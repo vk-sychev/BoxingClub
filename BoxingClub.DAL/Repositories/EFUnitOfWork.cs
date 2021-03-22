@@ -22,8 +22,9 @@ namespace BoxingClub.DAL.Repositories
         {
             get
             {
-                if (_studentRepository != null)
+                if (_studentRepository != null) {
                     _studentRepository = new StudentRepository(db);
+                }
                 return _studentRepository;
             }
         }
