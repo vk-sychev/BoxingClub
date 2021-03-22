@@ -26,7 +26,9 @@ namespace BoxingClub.DAL.Repositories
         {
             var student = db.Students.Find(id);
             if (student != null)
+            {
                 db.Students.Remove(student);
+            }
         }
 
         public IEnumerable<Student> Find(Func<Student, bool> predicate)

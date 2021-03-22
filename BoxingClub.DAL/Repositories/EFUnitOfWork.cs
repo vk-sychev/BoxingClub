@@ -22,7 +22,8 @@ namespace BoxingClub.DAL.Repositories
         {
             get
             {
-                if (_studentRepository != null) {
+                if (_studentRepository != null) 
+                {
                     _studentRepository = new StudentRepository(db);
                 }
                 return _studentRepository;
@@ -33,6 +34,27 @@ namespace BoxingClub.DAL.Repositories
         {
             db.SaveChanges();
         }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+                this.disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }
+
 
