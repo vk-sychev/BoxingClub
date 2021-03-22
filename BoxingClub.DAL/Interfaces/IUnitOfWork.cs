@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BoxingClub.DAL.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork:IDisposable
     {
         IRepository<Student> Students { get; }
         void Save();
