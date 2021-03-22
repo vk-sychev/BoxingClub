@@ -1,4 +1,4 @@
-﻿using BoxingClub.DAL.EF;
+using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -32,29 +32,6 @@ namespace BoxingClub.DAL.Repositories
         {
             db.SaveChanges();
         }
-
-
-        //вопрос про _
-        //не уверен, что кусок ниже мне нужен
-        //private bool _disposed = false;
-
-        //public virtual void Dispose(bool disposing)
-        //{
-        //    if (!this._disposed)
-        //    {
-        //        if (disposing)
-        //        {
-        //            db.Dispose();
-        //        }
-        //        this._disposed = true;
-        //    }
-        //}
-
-        //public void Dispose()
-        //{
-        //    Dispose(true);
-        //    GC.SuppressFinalize(this);
-        //}
     }
 }
 
