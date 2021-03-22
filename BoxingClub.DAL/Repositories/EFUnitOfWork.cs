@@ -13,15 +13,9 @@ namespace BoxingClub.DAL.Repositories
         private BoxingClubContext db;
         private StudentRepository _studentRepository;
 
-        public EFUnitOfWork(string connectionString)
+        public EFUnitOfWork(BoxingClubContext context)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<BoxingClubContext>();
-
-            var options = optionsBuilder
-            .UseSqlServer(connectionString)
-            .Options;
-
-            db = new BoxingClubContext(options);
+            db = context;
         }
 
         public IRepository<Student> Students
@@ -42,25 +36,25 @@ namespace BoxingClub.DAL.Repositories
 
         //вопрос про _
         //не уверен, что кусок ниже мне нужен
-        private bool _disposed = false;
+        //private bool _disposed = false;
 
-        public virtual void Dispose(bool disposing)
-        {
-            if (!this._disposed)
-            {
-                if (disposing)
-                {
-                    db.Dispose();
-                }
-                this._disposed = true;
-            }
-        }
+        //public virtual void Dispose(bool disposing)
+        //{
+        //    if (!this._disposed)
+        //    {
+        //        if (disposing)
+        //        {
+        //            db.Dispose();
+        //        }
+        //        this._disposed = true;
+        //    }
+        //}
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        //public void Dispose()
+        //{
+        //    Dispose(true);
+        //    GC.SuppressFinalize(this);
+        //}
     }
 }
 
