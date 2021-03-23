@@ -7,21 +7,34 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using BoxingClub.BLL.Interfaces;
+using BoxingClub.BLL.DTO;
+using AutoMapper;
 
 namespace BoxingClub.WEB.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private IStudentService _studentService;
+
+        public HomeController(ILogger<HomeController> logger, IStudentService studentService)
         {
             _logger = logger;
+            _studentService = studentService;
         }
 
         public IActionResult Index()
         {
+            IEnumerable<IndexStudentDTO> studentDTOs = _studentService.GetStudents();
+            var mapper = new MapperConfiguration(s => s.CreateMap<IndexStudentDTO, StudentViewModel>()).CreateMapper();
+            var students = mapper.Map<IEnumerable<IndexStudentDTO>, List<StudentViewModel>>(studentDTOs);
+            if (students!=null)
+            {
+                ViewBag.add(students);
+            }
             return View();
         }
 

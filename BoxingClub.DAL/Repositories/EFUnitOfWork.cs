@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BoxingClub.DAL.Repositories
 {
-    class EFUnitOfWork : IUnitOfWork
+    public class EFUnitOfWork : IUnitOfWork
     {
         private BoxingClubContext db;
         private StudentRepository _studentRepository;

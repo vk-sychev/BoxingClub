@@ -36,8 +36,7 @@ namespace BoxingClub.BLL.Services
             {
                 throw new ValidationException("List of students is null");
             }
-            return collection;            
+            return collection;
         }
-
-        k   }
+    }
 }

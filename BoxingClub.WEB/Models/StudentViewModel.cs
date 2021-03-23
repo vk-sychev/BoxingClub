@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace BoxingClub.BLL.DTO
+namespace BoxingClub.WEB.Models
 {
-    public class IndexStudentDTO
+    public class StudentViewModel
     {
         public string Name { get; set; }
 
