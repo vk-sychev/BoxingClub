@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.DTO;
 using AutoMapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace BoxingClub.WEB.Controllers
 {
@@ -28,20 +29,30 @@ namespace BoxingClub.WEB.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<IndexStudentDTO> studentDTOs = _studentService.GetStudents();
-            var mapper = new MapperConfiguration(s => s.CreateMap<IndexStudentDTO, StudentViewModel>()).CreateMapper();
-            var students = mapper.Map<IEnumerable<IndexStudentDTO>, List<StudentViewModel>>(studentDTOs);
-            if (students!=null)
+            try
             {
-                ViewBag.add(students);
+                IEnumerable<IndexStudentDTO> studentDTOs = _studentService.GetStudents();
+                var mapper = new MapperConfiguration(s => s.CreateMap<IndexStudentDTO, StudentViewModel>()).CreateMapper();
+                var students = mapper.Map<IEnumerable<IndexStudentDTO>, List<StudentViewModel>>(studentDTOs);
+                return View(students);
             }
-            return View();
+            catch (ValidationException ex)
+            {
+                return Content(ex.Message);
+            }
+            
         }
 
-        public IActionResult Privacy()
+        protected override void Dispose(bool disposing)
         {
-            return View();
+            _studentService.Dispose();
+            base.Dispose(disposing);
         }
+
+        /*        public IActionResult Privacy()
+                {
+                    return View();
+                }*/
 
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

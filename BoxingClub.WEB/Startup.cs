@@ -27,7 +27,7 @@ namespace BoxingClub.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
+/*            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
                 .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
             services.AddControllersWithViews(options =>
@@ -36,7 +36,7 @@ namespace BoxingClub.WEB
                     .RequireAuthenticatedUser()
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
-            });
+            });*/
             services.AddRazorPages();
         }
 
@@ -58,8 +58,8 @@ namespace BoxingClub.WEB
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+/*            app.UseAuthentication();
+            app.UseAuthorization();*/
 
             app.UseEndpoints(endpoints =>
             {
