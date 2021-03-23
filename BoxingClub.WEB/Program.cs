@@ -1,3 +1,4 @@
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -22,5 +23,6 @@ namespace BoxingClub.WEB
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+            //.UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }

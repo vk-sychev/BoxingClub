@@ -1,3 +1,11 @@
+using Autofac;
+using BoxingClub.BLL.Infrascructure;
+using BoxingClub.BLL.Interfaces;
+using BoxingClub.BLL.Services;
+using BoxingClub.DAL.EF;
+using BoxingClub.DAL.Interfaces;
+using BoxingClub.DAL.Repositories;
+using BoxingClub.WEB.Util;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authorization;
@@ -5,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,21 +36,52 @@ namespace BoxingClub.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-/*            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+            /*            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
+                            .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
-            services.AddControllersWithViews(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            });*/
+                        services.AddControllersWithViews(options =>
+                        {
+                            var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                            options.Filters.Add(new AuthorizeFilter(policy));
+                        });*/
+            services.AddDbContext<BoxingClubContext>(options=>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("BoxingClubDB")));
+
+            services.AddTransient<IUnitOfWork, EFUnitOfWork>();
+            services.AddTransient<IStudentService, StudentService>();
+
             services.AddRazorPages();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+
+/*        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            string connection = Configuration.GetConnectionString("BoxingClubDB");
+
+            var optionsBuilder = new DbContextOptionsBuilder<BoxingClubContext>();
+            var options = optionsBuilder
+                .UseSqlServer(connection)
+                .Options;
+
+
+            builder.RegisterType<EFUnitOfWork>()
+                .As<IUnitOfWork>()
+                .WithParameter("options", new BoxingClubContext(options));
+
+            builder.RegisterType<StudentService>()
+                .As<IStudentService>();
+
+            //var container = builder.Build();
+
+            //DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+        }*/
+
+
+            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

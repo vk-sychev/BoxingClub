@@ -10,7 +10,7 @@ using System.Text;
 
 namespace BoxingClub.BLL.Services
 {
-    class StudentService : IStudentService
+    public class StudentService : IStudentService
     {
         public StudentService(IUnitOfWork uow)
         {
@@ -20,12 +20,21 @@ namespace BoxingClub.BLL.Services
         IUnitOfWork Database { get; set; }
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Database.Dispose();
         }
 
         public IndexStudentDTO GetStudent(int? id)
         {
-            throw new NotImplementedException();
+            if (id == null)
+            {
+                throw new ValidationException("id isn't set");
+            }
+            var student = Database.Students.Get(id.Value);
+            if (student == null)
+            {
+                throw new ValidationException("Student din't find");
+            }
+            return new IndexStudentDTO { Name = student.Name, Surname = student.Surname, Patronymic = student.Patronymic, BornDate = student.BornDate };
         }
 
         public IEnumerable<IndexStudentDTO> GetStudents()

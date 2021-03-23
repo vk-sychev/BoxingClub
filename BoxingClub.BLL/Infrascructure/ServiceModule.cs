@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BoxingClub.BLL.Infrascructure
 {
-    class ServiceModule : Module
+    public class ServiceModule : Module
     {
-        private DbContextOptions<BoxingClubContext> options;
+        private DbContextOptions<BoxingClubContext> _options;
 
         public ServiceModule(DbContextOptions<BoxingClubContext> options)
         {
-            this.options = options;
+            this._options = options;
         }
 
 
@@ -30,7 +30,7 @@ namespace BoxingClub.BLL.Infrascructure
             //builder.Register(u => new EFUnitOfWork(_context)).As<IUnitOfWork>();
             builder.RegisterType<EFUnitOfWork>()
                 .As<IUnitOfWork>()
-                .WithParameter("options", new BoxingClubContext(options));
+                .WithParameter("options", new BoxingClubContext(_options));
                 
         }
     }

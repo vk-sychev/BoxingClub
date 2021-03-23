@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using BoxingClub.BLL.Interfaces;
+using BoxingClub.BLL.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,8 @@ namespace BoxingClub.WEB.Util
     {
         protected override void Load(ContainerBuilder builder)
         {
-            base.Load(builder);
+            builder.RegisterType<StudentService>().
+                As<IStudentService>();
         }
     }
 }
