@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoxingClub.BLL.Infrascructure
+namespace BoxingClud.Exceptions.Exceptions
 {
-    class ValidationException : Exception
+    public class BoxingClubException : Exception
     {
         public string Property { get; protected set; }
-        public ValidationException(string message, string prop) : base(message)
+        public BoxingClubException(string message, string prop) : base(message)
         {
             Property = prop;
         }

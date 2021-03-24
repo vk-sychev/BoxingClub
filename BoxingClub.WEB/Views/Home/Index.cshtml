@@ -4,7 +4,10 @@
 
 <h2>Index</h2>
 
+@Html.ActionLink("Add Student", "AddStudent")
+
 <table class="table">
+
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
@@ -23,20 +26,20 @@
 
     @foreach (var item in Model)
     {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Surname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Patronymic)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BornDate)
-        </td>
-    </tr>
-    }
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Surname)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Patronymic)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.BornDate)
+    </td>
+</tr>
+}
 
 </table>

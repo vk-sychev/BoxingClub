@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BoxingClub.DAL\BoxingClub.DAL.csproj" />
+    <ProjectReference Include="..\BoxingClud.Exceptions\BoxingClub.Exceptions.csproj" />
   </ItemGroup>
 
 </Project>

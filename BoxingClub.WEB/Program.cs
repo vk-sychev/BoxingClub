@@ -23,6 +23,5 @@ namespace BoxingClub.WEB
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-            //.UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }
