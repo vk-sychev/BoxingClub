@@ -19,12 +19,15 @@ namespace BoxingClub.WEB.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private IStudentService _studentService;
+        private readonly IStudentService _studentService;
 
-        public HomeController(ILogger<HomeController> logger, IStudentService studentService)
+        private readonly IMapper _mapper;
+
+        public HomeController(ILogger<HomeController> logger, IStudentService studentService, IMapper mapper)
         {
             _logger = logger;
             _studentService = studentService;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -32,15 +35,13 @@ namespace BoxingClub.WEB.Controllers
             try
             {
                 IEnumerable<StudentLiteDTO> studentDTOs = _studentService.GetStudents();
-                var mapper = new MapperConfiguration(s => s.CreateMap<StudentLiteDTO, StudentViewModel>()).CreateMapper();
-
-                var students = mapper.Map<IEnumerable<StudentLiteDTO>, List<StudentViewModel>>(studentDTOs);
+                var students = _mapper.Map<IEnumerable<StudentLiteDTO>, List<StudentViewModel>>(studentDTOs);
                 return View(students);
             }
             catch (ValidationException ex)
             {
                 return Content(ex.Message);
-            }   
+            }
         }
 
 
@@ -49,25 +50,35 @@ namespace BoxingClub.WEB.Controllers
             return View();
         }
 
-/*        [HttpPost]
+        [HttpPost]
         public IActionResult CreateStudent(CreateStudentViewModel studentViewModel)
         {
             try
             {
-                var studentDTO = new CreateStudentDTO
-                {
-                    Name = studentViewModel.Name,
-                    Surname = studentViewModel.Surname,
-                    Patronymic = studentViewModel.Patronymic,
-                    BornDate = studentViewModel.BornDate,
-                    DateOfEntry = studentViewModel.DateOfEntry,
-                    Height = studentViewModel.Height,
-                    Weight = studentViewModel.Weight
-                };
-
-                _studentService.
+                var studentDTO = _mapper.Map<CreateStudentDTO>(studentViewModel);
+                _studentService.CreateStudent(studentDTO);
             }
-        }*/
+            catch (ArgumentNullException ex)
+            {
+                ModelState.AddModelError(ex.ParamName, ex.Message);
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
+        public IActionResult DeleteStudent(int? id)
+        {
+            try
+            {
+                _studentService.DeleteStudent(id);
+            }
+            catch (ArgumentNullException ex)
+            {
+                ModelState.AddModelError(ex.ParamName, ex.Message);
+            }
+            return RedirectToAction("Index");
+        }
 
         protected override void Dispose(bool disposing)
         {

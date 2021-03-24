@@ -13,9 +13,11 @@ namespace BoxingClub.BLL.Services
 {
     public class StudentService : IStudentService
     {
-        public StudentService(IUnitOfWork uow)
+        private readonly IMapper _mapper;
+        public StudentService(IUnitOfWork uow, IMapper mapper)
         {
             Database = uow;
+            _mapper = mapper;
         }
 
         IUnitOfWork Database { get; set; }
@@ -35,19 +37,34 @@ namespace BoxingClub.BLL.Services
             {
                 throw new NotFoundException("Student isn't found", "");
             }
-            return new StudentLiteDTO { Name = student.Name, Surname = student.Surname, Patronymic = student.Patronymic, BornDate = student.BornDate };//automapper
+            return _mapper.Map<StudentLiteDTO>(student);
         }
 
         public IEnumerable<StudentLiteDTO> GetStudents()
         {
-            var mapper = new MapperConfiguration(x => x.CreateMap<Student, StudentLiteDTO>()).CreateMapper();
-            var collection = mapper.Map<IEnumerable<Student>, List<StudentLiteDTO>>(Database.Students.GetAll());
+            var collection = _mapper.Map<IEnumerable<Student>, List<StudentLiteDTO>>(Database.Students.GetAll());
             return collection;
         }
 
         public void CreateStudent(CreateStudentDTO studentDTO)
         {
-            throw new NotImplementedException();
+            var student = _mapper.Map<Student>(studentDTO);
+            if (student == null)
+            {
+                throw new ArgumentNullException(nameof(student), "student is null");
+            }
+            Database.Students.Create(student);
+            Database.Save();
+        }
+
+        public void DeleteStudent(int? id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id), "id is null");
+            }
+            Database.Students.Delete(id.Value);
+            Database.Save();
         }
     }
 }

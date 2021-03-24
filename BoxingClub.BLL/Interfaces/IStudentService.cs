@@ -8,9 +8,14 @@ namespace BoxingClub.BLL.Interfaces
     public interface IStudentService
     {
         void Dispose();
+
         StudentLiteDTO GetStudent(int? id);
+
         IEnumerable<StudentLiteDTO> GetStudents();
+
         void CreateStudent(CreateStudentDTO studentDTO);
+
+        void DeleteStudent(int? id);
 
     }
 }

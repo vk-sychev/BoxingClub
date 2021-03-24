@@ -1,9 +1,11 @@
 using Autofac;
+using AutoMapper;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Services;
 using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.DAL.Repositories;
+using BoxingClub.WEB.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +44,14 @@ namespace BoxingClub.WEB
             services.AddTransient<IUnitOfWork, EFUnitOfWork>();
             services.AddTransient<IStudentService, StudentService>();
 
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
             services.AddRazorPages();
         }
 

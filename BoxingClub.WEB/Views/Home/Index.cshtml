@@ -4,7 +4,7 @@
 
 <h2>Index</h2>
 
-@Html.ActionLink("Add Student", "AddStudent")
+@Html.ActionLink("Add Student", "CreateStudent")
 
 <table class="table">
 
@@ -38,6 +38,9 @@
     </td>
     <td>
         @Html.DisplayFor(modelItem => item.BornDate)
+    </td>
+    <td>
+        @Html.ActionLink("Delete", "DeleteStudent", new { id = item.Id })
     </td>
 </tr>
 }
