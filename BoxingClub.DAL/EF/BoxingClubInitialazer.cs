@@ -15,7 +15,7 @@ namespace BoxingClub.DAL.EF
 
                     new Student
                     {
-                        Id = 5,
+                        Id = 1,
                         Name = "Vasiliy",
                         Surname = "Sychev",
                         Patronymic = "Konstantinovich",
@@ -27,7 +27,7 @@ namespace BoxingClub.DAL.EF
 
                     new Student
                     {
-                        Id = 10,
+                        Id = 2,
                         Name = "Igor",
                         Surname = "Zhuravlev",
                         BornDate = new DateTime(1991, 5, 22),
@@ -36,7 +36,7 @@ namespace BoxingClub.DAL.EF
 
                     new Student
                     {
-                        Id = 12,
+                        Id = 3,
                         Name = "Ivan",
                         Surname = "Pavlov",
                         BornDate = new DateTime(2001, 10, 14),

@@ -14,7 +14,8 @@ namespace BoxingClub.DAL.EF
 
         public BoxingClubContext(DbContextOptions<BoxingClubContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
