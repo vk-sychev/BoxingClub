@@ -1,16 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
-        T Get(int id);
-        IEnumerable<T> Find(Func<T, Boolean> predicate);
-        void Create(T item);
+        Task<IEnumerable<T>> GetAll();
+
+        Task<IEnumerable<T>> Find(Func<T, ValueTask<bool>> predicate);
+
+        Task<T> Get(int id);
+
+        Task Create(T item);
+
         void Update(T item);
+
         void Delete(int id);
+
+        //T Get(int id);
+
+        //IEnumerable<T> GetAll();
+
+        //void Create(T item);
+
+        //IEnumerable<T> Find(Func<T, Boolean> predicate);
     }
 }

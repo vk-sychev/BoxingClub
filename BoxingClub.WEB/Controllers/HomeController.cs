@@ -30,15 +30,16 @@ namespace BoxingClub.WEB.Controllers
             _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
-                IEnumerable<StudentLiteDTO> studentDTOs = _studentService.GetStudents();
+                IEnumerable<StudentLiteDTO> studentDTOs = await _studentService.GetStudents();
                 var students = _mapper.Map<IEnumerable<StudentLiteDTO>, List<StudentViewModel>>(studentDTOs);
                 return View(students);
             }
-            catch (ValidationException ex)
+
+            catch (Exception ex)
             {
                 return Content(ex.Message);
             }
@@ -51,63 +52,64 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateStudent(CreateStudentViewModel studentViewModel)
+        public async Task<IActionResult> CreateStudent(CreateStudentViewModel studentViewModel)
         {
             try
             {
-                var studentDTO = _mapper.Map<CreateStudentDTO>(studentViewModel);
-                _studentService.CreateStudent(studentDTO);
+                var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
+                await _studentService.CreateStudent(studentDTO);
             }
-            catch (ArgumentNullException ex)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(ex.ParamName, ex.Message);
+                return Content(ex.Message);
             }
 
             return RedirectToAction("Index");
 
         }
 
-        public IActionResult DeleteStudent(int? id)
+        public async Task<IActionResult> DeleteStudent(int? id)
         {
             try
             {
-                _studentService.DeleteStudent(id);
+                await _studentService.DeleteStudent(id);
             }
-            catch (ArgumentNullException ex)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(ex.ParamName, ex.Message);
+                return Content(ex.Message);
+                //ModelState.AddModelError(ex.ParamName, ex.Message);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Error"); ;
         }
 
-        public IActionResult UpdateStudent(int? id)
+        public async Task<IActionResult> UpdateStudent(int? id)
         {
             //CreateStudentDTO student = new CreateStudentDTO();
             CreateStudentViewModel student = new CreateStudentViewModel();
             try
             {
                 //student =_studentService.GetStudent(id.Value);
-                var studentDTO = _studentService.GetStudent(id.Value);
+                var studentDTO = await _studentService.GetStudent(id.Value);
                 student = _mapper.Map<CreateStudentViewModel>(studentDTO);
             }
-            catch (ArgumentNullException ex)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(ex.ParamName, ex.Message);
+                return Content(ex.Message);
             }
             return View(student);
         }
 
         [HttpPost]
-        public IActionResult UpdateStudent(CreateStudentViewModel studentViewModel)
+        public async Task<IActionResult> UpdateStudent(CreateStudentViewModel studentViewModel)
         {
             try
             {
-                var studentDTO = _mapper.Map<CreateStudentDTO>(studentViewModel);
-                _studentService.UpdateStudent(studentDTO);
+                var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
+                await _studentService.UpdateStudent(studentDTO);
             }
             catch (ArgumentNullException ex)
             {
-                ModelState.AddModelError(ex.ParamName, ex.Message);
+                return Content(ex.Message);
             }
             return RedirectToAction("Index");
         }

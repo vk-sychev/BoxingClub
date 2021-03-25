@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.DAL", "BoxingClu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.BLL", "BoxingClub.BLL\BoxingClub.BLL.csproj", "{9DD3557D-E864-409A-9C44-85FC65AD3E63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.Exceptions", "BoxingClud.Exceptions\BoxingClub.Exceptions.csproj", "{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.Infrastructure", "BoxingClud.Exceptions\BoxingClub.Infrastructure.csproj", "{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

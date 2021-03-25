@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BoxingClub.BLL.Interfaces
 {
@@ -9,15 +10,15 @@ namespace BoxingClub.BLL.Interfaces
     {
         void Dispose();
 
-        CreateStudentDTO GetStudent(int? id);
+        Task<StudentFullDTO> GetStudent(int? id);
 
-        IEnumerable<StudentLiteDTO> GetStudents();
+        Task<IEnumerable<StudentLiteDTO>> GetStudents();
 
-        void CreateStudent(CreateStudentDTO studentDTO);
+        Task CreateStudent(StudentFullDTO studentDTO);
 
-        void DeleteStudent(int? id);
+        Task DeleteStudent(int? id);
 
-        void UpdateStudent(CreateStudentDTO studentDTO);
+        Task UpdateStudent(StudentFullDTO studentDTO);
 
     }
 }

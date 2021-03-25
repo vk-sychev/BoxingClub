@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Repositories
 {
@@ -30,9 +31,9 @@ namespace BoxingClub.DAL.Repositories
             }
         }
 
-        public void Save()
+        public async Task Save()
         {
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
         private bool disposed = false;

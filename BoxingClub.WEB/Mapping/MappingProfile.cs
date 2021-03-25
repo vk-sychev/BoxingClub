@@ -13,10 +13,10 @@ namespace BoxingClub.WEB.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<CreateStudentDTO, CreateStudentViewModel>().ReverseMap();
+            CreateMap<StudentFullDTO, CreateStudentViewModel>().ReverseMap();
             CreateMap<StudentLiteDTO, StudentViewModel>().ReverseMap();
             CreateMap<StudentLiteDTO, Student>().ReverseMap();
-            CreateMap<CreateStudentDTO, Student>().ReverseMap();
+            CreateMap<StudentFullDTO, Student>().ReverseMap();
         }
     }
 }

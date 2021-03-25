@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BoxingClub.BLL.Services
 {
@@ -26,48 +27,49 @@ namespace BoxingClub.BLL.Services
             Database.Dispose();
         }
 
-        public CreateStudentDTO GetStudent(int? id)
+        public async Task<StudentFullDTO> GetStudent(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "id is null");    
             }
-            var student = Database.Students.Get(id.Value);
+            var student = await Database.Students.Get(id.Value);
             if (student == null)
             {
                 throw new NotFoundException("Student isn't found", "");
             }
-            return _mapper.Map<CreateStudentDTO>(student);
+            return _mapper.Map<StudentFullDTO>(student);
         }
 
-        public IEnumerable<StudentLiteDTO> GetStudents()
+        public async Task<IEnumerable<StudentLiteDTO>> GetStudents()
         {
-            var collection = _mapper.Map<IEnumerable<Student>, List<StudentLiteDTO>>(Database.Students.GetAll());
+            var students = await Database.Students.GetAll();
+            var collection = _mapper.Map<IEnumerable<Student>, List<StudentLiteDTO>>(students);
             return collection;
         }
 
-        public void CreateStudent(CreateStudentDTO studentDTO)
+        public async Task CreateStudent(StudentFullDTO studentDTO)
         {
             var student = _mapper.Map<Student>(studentDTO);
             if (student == null)
             {
                 throw new ArgumentNullException(nameof(student), "student is null");
             }
-            Database.Students.Create(student);
-            Database.Save();
+            await Database.Students.Create(student);
+            await Database.Save();
         }
 
-        public void DeleteStudent(int? id)
+        public async Task DeleteStudent(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "id is null");
             }
             Database.Students.Delete(id.Value);
-            Database.Save();
+            await Database.Save();
         }
 
-        public void UpdateStudent(CreateStudentDTO studentDTO)
+        public async Task UpdateStudent(StudentFullDTO studentDTO)
         {
             var student = _mapper.Map<Student>(studentDTO);
             if (student == null)
@@ -75,7 +77,7 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(student), "student is null");
             }
             Database.Students.Update(student);
-            Database.Save();
+            await Database.Save();
         }
     }
 }
