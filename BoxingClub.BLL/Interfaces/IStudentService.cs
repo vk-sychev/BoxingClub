@@ -9,13 +9,15 @@ namespace BoxingClub.BLL.Interfaces
     {
         void Dispose();
 
-        StudentLiteDTO GetStudent(int? id);
+        CreateStudentDTO GetStudent(int? id);
 
         IEnumerable<StudentLiteDTO> GetStudents();
 
         void CreateStudent(CreateStudentDTO studentDTO);
 
         void DeleteStudent(int? id);
+
+        void UpdateStudent(CreateStudentDTO studentDTO);
 
     }
 }

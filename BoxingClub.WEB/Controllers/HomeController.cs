@@ -80,6 +80,38 @@ namespace BoxingClub.WEB.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult UpdateStudent(int? id)
+        {
+            //CreateStudentDTO student = new CreateStudentDTO();
+            CreateStudentViewModel student = new CreateStudentViewModel();
+            try
+            {
+                //student =_studentService.GetStudent(id.Value);
+                var studentDTO = _studentService.GetStudent(id.Value);
+                student = _mapper.Map<CreateStudentViewModel>(studentDTO);
+            }
+            catch (ArgumentNullException ex)
+            {
+                ModelState.AddModelError(ex.ParamName, ex.Message);
+            }
+            return View(student);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateStudent(CreateStudentViewModel studentViewModel)
+        {
+            try
+            {
+                var studentDTO = _mapper.Map<CreateStudentDTO>(studentViewModel);
+                _studentService.UpdateStudent(studentDTO);
+            }
+            catch (ArgumentNullException ex)
+            {
+                ModelState.AddModelError(ex.ParamName, ex.Message);
+            }
+            return RedirectToAction("Index");
+        }
+
         protected override void Dispose(bool disposing)
         {
             _studentService.Dispose();

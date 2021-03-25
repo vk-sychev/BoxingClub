@@ -40,6 +40,9 @@
         @Html.DisplayFor(modelItem => item.BornDate)
     </td>
     <td>
+        @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id })
+    </td>
+    <td>
         @Html.ActionLink("Delete", "DeleteStudent", new { id = item.Id })
     </td>
 </tr>

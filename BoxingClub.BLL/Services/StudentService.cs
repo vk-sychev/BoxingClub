@@ -26,7 +26,7 @@ namespace BoxingClub.BLL.Services
             Database.Dispose();
         }
 
-        public StudentLiteDTO GetStudent(int? id)
+        public CreateStudentDTO GetStudent(int? id)
         {
             if (id == null)
             {
@@ -37,7 +37,7 @@ namespace BoxingClub.BLL.Services
             {
                 throw new NotFoundException("Student isn't found", "");
             }
-            return _mapper.Map<StudentLiteDTO>(student);
+            return _mapper.Map<CreateStudentDTO>(student);
         }
 
         public IEnumerable<StudentLiteDTO> GetStudents()
@@ -64,6 +64,17 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(id), "id is null");
             }
             Database.Students.Delete(id.Value);
+            Database.Save();
+        }
+
+        public void UpdateStudent(CreateStudentDTO studentDTO)
+        {
+            var student = _mapper.Map<Student>(studentDTO);
+            if (student == null)
+            {
+                throw new ArgumentNullException(nameof(student), "student is null");
+            }
+            Database.Students.Update(student);
             Database.Save();
         }
     }
