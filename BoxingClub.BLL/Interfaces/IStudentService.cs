@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.BLL.Interfaces
 {
-    public interface IStudentService
+    public interface IStudentService 
     {
-        void Dispose();
-
         Task<StudentFullDTO> GetStudent(int? id);
 
         Task<IEnumerable<StudentLiteDTO>> GetStudents();

@@ -22,10 +22,6 @@ namespace BoxingClub.BLL.Services
         }
 
         IUnitOfWork Database { get; set; }
-        public void Dispose()
-        {
-            Database.Dispose();
-        }
 
         public async Task<StudentFullDTO> GetStudent(int? id)
         {
@@ -59,17 +55,17 @@ namespace BoxingClub.BLL.Services
             await Database.Save();
         }
 
-        public async Task DeleteStudent(int? id)
+        public Task DeleteStudent(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "id is null");
             }
             Database.Students.Delete(id.Value);
-            await Database.Save();
+            return Database.Save();
         }
 
-        public async Task UpdateStudent(StudentFullDTO studentDTO)
+        public Task UpdateStudent(StudentFullDTO studentDTO)
         {
             var student = _mapper.Map<Student>(studentDTO);
             if (student == null)
@@ -77,7 +73,7 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(student), "student is null");
             }
             Database.Students.Update(student);
-            await Database.Save();
+            return Database.Save();
         }
     }
 }

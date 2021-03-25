@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Interfaces
 {
-    public interface IUnitOfWork:IDisposable
+    public interface IUnitOfWork
     {
         IRepository<Student> Students { get; }
         Task Save();

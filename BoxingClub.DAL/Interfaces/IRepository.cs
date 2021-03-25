@@ -18,13 +18,5 @@ namespace BoxingClub.DAL.Interfaces
         void Update(T item);
 
         void Delete(int id);
-
-        //T Get(int id);
-
-        //IEnumerable<T> GetAll();
-
-        //void Create(T item);
-
-        //IEnumerable<T> Find(Func<T, Boolean> predicate);
     }
 }

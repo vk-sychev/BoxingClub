@@ -56,26 +56,5 @@ namespace BoxingClub.DAL.Repositories
         {
             db.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
         }
-
-        /*        public void Create(Student item)
-        {
-            db.Students.Add(item);
-        }*/
-
-        /*        public IEnumerable<Student> GetAll()
-        {
-            return db.Students;
-        }*/
-
-        /*        public Student Get(int id)
-        {
-            return db.Students.Find(id);
-        }*/
-
-        /*        public IEnumerable<Student> Find(Func<Student, bool> predicate)
-        {
-            return db.Students.Where(predicate).ToList();
-        }*/
-
     }
 }

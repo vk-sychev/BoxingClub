@@ -11,6 +11,7 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.DTO;
 using AutoMapper;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace BoxingClub.WEB.Controllers
 {
@@ -32,17 +33,26 @@ namespace BoxingClub.WEB.Controllers
 
         public async Task<IActionResult> Index()
         {
+            List<StudentViewModel> students = new List<StudentViewModel>();
             try
             {
                 IEnumerable<StudentLiteDTO> studentDTOs = await _studentService.GetStudents();
-                var students = _mapper.Map<IEnumerable<StudentLiteDTO>, List<StudentViewModel>>(studentDTOs);
-                return View(students);
+                students = _mapper.Map<IEnumerable<StudentLiteDTO>, List<StudentViewModel>>(studentDTOs);
+            }
+
+            catch (ArgumentNullException ex)
+            {
+                ModelState.AddModelError(ex.ParamName, ex.Message);
+                _logger.LogError()
+                return NotFound(ModelState); 
             }
 
             catch (Exception ex)
             {
-                return Content(ex.Message);
+                return BadRequest();
             }
+
+            return View(students);
         }
 
 
@@ -59,9 +69,16 @@ namespace BoxingClub.WEB.Controllers
                 var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
                 await _studentService.CreateStudent(studentDTO);
             }
+
+            catch (ArgumentNullException ex)
+            {
+                ModelState.AddModelError(ex.ParamName, ex.Message);
+                return NotFound(ModelState);
+            }
+
             catch (Exception ex)
             {
-                return Content(ex.Message);
+                return NotFound();
             }
 
             return RedirectToAction("Index");
@@ -74,27 +91,38 @@ namespace BoxingClub.WEB.Controllers
             {
                 await _studentService.DeleteStudent(id);
             }
+
+            catch (ArgumentNullException ex)
+            {
+                ModelState.AddModelError(ex.ParamName, ex.Message);
+                return BadRequest(ModelState);
+            }
+
             catch (Exception ex)
             {
-                return Content(ex.Message);
-                //ModelState.AddModelError(ex.ParamName, ex.Message);
+                return NotFound();
             }
-            return RedirectToAction("Error"); ;
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> UpdateStudent(int? id)
         {
-            //CreateStudentDTO student = new CreateStudentDTO();
             CreateStudentViewModel student = new CreateStudentViewModel();
             try
             {
-                //student =_studentService.GetStudent(id.Value);
                 var studentDTO = await _studentService.GetStudent(id.Value);
                 student = _mapper.Map<CreateStudentViewModel>(studentDTO);
             }
+
+            catch (ArgumentNullException ex)
+            {
+                ModelState.AddModelError(ex.ParamName, ex.Message);
+                return NotFound(ModelState);
+            }
+
             catch (Exception ex)
             {
-                return Content(ex.Message);
+                return BadRequest();
             }
             return View(student);
         }
@@ -109,17 +137,15 @@ namespace BoxingClub.WEB.Controllers
             }
             catch (ArgumentNullException ex)
             {
-                return Content(ex.Message);
+                ModelState.AddModelError(ex.ParamName, ex.Message);
+                return NotFound(ModelState);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
             return RedirectToAction("Index");
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            _studentService.Dispose();
-            base.Dispose(disposing);
-        }
-
 
 
         /*        public IActionResult Privacy()
