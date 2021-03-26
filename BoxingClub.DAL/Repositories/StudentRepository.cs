@@ -25,13 +25,15 @@ namespace BoxingClub.DAL.Repositories
             await db.Students.AddAsync(item);
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             var student = db.Students.Find(id);
             if (student != null)
             {
                 db.Students.Remove(student);
+                return true;
             }
+            return false;
         }
 
 
