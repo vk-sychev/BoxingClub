@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Repositories
 {
-    class EFUnitOfWork : IUnitOfWork
+    public class EFUnitOfWork : IUnitOfWork
     {
         private BoxingClubContext db;
         private StudentRepository _studentRepository;
@@ -22,7 +23,7 @@ namespace BoxingClub.DAL.Repositories
         {
             get
             {
-                if (_studentRepository != null) 
+                if (_studentRepository == null) 
                 {
                     _studentRepository = new StudentRepository(db);
                 }
@@ -30,29 +31,9 @@ namespace BoxingClub.DAL.Repositories
             }
         }
 
-        public void Save()
+        public async Task Save()
         {
-            db.SaveChanges();
-        }
-
-        private bool disposed = false;
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    db.Dispose();
-                }
-                this.disposed = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            await db.SaveChangesAsync();
         }
     }
 }

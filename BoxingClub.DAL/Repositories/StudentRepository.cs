@@ -1,10 +1,12 @@
 ﻿using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Repositories
 {
@@ -17,9 +19,10 @@ namespace BoxingClub.DAL.Repositories
             this.db = context;
         }
 
-        public void Create(Student item)
+
+        public async Task Create(Student item)
         {
-            db.Students.Add(item);
+            await db.Students.AddAsync(item);
         }
 
         public void Delete(int id)
@@ -31,19 +34,22 @@ namespace BoxingClub.DAL.Repositories
             }
         }
 
-        public IEnumerable<Student> Find(Func<Student, bool> predicate)
+
+        public async Task<IEnumerable<Student>> Find(Func<Student, ValueTask<bool>> predicate)
         {
-            return db.Students.Where(predicate).ToList();
+            return await db.Students.WhereAwait(predicate).ToListAsync();
         }
 
-        public Student Get(int id)
+
+        public async Task<Student> Get(int id)
         {
-            return db.Students.Find(id);
+            return await db.Students.FindAsync(id);
         }
 
-        public IEnumerable<Student> GetAll()
+
+        public async Task<IEnumerable<Student>> GetAll()
         {
-            return db.Students;
+            return await db.Students.AsQueryable().ToListAsync();
         }
 
         public void Update(Student item)

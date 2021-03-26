@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace BoxingClub.DAL.Entities
+namespace BoxingClub.BLL.DTO
 {
-    public class Student
+    public class StudentFullDTO
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
-        [Required]
         public int Id { get; set; }
 
         public string Name { get; set; }

@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.WEB", "BoxingClub.WEB\BoxingClub.WEB.csproj", "{4D86F5C4-033A-4E00-AF42-EEF090DE4E4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.WEB", "BoxingClub.WEB\BoxingClub.WEB.csproj", "{4D86F5C4-033A-4E00-AF42-EEF090DE4E4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.DAL", "BoxingClub.DAL\BoxingClub.DAL.csproj", "{A6A3A856-0B6D-430B-B32F-0AAD459CED88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.DAL", "BoxingClub.DAL\BoxingClub.DAL.csproj", "{A6A3A856-0B6D-430B-B32F-0AAD459CED88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.BLL", "BoxingClub.BLL\BoxingClub.BLL.csproj", "{9DD3557D-E864-409A-9C44-85FC65AD3E63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.BLL", "BoxingClub.BLL\BoxingClub.BLL.csproj", "{9DD3557D-E864-409A-9C44-85FC65AD3E63}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.Infrastructure", "BoxingClud.Exceptions\BoxingClub.Infrastructure.csproj", "{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{9DD3557D-E864-409A-9C44-85FC65AD3E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DD3557D-E864-409A-9C44-85FC65AD3E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DD3557D-E864-409A-9C44-85FC65AD3E63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
