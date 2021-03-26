@@ -10,16 +10,6 @@ namespace BoxingClub.DAL.EF
 {
     public class BoxingClubContext : DbContext
     {
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
-
-        public override ValueTask DisposeAsync()
-        {
-            return base.DisposeAsync();
-        }
-
         public DbSet<Student> Students { get; set; }
 
         public BoxingClubContext(DbContextOptions<BoxingClubContext> options) : base(options) { }

@@ -32,7 +32,7 @@ namespace BoxingClub.BLL.Services
             var student = await Database.Students.Get(id.Value);
             if (student == null)
             {
-                throw new NotFoundException("Student isn't found", "");
+                throw new NotFoundException($"Student for {id.Value} isn't found", "");
             }
             return _mapper.Map<StudentFullDTO>(student);
         }

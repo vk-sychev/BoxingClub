@@ -33,11 +33,11 @@ namespace BoxingClub.WEB.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<StudentViewModel> students = new List<StudentViewModel>();
+            List<StudentLiteViewModel> students = new List<StudentLiteViewModel>();
             try
             {
                 IEnumerable<StudentLiteDTO> studentDTOs = await _studentService.GetStudents();
-                students = _mapper.Map<IEnumerable<StudentLiteDTO>, List<StudentViewModel>>(studentDTOs);
+                students = _mapper.Map<IEnumerable<StudentLiteDTO>, List<StudentLiteViewModel>>(studentDTOs);
             }
 
             catch (ArgumentNullException ex)
@@ -62,7 +62,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateStudent(CreateStudentViewModel studentViewModel)
+        public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
         {
             try
             {
@@ -107,11 +107,11 @@ namespace BoxingClub.WEB.Controllers
 
         public async Task<IActionResult> UpdateStudent(int? id)
         {
-            CreateStudentViewModel student = new CreateStudentViewModel();
+            StudentFullViewModel student = new StudentFullViewModel();
             try
             {
                 var studentDTO = await _studentService.GetStudent(id.Value);
-                student = _mapper.Map<CreateStudentViewModel>(studentDTO);
+                student = _mapper.Map<StudentFullViewModel>(studentDTO);
             }
 
             catch (ArgumentNullException ex)
@@ -128,7 +128,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateStudent(CreateStudentViewModel studentViewModel)
+        public async Task<IActionResult> UpdateStudent(StudentFullViewModel studentViewModel)
         {
             try
             {
