@@ -43,7 +43,7 @@ namespace BoxingClub.WEB.Controllers
             catch (ArgumentNullException ex)
             {
                 ModelState.AddModelError(ex.ParamName, ex.Message);
-                _logger.LogError()
+                //_logger.LogError()
                 return NotFound(ModelState); 
             }
 

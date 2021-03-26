@@ -46,11 +46,11 @@ namespace BoxingClub.BLL.Services
 
         public async Task CreateStudent(StudentFullDTO studentDTO)
         {
-            var student = _mapper.Map<Student>(studentDTO);
-            if (student == null)
+            if (studentDTO == null)
             {
-                throw new ArgumentNullException(nameof(student), "student is null");
+                throw new ArgumentNullException(nameof(studentDTO), "student is null");
             }
+            var student = _mapper.Map<Student>(studentDTO);
             await Database.Students.Create(student);
             await Database.Save();
         }
@@ -67,11 +67,11 @@ namespace BoxingClub.BLL.Services
 
         public Task UpdateStudent(StudentFullDTO studentDTO)
         {
-            var student = _mapper.Map<Student>(studentDTO);
-            if (student == null)
+            if (studentDTO == null)
             {
-                throw new ArgumentNullException(nameof(student), "student is null");
+                throw new ArgumentNullException(nameof(studentDTO), "student is null");
             }
+            var student = _mapper.Map<Student>(studentDTO);
             Database.Students.Update(student);
             return Database.Save();
         }
