@@ -8,9 +8,9 @@ namespace BoxingClub.Infrastructure.HttpSwitcher
 {
     static public class HttpSwitch
     {
-        public static int SwitchHttpCode(string exceptionType)
+        public static int SwitchHttpCode(Type exceptionType)
         {
-            switch (exceptionType)
+            switch (exceptionType.ToString())
             {
                 case "NotFoundException":
                     return (int)HttpStatusCode.NotFound;

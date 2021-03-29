@@ -33,6 +33,7 @@ namespace BoxingClub.WEB.Controllers
             _mapper = mapper;
         }
 
+        
         public async Task<IActionResult> Index()
         {
             IEnumerable<StudentLiteDTO> studentDTOs = await _studentService.GetStudents();
@@ -96,10 +97,9 @@ namespace BoxingClub.WEB.Controllers
             ErrorViewModel errorViewModel = new ErrorViewModel
             {
                 Message = exceptionDetails.Error.Message,
-                StatusCode = HttpSwitch.SwitchHttpCode(exceptionDetails.Error.GetType().Name)
+                StatusCode = HttpSwitch.SwitchHttpCode(exceptionDetails.Error.GetType())
             };
             _logger.LogError(exceptionDetails.Error.Message);
-            _logger.LogTrace("ТЕСТ");
             return View(errorViewModel);
         }
     }
