@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoxingClud.Exceptions.Exceptions
+namespace BoxingClub.Infrastructure.Exceptions
 {
     public class BoxingClubException : Exception
     {
+
         public string Property { get; protected set; }
         public BoxingClubException(string message, string prop) : base(message)
         {

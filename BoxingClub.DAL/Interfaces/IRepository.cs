@@ -17,6 +17,6 @@ namespace BoxingClub.DAL.Interfaces
 
         void Update(T item);
 
-        void Delete(int id);
+        bool Delete(int id);
     }
 }

@@ -3,7 +3,7 @@ using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
-using BoxingClud.Exceptions.Exceptions;
+using BoxingClub.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -27,12 +27,12 @@ namespace BoxingClub.BLL.Services
         {
             if (id == null)
             {
-                throw new ArgumentNullException(nameof(id), "id is null");    
+                throw new ArgumentNullException(nameof(id), "Student's id is null");    
             }
             var student = await Database.Students.Get(id.Value);
             if (student == null)
             {
-                throw new NotFoundException($"Student for {id.Value} isn't found", "");
+                throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
             }
             return _mapper.Map<StudentFullDTO>(student);
         }
@@ -48,7 +48,7 @@ namespace BoxingClub.BLL.Services
         {
             if (studentDTO == null)
             {
-                throw new ArgumentNullException(nameof(studentDTO), "student is null");
+                throw new ArgumentNullException(nameof(studentDTO), "Student is null");
             }
             var student = _mapper.Map<Student>(studentDTO);
             await Database.Students.Create(student);
@@ -59,9 +59,12 @@ namespace BoxingClub.BLL.Services
         {
             if (id == null)
             {
-                throw new ArgumentNullException(nameof(id), "id is null");
+                throw new ArgumentNullException(nameof(id), "Student's id is null");
             }
-            Database.Students.Delete(id.Value);
+            if(!Database.Students.Delete(id.Value))
+            {
+                throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
+            }
             return Database.Save();
         }
 
@@ -69,7 +72,7 @@ namespace BoxingClub.BLL.Services
         {
             if (studentDTO == null)
             {
-                throw new ArgumentNullException(nameof(studentDTO), "student is null");
+                throw new ArgumentNullException(nameof(studentDTO), "Student is null");
             }
             var student = _mapper.Map<Student>(studentDTO);
             Database.Students.Update(student);
