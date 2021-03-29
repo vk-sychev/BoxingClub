@@ -20,15 +20,12 @@ namespace BoxingClub.WEB.Controllers
     //[Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
         private readonly IStudentService _studentService;
 
         private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger, IStudentService studentService, IMapper mapper)
+        public HomeController(IStudentService studentService, IMapper mapper)
         {
-            _logger = logger;
             _studentService = studentService;
             _mapper = mapper;
         }
@@ -85,22 +82,5 @@ namespace BoxingClub.WEB.Controllers
                     return View();
                 }*/
 
-
-
-
-        [AllowAnonymous]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [Route("Error")]
-        public IActionResult Error()
-        {
-            var exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            ErrorViewModel errorViewModel = new ErrorViewModel
-            {
-                Message = exceptionDetails.Error.Message,
-                StatusCode = HttpSwitch.SwitchHttpCode(exceptionDetails.Error.GetType())
-            };
-            _logger.LogError(exceptionDetails.Error.Message);
-            return View(errorViewModel);
-        }
     }
 }
