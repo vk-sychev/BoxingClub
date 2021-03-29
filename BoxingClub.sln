@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.DAL", "BoxingClu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.BLL", "BoxingClub.BLL\BoxingClub.BLL.csproj", "{9DD3557D-E864-409A-9C44-85FC65AD3E63}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.Infrastructure", "BoxingClud.Exceptions\BoxingClub.Infrastructure.csproj", "{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.Infrastructure", "BoxingClub.Infrastructure\BoxingClub.Infrastructure.csproj", "{E778A16A-9D3E-4E9E-9040-36219090F55B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{9DD3557D-E864-409A-9C44-85FC65AD3E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DD3557D-E864-409A-9C44-85FC65AD3E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DD3557D-E864-409A-9C44-85FC65AD3E63}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C12E9CD-2AB0-41E7-BFED-A39DEA1C4C11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E778A16A-9D3E-4E9E-9040-36219090F55B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E778A16A-9D3E-4E9E-9040-36219090F55B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E778A16A-9D3E-4E9E-9040-36219090F55B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E778A16A-9D3E-4E9E-9040-36219090F55B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

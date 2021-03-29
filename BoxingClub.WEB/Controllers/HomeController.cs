@@ -13,7 +13,7 @@ using AutoMapper;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
-using BoxingClub.WEB.HttpSwitcher;
+using BoxingClub.Infrastructure.HttpSwitcher;
 
 namespace BoxingClub.WEB.Controllers
 {

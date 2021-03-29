@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace BoxingClub.WEB.HttpSwitcher
+namespace BoxingClub.Infrastructure.HttpSwitcher
 {
     static public class HttpSwitch
     {

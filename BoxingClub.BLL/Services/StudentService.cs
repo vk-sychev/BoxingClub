@@ -3,7 +3,7 @@ using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
-using BoxingClud.Exceptions.Exceptions;
+using BoxingClub.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

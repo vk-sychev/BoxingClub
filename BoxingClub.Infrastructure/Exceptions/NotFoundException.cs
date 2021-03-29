@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoxingClud.Exceptions.Exceptions
+namespace BoxingClub.Infrastructure.Exceptions
 {
     public class NotFoundException : BoxingClubException
     {
