@@ -8,6 +8,7 @@ using BoxingClub.DAL.Repositories;
 using BoxingClub.WEB.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +41,14 @@ namespace BoxingClub.WEB
             services.AddDbContext<BoxingClubContext>(options=>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("BoxingClubDB")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+                options.Password.RequiredLength = 3;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
+                .AddEntityFrameworkStores<BoxingClubContext>();
 
             services.AddTransient<IUnitOfWork, EFUnitOfWork>();
             services.AddTransient<IStudentService, StudentService>();
@@ -76,8 +85,8 @@ namespace BoxingClub.WEB
 
             app.UseRouting();
 
-/*            app.UseAuthentication();
-            app.UseAuthorization();*/
+            app.UseAuthentication();
+            //app.U seAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

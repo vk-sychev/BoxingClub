@@ -1,4 +1,5 @@
 ﻿using BoxingClub.DAL.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.EF
 {
-    public class BoxingClubContext : DbContext
+    public class BoxingClubContext : IdentityDbContext
     {
         public DbSet<Student> Students { get; set; }
 
@@ -16,6 +17,7 @@ namespace BoxingClub.DAL.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
         }
     }
