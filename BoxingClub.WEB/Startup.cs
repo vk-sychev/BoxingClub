@@ -5,6 +5,7 @@ using BoxingClub.BLL.Services;
 using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.DAL.Repositories;
+using BoxingClub.WEB.Controllers;
 using BoxingClub.WEB.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,16 +29,6 @@ namespace BoxingClub.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            /*            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                            .AddAzureAD(options => Configuration.Bind("AzureAd", options));
-
-                        services.AddControllersWithViews(options =>
-                        {
-                            var policy = new AuthorizationPolicyBuilder()
-                                .RequireAuthenticatedUser()
-                                .Build();
-                            options.Filters.Add(new AuthorizeFilter(policy));
-                        });*/
             services.AddDbContext<BoxingClubContext>(options=>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("BoxingClubDB")));
@@ -74,9 +65,7 @@ namespace BoxingClub.WEB
             }
             else
             {
-                //app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 app.UseExceptionHandler("/Error");
-                //app.UseStatusCodePagesWithReExecute("/Error{0}");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
