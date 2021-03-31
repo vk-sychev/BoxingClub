@@ -76,9 +76,13 @@ namespace BoxingClub.WEB.Controllers
         [Route("UpdateStudent/{id}")]
         public async Task<IActionResult> UpdateStudent(StudentFullViewModel studentViewModel)
         {
-            var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
-            await _studentService.UpdateStudent(studentDTO);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
+                await _studentService.UpdateStudent(studentDTO);
+                return RedirectToAction("Index");
+            }
+            return View(studentViewModel);
         }
 
 
