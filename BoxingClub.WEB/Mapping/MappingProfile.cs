@@ -2,6 +2,7 @@
 using BoxingClub.BLL.DTO;
 using BoxingClub.DAL.Entities;
 using BoxingClub.WEB.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace BoxingClub.WEB.Mapping
             CreateMap<StudentLiteDTO, StudentLiteViewModel>().ReverseMap();
             CreateMap<StudentLiteDTO, Student>().ReverseMap();
             CreateMap<StudentFullDTO, Student>().ReverseMap();
+            CreateMap<SignUpViewModel, IdentityUser>().ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.NickName)).ReverseMap();
+            CreateMap<SignInViewModel, userDTO>();
         }
     }
 }

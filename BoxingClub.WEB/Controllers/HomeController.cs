@@ -17,7 +17,7 @@ using BoxingClub.Infrastructure.HttpSwitcher;
 
 namespace BoxingClub.WEB.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IStudentService _studentService;
@@ -30,11 +30,11 @@ namespace BoxingClub.WEB.Controllers
             _mapper = mapper;
         }
 
-        
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             IEnumerable<StudentLiteDTO> studentDTOs = await _studentService.GetStudents();
-            var students = _mapper.Map<IEnumerable<StudentLiteDTO>, List<StudentLiteViewModel>>(studentDTOs);
+            var students = _mapper.Map<List<StudentLiteViewModel>>(studentDTOs);
             return View(students);
         }
 
@@ -47,9 +47,13 @@ namespace BoxingClub.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
         {
-            var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
-            await _studentService.CreateStudent(studentDTO);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
+                await _studentService.CreateStudent(studentDTO);
+                return RedirectToAction("Index");
+            }
+            return View(studentViewModel);
 
         }
 
@@ -69,6 +73,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [HttpPost]
+        [Route("UpdateStudent/{id}")]
         public async Task<IActionResult> UpdateStudent(StudentFullViewModel studentViewModel)
         {
             var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);

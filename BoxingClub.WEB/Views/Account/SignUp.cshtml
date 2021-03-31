@@ -10,7 +10,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="SignUp">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="NickName" class="control-label"></label>
                 <input asp-for="NickName" class="form-control" />
@@ -41,4 +41,8 @@
 <div>
     <a asp-action="Index" asp-controller="home">Back to List</a>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 

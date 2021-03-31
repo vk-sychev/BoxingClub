@@ -1,42 +1,49 @@
-﻿using BoxingClub.WEB.Models;
+﻿using AutoMapper;
+using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.Interfaces;
+using BoxingClub.WEB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+
 
 namespace BoxingClub.WEB.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
 
-        public AccountController(UserManager<IdentityUser> userManager, 
-                                 SignInManager<IdentityUser> signInManager)
+        public AccountController(IAccountService accountService,
+                                 IMapper mapper)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _accountService = accountService;
+            _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult SignUp()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async  Task<IActionResult> SignUp(SignUpViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.NickName, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-
+                var user = _mapper.Map<IdentityUser>(model);
+                var result = await _accountService.SignUp(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("index", "home");
                 }
 
@@ -51,23 +58,26 @@ namespace BoxingClub.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> SignOut()
         {
-            await _signInManager.SignOutAsync();
+            await _accountService.SignOut();
             return RedirectToAction("index", "home");
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult SignIn()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> SignIn(SignInViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.NickName, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
+                var user = _mapper.Map<userDTO>(model);
+                var result = await _accountService.SignIn(user);
+                if (result)
                 {
                     return RedirectToAction("index", "home");
                 }
@@ -77,7 +87,5 @@ namespace BoxingClub.WEB.Controllers
 
             return View(model);
         }
-
-
     }
 }

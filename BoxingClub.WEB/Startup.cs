@@ -7,13 +7,22 @@ using BoxingClub.DAL.Interfaces;
 using BoxingClub.DAL.Repositories;
 using BoxingClub.WEB.Controllers;
 using BoxingClub.WEB.Mapping;
+using BoxingClub.WEB.Models;
+using BoxingClub.WEB.Validations;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace BoxingClub.WEB
 {
@@ -29,35 +38,49 @@ namespace BoxingClub.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BoxingClubContext>(options=>
+            services.AddDbContext<BoxingClubContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("BoxingClubDB")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
                 options.Password.RequiredLength = 3;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             })
-                .AddEntityFrameworkStores<BoxingClubContext>();
+            .AddEntityFrameworkStores<BoxingClubContext>();
 
             services.AddTransient<IUnitOfWork, EFUnitOfWork>();
             services.AddTransient<IStudentService, StudentService>();
+            services.AddTransient<IAccountService, AccountService>();
 
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-
-
+            var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
             IMapper mapper = mapperConfig.CreateMapper();
+
             services.AddSingleton(mapper);
-            services.AddRazorPages();
+            services.AddMvc(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }).AddFluentValidation();
+
+/*            services.AddTransient<IValidator<SignUpViewModel>, SignUpViewModelValidator>();
+            services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();*/
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/SignIn";
+            });
         }
 
 
-            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -75,7 +98,7 @@ namespace BoxingClub.WEB
             app.UseRouting();
 
             app.UseAuthentication();
-            //app.U seAuthorization();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
