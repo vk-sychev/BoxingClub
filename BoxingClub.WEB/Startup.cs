@@ -69,12 +69,13 @@ namespace BoxingClub.WEB
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).AddFluentValidation();
 
-/*            services.AddTransient<IValidator<SignUpViewModel>, SignUpViewModelValidator>();
-            services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();*/
+            services.AddTransient<IValidator<SignUpViewModel>, SignUpViewModelValidator>();
+            services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/SignIn";
+                options.AccessDeniedPath = "/Administration/AccessDenied";
             });
         }
 

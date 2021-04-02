@@ -19,7 +19,10 @@ namespace BoxingClub.WEB.Mapping
             CreateMap<StudentLiteDTO, Student>().ReverseMap();
             CreateMap<StudentFullDTO, Student>().ReverseMap();
             CreateMap<SignUpViewModel, IdentityUser>().ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.NickName)).ReverseMap();
-            CreateMap<SignInViewModel, userDTO>();
+            CreateMap<SignInViewModel, UserDTO>();
+            CreateMap<RoleDTO, RoleViewModel>().ReverseMap();
+            CreateMap<IdentityRole, RoleViewModel>().ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Name)).ReverseMap();
+            CreateMap<UserRoleViewModel, IdentityUser>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId)).ReverseMap();
         }
     }
 }

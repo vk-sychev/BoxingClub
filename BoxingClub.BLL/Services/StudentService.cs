@@ -40,7 +40,7 @@ namespace BoxingClub.BLL.Services
         public async Task<IEnumerable<StudentLiteDTO>> GetStudents()
         {
             var students = await Database.Students.GetAll();
-            var collection = _mapper.Map<IEnumerable<Student>, List<StudentLiteDTO>>(students);
+            var collection = _mapper.Map<List<StudentLiteDTO>>(students);
             return collection;
         }
 

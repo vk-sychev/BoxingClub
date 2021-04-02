@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BoxingClub.BLL.DTO
 {
-    public class userDTO
+    public class UserDTO
     {
         public string NickName { get; set; }
 

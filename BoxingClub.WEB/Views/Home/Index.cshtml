@@ -4,7 +4,8 @@
 
 <h2>Index</h2>
 
-@Html.ActionLink("Add Student", "CreateStudent")
+@Html.ActionLink("Add Student", "CreateStudent", "Home")
+@Html.ActionLink("Get Roles", "GetRoles", "Administration")
 
 <table class="table">
 
@@ -26,26 +27,26 @@
 
     @foreach (var item in Model)
     {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Surname)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Patronymic)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.BornDate)
-    </td>
-    <td>
-        @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id })
-    </td>
-    <td>
-        @Html.ActionLink("Delete", "DeleteStudent", new { id = item.Id })
-    </td>
-</tr>
-}
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patronymic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BornDate)
+            </td>
+            <td>
+                @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id })
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteStudent", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>

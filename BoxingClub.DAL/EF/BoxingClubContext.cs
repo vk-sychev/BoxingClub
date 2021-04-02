@@ -13,6 +13,11 @@ namespace BoxingClub.DAL.EF
     {
         public DbSet<Student> Students { get; set; }
 
+        public override ValueTask DisposeAsync()
+        {
+            return base.DisposeAsync();
+        }
+
         public BoxingClubContext(DbContextOptions<BoxingClubContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
