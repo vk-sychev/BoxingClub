@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.DAL.Entities;
+using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -14,133 +16,122 @@ namespace BoxingClub.BLL.Services
     public class AccountService : IAccountService
     {
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAccountProvider _accountProvider;
 
         public AccountService(IMapper mapper,
-                              UserManager<IdentityUser> userManager,
-                              SignInManager<IdentityUser> signInManager,
-                              RoleManager<IdentityRole> roleManager)
+                              IAccountProvider accountProvider)
         {
             _mapper = mapper;
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
+            _accountProvider = accountProvider;
         }
 
-        public Task<IdentityResult> AddToRole(IdentityUser user, string roleName)
+        public async Task<AccountResultDTO> AddToRole(UserDTO user, string roleName)
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "Role is null");
+                throw new NotFoundException(nameof(user), "User is null");
             }
-            return _userManager.AddToRoleAsync(user, roleName);
+            return _mapper.Map<AccountResultDTO>(await _accountProvider.AddToRole(_mapper.Map<User>(user), roleName));
         }
 
-        public Task<IdentityResult> CreateRole(RoleDTO role)
+        public async Task<AccountResultDTO> CreateRole(RoleDTO role)
         {
-            IdentityRole identityRole = new IdentityRole { Name = role.RoleName };
-            return _roleManager.CreateAsync(identityRole);
+            var result = await _accountProvider.CreateRole(_mapper.Map<Role>(role));
+            return _mapper.Map<AccountResultDTO>(result);
         }
 
-        public async Task Delete(string id)
+        public async Task<AccountResultDTO> Delete(string id)
         {
-            var role = FindRoleById(id);
-            await _roleManager.DeleteAsync(role.Result);
+            return _mapper.Map<AccountResultDTO>(await _accountProvider.Delete(id));
         }
 
-        public Task<IdentityResult> EditRole(IdentityRole role)
+        public async Task<AccountResultDTO> EditRole(RoleDTO role)
         {
             if (role == null)
             {
                 throw new NotFoundException(nameof(role), "Role is null");
             }
-
-            var foundRole = FindRoleById(role.Id);
-            foundRole.Result.Name = role.Name;
-
-            return  _roleManager.UpdateAsync(foundRole.Result);
+            return _mapper.Map<AccountResultDTO>(await _accountProvider.EditRole(_mapper.Map<Role>(role)));
         }
 
-        public Task<IdentityRole> FindRoleById(string id)
+        public async Task<RoleDTO> FindRoleById(string id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "Role's id is null");
             }
-            var role = _roleManager.FindByIdAsync(id);
+            var role = await _accountProvider.FindRoleById(id);
             if (role == null)
             {
                 throw new NotFoundException($"Role with id = {id} isn't found", "");
             }
-            return role;
+            return _mapper.Map<RoleDTO>(role);
         }
 
-        public Task<IdentityUser> FindUserById(string id)
+        public async Task<UserDTO> FindUserById(string id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "User's id is null");
             }
-            var user = _userManager.FindByIdAsync(id);
+            var user = await _accountProvider.FindUserById(id);
             if (user == null)
             {
                 throw new NotFoundException($"User with id = {id} isn't found", "");
             }
-            return user;
+            return _mapper.Map<UserDTO>(user);
         }
 
-        public IEnumerable<IdentityRole> GetRoles()
+        public List<RoleDTO> GetRoles()
         {
-            return _roleManager.Roles;
+            return _mapper.Map<List<RoleDTO>>(_accountProvider.GetRoles());
         }
 
-        public IEnumerable<IdentityUser> GetUsers()
+        public List<UserDTO> GetUsers()
         {
-            return _userManager.Users.ToList();
+            return _mapper.Map<List<UserDTO>>(_accountProvider.GetUsers());
         }
 
-        public Task<bool> IsInRole(IdentityUser user, string roleName)
-        {
-            var result = _userManager.IsInRoleAsync(user, roleName);
-            return result;
-        }
-
-        public Task<IdentityResult> RemoveFromRole(IdentityUser user, string roleName)
+        public async Task<bool> IsInRole(UserDTO user, string roleName)
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "Role is null");
+                throw new NotFoundException(nameof(user), "User is null");
             }
-            return _userManager.RemoveFromRoleAsync(user, roleName);
+
+            return await _accountProvider.IsInRole(_mapper.Map<User>(user), roleName);
         }
 
-        public async Task<bool> SignIn(UserDTO user)
+        public async Task<AccountResultDTO> RemoveFromRole(UserDTO user, string roleName)
         {
-            var result = await _signInManager.PasswordSignInAsync(user.NickName, user.Password, user.RememberMe, false);
-            return result.Succeeded ? true : false;
-        }
-
-        public async Task SignOut()
-        {
-            await _signInManager.SignOutAsync();
-        }
-
-        public async Task<IdentityResult> SignUp(IdentityUser user, string password)
-        {
-            var result = await _userManager.CreateAsync(user, password);
-
-            if (result.Succeeded)
+            if (user == null)
             {
-                var role = await _roleManager.FindByNameAsync("user");
-                if (role != null)
-                {
-                    await _userManager.AddToRoleAsync(user, "user");
-                }
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                throw new NotFoundException(nameof(user), "User is null");
             }
-            return result;
+            return _mapper.Map<AccountResultDTO>(await _accountProvider.RemoveFromRole(_mapper.Map<User>(user), roleName));
+        }
+
+        public async Task<SignInResultDTO> SignIn(UserDTO user)
+        {
+            if (user == null)
+            {
+                throw new NotFoundException(nameof(user), "User is null");
+            }
+            return _mapper.Map<SignInResultDTO>(await _accountProvider.SignIn(_mapper.Map<User>(user)));
+        }
+
+        public Task SignOut()
+        {
+            return _accountProvider.SignOut();
+        }
+
+        public async Task<AccountResultDTO> SignUp(UserDTO user, string password)
+        {
+            if (user == null)
+            {
+                throw new NotFoundException(nameof(user), "User is null");
+            }
+            return _mapper.Map<AccountResultDTO>(await _accountProvider.SignUp(_mapper.Map<User>(user), password));
         }
     }
 }

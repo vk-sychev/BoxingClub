@@ -11,7 +11,7 @@ namespace BoxingClub.WEB.Models
         public string Id { get; set; }
 
         [Required]
-        public string RoleName { get; set; }
+        public string Name { get; set; }
 
     }
 }

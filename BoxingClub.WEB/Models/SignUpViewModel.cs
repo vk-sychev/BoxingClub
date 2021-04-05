@@ -10,7 +10,7 @@ namespace BoxingClub.WEB.Models
     public class SignUpViewModel
     {
         //[Required]
-        public string NickName { get; set; }
+        public string UserName { get; set; }
 
         //[Required]
         //[EmailAddress]

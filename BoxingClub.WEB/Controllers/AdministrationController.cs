@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
+    //[Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly IAccountService _accountService;
@@ -38,7 +39,7 @@ namespace BoxingClub.WEB.Controllers
             {
                 var role = _mapper.Map<RoleDTO>(model);
                 var result = await _accountService.CreateRole(role);
-
+                
                 if (result.Succeeded)
                 {
                     return RedirectToAction("GetRoles", "administration");
@@ -74,7 +75,7 @@ namespace BoxingClub.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var role = _mapper.Map<IdentityRole>(model);
-                var result = await _accountService.EditRole(role);
+                var result = await _accountService.EditRole(_mapper.Map<RoleDTO>(role));
                 if (result.Succeeded)
                 {
                     return RedirectToAction("GetRoles", "administration");
@@ -104,18 +105,19 @@ namespace BoxingClub.WEB.Controllers
             var model = new List<UserRoleViewModel>();
 
             var users = _accountService.GetUsers();
-
+            //var userRole = _mapper.Map<UserRoleViewModel>(users.First());
             foreach (var user in users)
             {
                 var userRoleViewModel = _mapper.Map<UserRoleViewModel>(user);
-                if (await _accountService.IsInRole(user, role.Name))
+                userRoleViewModel.IsSelected = await _accountService.IsInRole(user, role.Name);
+/*                if (await _accountService.IsInRole(user, role.Name))
                 {
                     userRoleViewModel.IsSelected = true;
                 }
                 else
                 {
                     userRoleViewModel.IsSelected = false;
-                }
+                }*/
                 model.Add(userRoleViewModel);
             }
             return View(model);
@@ -134,11 +136,11 @@ namespace BoxingClub.WEB.Controllers
 
                     if (userView[i].IsSelected && !(await _accountService.IsInRole(user, role.Name)))
                     {
-                        result = await _accountService.AddToRole(user, role.Name);
+                        result = _mapper.Map<IdentityResult>(await _accountService.AddToRole(user, role.Name));
                     }
                     else if (!userView[i].IsSelected && (await _accountService.IsInRole(user, role.Name)))
                     {
-                        result = await _accountService.RemoveFromRole(user, role.Name);
+                        result = _mapper.Map<IdentityResult>(await _accountService.RemoveFromRole(user, role.Name));
                     }
                     else
                     {

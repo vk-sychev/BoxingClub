@@ -40,7 +40,7 @@ namespace BoxingClub.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _mapper.Map<IdentityUser>(model);
+                var user = _mapper.Map<UserDTO>(model);
                 var result = await _accountService.SignUp(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -77,7 +77,7 @@ namespace BoxingClub.WEB.Controllers
             {
                 var user = _mapper.Map<UserDTO>(model);
                 var result = await _accountService.SignIn(user);
-                if (result)
+                if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {

@@ -17,7 +17,7 @@ using BoxingClub.Infrastructure.HttpSwitcher;
 
 namespace BoxingClub.WEB.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "User, Admin")]
     public class HomeController : Controller
     {
         private readonly IStudentService _studentService;
@@ -30,7 +30,6 @@ namespace BoxingClub.WEB.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             IEnumerable<StudentLiteDTO> studentDTOs = await _studentService.GetStudents();

@@ -54,11 +54,13 @@ namespace BoxingClub.WEB
             services.AddTransient<IUnitOfWork, EFUnitOfWork>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IAccountProvider, AccountProvider>();
 
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
+            mapperConfig.AssertConfigurationIsValid();
             IMapper mapper = mapperConfig.CreateMapper();
-
             services.AddSingleton(mapper);
+
             services.AddMvc(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()

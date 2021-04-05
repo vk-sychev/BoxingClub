@@ -9,7 +9,7 @@ namespace BoxingClub.WEB.Models
     public class SignInViewModel
     {
         //[Required]
-        public string NickName { get; set; }
+        public string UserName { get; set; }
 
         //[Required]
         [DataType(DataType.Password)]

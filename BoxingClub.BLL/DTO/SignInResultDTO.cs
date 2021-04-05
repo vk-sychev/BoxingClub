@@ -4,9 +4,8 @@ using System.Text;
 
 namespace BoxingClub.BLL.DTO
 {
-    public class RoleDTO
+    public class SignInResultDTO
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public bool Succeeded { get; protected set; }
     }
 }

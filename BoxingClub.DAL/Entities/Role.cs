@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoxingClub.BLL.DTO
+namespace BoxingClub.DAL.Entities
 {
-    public class RoleDTO
+    public class Role
     {
         public string Id { get; set; }
         public string Name { get; set; }

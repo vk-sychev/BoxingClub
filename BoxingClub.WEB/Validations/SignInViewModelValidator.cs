@@ -11,7 +11,7 @@ namespace BoxingClub.WEB.Validations
     {
         public SignInViewModelValidator()
         {
-            RuleFor(x => x.NickName).NotNull().NotEmpty();
+            RuleFor(x => x.UserName).NotNull().NotEmpty();
             RuleFor(x => x.Password).NotNull().NotEmpty();
         }
     }
