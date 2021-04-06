@@ -13,6 +13,10 @@ namespace BoxingClub.DAL.EF
     {
         public DbSet<Student> Students { get; set; }
 
+        public DbSet<BoxingGroup> BoxingGroups { get; set; }
+
+        public DbSet<Coach> Coaches { get; set; }
+
         public override ValueTask DisposeAsync()
         {
             return base.DisposeAsync();

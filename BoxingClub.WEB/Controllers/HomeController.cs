@@ -32,10 +32,11 @@ namespace BoxingClub.WEB.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<StudentLiteDTO> studentDTOs = await _studentService.GetStudents();
+            var studentDTOs = await _studentService.GetStudents();
             var students = _mapper.Map<List<StudentLiteViewModel>>(studentDTOs);
             return View(students);
         }
+
 
 
         [Authorize(Roles = "Admin")]
@@ -97,6 +98,6 @@ namespace BoxingClub.WEB.Controllers
             var studentDTO = await _studentService.GetStudent(id.Value);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
             return View(student);
-        }    
+        }
     }
 }
