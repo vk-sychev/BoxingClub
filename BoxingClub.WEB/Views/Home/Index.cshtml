@@ -3,9 +3,10 @@
 @{ ViewData["Title"] = "Home Page"; }
 
 <h2>Index</h2>
-
-@Html.ActionLink("Add Student", "CreateStudent", "Home")
-@Html.ActionLink("Get Roles", "GetRoles", "Administration")
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    @Html.ActionLink("Add Student", "CreateStudent", "Home")
+}
 
 <table class="table">
 
@@ -40,12 +41,24 @@
             <td>
                 @Html.DisplayFor(modelItem => item.BornDate)
             </td>
-            <td>
-                @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id })
-            </td>
-            <td>
-                @Html.ActionLink("Delete", "DeleteStudent", new { id = item.Id })
-            </td>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id })
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "DetailsStudent", new { id = item.Id })
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "DeleteStudent", new { id = item.Id })
+                </td>
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                <td>
+                    @Html.ActionLink("Details", "DetailsStudent", new { id = item.Id })
+                </td>
+            }
         </tr>
     }
 

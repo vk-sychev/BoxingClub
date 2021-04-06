@@ -35,9 +35,8 @@ namespace BoxingClub.DAL.Repositories
             return await _userManager.AddToRoleAsync(identityUser, roleName);
         }
 
-        public async Task<IdentityResult> CreateRole(Role role)//при маппинге id пропадает
+        public async Task<IdentityResult> CreateRole(Role role)
         {
-            //IdentityRole identityRole = new IdentityRole(role.Name);
             var identityRole = _mapper.Map<IdentityRole>(role);
             return await _roleManager.CreateAsync(identityRole);
         }
@@ -50,10 +49,9 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task<IdentityResult> EditRole(Role role)
         {
-            var identityRole = _mapper.Map<IdentityRole>(role);
-            var foundRole = await _roleManager.FindByIdAsync(identityRole.Id);
-            foundRole.Name = identityRole.Name;
-            return await _roleManager.UpdateAsync(foundRole);
+            var identityRole = await _roleManager.FindByIdAsync(role.Id);
+            identityRole.Name = role.Name;
+            return await _roleManager.UpdateAsync(identityRole);
         }
 
         public async Task<IdentityRole> FindRoleById(string id)
@@ -79,7 +77,8 @@ namespace BoxingClub.DAL.Repositories
         public async Task<bool> IsInRole(User user, string roleName)
         {
             var identityUser = _mapper.Map<IdentityUser>(user);
-            return await _userManager.IsInRoleAsync(identityUser, roleName);
+            var res = await _userManager.IsInRoleAsync(identityUser, roleName);
+            return res;
         }
 
         public async Task<IdentityResult> RemoveFromRole(User user, string roleName)
@@ -101,16 +100,14 @@ namespace BoxingClub.DAL.Repositories
         public async Task<IdentityResult> SignUp(User user, string password)
         {
             var identityUser = new IdentityUser(user.UserName);
-            //identityUser = _mapper.Map<IdentityUser>(user);
-            //var identityUser = _mapper.Map<IdentityUser>(user);
             var result = await _userManager.CreateAsync(identityUser, password);
 
             if (result.Succeeded)
             {
-                var role = await _roleManager.FindByNameAsync("user");
+                var role = await _roleManager.FindByNameAsync("User");
                 if (role != null)
                 {
-                    await _userManager.AddToRoleAsync(identityUser, "user");
+                    await _userManager.AddToRoleAsync(identityUser, role.Name);
                 }
                 await _signInManager.SignInAsync(identityUser, isPersistent: false);
             }

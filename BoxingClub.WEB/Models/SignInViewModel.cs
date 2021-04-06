@@ -8,14 +8,11 @@ namespace BoxingClub.WEB.Models
 {
     public class SignInViewModel
     {
-        //[Required]
         public string UserName { get; set; }
 
-        //[Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        //[Required]
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
     }

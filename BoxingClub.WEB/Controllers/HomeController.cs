@@ -37,12 +37,15 @@ namespace BoxingClub.WEB.Controllers
             return View(students);
         }
 
+
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateStudent()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
         {
             if (ModelState.IsValid)
@@ -56,6 +59,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [Route("DeleteStudent/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteStudent(int? id)
         {
             await _studentService.DeleteStudent(id);
@@ -63,6 +67,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [Route("UpdateStudent/{id}")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> UpdateStudent(int? id)
         {
@@ -73,6 +78,7 @@ namespace BoxingClub.WEB.Controllers
 
         [HttpPost]
         [Route("UpdateStudent/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateStudent(StudentFullViewModel studentViewModel)
         {
             if (ModelState.IsValid)
@@ -84,11 +90,13 @@ namespace BoxingClub.WEB.Controllers
             return View(studentViewModel);
         }
 
-
-        /*        public IActionResult Privacy()
-                {
-                    return View();
-                }*/ 
-
+        [HttpGet]
+        [Route("DetailsStudent/{id}")]
+        public async Task<IActionResult> DetailsStudent(int? id)
+        {
+            var studentDTO = await _studentService.GetStudent(id.Value);
+            var student = _mapper.Map<StudentFullViewModel>(studentDTO);
+            return View(student);
+        }    
     }
 }

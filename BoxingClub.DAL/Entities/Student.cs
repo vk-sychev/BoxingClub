@@ -8,9 +8,9 @@ namespace BoxingClub.DAL.Entities
 {
     public class Student
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+/*        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        [Required]
+        [Required]*/
         public int Id { get; set; }
 
         public string Name { get; set; }

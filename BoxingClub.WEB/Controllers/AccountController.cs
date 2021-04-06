@@ -6,6 +6,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace BoxingClub.WEB.Controllers
         [HttpGet]
         public IActionResult SignUp()
         {
+            ViewBag.roleList = new SelectList(_mapper.Map<List<RoleViewModel>>(_accountService.GetRoles()), "Id", "Name");
             return View();
         }
 

@@ -13,7 +13,7 @@ namespace BoxingClub.WEB.Validations
         {
             RuleFor(x => x.UserName).NotNull().MinimumLength(5);
             RuleFor(x => x.Email).EmailAddress().NotNull().NotEmpty();
-            RuleFor(x => x.Password).NotNull().NotEmpty();
+            RuleFor(x => x.Password).NotNull().MinimumLength(3);
             RuleFor(x => x.Password).Equal(x => x.ConfirmPassword).WithMessage("Password and confirmation password do not match.");
         }
     }

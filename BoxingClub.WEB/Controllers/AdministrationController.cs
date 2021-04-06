@@ -12,8 +12,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Controllers
 {
-    [AllowAnonymous]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly IAccountService _accountService;
@@ -105,19 +104,10 @@ namespace BoxingClub.WEB.Controllers
             var model = new List<UserRoleViewModel>();
 
             var users = _accountService.GetUsers();
-            //var userRole = _mapper.Map<UserRoleViewModel>(users.First());
             foreach (var user in users)
             {
                 var userRoleViewModel = _mapper.Map<UserRoleViewModel>(user);
                 userRoleViewModel.IsSelected = await _accountService.IsInRole(user, role.Name);
-/*                if (await _accountService.IsInRole(user, role.Name))
-                {
-                    userRoleViewModel.IsSelected = true;
-                }
-                else
-                {
-                    userRoleViewModel.IsSelected = false;
-                }*/
                 model.Add(userRoleViewModel);
             }
             return View(model);

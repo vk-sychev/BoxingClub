@@ -1,4 +1,3 @@
-using Autofac;
 using AutoMapper;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Services;
@@ -58,8 +57,9 @@ namespace BoxingClub.WEB
 
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
             mapperConfig.AssertConfigurationIsValid();
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            //IMapper mapper = mapperConfig.CreateMapper();
+
+            services.AddAutoMapper(typeof(MappingProfile)); 
 
             services.AddMvc(options =>
             {
@@ -73,6 +73,8 @@ namespace BoxingClub.WEB
 
             services.AddTransient<IValidator<SignUpViewModel>, SignUpViewModelValidator>();
             services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();
+            services.AddTransient<IValidator<StudentFullViewModel>, StudentFullViewModelValidator>();
+            services.AddTransient<IValidator<RoleViewModel>, RoleViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>
             {
