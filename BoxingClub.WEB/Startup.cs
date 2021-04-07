@@ -54,6 +54,8 @@ namespace BoxingClub.WEB
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAccountProvider, AccountProvider>();
+            services.AddTransient<IBoxingGroupService, BoxingGroupService>();
+            
 
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
             //mapperConfig.AssertConfigurationIsValid();

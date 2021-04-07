@@ -9,6 +9,8 @@ namespace BoxingClub.DAL.Interfaces
     public interface IUnitOfWork
     {
         IRepository<Student> Students { get; }
+
+        IRepository<BoxingGroup> BoxingGroups { get; }
         Task Save();
     }
 }

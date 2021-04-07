@@ -24,6 +24,6 @@ namespace BoxingClub.WEB.Models
         public double Weight { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? DateOfEntry { get; set; }
+        public DateTime DateOfEntry { get; set; }
     }
 }

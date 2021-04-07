@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoxingClub.DAL.Entities
+namespace BoxingClub.BLL.DTO
 {
-    public class Coach
+    public class CoachDTO
     {
         public int Id { get; set; }
 
@@ -17,7 +17,5 @@ namespace BoxingClub.DAL.Entities
         public DateTime BornDate { get; set; }
 
         public string Description { get; set; }
-
-        public List<BoxingGroup> BoxingGroups { get; set; } = new List<BoxingGroup>();
     }
 }

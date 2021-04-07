@@ -53,6 +53,13 @@ namespace BoxingClub.WEB.Mapping
             CreateMap<AccountResultDTO, IdentityResult>(MemberList.Source).ReverseMap();
             CreateMap<AccountErrorDTO, IdentityError>(MemberList.Source).ReverseMap();
             CreateMap<SignInResultDTO, SignInResult>(MemberList.Source).ReverseMap();
+
+
+            CreateMap<Coach, CoachDTO>().ReverseMap();
+            CreateMap<CoachDTO, CoachViewModel>().ReverseMap();
+
+            CreateMap<BoxingGroup, BoxingGroupDTO>().ReverseMap();
+            CreateMap<BoxingGroupDTO, BoxingGroupViewModel>().ReverseMap();
         }
     }
 }

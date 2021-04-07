@@ -12,25 +12,25 @@ namespace BoxingClub.DAL.Repositories
 {
     class StudentRepository : IRepository<Student>
     {
-        private BoxingClubContext db;
+        private readonly BoxingClubContext _db;
 
         public StudentRepository(BoxingClubContext context)
         {
-            this.db = context;
+            _db = context;
         }
 
 
         public async Task Create(Student item)
         {
-            await db.Students.AddAsync(item);
+            await _db.Students.AddAsync(item);
         }
 
         public bool Delete(int id)
         {
-            var student = db.Students.Find(id);
+            var student = _db.Students.Find(id);
             if (student != null)
             {
-                db.Students.Remove(student);
+                _db.Students.Remove(student);
                 return true;
             }
             return false;
@@ -39,24 +39,24 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task<IEnumerable<Student>> Find(Func<Student, ValueTask<bool>> predicate)
         {
-            return await db.Students.WhereAwait(predicate).ToListAsync();
+            return await _db.Students.WhereAwait(predicate).ToListAsync();
         }
 
 
         public async Task<Student> Get(int id)
         {
-            return await db.Students.FindAsync(id);
+            return await _db.Students.FindAsync(id);
         }
 
 
         public async Task<IEnumerable<Student>> GetAll()
         {
-            return await db.Students.AsQueryable().ToListAsync();
+            return await _db.Students.AsQueryable().ToListAsync();
         }
 
         public void Update(Student item)
         {
-            db.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _db.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
         }
     }
 }
