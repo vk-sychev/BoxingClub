@@ -50,11 +50,13 @@ namespace BoxingClub.WEB.Controllers
             return View(model);
         }
 
-/*        [HttpGet]
+        [HttpGet]
         [Route("EditStudentsInGroup/id")]
         public async Task<IActionResult> EditStudentsInGroup(int? id)
         {
-            var 
-        }*/
+            var group = await _boxingGroupService.GetBoxingGroup(id);
+
+            return View();
+        }
     }
 }
