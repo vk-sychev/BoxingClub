@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Controllers
 {
+    [AllowAnonymous]
     public class ErrorController : Controller
     {
         private readonly ILogger<ErrorController> _logger;
@@ -20,7 +21,6 @@ namespace BoxingClub.WEB.Controllers
             _logger = logger;
         }
 
-        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [Route("Error")]
         public IActionResult Error()

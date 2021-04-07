@@ -8,9 +8,6 @@ namespace BoxingClub.DAL.Entities
 {
     public class Student
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
-        [Required]
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -26,5 +23,7 @@ namespace BoxingClub.DAL.Entities
         public double Weight { get; set; }
 
         public DateTime DateOfEntry { get; set; }
+
+        public BoxingGroup BoxingGroup { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace BoxingClub.BLL.Interfaces
     {
         Task<StudentFullDTO> GetStudent(int? id);
 
-        Task<IEnumerable<StudentLiteDTO>> GetStudents();
+        Task<List<StudentLiteDTO>> GetStudents();
 
         Task CreateStudent(StudentFullDTO studentDTO);
 
