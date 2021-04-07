@@ -19,11 +19,11 @@ namespace BoxingClub.WEB.Models
         [DataType(DataType.Date)]
         public DateTime BornDate { get; set; }
 
-        public int? Height { get; set; }
+        public int Height { get; set; }
 
-        public double? Weight { get; set; }
+        public double Weight { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? DateOfEntry { get; set; }
+        public DateTime DateOfEntry { get; set; }
     }
 }
