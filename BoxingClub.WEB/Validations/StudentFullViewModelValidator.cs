@@ -23,9 +23,8 @@ namespace BoxingClub.WEB.Validations
             RuleFor(x => x.Patronymic).Must(x => x == null || x.Length > 0);
 
             RuleFor(x => x.DateOfEntry).NotNull()
-                                       .LessThanOrEqualTo(todaysDate)
-                                       //.LessThan(todaysDate)
-                                       .WithMessage($"Date of entry must be less or equal today's date: { todaysDate.ToString("{MM-dd-yyyy}") }")
+                                       .Must(x => x <= todaysDate)
+                                       .WithMessage($"Date of entry must be less or equal today's date: { todaysDate }")
                                        .GreaterThan(x => x.BornDate)
                                        .WithMessage("Date of entry must be greater than the date of birth");
 

@@ -53,9 +53,9 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetRoles()
+        public async Task<IActionResult> GetRoles()
         {
-            var roles = _mapper.Map<List<RoleViewModel>>(_accountService.GetRoles());
+            var roles = _mapper.Map<List<RoleViewModel>>(await _accountService.GetRoles());
             return View(roles);
         }
 
@@ -103,7 +103,7 @@ namespace BoxingClub.WEB.Controllers
             ViewBag.roleId = role.Id;
             var model = new List<UserRoleViewModel>();
 
-            var users = _accountService.GetUsers();
+            var users = await _accountService.GetUsers();
             foreach (var user in users)
             {
                 var userRoleViewModel = _mapper.Map<UserRoleViewModel>(user);

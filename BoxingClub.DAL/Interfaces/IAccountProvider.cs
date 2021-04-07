@@ -19,9 +19,9 @@ namespace BoxingClub.DAL.Interfaces
 
         Task<IdentityUser> FindUserById(string id);
 
-        List<IdentityRole> GetRoles();
+        Task<List<IdentityRole>> GetRoles();
 
-        List<IdentityUser> GetUsers();
+        Task<List<IdentityUser>> GetUsers();
 
         Task<bool> IsInRole(User user, string roleName);
 
