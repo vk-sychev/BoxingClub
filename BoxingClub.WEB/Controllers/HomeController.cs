@@ -55,7 +55,6 @@ namespace BoxingClub.WEB.Controllers
                 return RedirectToAction("Index");
             }
             return View(studentViewModel);
-
         }
 
         [Route("DeleteStudent/{id}")]

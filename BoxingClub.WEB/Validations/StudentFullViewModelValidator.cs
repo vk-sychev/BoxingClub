@@ -12,7 +12,6 @@ namespace BoxingClub.WEB.Validations
         public StudentFullViewModelValidator()
         {
             var todaysDate = DateTime.Today;
-            var res = new DateTime(2020, 5, 5) < todaysDate;
             RuleFor(x => x.Name).NotNull();
             RuleFor(x => x.Surname).NotNull();
             RuleFor(x => x.BornDate).NotNull()
@@ -26,7 +25,7 @@ namespace BoxingClub.WEB.Validations
             RuleFor(x => x.DateOfEntry).NotNull()
                                        .LessThanOrEqualTo(todaysDate)
                                        //.LessThan(todaysDate)
-                                       .WithMessage($"Date of entry must be less or equal today's date: { todaysDate }")
+                                       .WithMessage($"Date of entry must be less or equal today's date: { todaysDate.ToString("{MM-dd-yyyy}") }")
                                        .GreaterThan(x => x.BornDate)
                                        .WithMessage("Date of entry must be greater than the date of birth");
 
