@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
@@ -39,6 +40,41 @@ namespace BoxingClub.BLL.Services
                 throw new NotFoundException($"Group with id = {id.Value} isn't found", "");
             }
             return _mapper.Map<BoxingGroupDTO>(group);
+        }
+
+        public Task UpdateGroup(BoxingGroupDTO groupDTO)
+        {
+            if (groupDTO == null)
+            {
+                throw new ArgumentNullException(nameof(groupDTO), "Group is null");
+            }
+            var group = _mapper.Map<BoxingGroup>(groupDTO);
+            _database.BoxingGroups.Update(group);
+            return _database.Save();
+        }
+
+        public async Task CreateGroup(BoxingGroupDTO groupDTO)
+        {
+            if (groupDTO == null)
+            {
+                throw new ArgumentNullException(nameof(groupDTO), "Group is null");
+            }
+            var group = _mapper.Map<BoxingGroup>(groupDTO);
+            await _database.BoxingGroups.Create(group);
+            await _database.Save();
+        }
+
+        public async Task DeleleGroup(int? id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id), "Group's id is null");
+            }
+            if (!await _database.BoxingGroups.Delete(id.Value))
+            {
+                throw new NotFoundException($"Group with id = {id.Value} isn't found", "");
+            }
+            await _database.Save();
         }
     }
 }

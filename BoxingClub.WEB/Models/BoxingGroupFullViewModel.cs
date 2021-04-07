@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Models
 {
-    public class BoxingGroupViewModel
+    public class BoxingGroupFullViewModel
     {
         public int Id { get; set; }
 

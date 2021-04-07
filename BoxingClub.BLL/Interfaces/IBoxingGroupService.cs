@@ -6,8 +6,10 @@ namespace BoxingClub.BLL.Interfaces
 {
     public interface IBoxingGroupService
     {
-        Task<List<BoxingGroupDTO>> GetBoxingGroups();
-
+        Task CreateGroup(BoxingGroupDTO groupDTO);
+        Task DeleleGroup(int? id);
         Task<BoxingGroupDTO> GetBoxingGroup(int? id);
+        Task<List<BoxingGroupDTO>> GetBoxingGroups();
+        Task UpdateGroup(BoxingGroupDTO groupDTO);
     }
 }
