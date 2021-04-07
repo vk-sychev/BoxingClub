@@ -23,8 +23,8 @@ namespace BoxingClub.WEB.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _mapper.Map<BoxingGroupViewModel>(await _boxingGroupService.GetBoxingGroups());
-            return View();
+            var model = _mapper.Map<List<BoxingGroupViewModel>>(await _boxingGroupService.GetBoxingGroups());
+            return View(model);
         }
     }
 }
