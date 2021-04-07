@@ -11,12 +11,13 @@ namespace BoxingClub.DAL.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
-        private BoxingClubContext db;
+        private readonly BoxingClubContext _db;
         private StudentRepository _studentRepository;
+        private BoxingGroupRepository _boxingGroupRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
-            db = context;
+            _db = context;
         }
 
         public IRepository<Student> Students
@@ -25,15 +26,27 @@ namespace BoxingClub.DAL.Repositories
             {
                 if (_studentRepository == null) 
                 {
-                    _studentRepository = new StudentRepository(db);
+                    _studentRepository = new StudentRepository(_db);
                 }
                 return _studentRepository;
             }
         }
 
+        public IRepository<BoxingGroup> BoxingGroups
+        {
+            get
+            {
+                if (_boxingGroupRepository == null)
+                {
+                    _boxingGroupRepository = new BoxingGroupRepository(_db);
+                }
+                return _boxingGroupRepository;
+            }
+        }
+
         public async Task Save()
         {
-            await db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
         }
     }
 }
