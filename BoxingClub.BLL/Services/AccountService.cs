@@ -29,9 +29,10 @@ namespace BoxingClub.BLL.Services
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(user), "User is null");
             }
-            return _mapper.Map<AccountResultDTO>(await _accountProvider.AddToRole(_mapper.Map<User>(user), roleName));
+            var result = await _accountProvider.AddToRole(_mapper.Map<User>(user), roleName);
+            return _mapper.Map<AccountResultDTO>(result);
         }
 
         public async Task<AccountResultDTO> CreateRole(RoleDTO role)
@@ -82,14 +83,14 @@ namespace BoxingClub.BLL.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public List<RoleDTO> GetRoles()
+        public async Task<List<RoleDTO>> GetRoles()
         {
-            return _mapper.Map<List<RoleDTO>>(_accountProvider.GetRoles());
+            return _mapper.Map<List<RoleDTO>>(await _accountProvider.GetRoles());
         }
 
-        public List<UserDTO> GetUsers()
+        public async Task<List<UserDTO>> GetUsers()
         {
-            return _mapper.Map<List<UserDTO>>(_accountProvider.GetUsers());
+            return _mapper.Map<List<UserDTO>>(await _accountProvider.GetUsers());
         }
 
         public async Task<bool> IsInRole(UserDTO user, string roleName)

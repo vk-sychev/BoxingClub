@@ -3,6 +3,7 @@ using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,14 +65,14 @@ namespace BoxingClub.DAL.Repositories
             return await _userManager.FindByIdAsync(id);
         }
 
-        public List<IdentityRole> GetRoles()
+        public async Task<List<IdentityRole>> GetRoles()
         {
-            return _roleManager.Roles.ToList();
+            return await _roleManager.Roles.ToListAsync();
         }
 
-        public List<IdentityUser> GetUsers()
+        public async Task<List<IdentityUser>> GetUsers()
         {
-            return _userManager.Users.ToList();
+            return await _userManager.Users.ToListAsync();
         }
 
         public async Task<bool> IsInRole(User user, string roleName)

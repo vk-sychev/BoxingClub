@@ -18,9 +18,9 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<UserDTO> FindUserById(string id);
 
-        List<RoleDTO> GetRoles();
+        Task<List<RoleDTO>> GetRoles();
 
-        List<UserDTO> GetUsers();
+        Task<List<UserDTO>> GetUsers();
 
         Task<bool> IsInRole(UserDTO user, string roleName);
 
