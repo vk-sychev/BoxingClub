@@ -9,5 +9,9 @@ namespace BoxingClub.BLL.DTO
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public CoachDTO Coach { get; set; }
+
+        public List<StudentLiteDTO> Students { get; set; } = new List<StudentLiteDTO>();
     }
 }

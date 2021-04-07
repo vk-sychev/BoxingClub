@@ -26,5 +26,22 @@ namespace BoxingClub.WEB.Controllers
             var model = _mapper.Map<List<BoxingGroupViewModel>>(await _boxingGroupService.GetBoxingGroups());
             return View(model);
         }
+
+        [HttpGet]
+        [Route("EditGroup/{id}")]
+        public async Task<IActionResult> EditGroup(int? id)
+        {
+            var group = await _boxingGroupService.GetBoxingGroup(id);
+            var mappedGroup = _mapper.Map<BoxingGroupViewModel>(group);
+            return View(mappedGroup);
+        }
+
+        [HttpPost]
+        [Route("EditGroup/{id}")]
+
+        public async Task<IActionResult> EditGroup(BoxingGroupViewModel model)
+        {
+
+        }
     }
 }

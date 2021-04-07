@@ -25,9 +25,9 @@ namespace BoxingClub.DAL.Repositories
             await _db.Students.AddAsync(item);
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var student = _db.Students.Find(id);
+            var student = await _db.Students.FindAsync(id);
             if (student != null)
             {
                 _db.Students.Remove(student);
@@ -56,7 +56,7 @@ namespace BoxingClub.DAL.Repositories
 
         public void Update(Student item)
         {
-            _db.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _db.Entry(item).State = EntityState.Modified;
         }
     }
 }

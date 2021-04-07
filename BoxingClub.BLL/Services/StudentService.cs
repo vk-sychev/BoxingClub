@@ -54,17 +54,17 @@ namespace BoxingClub.BLL.Services
             await _database.Save();
         }
 
-        public Task DeleteStudent(int? id)
+        public async Task DeleteStudent(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "Student's id is null");
             }
-            if(!_database.Students.Delete(id.Value))
+            if(! await _database.Students.Delete(id.Value))
             {
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
             }
-            return _database.Save();
+            await _database.Save();
         }
 
         public Task UpdateStudent(StudentFullDTO studentDTO)

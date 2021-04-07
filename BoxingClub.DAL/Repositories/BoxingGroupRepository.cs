@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace BoxingClub.DAL.Repositories
 {
@@ -18,14 +19,20 @@ namespace BoxingClub.DAL.Repositories
             _db = context;
         }
 
-        public Task Create(BoxingGroup item)
+        public async Task Create(BoxingGroup item)
         {
-            throw new NotImplementedException();
+            await _db.BoxingGroups.AddAsync(item);
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var group = await _db.BoxingGroups.FindAsync(id);
+            if (group != null)
+            {
+                _db.BoxingGroups.Remove(group);
+                return true;
+            }
+            return false;
         }
 
         public Task<IEnumerable<BoxingGroup>> Find(Func<BoxingGroup, ValueTask<bool>> predicate)
@@ -33,19 +40,20 @@ namespace BoxingClub.DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<BoxingGroup> Get(int id)
+        public async Task<BoxingGroup> Get(int id)
         {
-            throw new NotImplementedException();
+            var res = await _db.BoxingGroups.Include(x => x.Coach).Where(g => g.Id == id).SingleAsync();
+            return res;
         }
 
         public async Task<IEnumerable<BoxingGroup>> GetAll()
         {
-            return await _db.BoxingGroups.AsQueryable().ToListAsync();
+            return await _db.BoxingGroups.AsQueryable().Include(x => x.Coach).ToListAsync();
         }
 
         public void Update(BoxingGroup item)
         {
-            throw new NotImplementedException();
+            _db.Entry(item).State = EntityState.Modified;
         }
     }
 }
