@@ -9,8 +9,6 @@ namespace BoxingClub.DAL.Interfaces
     {
         Task<IEnumerable<T>> GetAll();
 
-        Task<IEnumerable<T>> Find(Func<T, ValueTask<bool>> predicate);
-
         Task<T> Get(int id);
 
         Task Create(T item);

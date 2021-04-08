@@ -15,15 +15,11 @@ namespace BoxingClub.WEB.Models
 
         public CoachViewModel Coach { get; set; }
 
-        [DisplayName("Coach's Name")]
-        public string CoachName { get { return Coach.Name; } }
+        public string FIO { get { return Coach.Surname + ' ' + Coach.Name + ' ' + Coach.Patronymic; } }
 
-        [DisplayName("Coach's Surname")]
-        public string CoachSurname { get { return Coach.Surname; } }
+        [DisplayName("Coach")]
+        public int CoachId { get; set; }
 
-        [DisplayName("Coach's Patronymic")]
-        public string CoachPatronymic { get { return Coach.Patronymic; } }
-
-        public List<StudentFullViewModel> Students { get; set; } = new List<StudentFullViewModel>();
+        public List<StudentLiteViewModel> Students { get; set; } = new List<StudentLiteViewModel>();
     }
 }

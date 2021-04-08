@@ -14,87 +14,115 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using BoxingClub.Infrastructure.HttpSwitcher;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BoxingClub.WEB.Controllers
 {
-    [Authorize(Roles = "User, Admin")]
+    [Authorize(Roles = "Manager, Admin")]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
-
+        private readonly IBoxingGroupService _boxingGroupService;
         private readonly IMapper _mapper;
 
-        public StudentController(IStudentService studentService, IMapper mapper)
+        public StudentController(IStudentService studentService, 
+                                 IMapper mapper,
+                                 IBoxingGroupService boxingGroupService)
         {
             _studentService = studentService;
             _mapper = mapper;
+            _boxingGroupService = boxingGroupService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> GetAllStudents()
         {
             var studentDTOs = await _studentService.GetStudents();
             var students = _mapper.Map<List<StudentLiteViewModel>>(studentDTOs);
             return View(students);
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult CreateStudent()
+        public async Task<IActionResult> CreateStudent()
         {
+            var groups = await _boxingGroupService.GetBoxingGroups();
+            var model = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
+            var selectList = new SelectList(model, "Id", "Name");
+            ViewBag.Groups = selectList;
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
         {
             if (ModelState.IsValid)
             {
                 var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
                 await _studentService.CreateStudent(studentDTO);
-                return RedirectToAction("Index");
+                return RedirectToAction("GetAllStudents", "Student");
             }
+            var groups = await _boxingGroupService.GetBoxingGroups();
+            var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
+            var selectList = new SelectList(groupViewModels, "Id", "Name");
+            ViewBag.Groups = selectList;
             return View(studentViewModel);
 
         }
 
-        [Route("DeleteStudent/{id}")]
+        [Route("Student/DeleteStudent/{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteStudent(int? id)
         {
             await _studentService.DeleteStudent(id);
-            return RedirectToAction("Index");
+            return RedirectToAction("GetAllStudents", "Student");
         }
 
-        [Route("UpdateStudent/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Route("Student/UpdateStudent/{id}")]
         [HttpGet]
-        public async Task<IActionResult> UpdateStudent(int? id)
+        public async Task<IActionResult> UpdateStudent(int? id, bool fromHomeController, int returnId)
         {
+            var groups = await _boxingGroupService.GetBoxingGroups();
+            var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
+            var selectList = new SelectList(groupViewModels, "Id", "Name");
+            ViewBag.Groups = selectList;
+
+            ViewBag.fromHomeController = fromHomeController;
+            ViewBag.returnId = returnId;
             var studentDTO = await _studentService.GetStudent(id.Value);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
+
             return View(student);
         }
 
         [HttpPost]
-        [Route("UpdateStudent/{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateStudent(StudentFullViewModel studentViewModel)
+        [Route("Student/UpdateStudent/{id}")]
+        public async Task<IActionResult> UpdateStudent(StudentFullViewModel studentViewModel, bool fromHomeController, int returnId)
         {
             if (ModelState.IsValid)
             {
                 var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
                 await _studentService.UpdateStudent(studentDTO);
-                return RedirectToAction("Index");
+                if (fromHomeController)
+                {
+                    return RedirectToAction("DetailsGroup", "Home", new { id = returnId });
+                }
+                return RedirectToAction("GetAllStudents", "Student");
             }
+            var groups = await _boxingGroupService.GetBoxingGroups();
+            var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
+            var selectList = new SelectList(groupViewModels, "Id", "Name");
+            ViewBag.Groups = selectList;
+            ViewBag.fromHomeController = fromHomeController;
+
             return View(studentViewModel);
         }
 
         [HttpGet]
-        [Route("DetailsStudent/{id}")]
-        public async Task<IActionResult> DetailsStudent(int? id)
+        [Route("Student/DetailsStudent/{id}")]
+        public async Task<IActionResult> DetailsStudent(int? id, bool fromHomeController, int returnId)
         {
             var studentDTO = await _studentService.GetStudent(id.Value);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
+            ViewBag.fromHomeController = fromHomeController;
+            ViewBag.returnId = returnId;
             return View(student);
         }
     }

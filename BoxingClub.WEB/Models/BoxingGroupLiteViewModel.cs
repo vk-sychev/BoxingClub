@@ -12,5 +12,10 @@ namespace BoxingClub.WEB.Models
 
         [DisplayName("Group's Name")]
         public string Name { get; set; }
+
+        public CoachViewModel Coach { get; set; }
+
+        public int CoachId { get; set; }
+
     }
 }

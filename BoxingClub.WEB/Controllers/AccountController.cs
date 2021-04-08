@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
@@ -28,7 +29,6 @@ namespace BoxingClub.WEB.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult SignUp()
         {
@@ -36,7 +36,6 @@ namespace BoxingClub.WEB.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel model)
         {
@@ -64,14 +63,12 @@ namespace BoxingClub.WEB.Controllers
             return RedirectToAction("index", "home");
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult SignIn()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> SignIn(SignInViewModel model, string returnUrl)
         {

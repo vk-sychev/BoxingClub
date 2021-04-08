@@ -77,5 +77,18 @@ namespace BoxingClub.BLL.Services
             _database.Students.Update(student);
             return _database.Save();
         }
+
+        public async Task DeleteFromGroup(int? id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id), "Student's id is null");
+            }
+
+            var student = await _database.Students.Get(id.Value);
+            student.BoxingGroup = null;
+            _database.Students.Update(student);
+            await _database.Save();
+        }
     }
 }

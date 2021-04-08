@@ -1,0 +1,51 @@
+﻿@model BoxingClub.WEB.Models.BoxingGroupFullViewModel
+
+@{
+    ViewData["Title"] = "Group's Details";
+}
+
+<h3>Group's Details</h3>
+
+<div>
+    <h4>Group Name: @Model.Name</h4>
+    <hr />
+    <h4>Coach Name: @Model.FIO</h4>
+    <hr />
+    <h4>Coach Description: @Model.Coach.Description</h4>
+    <hr />
+    <h4>Students: </h4>
+</div>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model.Students)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patronymic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BornDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "UpdateStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
+                    @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
+                    @Html.ActionLink("Delete from group", "DeleteFromGroup", "Home", new { id = item.Id, returnId = Model.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Edit", "EditGroup", new { id = Model.Id })
+    }|
+    <a asp-action="Index" asp-controller="Home">Back to List</a>
+</div>

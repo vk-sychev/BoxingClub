@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace BoxingClub.DAL.Repositories
 {
-    public class BoxingGroupRepository : IRepository<BoxingGroup>
+    public class BoxingGroupRepository : IBoxingGroupRepository
     {
         private readonly BoxingClubContext _db;
 
@@ -35,20 +35,21 @@ namespace BoxingClub.DAL.Repositories
             return false;
         }
 
-        public Task<IEnumerable<BoxingGroup>> Find(Func<BoxingGroup, ValueTask<bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<BoxingGroup> Get(int id)
         {
-            var res = await _db.BoxingGroups.Include(x => x.Coach).Where(g => g.Id == id).SingleAsync();
+            var res = await _db.BoxingGroups.AsQueryable().Where(g => g.Id == id).Include(x => x.Coach).SingleAsync();
             return res;
         }
 
         public async Task<IEnumerable<BoxingGroup>> GetAll()
         {
-            return await _db.BoxingGroups.AsQueryable().Include(x => x.Coach).ToListAsync();
+            return await _db.BoxingGroups.Include(x => x.Coach).ToListAsync();
+        }
+
+        public async Task<BoxingGroup> GetGroupWithStudents(int? id)
+        {
+            var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id.Value).Include(x => x.Coach).Include(x => x.Students).SingleAsync();
+            return res;
         }
 
         public void Update(BoxingGroup item)

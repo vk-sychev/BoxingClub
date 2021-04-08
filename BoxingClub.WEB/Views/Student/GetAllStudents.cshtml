@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<BoxingClub.WEB.Models.StudentLiteViewModel>
 
-@{ ViewData["Title"] = "Home Page"; }
+@{ ViewData["Title"] = "All students"; }
 
-<h2>Index</h2>
+<h2>All students</h2>
 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
-    @Html.ActionLink("Add Student", "CreateStudent", "Home")
+    @Html.ActionLink("Add Student", "CreateStudent", "Student")
 }
 
 <table class="table">
@@ -22,6 +22,9 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.BornDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BoxingGroup.Name)
         </th>
         <th></th>
     </tr>
@@ -41,6 +44,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.BornDate)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoxingGroup.Name)
+            </td>
             @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
             {
                 <td>
@@ -53,8 +59,11 @@
                     @Html.ActionLink("Delete", "DeleteStudent", new { id = item.Id })
                 </td>
             }
-            else if (User.Identity.IsAuthenticated)
+            else if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
             {
+                                <td>
+                    @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id })
+                </td>
                 <td>
                     @Html.ActionLink("Details", "DetailsStudent", new { id = item.Id })
                 </td>

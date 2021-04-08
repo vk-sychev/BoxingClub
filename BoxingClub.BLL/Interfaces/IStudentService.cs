@@ -18,5 +18,6 @@ namespace BoxingClub.BLL.Interfaces
 
         Task UpdateStudent(StudentFullDTO studentDTO);
 
+        Task DeleteFromGroup(int? id);
     }
 }

@@ -13,7 +13,8 @@ namespace BoxingClub.DAL.Repositories
     {
         private readonly BoxingClubContext _db;
         private StudentRepository _studentRepository;
-        private BoxingGroupRepository _boxingGroupRepository;
+        private IBoxingGroupRepository _boxingGroupRepository;
+        private CoachRepository _coachRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
@@ -32,7 +33,7 @@ namespace BoxingClub.DAL.Repositories
             }
         }
 
-        public IRepository<BoxingGroup> BoxingGroups
+        public IBoxingGroupRepository BoxingGroups
         {
             get
             {
@@ -41,6 +42,18 @@ namespace BoxingClub.DAL.Repositories
                     _boxingGroupRepository = new BoxingGroupRepository(_db);
                 }
                 return _boxingGroupRepository;
+            }
+        }
+
+        public IRepository<Coach> Coaches
+        {
+            get
+            {
+                if(_coachRepository == null)
+                {
+                    _coachRepository = new CoachRepository(_db);
+                }
+                return _coachRepository;
             }
         }
 

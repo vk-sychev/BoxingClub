@@ -105,7 +105,7 @@ namespace BoxingClub.DAL.Repositories
 
             if (result.Succeeded)
             {
-                var role = await _roleManager.FindByNameAsync("User");
+                var role = await _roleManager.FindByNameAsync("Manager");
                 if (role != null)
                 {
                     await _userManager.AddToRoleAsync(identityUser, role.Name);

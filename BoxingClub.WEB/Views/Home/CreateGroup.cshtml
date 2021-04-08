@@ -1,15 +1,16 @@
-﻿@model BoxingClub.WEB.Models.BoxingGroupLiteViewModel
+﻿@model BoxingClub.WEB.Models.BoxingGroupFullViewModel
 
 @{
-    ViewData["Title"] = "EditGroup";
+    ViewData["Title"] = "CreateGroup";
 }
 
-<h1>EditGroup</h1>
+<h1>CreateGroup</h1>
 
+<h4>BoxingGroupFullViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EditGroup">
+        <form asp-action="CreateGroup">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -24,11 +25,8 @@
                 <span asp-validation-for="CoachId" class="text-danger"></span>
             </div>
             <div></div>
-            <div>
-                <h5>@Html.ActionLink("Group Details", "DetailsGroup", new { Id = Model.Id })</h5>
-            </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -38,6 +36,3 @@
     <a asp-action="Index" asp-controller="Home">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -60,7 +60,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [HttpGet]
-        [Route("EditRole/{id}")]
+        [Route("Administration/EditRole/{id}")]
         public async Task<IActionResult> EditRole(string? id)
         {
             var role = await _accountService.FindRoleById(id);
@@ -68,7 +68,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [HttpPost]
-        [Route("EditRole/{id}")]
+        [Route("Administration/EditRole/{id}")]
         public async Task<IActionResult> EditRole(RoleViewModel model)
         {
             if (ModelState.IsValid)
@@ -88,7 +88,7 @@ namespace BoxingClub.WEB.Controllers
             return View(model);
         }
 
-        [Route("DeleteRole/{id}")]
+        [Route("Administration/DeleteRole/{id}")]
         public async Task<IActionResult> DeleteRole(string? id)
         {
             await _accountService.Delete(id);
