@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Student's Details";
+    var fromHomeController = ViewBag.fromHomeController;
+    var returnId = ViewBag.returnId;
 }
 
 <h1>Student's Details</h1>
@@ -51,12 +53,27 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DateOfEntry)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BoxingGroup.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BoxingGroup.Name)
+        </dd>
     </dl>
 </div>
 <div>
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
-        @Html.ActionLink("Edit", "UpdateStudent", new { id = Model.Id }) 
+        @Html.ActionLink("Edit", "UpdateStudent", new { id = Model.Id })
     } |
-    <a asp-action="Index" asp-controller="home">Back to List</a>
+    @if (fromHomeController)
+    {
+        <div>
+            <a asp-action="DetailsGroup"  asp-controller="Home" asp-route-id=@returnId>Back to groups List</a>
+        </div>
+    }
+    else
+    {
+        <a asp-action="GetAllStudents" asp-controller="Student">Back to students List</a>
+    }
 </div>

@@ -17,7 +17,7 @@ namespace BoxingClub.WEB.Models
         public string Patronymic { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime BornDate { get; set; }
 
         public int Height { get; set; }
@@ -25,7 +25,11 @@ namespace BoxingClub.WEB.Models
         public double Weight { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateOfEntry { get; set; }
+
+        public int BoxingGroupId { get; set; }
+
+        public BoxingGroupLiteViewModel BoxingGroup { get; set; }
     }
 }

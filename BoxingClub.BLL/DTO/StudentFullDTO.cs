@@ -21,5 +21,9 @@ namespace BoxingClub.BLL.DTO
         public double Weight { get; set; }
 
         public DateTime DateOfEntry { get; set; }
+
+        public int BoxingGroupId { get; set; }
+
+        public BoxingGroupDTO BoxingGroup { get; set; }
     }
 }

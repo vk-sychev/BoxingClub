@@ -55,10 +55,10 @@ namespace BoxingClub.WEB
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAccountProvider, AccountProvider>();
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
-            
+            services.AddTransient<ICoachService, CoachService>();            
 
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
-            //mapperConfig.AssertConfigurationIsValid();
+            mapperConfig.AssertConfigurationIsValid();
             //IMapper mapper = mapperConfig.CreateMapper();
 
             services.AddAutoMapper(typeof(MappingProfile)); 
@@ -77,6 +77,7 @@ namespace BoxingClub.WEB
             services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();
             services.AddTransient<IValidator<StudentFullViewModel>, StudentFullViewModelValidator>();
             services.AddTransient<IValidator<RoleViewModel>, RoleViewModelValidator>();
+            services.AddTransient<IValidator<BoxingGroupLiteViewModel>, BoxingGroupLiteViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>
             {

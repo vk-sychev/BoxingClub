@@ -10,7 +10,9 @@ namespace BoxingClub.DAL.Interfaces
     {
         IRepository<Student> Students { get; }
 
-        IRepository<BoxingGroup> BoxingGroups { get; }
-        Task Save();
+        IBoxingGroupRepository BoxingGroups { get; }
+
+        IRepository<Coach> Coaches { get; }
+        Task SaveAsync();
     }
 }

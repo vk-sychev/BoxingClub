@@ -16,7 +16,12 @@ namespace BoxingClub.WEB.Models
 
         public string Patronymic { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime BornDate { get; set; }
+
+        public int BoxingGroupId { get; set; }
+
+        public BoxingGroupLiteViewModel BoxingGroup { get; set; }
     }
 }

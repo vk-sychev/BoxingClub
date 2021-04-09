@@ -26,7 +26,7 @@ namespace BoxingClub.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CoachId")
+                    b.Property<int>("CoachId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -37,6 +37,26 @@ namespace BoxingClub.DAL.Migrations
                     b.HasIndex("CoachId");
 
                     b.ToTable("BoxingGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CoachId = 1,
+                            Name = "Vityaz"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CoachId = 1,
+                            Name = "Warrior"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CoachId = 2,
+                            Name = "Sarmat"
+                        });
                 });
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.Coach", b =>
@@ -64,6 +84,34 @@ namespace BoxingClub.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Coaches");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BornDate = new DateTime(1995, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "CMS in boxing",
+                            Name = "Pavel",
+                            Patronymic = "Nikolayevich",
+                            Surname = "Dorochin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BornDate = new DateTime(1991, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "CMS in boxing",
+                            Name = "Vlad",
+                            Patronymic = "Nikolayevich",
+                            Surname = "Dorochin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BornDate = new DateTime(1970, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "MS in boxing",
+                            Name = "Sergey",
+                            Surname = "Goncharov"
+                        });
                 });
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.Student", b =>
@@ -107,7 +155,8 @@ namespace BoxingClub.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            BornDate = new DateTime(2020, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BornDate = new DateTime(2000, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 1,
                             DateOfEntry = new DateTime(2020, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Height = 175,
                             Name = "Vasiliy",
@@ -119,21 +168,34 @@ namespace BoxingClub.DAL.Migrations
                         {
                             Id = 2,
                             BornDate = new DateTime(1991, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 2,
                             DateOfEntry = new DateTime(2019, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Height = 0,
+                            Height = 180,
                             Name = "Igor",
                             Surname = "Zhuravlev",
-                            Weight = 0.0
+                            Weight = 87.0
                         },
                         new
                         {
                             Id = 3,
                             BornDate = new DateTime(2001, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 1,
                             DateOfEntry = new DateTime(2020, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Height = 175,
                             Name = "Ivan",
                             Surname = "Pavlov",
                             Weight = 81.0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BornDate = new DateTime(2000, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfEntry = new DateTime(2021, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Height = 176,
+                            Name = "Andrew",
+                            Patronymic = "Sergeevich",
+                            Surname = "Solovyev",
+                            Weight = 73.0
                         });
                 });
 
@@ -162,6 +224,22 @@ namespace BoxingClub.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "291c0120-8c27-47c5-83fe-9d7deb36f73c",
+                            ConcurrencyStamp = "6ab550b8-7392-4793-b87f-672bea80a163",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6",
+                            ConcurrencyStamp = "84f84536-55ff-4715-bea3-afb97dac9d3d",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -251,6 +329,56 @@ namespace BoxingClub.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7049f435-9b35-481a-b97d-da94c627f75a",
+                            Email = "Manager1@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MANAGER1@GMAIL.COM",
+                            NormalizedUserName = "MANAGER1",
+                            PasswordHash = "AQAAAAEAACcQAAAAEALHcgn10nfulcxov9gtfDCUG3qDLqpiWqTMy/AV3hpO2RUBZ7OOlpo0cSH0QdLEEQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "1af415f4-2af7-431b-8dfe-92c225c9b64d",
+                            TwoFactorEnabled = false,
+                            UserName = "Manager1"
+                        },
+                        new
+                        {
+                            Id = "2d4254a5-7782-4b9c-a987-42a83d30669a",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "57ef55a5-f78d-465f-ae96-a8df7d15ca54",
+                            Email = "Manager2@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MANAGER2@GMAIL.COM",
+                            NormalizedUserName = "MANAGER2",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJQvbpWWktqqGThy551mr/4m9iZA2LpcblYIdBWz5pHNsAV0Jsim/ROwZMlhjNZWVA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "d49c32c5-6604-4803-9150-cdecabf91cde",
+                            TwoFactorEnabled = false,
+                            UserName = "Manager2"
+                        },
+                        new
+                        {
+                            Id = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6499a3ce-6a59-4bd4-ae20-d44f5639aafb",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKmo3W36SXXvAiJXBmbznlPR/HzbIB7OZnGCC+s2U35+4WAi5W1hiT5PT9L2Rj/bPQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "43ecb5aa-e093-4871-b220-9f241eee8fe0",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -312,6 +440,23 @@ namespace BoxingClub.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
+                            RoleId = "291c0120-8c27-47c5-83fe-9d7deb36f73c"
+                        },
+                        new
+                        {
+                            UserId = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
+                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
+                        },
+                        new
+                        {
+                            UserId = "2d4254a5-7782-4b9c-a987-42a83d30669a",
+                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -336,8 +481,10 @@ namespace BoxingClub.DAL.Migrations
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>
                 {
                     b.HasOne("BoxingClub.DAL.Entities.Coach", "Coach")
-                        .WithMany()
-                        .HasForeignKey("CoachId");
+                        .WithMany("BoxingGroups")
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Coach");
                 });
@@ -405,6 +552,11 @@ namespace BoxingClub.DAL.Migrations
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>
                 {
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("BoxingClub.DAL.Entities.Coach", b =>
+                {
+                    b.Navigation("BoxingGroups");
                 });
 #pragma warning restore 612, 618
         }

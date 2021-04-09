@@ -17,6 +17,7 @@ namespace BoxingClub.BLL.Services
     {
         private readonly IMapper _mapper;
         private readonly IAccountProvider _accountProvider;
+        private const string DefaultRoleName = "Manager";
 
         public AccountService(IMapper mapper,
                               IAccountProvider accountProvider)
@@ -25,43 +26,47 @@ namespace BoxingClub.BLL.Services
             _accountProvider = accountProvider;
         }
 
-        public async Task<AccountResultDTO> AddToRole(UserDTO user, string roleName)
+        public async Task<AccountResultDTO> AddToRoleAsync(UserDTO userDTO, string roleName)
         {
-            if (user == null)
+            if (userDTO == null)
             {
-                throw new ArgumentNullException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(userDTO), "User is null");
             }
-            var result = await _accountProvider.AddToRole(_mapper.Map<User>(user), roleName);
+            var user = _mapper.Map<User>(userDTO);
+            var result = await _accountProvider.AddToRoleAsync(user, roleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
 
-        public async Task<AccountResultDTO> CreateRole(RoleDTO role)
+        public async Task<AccountResultDTO> CreateRoleAsync(RoleDTO roleDTO)
         {
-            var result = await _accountProvider.CreateRole(_mapper.Map<Role>(role));
+            var role = _mapper.Map<Role>(roleDTO);
+            var result = await _accountProvider.CreateRoleAsync(role);
             return _mapper.Map<AccountResultDTO>(result);
         }
 
-        public async Task<AccountResultDTO> Delete(string id)
+        public async Task<AccountResultDTO> DeleteAsync(string id)
         {
-            return _mapper.Map<AccountResultDTO>(await _accountProvider.Delete(id));
+            var result = await _accountProvider.DeleteAsync(id);
+            return _mapper.Map<AccountResultDTO>(result);
         }
 
-        public async Task<AccountResultDTO> EditRole(RoleDTO role)
+        public async Task<AccountResultDTO> EditRoleAsync(RoleDTO role)
         {
             if (role == null)
             {
-                throw new NotFoundException(nameof(role), "Role is null");
+                throw new ArgumentNullException(nameof(role), "Role is null");
             }
-            return _mapper.Map<AccountResultDTO>(await _accountProvider.EditRole(_mapper.Map<Role>(role)));
+            var result = await _accountProvider.EditRoleAsync(_mapper.Map<Role>(role));
+            return _mapper.Map<AccountResultDTO>(result);
         }
 
-        public async Task<RoleDTO> FindRoleById(string id)
+        public async Task<RoleDTO> FindRoleByIdAsync(string id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "Role's id is null");
             }
-            var role = await _accountProvider.FindRoleById(id);
+            var role = await _accountProvider.FindRoleByIdAsync(id);
             if (role == null)
             {
                 throw new NotFoundException($"Role with id = {id} isn't found", "");
@@ -69,13 +74,13 @@ namespace BoxingClub.BLL.Services
             return _mapper.Map<RoleDTO>(role);
         }
 
-        public async Task<UserDTO> FindUserById(string id)
+        public async Task<UserDTO> FindUserByIdAsync(string id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "User's id is null");
             }
-            var user = await _accountProvider.FindUserById(id);
+            var user = await _accountProvider.FindUserByIdAsync(id);
             if (user == null)
             {
                 throw new NotFoundException($"User with id = {id} isn't found", "");
@@ -83,56 +88,67 @@ namespace BoxingClub.BLL.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<List<RoleDTO>> GetRoles()
+        public async Task<List<RoleDTO>> GetRolesAsync()
         {
-            return _mapper.Map<List<RoleDTO>>(await _accountProvider.GetRoles());
+            var roles = await _accountProvider.GetRolesAsync();
+            return _mapper.Map<List<RoleDTO>>(roles);
         }
 
-        public async Task<List<UserDTO>> GetUsers()
+        public async Task<List<UserDTO>> GetUsersAsync()
         {
-            return _mapper.Map<List<UserDTO>>(await _accountProvider.GetUsers());
+            var users = await _accountProvider.GetUsersAsync();
+            return _mapper.Map<List<UserDTO>>(users);
         }
 
-        public async Task<bool> IsInRole(UserDTO user, string roleName)
+        public async Task<bool> IsInRoleAsync(UserDTO user, string roleName)
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(user), "User is null");
             }
 
-            return await _accountProvider.IsInRole(_mapper.Map<User>(user), roleName);
+            var result = await _accountProvider.IsInRoleAsync(_mapper.Map<User>(user), roleName);
+            return result;
         }
 
-        public async Task<AccountResultDTO> RemoveFromRole(UserDTO user, string roleName)
+        public async Task<AccountResultDTO> RemoveFromRoleAsync(UserDTO user, string roleName)
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(user), "User is null");
             }
-            return _mapper.Map<AccountResultDTO>(await _accountProvider.RemoveFromRole(_mapper.Map<User>(user), roleName));
+            var result = await _accountProvider.RemoveFromRoleAsync(_mapper.Map<User>(user), roleName);
+            return _mapper.Map<AccountResultDTO>(result);
         }
 
-        public async Task<SignInResultDTO> SignIn(UserDTO user)
+        public async Task<SignInResultDTO> SignInAsync(UserDTO user)
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(user), "User is null");
             }
-            return _mapper.Map<SignInResultDTO>(await _accountProvider.SignIn(_mapper.Map<User>(user)));
+            var result = await _accountProvider.SignInAsync(_mapper.Map<User>(user));
+            return _mapper.Map<SignInResultDTO>(result);
         }
 
-        public Task SignOut()
+        public Task SignOutAsync()
         {
-            return _accountProvider.SignOut();
+            return _accountProvider.SignOutAsync();
         }
 
-        public async Task<AccountResultDTO> SignUp(UserDTO user, string password)
+        public async Task<AccountResultDTO> SignUpAsync(UserDTO user, string password)
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(user), "User is null");
             }
-            return _mapper.Map<AccountResultDTO>(await _accountProvider.SignUp(_mapper.Map<User>(user), password));
+            var defaultRole = await _accountProvider.FindRoleByNameAsync(DefaultRoleName);
+            if (defaultRole == null)
+            {
+                throw new InvalidOperationException($"Role with name {DefaultRoleName} doesn't exist");
+            }
+            var result = await _accountProvider.SignUpAsync(_mapper.Map<User>(user), password, DefaultRoleName);
+            return _mapper.Map<AccountResultDTO>(result);
         }
     }
 }

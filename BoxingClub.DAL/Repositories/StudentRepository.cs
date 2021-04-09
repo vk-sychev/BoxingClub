@@ -20,12 +20,14 @@ namespace BoxingClub.DAL.Repositories
         }
 
 
-        public async Task Create(Student item)
+        public async Task CreateAsync(Student item)
         {
+            var group = await _db.BoxingGroups.FindAsync(item.BoxingGroupId);
+            item.BoxingGroup = group;
             await _db.Students.AddAsync(item);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var student = await _db.Students.FindAsync(id);
             if (student != null)
@@ -36,22 +38,15 @@ namespace BoxingClub.DAL.Repositories
             return false;
         }
 
-
-        public async Task<IEnumerable<Student>> Find(Func<Student, ValueTask<bool>> predicate)
+        public async Task<Student> GetAsync(int id)
         {
-            return await _db.Students.WhereAwait(predicate).ToListAsync();
+            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).Where(g => g.Id == id).SingleOrDefaultAsync();
         }
 
 
-        public async Task<Student> Get(int id)
+        public async Task<IEnumerable<Student>> GetAllAsync()
         {
-            return await _db.Students.FindAsync(id);
-        }
-
-
-        public async Task<IEnumerable<Student>> GetAll()
-        {
-            return await _db.Students.AsQueryable().ToListAsync();
+            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).ToListAsync();
         }
 
         public void Update(Student item)

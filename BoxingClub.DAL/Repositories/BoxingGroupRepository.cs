@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace BoxingClub.DAL.Repositories
 {
-    public class BoxingGroupRepository : IRepository<BoxingGroup>
+    public class BoxingGroupRepository : IBoxingGroupRepository
     {
         private readonly BoxingClubContext _db;
 
@@ -19,12 +19,12 @@ namespace BoxingClub.DAL.Repositories
             _db = context;
         }
 
-        public async Task Create(BoxingGroup item)
+        public async Task CreateAsync(BoxingGroup item)
         {
             await _db.BoxingGroups.AddAsync(item);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var group = await _db.BoxingGroups.FindAsync(id);
             if (group != null)
@@ -35,20 +35,21 @@ namespace BoxingClub.DAL.Repositories
             return false;
         }
 
-        public Task<IEnumerable<BoxingGroup>> Find(Func<BoxingGroup, ValueTask<bool>> predicate)
+        public async Task<BoxingGroup> GetAsync(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<BoxingGroup> Get(int id)
-        {
-            var res = await _db.BoxingGroups.Include(x => x.Coach).Where(g => g.Id == id).SingleAsync();
+            var res = await _db.BoxingGroups.AsQueryable().Where(g => g.Id == id).Include(x => x.Coach).SingleOrDefaultAsync();
             return res;
         }
 
-        public async Task<IEnumerable<BoxingGroup>> GetAll()
+        public async Task<IEnumerable<BoxingGroup>> GetAllAsync()
         {
-            return await _db.BoxingGroups.AsQueryable().Include(x => x.Coach).ToListAsync();
+            return await _db.BoxingGroups.Include(x => x.Coach).ToListAsync();
+        }
+
+        public async Task<BoxingGroup> GetGroupWithStudentsAsync(int? id)
+        {
+            var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id.Value).Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync();
+            return res;
         }
 
         public void Update(BoxingGroup item)

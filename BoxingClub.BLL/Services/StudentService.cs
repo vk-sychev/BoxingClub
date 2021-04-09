@@ -22,13 +22,13 @@ namespace BoxingClub.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<StudentFullDTO> GetStudent(int? id)
+        public async Task<StudentFullDTO> GetStudentAsync(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "Student's id is null");    
             }
-            var student = await _database.Students.Get(id.Value);
+            var student = await _database.Students.GetAsync(id.Value);
             if (student == null)
             {
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
@@ -36,38 +36,38 @@ namespace BoxingClub.BLL.Services
             return _mapper.Map<StudentFullDTO>(student);
         }
 
-        public async Task<List<StudentLiteDTO>> GetStudents()
+        public async Task<List<StudentLiteDTO>> GetStudentsAsync()
         {
-            var students = await _database.Students.GetAll();
+            var students = await _database.Students.GetAllAsync();
             var collection = _mapper.Map<List<StudentLiteDTO>>(students);
             return collection;
         }
 
-        public async Task CreateStudent(StudentFullDTO studentDTO)
+        public async Task CreateStudentAsync(StudentFullDTO studentDTO)
         {
             if (studentDTO == null)
             {
                 throw new ArgumentNullException(nameof(studentDTO), "Student is null");
             }
             var student = _mapper.Map<Student>(studentDTO);
-            await _database.Students.Create(student);
-            await _database.Save();
+            await _database.Students.CreateAsync(student);
+            await _database.SaveAsync();
         }
 
-        public async Task DeleteStudent(int? id)
+        public async Task DeleteStudentAsync(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "Student's id is null");
             }
-            if(! await _database.Students.Delete(id.Value))
+            if(! await _database.Students.DeleteAsync(id.Value))
             {
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
             }
-            await _database.Save();
+            await _database.SaveAsync();
         }
 
-        public Task UpdateStudent(StudentFullDTO studentDTO)
+        public Task UpdateStudentAsync(StudentFullDTO studentDTO)
         {
             if (studentDTO == null)
             {
@@ -75,7 +75,20 @@ namespace BoxingClub.BLL.Services
             }
             var student = _mapper.Map<Student>(studentDTO);
             _database.Students.Update(student);
-            return _database.Save();
+            return _database.SaveAsync();
+        }
+
+        public async Task DeleteFromGroupAsync(int? id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id), "Student's id is null");
+            }
+
+            var student = await _database.Students.GetAsync(id.Value);
+            student.BoxingGroup = null;
+            _database.Students.Update(student);
+            await _database.SaveAsync();
         }
     }
 }

@@ -7,16 +7,14 @@ namespace BoxingClub.DAL.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
 
-        Task<IEnumerable<T>> Find(Func<T, ValueTask<bool>> predicate);
+        Task<T> GetAsync(int id);
 
-        Task<T> Get(int id);
-
-        Task Create(T item);
+        Task CreateAsync(T item);
 
         void Update(T item);
 
-        Task<bool> Delete(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }

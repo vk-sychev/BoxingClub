@@ -59,7 +59,9 @@ namespace BoxingClub.WEB.Mapping
             CreateMap<CoachDTO, CoachViewModel>().ReverseMap();
 
             CreateMap<BoxingGroup, BoxingGroupDTO>().ReverseMap();
-            CreateMap<BoxingGroupDTO, BoxingGroupViewModel>().ReverseMap();
+            CreateMap<BoxingGroupDTO, BoxingGroupFullViewModel>().ReverseMap();
+            CreateMap<BoxingGroupLiteViewModel, BoxingGroupDTO>().ForMember(dest => dest.Students, opt => opt.Ignore())
+                                                                .ReverseMap();
         }
     }
 }
