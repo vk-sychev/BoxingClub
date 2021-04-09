@@ -12,7 +12,7 @@ namespace BoxingClub.Infrastructure.HttpSwitcher
         public static int GetSwitchHttpCode(Type exceptionType)
         {
             if (exceptionType == typeof(NotFoundException)) return (int)HttpStatusCode.NotFound;
-            if (exceptionType == typeof(ArgumentException)) return (int)HttpStatusCode.BadRequest;
+            if (exceptionType == typeof(ArgumentNullException)) return (int)HttpStatusCode.BadRequest;
             return (int)HttpStatusCode.InternalServerError;
         }
     }

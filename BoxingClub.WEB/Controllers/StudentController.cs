@@ -86,7 +86,7 @@ namespace BoxingClub.WEB.Controllers
 
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;
-            var studentDTO = await _studentService.GetStudent(id.Value);
+            var studentDTO = await _studentService.GetStudent(id);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
 
             return View(student);
@@ -119,7 +119,7 @@ namespace BoxingClub.WEB.Controllers
         [Route("Student/DetailsStudent/{id}")]
         public async Task<IActionResult> DetailsStudent(int? id, bool fromHomeController, int returnId)
         {
-            var studentDTO = await _studentService.GetStudent(id.Value);
+            var studentDTO = await _studentService.GetStudent(id);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;

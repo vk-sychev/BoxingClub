@@ -55,6 +55,8 @@ namespace BoxingClub.DAL.EF
                     Surname = "Zhuravlev",
                     BornDate = new DateTime(1991, 5, 22),
                     DateOfEntry = new DateTime(2019, 1, 15),
+                    Height = 180,
+                    Weight = 87,
                     BoxingGroupId = 2
                 },
 
@@ -77,6 +79,7 @@ namespace BoxingClub.DAL.EF
                     Surname = "Solovyev",
                     Patronymic = "Sergeevich",
                     BornDate = new DateTime(2000, 04, 03),
+                    DateOfEntry = new DateTime(2021, 02, 02),
                     Height = 176,
                     Weight = 73
                 });

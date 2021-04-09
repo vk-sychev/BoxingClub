@@ -98,18 +98,19 @@ namespace BoxingClub.DAL.Repositories
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<IdentityResult> SignUp(User user, string password)
+        public async Task<IdentityRole> FindRoleByName(string roleName)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+            return role;
+        }
+
+        public async Task<IdentityResult> SignUp(User user, string password, string roleName)
         {
             var identityUser = new IdentityUser(user.UserName);
             var result = await _userManager.CreateAsync(identityUser, password);
-
             if (result.Succeeded)
             {
-                var role = await _roleManager.FindByNameAsync("Manager");
-                if (role != null)
-                {
-                    await _userManager.AddToRoleAsync(identityUser, role.Name);
-                }
+                await _userManager.AddToRoleAsync(identityUser, roleName);
                 await _signInManager.SignInAsync(identityUser, isPersistent: false);
             }
             return result;

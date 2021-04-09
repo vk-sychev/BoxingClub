@@ -155,7 +155,7 @@ namespace BoxingClub.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            BornDate = new DateTime(2020, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BornDate = new DateTime(2000, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BoxingGroupId = 1,
                             DateOfEntry = new DateTime(2020, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Height = 175,
@@ -170,10 +170,10 @@ namespace BoxingClub.DAL.Migrations
                             BornDate = new DateTime(1991, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BoxingGroupId = 2,
                             DateOfEntry = new DateTime(2019, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Height = 0,
+                            Height = 180,
                             Name = "Igor",
                             Surname = "Zhuravlev",
-                            Weight = 0.0
+                            Weight = 87.0
                         },
                         new
                         {
@@ -190,7 +190,7 @@ namespace BoxingClub.DAL.Migrations
                         {
                             Id = 4,
                             BornDate = new DateTime(2000, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateOfEntry = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfEntry = new DateTime(2021, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Height = 176,
                             Name = "Andrew",
                             Patronymic = "Sergeevich",
@@ -228,15 +228,15 @@ namespace BoxingClub.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "87dbcf4c-9669-4b1a-a742-231d26146c90",
-                            ConcurrencyStamp = "706ccc8a-b6c0-4b43-9694-ebfa956a118f",
+                            Id = "291c0120-8c27-47c5-83fe-9d7deb36f73c",
+                            ConcurrencyStamp = "6ab550b8-7392-4793-b87f-672bea80a163",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8b295461-1a6c-45e7-a03b-9f73951bb63c",
-                            ConcurrencyStamp = "4d6235aa-6f0d-4159-af49-910226fd878e",
+                            Id = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6",
+                            ConcurrencyStamp = "84f84536-55ff-4715-bea3-afb97dac9d3d",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         });
@@ -333,49 +333,49 @@ namespace BoxingClub.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "541b65ba-b24f-4075-b8bd-99caf784e5d3",
+                            Id = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9a827a1f-665c-4a17-8623-68a502607280",
+                            ConcurrencyStamp = "7049f435-9b35-481a-b97d-da94c627f75a",
                             Email = "Manager1@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER1@GMAIL.COM",
                             NormalizedUserName = "MANAGER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEER6cjXYqFOj0JDhRkKMlCZYzdyuNxE5wyxKh/v859jaTXvKNiB48i+P3y2/RI2zYw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEALHcgn10nfulcxov9gtfDCUG3qDLqpiWqTMy/AV3hpO2RUBZ7OOlpo0cSH0QdLEEQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "752e272d-3728-4f5c-aab9-39551bbead47",
+                            SecurityStamp = "1af415f4-2af7-431b-8dfe-92c225c9b64d",
                             TwoFactorEnabled = false,
                             UserName = "Manager1"
                         },
                         new
                         {
-                            Id = "9d1b9166-25ce-445c-8a9b-bf8707b704f4",
+                            Id = "2d4254a5-7782-4b9c-a987-42a83d30669a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f701a43d-b4d4-4ed3-9bfc-88a3c4d3624d",
+                            ConcurrencyStamp = "57ef55a5-f78d-465f-ae96-a8df7d15ca54",
                             Email = "Manager2@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER2@GMAIL.COM",
                             NormalizedUserName = "MANAGER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGdtpPhixSSEx7H/P7fqh+mYLxY9tkc5mGqXzWDwMQixTz3HqnvveFtHBa78LX7Jbg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJQvbpWWktqqGThy551mr/4m9iZA2LpcblYIdBWz5pHNsAV0Jsim/ROwZMlhjNZWVA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "73a7690d-4177-4840-8346-9eafbe2cb218",
+                            SecurityStamp = "d49c32c5-6604-4803-9150-cdecabf91cde",
                             TwoFactorEnabled = false,
                             UserName = "Manager2"
                         },
                         new
                         {
-                            Id = "2df7bdf4-2d02-4353-a151-bad2a8964169",
+                            Id = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "54901665-52b5-442e-a61d-9740f9a62bb0",
+                            ConcurrencyStamp = "6499a3ce-6a59-4bd4-ae20-d44f5639aafb",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOfhynGNfGn5cIgO59xevg5QCx56nDMPgnIqz/pTzYzS4DEBDBHru/an3NZ7EZd6Gg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKmo3W36SXXvAiJXBmbznlPR/HzbIB7OZnGCC+s2U35+4WAi5W1hiT5PT9L2Rj/bPQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c719f9cf-af67-4772-8f5a-f8392288417a",
+                            SecurityStamp = "43ecb5aa-e093-4871-b220-9f241eee8fe0",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -444,18 +444,18 @@ namespace BoxingClub.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "2df7bdf4-2d02-4353-a151-bad2a8964169",
-                            RoleId = "87dbcf4c-9669-4b1a-a742-231d26146c90"
+                            UserId = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
+                            RoleId = "291c0120-8c27-47c5-83fe-9d7deb36f73c"
                         },
                         new
                         {
-                            UserId = "541b65ba-b24f-4075-b8bd-99caf784e5d3",
-                            RoleId = "8b295461-1a6c-45e7-a03b-9f73951bb63c"
+                            UserId = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
+                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
                         },
                         new
                         {
-                            UserId = "9d1b9166-25ce-445c-8a9b-bf8707b704f4",
-                            RoleId = "8b295461-1a6c-45e7-a03b-9f73951bb63c"
+                            UserId = "2d4254a5-7782-4b9c-a987-42a83d30669a",
+                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
                         });
                 });
 

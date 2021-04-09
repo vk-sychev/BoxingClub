@@ -17,6 +17,8 @@ namespace BoxingClub.DAL.Interfaces
 
         Task<IdentityRole> FindRoleById(string id);
 
+        Task<IdentityRole> FindRoleByName(string roleName);
+
         Task<IdentityUser> FindUserById(string id);
 
         Task<List<IdentityRole>> GetRoles();
@@ -31,6 +33,6 @@ namespace BoxingClub.DAL.Interfaces
 
         Task SignOut();
 
-        Task<IdentityResult> SignUp(User user, string password);
+        Task<IdentityResult> SignUp(User user, string password, string roleName);
     }
 }

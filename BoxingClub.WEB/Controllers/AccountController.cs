@@ -32,7 +32,6 @@ namespace BoxingClub.WEB.Controllers
         [HttpGet]
         public IActionResult SignUp()
         {
-            ViewBag.roleList = new SelectList(_mapper.Map<List<RoleViewModel>>(_accountService.GetRoles()), "Id", "Name");
             return View();
         }
 

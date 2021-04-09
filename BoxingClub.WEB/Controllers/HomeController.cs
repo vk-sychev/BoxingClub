@@ -80,7 +80,6 @@ namespace BoxingClub.WEB.Controllers
         public async Task<IActionResult> EditStudentsInGroup(int? id)
         {
             var group = await _boxingGroupService.GetBoxingGroup(id);
-
             return View();
         }
 

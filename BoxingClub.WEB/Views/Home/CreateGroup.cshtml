@@ -1,12 +1,11 @@
-﻿@model BoxingClub.WEB.Models.BoxingGroupFullViewModel
+﻿@model BoxingClub.WEB.Models.BoxingGroupLiteViewModel
 
 @{
-    ViewData["Title"] = "CreateGroup";
+    ViewData["Title"] = "Create Group";
 }
 
-<h1>CreateGroup</h1>
+<h1>Create Group</h1>
 
-<h4>BoxingGroupFullViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -22,6 +21,7 @@
                 <select asp-for="CoachId" asp-items="ViewBag.Coaches">
                     <option selected="selected" disabled="disabled">Choose coach</option>
                 </select>
+                <br />
                 <span asp-validation-for="CoachId" class="text-danger"></span>
             </div>
             <div></div>
@@ -35,4 +35,8 @@
 <div>
     <a asp-action="Index" asp-controller="Home">Back to List</a>
 </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BoxingClub.DAL.Migrations
 {
-    public partial class FullMigration : Migration
+    public partial class PCmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -220,8 +220,8 @@ namespace BoxingClub.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "87dbcf4c-9669-4b1a-a742-231d26146c90", "706ccc8a-b6c0-4b43-9694-ebfa956a118f", "Admin", "ADMIN" },
-                    { "8b295461-1a6c-45e7-a03b-9f73951bb63c", "4d6235aa-6f0d-4159-af49-910226fd878e", "Manager", "MANAGER" }
+                    { "291c0120-8c27-47c5-83fe-9d7deb36f73c", "6ab550b8-7392-4793-b87f-672bea80a163", "Admin", "ADMIN" },
+                    { "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6", "84f84536-55ff-4715-bea3-afb97dac9d3d", "Manager", "MANAGER" }
                 });
 
             migrationBuilder.InsertData(
@@ -229,9 +229,9 @@ namespace BoxingClub.DAL.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "541b65ba-b24f-4075-b8bd-99caf784e5d3", 0, "9a827a1f-665c-4a17-8623-68a502607280", "Manager1@gmail.com", false, false, null, "MANAGER1@GMAIL.COM", "MANAGER1", "AQAAAAEAACcQAAAAEER6cjXYqFOj0JDhRkKMlCZYzdyuNxE5wyxKh/v859jaTXvKNiB48i+P3y2/RI2zYw==", null, false, "752e272d-3728-4f5c-aab9-39551bbead47", false, "Manager1" },
-                    { "9d1b9166-25ce-445c-8a9b-bf8707b704f4", 0, "f701a43d-b4d4-4ed3-9bfc-88a3c4d3624d", "Manager2@gmail.com", false, false, null, "MANAGER2@GMAIL.COM", "MANAGER2", "AQAAAAEAACcQAAAAEGdtpPhixSSEx7H/P7fqh+mYLxY9tkc5mGqXzWDwMQixTz3HqnvveFtHBa78LX7Jbg==", null, false, "73a7690d-4177-4840-8346-9eafbe2cb218", false, "Manager2" },
-                    { "2df7bdf4-2d02-4353-a151-bad2a8964169", 0, "54901665-52b5-442e-a61d-9740f9a62bb0", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEOfhynGNfGn5cIgO59xevg5QCx56nDMPgnIqz/pTzYzS4DEBDBHru/an3NZ7EZd6Gg==", null, false, "c719f9cf-af67-4772-8f5a-f8392288417a", false, "Admin" }
+                    { "fda7dfec-9828-41b2-bd9c-53dccbef2bb8", 0, "7049f435-9b35-481a-b97d-da94c627f75a", "Manager1@gmail.com", false, false, null, "MANAGER1@GMAIL.COM", "MANAGER1", "AQAAAAEAACcQAAAAEALHcgn10nfulcxov9gtfDCUG3qDLqpiWqTMy/AV3hpO2RUBZ7OOlpo0cSH0QdLEEQ==", null, false, "1af415f4-2af7-431b-8dfe-92c225c9b64d", false, "Manager1" },
+                    { "2d4254a5-7782-4b9c-a987-42a83d30669a", 0, "57ef55a5-f78d-465f-ae96-a8df7d15ca54", "Manager2@gmail.com", false, false, null, "MANAGER2@GMAIL.COM", "MANAGER2", "AQAAAAEAACcQAAAAEJQvbpWWktqqGThy551mr/4m9iZA2LpcblYIdBWz5pHNsAV0Jsim/ROwZMlhjNZWVA==", null, false, "d49c32c5-6604-4803-9150-cdecabf91cde", false, "Manager2" },
+                    { "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef", 0, "6499a3ce-6a59-4bd4-ae20-d44f5639aafb", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEKmo3W36SXXvAiJXBmbznlPR/HzbIB7OZnGCC+s2U35+4WAi5W1hiT5PT9L2Rj/bPQ==", null, false, "43ecb5aa-e093-4871-b220-9f241eee8fe0", false, "Admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -247,16 +247,16 @@ namespace BoxingClub.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "Students",
                 columns: new[] { "Id", "BornDate", "BoxingGroupId", "DateOfEntry", "Height", "Name", "Patronymic", "Surname", "Weight" },
-                values: new object[] { 4, new DateTime(2000, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 176, "Andrew", "Sergeevich", "Solovyev", 73.0 });
+                values: new object[] { 4, new DateTime(2000, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(2021, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 176, "Andrew", "Sergeevich", "Solovyev", 73.0 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "8b295461-1a6c-45e7-a03b-9f73951bb63c", "541b65ba-b24f-4075-b8bd-99caf784e5d3" },
-                    { "8b295461-1a6c-45e7-a03b-9f73951bb63c", "9d1b9166-25ce-445c-8a9b-bf8707b704f4" },
-                    { "87dbcf4c-9669-4b1a-a742-231d26146c90", "2df7bdf4-2d02-4353-a151-bad2a8964169" }
+                    { "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6", "fda7dfec-9828-41b2-bd9c-53dccbef2bb8" },
+                    { "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6", "2d4254a5-7782-4b9c-a987-42a83d30669a" },
+                    { "291c0120-8c27-47c5-83fe-9d7deb36f73c", "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef" }
                 });
 
             migrationBuilder.InsertData(
@@ -272,7 +272,7 @@ namespace BoxingClub.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "Students",
                 columns: new[] { "Id", "BornDate", "BoxingGroupId", "DateOfEntry", "Height", "Name", "Patronymic", "Surname", "Weight" },
-                values: new object[] { 1, new DateTime(2020, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new DateTime(2020, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 175, "Vasiliy", "Konstantinovich", "Sychev", 88.0 });
+                values: new object[] { 1, new DateTime(2000, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new DateTime(2020, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 175, "Vasiliy", "Konstantinovich", "Sychev", 88.0 });
 
             migrationBuilder.InsertData(
                 table: "Students",
@@ -282,7 +282,7 @@ namespace BoxingClub.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "Students",
                 columns: new[] { "Id", "BornDate", "BoxingGroupId", "DateOfEntry", "Height", "Name", "Patronymic", "Surname", "Weight" },
-                values: new object[] { 2, new DateTime(1991, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new DateTime(2019, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, "Igor", null, "Zhuravlev", 0.0 });
+                values: new object[] { 2, new DateTime(1991, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new DateTime(2019, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 180, "Igor", null, "Zhuravlev", 87.0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

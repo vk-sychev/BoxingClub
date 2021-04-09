@@ -141,7 +141,13 @@ namespace BoxingClub.BLL.Services
             {
                 throw new NotFoundException(nameof(user), "User is null");
             }
-            var result = await _accountProvider.SignUp(_mapper.Map<User>(user), password);
+            var defaultRoleName = "Manager";
+            var defaultRole = await _accountProvider.FindRoleByName(defaultRoleName);
+            if (defaultRole == null)
+            {
+                throw new ArgumentNullException(nameof(defaultRole), $"Role with name {defaultRoleName} doesn't exist");
+            }
+            var result = await _accountProvider.SignUp(_mapper.Map<User>(user), password, defaultRoleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
     }
