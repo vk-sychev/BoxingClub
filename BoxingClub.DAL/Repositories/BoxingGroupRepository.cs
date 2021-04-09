@@ -37,7 +37,7 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task<BoxingGroup> Get(int id)
         {
-            var res = await _db.BoxingGroups.AsQueryable().Where(g => g.Id == id).Include(x => x.Coach).SingleAsync();
+            var res = await _db.BoxingGroups.AsQueryable().Where(g => g.Id == id).Include(x => x.Coach).SingleOrDefaultAsync();
             return res;
         }
 
@@ -48,7 +48,7 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task<BoxingGroup> GetGroupWithStudents(int? id)
         {
-            var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id.Value).Include(x => x.Coach).Include(x => x.Students).SingleAsync();
+            var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id.Value).Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync();
             return res;
         }
 
