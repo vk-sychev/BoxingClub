@@ -26,8 +26,8 @@ namespace BoxingClub.BLL.Services
         public async Task<List<CoachDTO>> GetCoaches()
         {
             var coaches = await _database.Coaches.GetAll();
-            var coacheDTOs = _mapper.Map<List<CoachDTO>>(coaches);
-            return coacheDTOs;
+            var coachDTOs = _mapper.Map<List<CoachDTO>>(coaches);
+            return coachDTOs;
         }
 
         public async Task<CoachDTO> GetCoach(int? id)

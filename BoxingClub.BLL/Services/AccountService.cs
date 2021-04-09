@@ -17,6 +17,7 @@ namespace BoxingClub.BLL.Services
     {
         private readonly IMapper _mapper;
         private readonly IAccountProvider _accountProvider;
+        private const string DefaultRoleName = "Manager";
 
         public AccountService(IMapper mapper,
                               IAccountProvider accountProvider)
@@ -53,7 +54,7 @@ namespace BoxingClub.BLL.Services
         {
             if (role == null)
             {
-                throw new NotFoundException(nameof(role), "Role is null");
+                throw new ArgumentNullException(nameof(role), "Role is null");
             }
             var result = await _accountProvider.EditRole(_mapper.Map<Role>(role));
             return _mapper.Map<AccountResultDTO>(result);
@@ -103,7 +104,7 @@ namespace BoxingClub.BLL.Services
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(user), "User is null");
             }
 
             var result = await _accountProvider.IsInRole(_mapper.Map<User>(user), roleName);
@@ -114,7 +115,7 @@ namespace BoxingClub.BLL.Services
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(user), "User is null");
             }
             var result = await _accountProvider.RemoveFromRole(_mapper.Map<User>(user), roleName);
             return _mapper.Map<AccountResultDTO>(result);
@@ -124,7 +125,7 @@ namespace BoxingClub.BLL.Services
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(user), "User is null");
             }
             var result = await _accountProvider.SignIn(_mapper.Map<User>(user));
             return _mapper.Map<SignInResultDTO>(result);
@@ -139,15 +140,14 @@ namespace BoxingClub.BLL.Services
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(user), "User is null");
             }
-            var defaultRoleName = "Manager";
-            var defaultRole = await _accountProvider.FindRoleByName(defaultRoleName);
+            var defaultRole = await _accountProvider.FindRoleByName(DefaultRoleName);
             if (defaultRole == null)
             {
-                throw new ArgumentNullException(nameof(defaultRole), $"Role with name {defaultRoleName} doesn't exist");
+                throw new InvalidOperationException($"Role with name {DefaultRoleName} doesn't exist");
             }
-            var result = await _accountProvider.SignUp(_mapper.Map<User>(user), password, defaultRoleName);
+            var result = await _accountProvider.SignUp(_mapper.Map<User>(user), password, DefaultRoleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
     }
