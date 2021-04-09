@@ -13,6 +13,6 @@ namespace BoxingClub.DAL.Interfaces
         IBoxingGroupRepository BoxingGroups { get; }
 
         IRepository<Coach> Coaches { get; }
-        Task Save();
+        Task SaveAsync();
     }
 }

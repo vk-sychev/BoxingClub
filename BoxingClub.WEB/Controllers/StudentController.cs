@@ -36,14 +36,14 @@ namespace BoxingClub.WEB.Controllers
 
         public async Task<IActionResult> GetAllStudents()
         {
-            var studentDTOs = await _studentService.GetStudents();
+            var studentDTOs = await _studentService.GetStudentsAsync();
             var students = _mapper.Map<List<StudentLiteViewModel>>(studentDTOs);
             return View(students);
         }
 
         public async Task<IActionResult> CreateStudent()
         {
-            var groups = await _boxingGroupService.GetBoxingGroups();
+            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
             var model = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
             var selectList = new SelectList(model, "Id", "Name");
             ViewBag.Groups = selectList;
@@ -56,10 +56,10 @@ namespace BoxingClub.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
-                await _studentService.CreateStudent(studentDTO);
+                await _studentService.CreateStudentAsync(studentDTO);
                 return RedirectToAction("GetAllStudents", "Student");
             }
-            var groups = await _boxingGroupService.GetBoxingGroups();
+            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
             var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
             var selectList = new SelectList(groupViewModels, "Id", "Name");
             ViewBag.Groups = selectList;
@@ -71,7 +71,7 @@ namespace BoxingClub.WEB.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteStudent(int? id)
         {
-            await _studentService.DeleteStudent(id);
+            await _studentService.DeleteStudentAsync(id);
             return RedirectToAction("GetAllStudents", "Student");
         }
 
@@ -79,14 +79,14 @@ namespace BoxingClub.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateStudent(int? id, bool fromHomeController, int returnId)
         {
-            var groups = await _boxingGroupService.GetBoxingGroups();
+            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
             var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
             var selectList = new SelectList(groupViewModels, "Id", "Name");
             ViewBag.Groups = selectList;
 
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;
-            var studentDTO = await _studentService.GetStudent(id);
+            var studentDTO = await _studentService.GetStudentAsync(id);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
 
             return View(student);
@@ -99,14 +99,14 @@ namespace BoxingClub.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
-                await _studentService.UpdateStudent(studentDTO);
+                await _studentService.UpdateStudentAsync(studentDTO);
                 if (fromHomeController)
                 {
                     return RedirectToAction("DetailsGroup", "Home", new { id = returnId });
                 }
                 return RedirectToAction("GetAllStudents", "Student");
             }
-            var groups = await _boxingGroupService.GetBoxingGroups();
+            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
             var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
             var selectList = new SelectList(groupViewModels, "Id", "Name");
             ViewBag.Groups = selectList;
@@ -119,7 +119,7 @@ namespace BoxingClub.WEB.Controllers
         [Route("Student/DetailsStudent/{id}")]
         public async Task<IActionResult> DetailsStudent(int? id, bool fromHomeController, int returnId)
         {
-            var studentDTO = await _studentService.GetStudent(id);
+            var studentDTO = await _studentService.GetStudentAsync(id);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;

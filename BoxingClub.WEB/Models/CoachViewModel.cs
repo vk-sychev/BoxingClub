@@ -19,6 +19,6 @@ namespace BoxingClub.WEB.Models
 
         public string Description { get; set; }
 
-        public string FIO { get { return Surname + ' ' + Name + ' ' + Patronymic; } }
+        public string FullName { get { return $"{Surname} {Name} {Patronymic}"; } }
     }
 }

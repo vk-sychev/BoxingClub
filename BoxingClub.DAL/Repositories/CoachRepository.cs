@@ -17,12 +17,12 @@ namespace BoxingClub.DAL.Repositories
             _db = context;
         }
 
-        public async Task Create(Coach item)
+        public async Task CreateAsync(Coach item)
         {
             await _db.Coaches.AddAsync(item);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var coach = await _db.Coaches.FindAsync(id);
             if (coach != null)
@@ -33,13 +33,13 @@ namespace BoxingClub.DAL.Repositories
             return false;
         }
 
-        public async Task<Coach> Get(int id)
+        public async Task<Coach> GetAsync(int id)
         {
             var coach = await _db.Coaches.FindAsync(id);
             return coach;
         }
 
-        public async Task<IEnumerable<Coach>> GetAll()
+        public async Task<IEnumerable<Coach>> GetAllAsync()
         {
             var coaches = await _db.Coaches.ToListAsync();
             return coaches;

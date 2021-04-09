@@ -6,30 +6,30 @@ namespace BoxingClub.BLL.Interfaces
 {
     public interface IAccountService
     {
-        Task<AccountResultDTO> AddToRole(UserDTO user, string roleName);
+        Task<AccountResultDTO> AddToRoleAsync(UserDTO user, string roleName);
 
-        Task<AccountResultDTO> CreateRole(RoleDTO role);
+        Task<AccountResultDTO> CreateRoleAsync(RoleDTO role);
 
-        Task<AccountResultDTO> Delete(string id);
+        Task<AccountResultDTO> DeleteAsync(string id);
 
-        Task<AccountResultDTO> EditRole(RoleDTO role);
+        Task<AccountResultDTO> EditRoleAsync(RoleDTO role);
 
-        Task<RoleDTO> FindRoleById(string id);
+        Task<RoleDTO> FindRoleByIdAsync(string id);
 
-        Task<UserDTO> FindUserById(string id);
+        Task<UserDTO> FindUserByIdAsync(string id);
 
-        Task<List<RoleDTO>> GetRoles();
+        Task<List<RoleDTO>> GetRolesAsync();
 
-        Task<List<UserDTO>> GetUsers();
+        Task<List<UserDTO>> GetUsersAsync();
 
-        Task<bool> IsInRole(UserDTO user, string roleName);
+        Task<bool> IsInRoleAsync(UserDTO user, string roleName);
 
-        Task<AccountResultDTO> RemoveFromRole(UserDTO user, string roleName);
+        Task<AccountResultDTO> RemoveFromRoleAsync(UserDTO user, string roleName);
 
-        Task<SignInResultDTO> SignIn(UserDTO user);
+        Task<SignInResultDTO> SignInAsync(UserDTO user);
 
-        Task SignOut();
+        Task SignOutAsync();
 
-        Task<AccountResultDTO> SignUp(UserDTO user, string password);
+        Task<AccountResultDTO> SignUpAsync(UserDTO user, string password);
     }
 }

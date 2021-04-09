@@ -15,7 +15,7 @@ namespace BoxingClub.WEB.Models
 
         public CoachViewModel Coach { get; set; }
 
-        public string FIO { get { return Coach.Surname + ' ' + Coach.Name + ' ' + Coach.Patronymic; } }
+        public string FullName { get { return $"{Coach.Surname} {Coach.Name} {Coach.Patronymic}"; } }
 
         [DisplayName("Coach")]
         public int CoachId { get; set; }

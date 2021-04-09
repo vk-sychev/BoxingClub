@@ -23,20 +23,20 @@ namespace BoxingClub.BLL.Services
             _database = uow;
         }
 
-        public async Task<List<CoachDTO>> GetCoaches()
+        public async Task<List<CoachDTO>> GetCoachesAsync()
         {
-            var coaches = await _database.Coaches.GetAll();
+            var coaches = await _database.Coaches.GetAllAsync();
             var coachDTOs = _mapper.Map<List<CoachDTO>>(coaches);
             return coachDTOs;
         }
 
-        public async Task<CoachDTO> GetCoach(int? id)
+        public async Task<CoachDTO> GetCoachAsync(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "Coach's id is null");
             }
-            var coach = await _database.Coaches.Get(id.Value);
+            var coach = await _database.Coaches.GetAsync(id.Value);
             if (coach == null)
             {
                 throw new NotFoundException($"Coach with id = {id.Value} isn't found", "");
@@ -44,7 +44,7 @@ namespace BoxingClub.BLL.Services
             return _mapper.Map<CoachDTO>(coach);
         }
 
-        public Task UpdateCoach(CoachDTO coachDTO)
+        public Task UpdateCoachAsync(CoachDTO coachDTO)
         {
             if (coachDTO == null)
             {
@@ -52,21 +52,21 @@ namespace BoxingClub.BLL.Services
             }
             var coach = _mapper.Map<Coach>(coachDTO);
             _database.Coaches.Update(coach);
-            return _database.Save();
+            return _database.SaveAsync();
         }
 
-        public async Task DeleteCoach(int? id)
+        public async Task DeleteCoachAsync(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "Coach's id is null");
             }
-            var res = await _database.Coaches.Delete(id.Value);
+            var res = await _database.Coaches.DeleteAsync(id.Value);
             if (!res)
             {
                 throw new NotFoundException($"Coach with id = {id.Value} isn't found", "");
             }
-            await _database.Save();
+            await _database.SaveAsync();
         }
     }
 }

@@ -30,81 +30,81 @@ namespace BoxingClub.DAL.Repositories
             _roleManager = roleManager;
         }
 
-        public async Task<IdentityResult> AddToRole(User user, string roleName)
+        public async Task<IdentityResult> AddToRoleAsync(User user, string roleName)
         {
             var identityUser = await _userManager.FindByIdAsync(user.Id);
             return await _userManager.AddToRoleAsync(identityUser, roleName);
         }
 
-        public async Task<IdentityResult> CreateRole(Role role)
+        public async Task<IdentityResult> CreateRoleAsync(Role role)
         {
             var identityRole = _mapper.Map<IdentityRole>(role);
             return await _roleManager.CreateAsync(identityRole);
         }
 
-        public async Task<IdentityResult> Delete(string id)
+        public async Task<IdentityResult> DeleteAsync(string id)
         {
             var role = _roleManager.FindByIdAsync(id);
             return await _roleManager.DeleteAsync(role.Result);
         }
 
-        public async Task<IdentityResult> EditRole(Role role)
+        public async Task<IdentityResult> EditRoleAsync(Role role)
         {
             var identityRole = await _roleManager.FindByIdAsync(role.Id);
             identityRole.Name = role.Name;
             return await _roleManager.UpdateAsync(identityRole);
         }
 
-        public async Task<IdentityRole> FindRoleById(string id)
+        public async Task<IdentityRole> FindRoleByIdAsync(string id)
         {
             return await _roleManager.FindByIdAsync(id);
         }
 
-        public async Task<IdentityUser> FindUserById(string id)
+        public async Task<IdentityUser> FindUserByIdAsync(string id)
         {
             return await _userManager.FindByIdAsync(id);
         }
 
-        public async Task<List<IdentityRole>> GetRoles()
+        public async Task<List<IdentityRole>> GetRolesAsync()
         {
             return await _roleManager.Roles.ToListAsync();
         }
 
-        public async Task<List<IdentityUser>> GetUsers()
+        public async Task<List<IdentityUser>> GetUsersAsync()
         {
             return await _userManager.Users.ToListAsync();
         }
 
-        public async Task<bool> IsInRole(User user, string roleName)
+        public async Task<bool> IsInRoleAsync(User user, string roleName)
         {
             var identityUser = _mapper.Map<IdentityUser>(user);
             var res = await _userManager.IsInRoleAsync(identityUser, roleName);
             return res;
         }
 
-        public async Task<IdentityResult> RemoveFromRole(User user, string roleName)
+        public async Task<IdentityResult> RemoveFromRoleAsync(User user, string roleName)
         {
             var identityUser = await _userManager.FindByIdAsync(user.Id);
             return await _userManager.RemoveFromRoleAsync(identityUser, roleName);
         }
 
-        public async Task<SignInResult> SignIn(User user)
+        public async Task<SignInResult> SignInAsync(User user)
         {
             return await _signInManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false);
         }
 
-        public async Task SignOut()
+        public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<IdentityRole> FindRoleByName(string roleName)
+        public async Task<IdentityRole> FindRoleByNameAsync(string roleName)
         {
             var role = await _roleManager.FindByNameAsync(roleName);
             return role;
         }
 
-        public async Task<IdentityResult> SignUp(User user, string password, string roleName)
+        public async Task<IdentityResult> SignUpAsync(User user, string password, string roleName)
         {
             var identityUser = new IdentityUser(user.UserName);
             var result = await _userManager.CreateAsync(identityUser, password);

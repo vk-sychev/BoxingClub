@@ -57,7 +57,7 @@ namespace BoxingClub.DAL.Repositories
             }
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
             await _db.SaveChangesAsync();
         }

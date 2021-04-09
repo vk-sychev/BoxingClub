@@ -6,9 +6,12 @@ namespace BoxingClub.BLL.Interfaces
 {
     public interface ICoachService
     {
-        Task DeleteCoach(int? id);
-        Task<CoachDTO> GetCoach(int? id);
-        Task<List<CoachDTO>> GetCoaches();
-        Task UpdateCoach(CoachDTO coachDTO);
+        Task DeleteCoachAsync(int? id);
+
+        Task<CoachDTO> GetCoachAsync(int? id);
+
+        Task<List<CoachDTO>> GetCoachesAsync();
+
+        Task UpdateCoachAsync(CoachDTO coachDTO);
     }
 }

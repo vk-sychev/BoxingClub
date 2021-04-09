@@ -19,12 +19,12 @@ namespace BoxingClub.DAL.Repositories
             _db = context;
         }
 
-        public async Task Create(BoxingGroup item)
+        public async Task CreateAsync(BoxingGroup item)
         {
             await _db.BoxingGroups.AddAsync(item);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var group = await _db.BoxingGroups.FindAsync(id);
             if (group != null)
@@ -35,18 +35,18 @@ namespace BoxingClub.DAL.Repositories
             return false;
         }
 
-        public async Task<BoxingGroup> Get(int id)
+        public async Task<BoxingGroup> GetAsync(int id)
         {
             var res = await _db.BoxingGroups.AsQueryable().Where(g => g.Id == id).Include(x => x.Coach).SingleOrDefaultAsync();
             return res;
         }
 
-        public async Task<IEnumerable<BoxingGroup>> GetAll()
+        public async Task<IEnumerable<BoxingGroup>> GetAllAsync()
         {
             return await _db.BoxingGroups.Include(x => x.Coach).ToListAsync();
         }
 
-        public async Task<BoxingGroup> GetGroupWithStudents(int? id)
+        public async Task<BoxingGroup> GetGroupWithStudentsAsync(int? id)
         {
             var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id.Value).Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync();
             return res;
