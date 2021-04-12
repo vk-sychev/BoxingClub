@@ -1,15 +1,15 @@
 ﻿@model BoxingClub.WEB.Models.BoxingGroupLiteViewModel
 
 @{
-    ViewData["Title"] = "Create Group";
+    ViewData["Title"] = "EditBoxingGroup";
 }
 
-<h1>Create Group</h1>
+<h1>Edit Boxing Group</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateGroup">
+        <form asp-action="EditBoxingGroup">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -21,12 +21,14 @@
                 <select asp-for="CoachId" asp-items="ViewBag.Coaches">
                     <option selected="selected" disabled="disabled">Choose coach</option>
                 </select>
-                <br />
                 <span asp-validation-for="CoachId" class="text-danger"></span>
             </div>
             <div></div>
+            <div>
+                <h5>@Html.ActionLink("Group Details", "DetailsBoxingGroup", new { Id = Model.Id })</h5>
+            </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -35,8 +37,7 @@
 <div>
     <a asp-action="Index" asp-controller="Home">Back to List</a>
 </div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-

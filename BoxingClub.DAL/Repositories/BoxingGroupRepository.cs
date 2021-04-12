@@ -46,7 +46,7 @@ namespace BoxingClub.DAL.Repositories
             return await _db.BoxingGroups.Include(x => x.Coach).ToListAsync();
         }
 
-        public async Task<BoxingGroup> GetGroupWithStudentsAsync(int? id)
+        public async Task<BoxingGroup> GetBoxingGroupWithStudentsAsync(int? id)
         {
             var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id.Value).Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync();
             return res;

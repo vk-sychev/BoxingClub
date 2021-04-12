@@ -42,7 +42,7 @@ namespace BoxingClub.WEB.Controllers
         [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Home/EditGroup/{id}")]
-        public async Task<IActionResult> EditGroup(int? id)
+        public async Task<IActionResult> EditBoxingGroup(int? id)
         {
             var group = await _boxingGroupService.GetBoxingGroupAsync(id);
             var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
@@ -55,12 +55,12 @@ namespace BoxingClub.WEB.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("Home/EditGroup/{id}")]
-        public async Task<IActionResult> EditGroup(BoxingGroupLiteViewModel model)
+        public async Task<IActionResult> EditBoxingGroup(BoxingGroupLiteViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var group = _mapper.Map<BoxingGroupDTO>(model);
-                await _boxingGroupService.UpdateGroupAsync(group);
+                await _boxingGroupService.UpdateBoxingGroupAsync(group);
                 return RedirectToAction("index", "home");
             }
             ViewBag.Coaches = await GetCoaches();
@@ -71,7 +71,7 @@ namespace BoxingClub.WEB.Controllers
         [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Home/EditStudentsInGroup/{id}")]
-        public async Task<IActionResult> EditStudentsInGroup(int? id)
+        public async Task<IActionResult> EditStudentsInBoxingGroup(int? id)
         {
             var group = await _boxingGroupService.GetBoxingGroupAsync(id);
             return View();
@@ -79,7 +79,7 @@ namespace BoxingClub.WEB.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> CreateGroup()
+        public async Task<IActionResult> CreateBoxingGroup()
         {
             ViewBag.Coaches = await GetCoaches();
             return View();
@@ -95,12 +95,12 @@ namespace BoxingClub.WEB.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> CreateGroup(BoxingGroupLiteViewModel model)
+        public async Task<IActionResult> CreateBoxingGroup(BoxingGroupLiteViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var groupDTO = _mapper.Map<BoxingGroupDTO>(model);
-                await _boxingGroupService.CreateGroupAsync(groupDTO);
+                await _boxingGroupService.CreateBoxingGroupAsync(groupDTO);
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Coaches = await GetCoaches();
@@ -109,15 +109,15 @@ namespace BoxingClub.WEB.Controllers
 
         [Authorize(Roles = "Admin")]
         [Route("Home/DeleteGroup/{id}")]
-        public async Task<IActionResult> DeleteGroup(int? id)
+        public async Task<IActionResult> DeleteBoxingGroup(int? id)
         {
-            await _boxingGroupService.DeleleGroupAsync(id);
+            await _boxingGroupService.DeleleBoxingGroupAsync(id);
             return RedirectToAction("Index", "Home");
         }
 
         [Route("Home/DetailsGroup/{id}")]
         [HttpGet]
-        public async Task<IActionResult> DetailsGroup(int? id)
+        public async Task<IActionResult> DetailsBoxingGroup(int? id)
         {
             var group = await _boxingGroupService.GetBoxingGroupWithStudentsAsync(id);
             var model = _mapper.Map<BoxingGroupFullViewModel>(group);
@@ -125,7 +125,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [Route("Home/DeleteFromGroup/{id}")]
-        public async Task<IActionResult> DeleteFromGroup(int? id, int? returnId)
+        public async Task<IActionResult> DeleteFromBoxingGroup(int? id, int? returnId)
         {
             await _studentService.DeleteFromGroupAsync(id);
             return RedirectToAction("DetailsGroup", new { id = returnId.Value });

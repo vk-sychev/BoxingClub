@@ -4,14 +4,16 @@ using BoxingClub.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoxingClub.DAL.Migrations
 {
     [DbContext(typeof(BoxingClubContext))]
-    partial class BoxingClubContextModelSnapshot : ModelSnapshot
+    [Migration("20210412093419_Added_ReferentialAction.SetNull_to_FK_Students_BoxingGroups_BoxingGroupId")]
+    partial class Added_ReferentialActionSetNull_to_FK_Students_BoxingGroups_BoxingGroupId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

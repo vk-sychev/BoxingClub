@@ -4,11 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Boxing Groups</h1>
+
 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
     <p>
-        <a asp-action="CreateGroup" asp-controller="Home">Create New Group</a>
+        <a asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
     </p>
 }
 <table class="table">
@@ -36,15 +37,15 @@
                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 {
                     <td>
-                        @Html.ActionLink("Edit", "EditGroup", "Home", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "DetailsGroup", "Home", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "DeleteGroup", "Home", new { id = item.Id })
+                        @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id })
                     </td>
                 }
                 else if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
                 {
                     <td>
-                        @Html.ActionLink("Details", "DetailsGroup", "Home", new { id = item.Id })
+                        @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id })
                     </td>
                 }
             </tr>

@@ -44,7 +44,7 @@ namespace BoxingClub.BLL.Services
             return _mapper.Map<BoxingGroupDTO>(group);
         }
 
-        public Task UpdateGroupAsync(BoxingGroupDTO groupDTO)
+        public Task UpdateBoxingGroupAsync(BoxingGroupDTO groupDTO)
         {
             if (groupDTO == null)
             {
@@ -55,7 +55,7 @@ namespace BoxingClub.BLL.Services
             return _database.SaveAsync();
         }
 
-        public async Task CreateGroupAsync(BoxingGroupDTO groupDTO)
+        public async Task CreateBoxingGroupAsync(BoxingGroupDTO groupDTO)
         {
             if (groupDTO == null)
             {
@@ -66,7 +66,7 @@ namespace BoxingClub.BLL.Services
             await _database.SaveAsync();
         }
 
-        public async Task DeleleGroupAsync(int? id)
+        public async Task DeleleBoxingGroupAsync(int? id)
         {
             if (id == null)
             {
@@ -88,7 +88,7 @@ namespace BoxingClub.BLL.Services
             {
                 throw new ArgumentNullException(nameof(id), "Group's id is null");
             }
-            var group = await _database.BoxingGroups.GetGroupWithStudentsAsync(id);
+            var group = await _database.BoxingGroups.GetBoxingGroupWithStudentsAsync(id);
             if (group == null)
             {
                 throw new NotFoundException($"Group with id = {id.Value} isn't found", "");

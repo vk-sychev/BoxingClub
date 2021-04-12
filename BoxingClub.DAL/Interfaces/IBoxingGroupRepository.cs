@@ -8,6 +8,6 @@ namespace BoxingClub.DAL.Interfaces
 {
     public interface IBoxingGroupRepository : IRepository<BoxingGroup>
     {
-        Task<BoxingGroup> GetGroupWithStudentsAsync(int? id);
+        Task<BoxingGroup> GetBoxingGroupWithStudentsAsync(int? id);
     }
 }

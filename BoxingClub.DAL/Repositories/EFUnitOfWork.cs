@@ -12,16 +12,17 @@ namespace BoxingClub.DAL.Repositories
     public class EFUnitOfWork : IUnitOfWork
     {
         private readonly BoxingClubContext _db;
-        private StudentRepository _studentRepository;
+
+        private IStudentRepository _studentRepository;
         private IBoxingGroupRepository _boxingGroupRepository;
-        private CoachRepository _coachRepository;
+        private ICoachRepository _coachRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
             _db = context;
         }
 
-        public IRepository<Student> Students
+        public IStudentRepository Students
         {
             get
             {
@@ -45,7 +46,7 @@ namespace BoxingClub.DAL.Repositories
             }
         }
 
-        public IRepository<Coach> Coaches
+        public ICoachRepository Coaches
         {
             get
             {

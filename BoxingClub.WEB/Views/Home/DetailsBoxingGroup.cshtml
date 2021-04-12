@@ -1,10 +1,10 @@
 ﻿@model BoxingClub.WEB.Models.BoxingGroupFullViewModel
 
 @{
-    ViewData["Title"] = "Group's Details";
+    ViewData["Title"] = "Boxing Group's Details";
 }
 
-<h3>Group's Details</h3>
+<h3>Boxing Group's Details</h3>
 
 <div>
     <h4>Group Name: @Model.Name</h4>
@@ -36,7 +36,7 @@
                 <td>
                     @Html.ActionLink("Edit", "UpdateStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
                     @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
-                    @Html.ActionLink("Delete from group", "DeleteFromGroup", "Home", new { id = item.Id, returnId = Model.Id })
+                    @Html.ActionLink("Delete from group", "DeleteFromBoxingGroup", "Home", new { id = item.Id, returnId = Model.Id })
                 </td>
             </tr>
         }
@@ -45,7 +45,7 @@
 <div>
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
-        @Html.ActionLink("Edit", "EditGroup", new { id = Model.Id })
+        @Html.ActionLink("Edit", "EditBoxingGroup", new { id = Model.Id })
     }|
     <a asp-action="Index" asp-controller="Home">Back to List</a>
 </div>

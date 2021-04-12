@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Repositories
 {
-    class StudentRepository : IRepository<Student>
+    class StudentRepository : IStudentRepository
     {
         private readonly BoxingClubContext _db;
 

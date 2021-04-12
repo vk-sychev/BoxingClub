@@ -50,7 +50,7 @@ namespace BoxingClub.WEB
             })
             .AddEntityFrameworkStores<BoxingClubContext>();
 
-            services.AddTransient<IUnitOfWork, EFUnitOfWork>();
+            services.AddScoped<IUnitOfWork, EFUnitOfWork>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAccountProvider, AccountProvider>();
@@ -59,8 +59,6 @@ namespace BoxingClub.WEB
 
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
             mapperConfig.AssertConfigurationIsValid();
-            //IMapper mapper = mapperConfig.CreateMapper();
-
             services.AddAutoMapper(typeof(MappingProfile)); 
 
             services.AddMvc(options =>

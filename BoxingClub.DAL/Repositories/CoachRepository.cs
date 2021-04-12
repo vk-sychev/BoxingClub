@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Repositories
 {
-    public class CoachRepository : IRepository<Coach>
+    public class CoachRepository : ICoachRepository
     {
         private readonly BoxingClubContext _db;
         public CoachRepository (BoxingClubContext context)
