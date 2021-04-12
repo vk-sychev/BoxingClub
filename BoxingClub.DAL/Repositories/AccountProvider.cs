@@ -106,7 +106,10 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task<IdentityResult> SignUpAsync(User user, string password, string roleName)
         {
-            var identityUser = new IdentityUser(user.UserName);
+            var identityUser = new IdentityUser(user.UserName)
+            {
+                Email = user.Email
+            };
             var result = await _userManager.CreateAsync(identityUser, password);
             if (result.Succeeded)
             {
