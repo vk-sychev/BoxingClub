@@ -5,11 +5,23 @@ VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.Web", "BoxingClub.WEB\BoxingClub.Web.csproj", "{4D86F5C4-033A-4E00-AF42-EEF090DE4E4E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.DAL", "BoxingClub.DAL\BoxingClub.DAL.csproj", "{A6A3A856-0B6D-430B-B32F-0AAD459CED88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.DAL.Implementation", "BoxingClub.DAL\BoxingClub.DAL.Implementation.csproj", "{A6A3A856-0B6D-430B-B32F-0AAD459CED88}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.BLL", "BoxingClub.BLL\BoxingClub.BLL.csproj", "{9DD3557D-E864-409A-9C44-85FC65AD3E63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.BLL.Implementation", "BoxingClub.BLL\BoxingClub.BLL.Implementation.csproj", "{9DD3557D-E864-409A-9C44-85FC65AD3E63}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.Infrastructure", "BoxingClub.Infrastructure\BoxingClub.Infrastructure.csproj", "{E778A16A-9D3E-4E9E-9040-36219090F55B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.DAL.Interfaces", "BoxingClub.DAL.Interfaces\BoxingClub.DAL.Interfaces.csproj", "{C1E5171E-50BF-40CA-9B0B-A4B38A9A0104}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.DAL.Entities", "BoxingClub.DAL.Entities\BoxingClub.DAL.Entities.csproj", "{65A946E1-6CF8-4AFF-BFEF-FE7AE5575207}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.BLL.Interfaces", "BoxingClub.BLL.Interfaces\BoxingClub.BLL.Interfaces.csproj", "{4D941C3B-74A0-4EDC-A60B-E909E500CFCA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.BLL.DomainEntities", "BoxingClub.BLL.DomainEntities\BoxingClub.BLL.DomainEntities.csproj", "{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BoxingClub.DAL", "BoxingClub.DAL", "{9D33341B-1024-4D86-A88B-B1986191CCEE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BoxingClub.BLL", "BoxingClub.BLL", "{305567E5-E451-4719-AE8A-DD4080225402}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +45,33 @@ Global
 		{E778A16A-9D3E-4E9E-9040-36219090F55B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E778A16A-9D3E-4E9E-9040-36219090F55B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E778A16A-9D3E-4E9E-9040-36219090F55B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1E5171E-50BF-40CA-9B0B-A4B38A9A0104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1E5171E-50BF-40CA-9B0B-A4B38A9A0104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1E5171E-50BF-40CA-9B0B-A4B38A9A0104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1E5171E-50BF-40CA-9B0B-A4B38A9A0104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65A946E1-6CF8-4AFF-BFEF-FE7AE5575207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65A946E1-6CF8-4AFF-BFEF-FE7AE5575207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65A946E1-6CF8-4AFF-BFEF-FE7AE5575207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65A946E1-6CF8-4AFF-BFEF-FE7AE5575207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D941C3B-74A0-4EDC-A60B-E909E500CFCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D941C3B-74A0-4EDC-A60B-E909E500CFCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D941C3B-74A0-4EDC-A60B-E909E500CFCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D941C3B-74A0-4EDC-A60B-E909E500CFCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A6A3A856-0B6D-430B-B32F-0AAD459CED88} = {9D33341B-1024-4D86-A88B-B1986191CCEE}
+		{9DD3557D-E864-409A-9C44-85FC65AD3E63} = {305567E5-E451-4719-AE8A-DD4080225402}
+		{C1E5171E-50BF-40CA-9B0B-A4B38A9A0104} = {9D33341B-1024-4D86-A88B-B1986191CCEE}
+		{65A946E1-6CF8-4AFF-BFEF-FE7AE5575207} = {9D33341B-1024-4D86-A88B-B1986191CCEE}
+		{4D941C3B-74A0-4EDC-A60B-E909E500CFCA} = {305567E5-E451-4719-AE8A-DD4080225402}
+		{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B} = {305567E5-E451-4719-AE8A-DD4080225402}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD409C7A-0182-4B3D-BF4A-E4346355E957}

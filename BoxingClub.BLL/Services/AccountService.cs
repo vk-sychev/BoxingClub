@@ -4,7 +4,6 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +45,7 @@ namespace BoxingClub.BLL.Services
 
         public async Task<AccountResultDTO> DeleteAsync(string id)
         {
-            var result = await _accountProvider.DeleteAsync(id);
+            var result = await _accountProvider.DeleteRoleAsync(id);
             return _mapper.Map<AccountResultDTO>(result);
         }
 

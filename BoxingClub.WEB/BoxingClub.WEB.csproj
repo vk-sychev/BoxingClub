@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BoxingClub.BLL\BoxingClub.BLL.csproj" />
+    <ProjectReference Include="..\BoxingClub.BLL\BoxingClub.BLL.Implementation.csproj" />
     <ProjectReference Include="..\BoxingClub.Infrastructure\BoxingClub.Infrastructure.csproj" />
   </ItemGroup>
 

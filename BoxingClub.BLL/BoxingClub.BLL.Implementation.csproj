@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.1.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -18,7 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BoxingClub.DAL\BoxingClub.DAL.csproj" />
+    <ProjectReference Include="..\BoxingClub.BLL.Interfaces\BoxingClub.BLL.Interfaces.csproj" />
+    <ProjectReference Include="..\BoxingClub.DAL.Interfaces\BoxingClub.DAL.Interfaces.csproj" />
     <ProjectReference Include="..\BoxingClub.Infrastructure\BoxingClub.Infrastructure.csproj" />
   </ItemGroup>
 
