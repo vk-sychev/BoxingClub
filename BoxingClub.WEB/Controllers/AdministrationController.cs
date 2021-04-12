@@ -15,13 +15,16 @@ namespace BoxingClub.WEB.Controllers
     [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
-        private readonly IAccountService _accountService;
+        private readonly IRoleService _roleService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AdministrationController(IAccountService accountService,
-                                 IMapper mapper)
+        public AdministrationController(IRoleService roleService,
+                                        IUserService userService,
+                                        IMapper mapper)
         {
-            _accountService = accountService;
+            _roleService = roleService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -37,7 +40,7 @@ namespace BoxingClub.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var role = _mapper.Map<RoleDTO>(model);
-                var result = await _accountService.CreateRoleAsync(role);
+                var result = await _roleService.CreateRoleAsync(role);
                 
                 if (result.Succeeded)
                 {
@@ -55,7 +58,7 @@ namespace BoxingClub.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRoles()
         {
-            var roles = _mapper.Map<List<RoleViewModel>>(await _accountService.GetRolesAsync());
+            var roles = _mapper.Map<List<RoleViewModel>>(await _roleService.GetRolesAsync());
             return View(roles);
         }
 
@@ -63,7 +66,7 @@ namespace BoxingClub.WEB.Controllers
         [Route("Administration/EditRole/{id}")]
         public async Task<IActionResult> EditRole(string? id)
         {
-            var role = await _accountService.FindRoleByIdAsync(id);
+            var role = await _roleService.FindRoleByIdAsync(id);
             return View(_mapper.Map<RoleViewModel>(role));
         }
 
@@ -74,7 +77,7 @@ namespace BoxingClub.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var role = _mapper.Map<IdentityRole>(model);
-                var result = await _accountService.EditRoleAsync(_mapper.Map<RoleDTO>(role));
+                var result = await _roleService.EditRoleAsync(_mapper.Map<RoleDTO>(role));
                 if (result.Succeeded)
                 {
                     return RedirectToAction("GetRoles", "administration");
@@ -91,23 +94,23 @@ namespace BoxingClub.WEB.Controllers
         [Route("Administration/DeleteRole/{id}")]
         public async Task<IActionResult> DeleteRole(string? id)
         {
-            await _accountService.DeleteAsync(id);
+            await _roleService.DeleteRoleAsync(id);
             return RedirectToAction("GetRoles", "administration");
         }
 
         [HttpGet]
         public async Task<IActionResult> EditUsersInRole(string? roleId)
         {
-            var role = await _accountService.FindRoleByIdAsync(roleId);
+            var role = await _roleService.FindRoleByIdAsync(roleId);
             ViewBag.roleName = role.Name;
             ViewBag.roleId = role.Id;
             var model = new List<UserRoleViewModel>();
 
-            var users = await _accountService.GetUsersAsync();
+            var users = await _userService.GetUsersAsync();
             foreach (var user in users)
             {
                 var userRoleViewModel = _mapper.Map<UserRoleViewModel>(user);
-                userRoleViewModel.IsSelected = await _accountService.IsInRoleAsync(user, role.Name);
+                userRoleViewModel.IsSelected = await _userService.IsInRoleAsync(user, role.Name);
                 model.Add(userRoleViewModel);
             }
             return View(model);
@@ -118,19 +121,19 @@ namespace BoxingClub.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var role = await _accountService.FindRoleByIdAsync(roleId);
+                var role = await _roleService.FindRoleByIdAsync(roleId);
                 for (var i = 0; i < userView.Count; i++)
                 {
-                    var user = await _accountService.FindUserByIdAsync(userView[i].UserId);
+                    var user = await _userService.FindUserByIdAsync(userView[i].UserId);
                     IdentityResult result;
 
-                    if (userView[i].IsSelected && !(await _accountService.IsInRoleAsync(user, role.Name)))
+                    if (userView[i].IsSelected && !(await _userService.IsInRoleAsync(user, role.Name)))
                     {
-                        result = _mapper.Map<IdentityResult>(await _accountService.AddToRoleAsync(user, role.Name));
+                        result = _mapper.Map<IdentityResult>(await _userService.AddToRoleAsync(user, role.Name));
                     }
-                    else if (!userView[i].IsSelected && (await _accountService.IsInRoleAsync(user, role.Name)))
+                    else if (!userView[i].IsSelected && (await _userService.IsInRoleAsync(user, role.Name)))
                     {
-                        result = _mapper.Map<IdentityResult>(await _accountService.RemoveFromRoleAsync(user, role.Name));
+                        result = _mapper.Map<IdentityResult>(await _userService.RemoveFromRoleAsync(user, role.Name));
                     }
                     else
                     {

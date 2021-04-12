@@ -10,15 +10,18 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
-    class UserProvider : IUserProvider
+    public class UserProvider : IUserProvider
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IMapper _mapper;
 
         public UserProvider(UserManager<IdentityUser> userManager,
+                            SignInManager<IdentityUser> signInManager,
                             IMapper mapper)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _mapper = mapper;
         }
 
@@ -55,9 +58,13 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return await _userManager.RemoveFromRoleAsync(identityUser, roleName);
         }
 
-        public async Task<IdentityResult> SignUpAsync(User user, string password, string roleName) //SignIn в другом сервисе делается
+        public async Task<IdentityResult> SignUpAsync(User user, string password, string roleName)
         {
-            var identityUser = new IdentityUser(user.UserName);
+            var identityUser = new IdentityUser(user.UserName)
+            {
+                Email = user.Email
+            };
+
             var result = await _userManager.CreateAsync(identityUser, password);
             if (result.Succeeded)
             {

@@ -19,13 +19,16 @@ namespace BoxingClub.WEB.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly IAccountService _accountService;
+        private readonly ISignInService _signInService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AccountController(IAccountService accountService,
+        public AccountController(ISignInService signInService,
+                                 IUserService userService,
                                  IMapper mapper)
         {
-            _accountService = accountService;
+            _signInService = signInService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -41,7 +44,7 @@ namespace BoxingClub.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var user = _mapper.Map<UserDTO>(model);
-                var result = await _accountService.SignUpAsync(user, model.Password);
+                var result = await _userService.SignUpAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("index", "home");
@@ -58,7 +61,7 @@ namespace BoxingClub.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> SignOut()
         {
-            await _accountService.SignOutAsync();
+            await _signInService.SignOutAsync();
             return RedirectToAction("index", "home");
         }
 
@@ -74,7 +77,7 @@ namespace BoxingClub.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var user = _mapper.Map<UserDTO>(model);
-                var result = await _accountService.SignInAsync(user);
+                var result = await _signInService.SignInAsync(user);
                 if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))

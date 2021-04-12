@@ -3,31 +3,24 @@ using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace BoxingClub.DAL.Repositories
+namespace BoxingClub.DAL.Implementation.Implementation
 {
-    public class AccountProvider : IAccountProvider
+    public class RoleProvider : IRoleProvider
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
 
-        public AccountProvider(UserManager<IdentityUser> userManager,
-                               SignInManager<IdentityUser> signInManager,
-                               RoleManager<IdentityRole> roleManager,
-                               IMapper mapper)
+        public RoleProvider(RoleManager<IdentityRole> roleManager,
+                            IMapper mapper)
         {
             _mapper = mapper;
-            _userManager = userManager;
-            _signInManager = signInManager;
             _roleManager = roleManager;
         }
-
-
 
         public async Task<IdentityResult> CreateRoleAsync(Role role)
         {
@@ -53,27 +46,9 @@ namespace BoxingClub.DAL.Repositories
             return await _roleManager.FindByIdAsync(id);
         }
 
-
-
         public async Task<List<IdentityRole>> GetRolesAsync()
         {
             return await _roleManager.Roles.ToListAsync();
-        }
-
-
-
-
-
-
-
-        public async Task<SignInResult> SignInAsync(User user)
-        {
-            return await _signInManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false);
-        }
-
-        public async Task SignOutAsync()
-        {
-            await _signInManager.SignOutAsync();
         }
 
         public async Task<IdentityRole> FindRoleByNameAsync(string roleName)
@@ -81,7 +56,5 @@ namespace BoxingClub.DAL.Repositories
             var role = await _roleManager.FindByNameAsync(roleName);
             return role;
         }
-
-
     }
 }

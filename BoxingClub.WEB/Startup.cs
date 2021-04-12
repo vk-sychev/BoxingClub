@@ -1,7 +1,9 @@
 using AutoMapper;
+using BoxingClub.BLL.Implementation.Services;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Services;
 using BoxingClub.DAL.EF;
+using BoxingClub.DAL.Implementation.Implementation;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.DAL.Repositories;
 using BoxingClub.WEB.Controllers;
@@ -50,8 +52,17 @@ namespace BoxingClub.WEB
 
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
             services.AddTransient<IStudentService, StudentService>();
-            services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<IAccountProvider, AccountProvider>();
+            //services.AddTransient<IAccountService, AccountService>();
+            //services.AddTransient<IAccountProvider, AccountProvider>();
+            
+            services.AddTransient<IRoleProvider, RoleProvider>();
+            services.AddTransient<IUserProvider, UserProvider>();
+            services.AddTransient<ISignInProvider, SignInProvider>();
+
+            services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ISignInService, SignInService>();
+
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<ICoachService, CoachService>();            
 
