@@ -26,7 +26,7 @@ namespace BoxingClub.WEB.Mapping
                                                                        
             CreateMap<UserDTO, SignInViewModel>(MemberList.Destination).ReverseMap()
                                                                        .ForMember(dest => dest.Id, opt => opt.Ignore())
-                                                                       //.ForMember(dest => dest.Email, opt => opt.Ignore())
+                                                                       .ForMember(dest => dest.Email, opt => opt.Ignore())
                                                                        .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore());
 
             CreateMap<RoleDTO, RoleViewModel>().ReverseMap();
