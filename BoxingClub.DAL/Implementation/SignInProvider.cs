@@ -13,8 +13,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
     {
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public SignInProvider(SignInManager<IdentityUser> signInManager,
-                              IMapper mapper)
+        public SignInProvider(SignInManager<IdentityUser> signInManager)
         {
             _signInManager = signInManager;
         }
