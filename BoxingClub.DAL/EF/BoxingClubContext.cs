@@ -15,7 +15,7 @@ namespace BoxingClub.DAL.EF
 
         public DbSet<BoxingGroup> BoxingGroups { get; set; }
 
-        public DbSet<Coach> Coaches { get; set; }
+        //public DbSet<Coach> Coaches { get; set; }
 
         public BoxingClubContext(DbContextOptions<BoxingClubContext> options) : base(options) { }
 

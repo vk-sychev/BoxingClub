@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BoxingClub.DAL.Interfaces
 {
-    public interface ICoachRepository : IRepository<Coach>
+    public interface ICoachRepository : IRepository<ApplicationUser>
     {
     }
 }
