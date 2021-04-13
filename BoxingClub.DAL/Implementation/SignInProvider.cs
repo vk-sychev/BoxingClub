@@ -19,7 +19,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
 
-        public async Task<SignInResult> SignInAsync(User user)
+        public async Task<SignInResult> SignInAsync(User user) //Переименовать user в SignInModel
         {
             return await _signInManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false);
         }

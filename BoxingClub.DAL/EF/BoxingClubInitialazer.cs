@@ -15,6 +15,7 @@ namespace BoxingClub.DAL.EF
             var adminsRoleId = Guid.NewGuid().ToString();
             var managersRoleId = Guid.NewGuid().ToString();
             var coachsRoleId = Guid.NewGuid().ToString();
+            var usersRoleId = Guid.NewGuid().ToString();
 
             modelBuilder.Entity<IdentityRole>().HasData(
                 new IdentityRole
@@ -29,6 +30,13 @@ namespace BoxingClub.DAL.EF
                     Id = managersRoleId,
                     Name = "Manager",
                     NormalizedName = "MANAGER"
+                },
+
+                new IdentityRole
+                {
+                    Id = usersRoleId,
+                    Name = "User",
+                    NormalizedName = "USER"
                 },
 
                 new IdentityRole
