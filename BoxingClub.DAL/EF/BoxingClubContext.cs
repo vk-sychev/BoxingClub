@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.EF
 {
-    public class BoxingClubContext : IdentityDbContext
+    public class BoxingClubContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Student> Students { get; set; }
 

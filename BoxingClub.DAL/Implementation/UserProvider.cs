@@ -12,12 +12,12 @@ namespace BoxingClub.DAL.Implementation.Implementation
 {
     public class UserProvider : IUserProvider
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
 
-        public UserProvider(UserManager<IdentityUser> userManager,
-                            SignInManager<IdentityUser> signInManager,
+        public UserProvider(UserManager<ApplicationUser> userManager,
+                            SignInManager<ApplicationUser> signInManager,
                             IMapper mapper)
         {
             _userManager = userManager;
@@ -32,13 +32,13 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
 
-        public async Task<IdentityUser> FindUserByIdAsync(string id)
+        public async Task<ApplicationUser> FindUserByIdAsync(string id)
         {
             return await _userManager.FindByIdAsync(id);
         }
 
 
-        public async Task<List<IdentityUser>> GetUsersAsync()
+        public async Task<List<ApplicationUser>> GetUsersAsync()
         {
             return await _userManager.Users.ToListAsync();
         }
@@ -46,7 +46,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<bool> IsInRoleAsync(User user, string roleName)
         {
-            var identityUser = _mapper.Map<IdentityUser>(user);
+            var identityUser = _mapper.Map<ApplicationUser>(user);
             var res = await _userManager.IsInRoleAsync(identityUser, roleName);
             return res;
         }
@@ -60,7 +60,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<IdentityResult> SignUpAsync(User user, string password, string roleName)
         {
-            var identityUser = new IdentityUser(user.UserName)
+            var identityUser = new ApplicationUser(user.UserName)
             {
                 Email = user.Email
             };

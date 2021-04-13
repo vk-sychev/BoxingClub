@@ -11,9 +11,9 @@ namespace BoxingClub.DAL.Implementation.Implementation
 {
     public class SignInProvider : ISignInProvider
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public SignInProvider(SignInManager<IdentityUser> signInManager)
+        public SignInProvider(SignInManager<ApplicationUser> signInManager)
         {
             _signInManager = signInManager;
         }

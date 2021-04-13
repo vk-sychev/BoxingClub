@@ -3,6 +3,7 @@ using BoxingClub.BLL.Implementation.Services;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Services;
 using BoxingClub.DAL.EF;
+using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Implementation.Implementation;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.DAL.Repositories;
@@ -41,7 +42,7 @@ namespace BoxingClub.WEB
                 options.UseSqlServer(
                     Configuration.GetConnectionString("BoxingClubDB")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 3;
                 options.Password.RequireNonAlphanumeric = false;

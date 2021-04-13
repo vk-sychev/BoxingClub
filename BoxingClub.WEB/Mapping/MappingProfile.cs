@@ -42,11 +42,11 @@ namespace BoxingClub.WEB.Mapping
             CreateMap<RoleViewModel, RoleDTO>().ReverseMap();
             CreateMap<UserDTO, User>().ReverseMap();
 
-            CreateMap<IdentityUser, User>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
+            CreateMap<ApplicationUser, User>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
                                                                  .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
                                                                  .ForMember(dest => dest.RememberMe, opt => opt.Ignore()).ReverseMap();
 
-            CreateMap<IdentityUser, UserDTO>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
+            CreateMap<ApplicationUser, UserDTO>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
                                                                     .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
                                                                     .ForMember(dest => dest.RememberMe, opt => opt.Ignore()).ReverseMap();
           
