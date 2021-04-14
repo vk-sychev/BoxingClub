@@ -12,10 +12,14 @@ namespace BoxingClub.DAL.EF
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-            var adminsRoleId = Guid.NewGuid().ToString();
-            var managersRoleId = Guid.NewGuid().ToString();
-            var coachsRoleId = Guid.NewGuid().ToString();
-            var usersRoleId = Guid.NewGuid().ToString();
+            var adminsRoleId = "291c0120-8c27-47c5-83fe-9d7deb36f73c";
+            var managersRoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6";
+            var coachsRoleId = "8da509ca-2005-457d-8ca3-105792f04013";
+            var usersRoleId = "db460306-31c6-457a-989e-9e4317be99b9";
+            /*            var adminsRoleId = Guid.NewGuid().ToString(); 
+                        var managersRoleId = Guid.NewGuid().ToString();
+                        var coachsRoleId = Guid.NewGuid().ToString();
+                        var usersRoleId = Guid.NewGuid().ToString();*/
 
             modelBuilder.Entity<IdentityRole>().HasData(
                 new IdentityRole
@@ -47,12 +51,19 @@ namespace BoxingClub.DAL.EF
                 });
 
 
-            var manager1Id = Guid.NewGuid().ToString();
-            var manager2Id = Guid.NewGuid().ToString();
-            var adminId = Guid.NewGuid().ToString();
-            var coach1Id = Guid.NewGuid().ToString();
-            var coach2Id = Guid.NewGuid().ToString();
-            var coach3Id = Guid.NewGuid().ToString();
+            /*            var manager1Id = Guid.NewGuid().ToString();
+                        var manager2Id = Guid.NewGuid().ToString();
+                        var adminId = Guid.NewGuid().ToString();
+                        var coach1Id = Guid.NewGuid().ToString();
+                        var coach2Id = Guid.NewGuid().ToString();
+                        var coach3Id = Guid.NewGuid().ToString();*/
+
+            var manager1Id = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8";
+            var manager2Id = "2d4254a5-7782-4b9c-a987-42a83d30669a";
+            var adminId = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef";
+            var coach1Id = "19759de3-ce1d-4cfd-8340-4e64eb245eb4";
+            var coach2Id = "060342c3-9dc3-4597-bae1-9f19c991ebe9";
+            var coach3Id = "a50a06a5-df07-4728-b6a0-93173c2ce4cf";
 
             PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
 

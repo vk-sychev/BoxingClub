@@ -9,7 +9,7 @@ namespace BoxingClub.DAL.Interfaces
 {
     public interface ISignInProvider
     {
-        Task<SignInResult> SignInAsync(User user);
+        Task<SignInResult> SignInAsync(SignIn user);
 
         Task SignOutAsync();
     }

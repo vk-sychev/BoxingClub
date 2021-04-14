@@ -25,7 +25,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
             _mapper = mapper;
         }
 
-        public async Task<IdentityResult> AddToRoleAsync(User user, string roleName)
+        public async Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string roleName)
         {
             var identityUser = await _userManager.FindByIdAsync(user.Id);
             return await _userManager.AddToRoleAsync(identityUser, roleName);
@@ -44,32 +44,32 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
 
-        public async Task<bool> IsInRoleAsync(User user, string roleName)
+        public async Task<bool> IsInRoleAsync(ApplicationUser user, string roleName)
         {
-            var identityUser = _mapper.Map<ApplicationUser>(user);
-            var res = await _userManager.IsInRoleAsync(identityUser, roleName);
+            //var identityUser = _mapper.Map<ApplicationUser>(user);
+            var res = await _userManager.IsInRoleAsync(user, roleName);
             return res;
         }
 
 
-        public async Task<IdentityResult> RemoveFromRoleAsync(User user, string roleName)
+        public async Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string roleName)
         {
             var identityUser = await _userManager.FindByIdAsync(user.Id);
             return await _userManager.RemoveFromRoleAsync(identityUser, roleName);
         }
 
-        public async Task<IdentityResult> SignUpAsync(User user, string password, string roleName)
+        public async Task<IdentityResult> SignUpAsync(ApplicationUser user, string password, string roleName)
         {
-            var identityUser = new ApplicationUser(user.UserName)
+/*            var identityUser = new ApplicationUser(user.UserName)
             {
                 Email = user.Email
-            };
+            };*/
 
-            var result = await _userManager.CreateAsync(identityUser, password);
+            var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(identityUser, roleName);
-                await _signInManager.SignInAsync(identityUser, isPersistent: false);
+                await _userManager.AddToRoleAsync(user, roleName);
+                await _signInManager.SignInAsync(user, isPersistent: false);
             }
             return result;
         }

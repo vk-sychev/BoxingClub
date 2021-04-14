@@ -20,7 +20,8 @@ namespace BoxingClub.WEB.Mapping
             CreateMap<StudentFullDTO, Student>().ReverseMap();
 
             CreateMap<UserDTO, SignUpViewModel>(MemberList.Destination).ForMember(dest => dest.ConfirmPassword, opt => opt.Ignore())
-                                                                       .ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore())
+                                                                       .ReverseMap()
+                                                                       .ForMember(dest => dest.Id, opt => opt.Ignore())
                                                                        .ForMember(dest => dest.RememberMe, opt => opt.Ignore())
                                                                        .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore());
                                                                        
@@ -36,32 +37,34 @@ namespace BoxingClub.WEB.Mapping
 
             CreateMap<UserDTO, UserRoleViewModel>(MemberList.Destination).ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
                                                                          .ForMember(dest => dest.IsSelected, opt => opt.Ignore()).ReverseMap();
+            CreateMap<UserDTO, UserViewModel>().ReverseMap();
 
             CreateMap<Role, IdentityRole>(MemberList.Source).ForMember(src => src.Id, dest => dest.Ignore()).ReverseMap();
 
             CreateMap<RoleViewModel, RoleDTO>().ReverseMap();
-            CreateMap<UserDTO, User>().ReverseMap();
+            CreateMap<UserDTO, SignIn>().ReverseMap();
 
-            CreateMap<ApplicationUser, User>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
+            CreateMap<ApplicationUser, SignIn>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
                                                                  .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
                                                                  .ForMember(dest => dest.RememberMe, opt => opt.Ignore()).ReverseMap();
 
             CreateMap<ApplicationUser, UserDTO>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
                                                                     .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
-                                                                    .ForMember(dest => dest.RememberMe, opt => opt.Ignore()).ReverseMap();
+                                                                    .ForMember(dest => dest.RememberMe, opt => opt.Ignore())
+                                                                    .ReverseMap();
           
             CreateMap<AccountResultDTO, IdentityResult>(MemberList.Source).ReverseMap();
             CreateMap<AccountErrorDTO, IdentityError>(MemberList.Source).ReverseMap();
             CreateMap<SignInResultDTO, SignInResult>(MemberList.Source).ReverseMap();
 
 
-            CreateMap<Coach, CoachDTO>().ReverseMap();
-            CreateMap<CoachDTO, CoachViewModel>().ReverseMap();
+/*            CreateMap<Coach, CoachDTO>().ReverseMap();
+            CreateMap<CoachDTO, CoachViewModel>().ReverseMap();*/
 
             CreateMap<BoxingGroup, BoxingGroupDTO>().ReverseMap();
             CreateMap<BoxingGroupDTO, BoxingGroupFullViewModel>().ReverseMap();
             CreateMap<BoxingGroupLiteViewModel, BoxingGroupDTO>().ForMember(dest => dest.Students, opt => opt.Ignore())
-                                                                .ReverseMap();
+                                                                 .ReverseMap();
         }
     }
 }

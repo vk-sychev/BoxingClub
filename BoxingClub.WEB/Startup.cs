@@ -68,7 +68,7 @@ namespace BoxingClub.WEB
             services.AddTransient<ICoachService, CoachService>();            
 
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
-            mapperConfig.AssertConfigurationIsValid();
+            //mapperConfig.AssertConfigurationIsValid();
             services.AddAutoMapper(typeof(MappingProfile)); 
 
             services.AddMvc(options =>

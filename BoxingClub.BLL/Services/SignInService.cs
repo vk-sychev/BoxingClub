@@ -28,7 +28,7 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new ArgumentNullException(nameof(user), "User is null");
             }
-            var result = await _signInProvider.SignInAsync(_mapper.Map<User>(user));
+            var result = await _signInProvider.SignInAsync(_mapper.Map<SignIn>(user));
             return _mapper.Map<SignInResultDTO>(result);
         }
 

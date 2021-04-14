@@ -88,7 +88,7 @@ namespace BoxingClub.WEB.Controllers
         private async Task<SelectList> GetCoaches()
         {
             var coaches = await _coachService.GetCoachesAsync();
-            var coacheViewModels = _mapper.Map<List<CoachViewModel>>(coaches);
+            var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
             var selectList = new SelectList(coacheViewModels, "Id", "FullName");
             return selectList;
         }

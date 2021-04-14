@@ -13,12 +13,12 @@ namespace BoxingClub.WEB.Models
         [DisplayName("Group's Name")]
         public string Name { get; set; }
 
-        public CoachViewModel Coach { get; set; }
+        public UserViewModel Coach { get; set; }
 
         public string FullName { get { return $"{Coach.Surname} {Coach.Name} {Coach.Patronymic}"; } }
 
         [DisplayName("Coach")]
-        public int CoachId { get; set; }
+        public string CoachId { get; set; }
 
         public List<StudentLiteViewModel> Students { get; set; } = new List<StudentLiteViewModel>();
     }

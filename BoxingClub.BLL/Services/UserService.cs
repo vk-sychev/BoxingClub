@@ -54,7 +54,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new ArgumentNullException(nameof(user), "User is null");
             }
 
-            var result = await _userProvider.IsInRoleAsync(_mapper.Map<User>(user), roleName);
+            var result = await _userProvider.IsInRoleAsync(_mapper.Map<ApplicationUser>(user), roleName);
             return result;
         }
 
@@ -64,7 +64,7 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new ArgumentNullException(nameof(user), "User is null");
             }
-            var result = await _userProvider.RemoveFromRoleAsync(_mapper.Map<User>(user), roleName);
+            var result = await _userProvider.RemoveFromRoleAsync(_mapper.Map<ApplicationUser>(user), roleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
 
@@ -74,7 +74,7 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new ArgumentNullException(nameof(userDTO), "User is null");
             }
-            var user = _mapper.Map<User>(userDTO);
+            var user = _mapper.Map<ApplicationUser>(userDTO);
             var result = await _userProvider.AddToRoleAsync(user, roleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
@@ -90,7 +90,7 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new InvalidOperationException($"Role with name {DefaultRoleName} doesn't exist");
             }
-            var result = await _userProvider.SignUpAsync(_mapper.Map<User>(user), password, DefaultRoleName);
+            var result = await _userProvider.SignUpAsync(_mapper.Map<ApplicationUser>(user), password, DefaultRoleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
     }

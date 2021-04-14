@@ -23,6 +23,6 @@ namespace BoxingClub.DAL.EF
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
-        }
+         }
     }
 }
