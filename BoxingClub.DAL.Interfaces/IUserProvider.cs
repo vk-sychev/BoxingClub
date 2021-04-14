@@ -9,7 +9,9 @@ namespace BoxingClub.DAL.Interfaces
 {
     public interface IUserProvider
     {
-        Task<bool> IsInRoleAsync(ApplicationUser user, string roleName); 
+        Task<bool> IsInRoleAsync(ApplicationUser user, string roleName);
+
+        Task<bool> DeleteAsync(string id);
 
         Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string roleName);
 

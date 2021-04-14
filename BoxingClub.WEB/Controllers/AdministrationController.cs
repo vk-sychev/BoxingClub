@@ -29,6 +29,21 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = await _userService.GetUsersAsync();
+            var mappedRoles = _mapper.Map<List<UserViewModel>>(users);
+            return View(mappedRoles);
+        }
+
+        public async Task<IActionResult> DeleteUser(string? id)
+        {
+            
+        }
+
+
+
+        /*[HttpGet]
         public IActionResult CreateRole()
         {
             return View();
@@ -44,7 +59,7 @@ namespace BoxingClub.WEB.Controllers
                 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("GetRoles", "administration");
+                    return RedirectToAction("GetRoles", "Administration");
                 }
 
                 foreach (var error in result.Errors)
@@ -168,7 +183,7 @@ namespace BoxingClub.WEB.Controllers
         public IActionResult AccessDenied()
         {
             return View();
-        }
+        }*/
     }
 }
 
