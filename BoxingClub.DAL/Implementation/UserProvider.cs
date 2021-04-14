@@ -31,7 +31,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return await _userManager.AddToRoleAsync(identityUser, roleName);
         }
 
-        public async Task<bool> DeleteAsync(string id)
+        public async Task<bool> DeleteUserAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user != null)

@@ -93,5 +93,17 @@ namespace BoxingClub.BLL.Implementation.Services
             var result = await _userProvider.SignUpAsync(_mapper.Map<ApplicationUser>(user), password, DefaultRoleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
+
+        public async Task DeleteUserAsync(string id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id), "User's id is null");
+            }
+            if (! await _userProvider.DeleteUserAsync(id))
+            {
+                throw new NotFoundException($"User with id = {id} isn't found", "");
+            }
+        }
     }
 }

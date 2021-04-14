@@ -11,7 +11,7 @@ namespace BoxingClub.DAL.Interfaces
     {
         Task<bool> IsInRoleAsync(ApplicationUser user, string roleName);
 
-        Task<bool> DeleteAsync(string id);
+        Task<bool> DeleteUserAsync(string id);
 
         Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string roleName);
 
