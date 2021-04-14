@@ -42,7 +42,7 @@
                         @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id })
                     </td>
                 }
-                else if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
+                else
                 {
                     <td>
                         @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id })

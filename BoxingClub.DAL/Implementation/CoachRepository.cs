@@ -34,7 +34,7 @@ namespace BoxingClub.DAL.Repositories
             return false;
         }
 
-        public async Task<ApplicationUser> GetAsync(int id)
+        public async Task<ApplicationUser> GetByIdAsync(int id)
         {
             var coach = await _db.Users.FindAsync(id);
             return coach;
@@ -56,6 +56,12 @@ namespace BoxingClub.DAL.Repositories
         public void Update(ApplicationUser item)
         {
             _db.Entry(item).State = EntityState.Modified;
+        }
+
+        public async Task<ApplicationUser> GetByNameAsync(string name)
+        {
+            var coach = await _db.Users.AsQueryable().Where(x => x.UserName.ToUpper().Trim() == name.ToUpper().Trim()).SingleOrDefaultAsync();
+            return coach;
         }
     }
 }

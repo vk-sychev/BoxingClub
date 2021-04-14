@@ -8,7 +8,9 @@ namespace BoxingClub.BLL.Interfaces
     {
         Task DeleteCoachAsync(int? id);
 
-        Task<UserDTO> GetCoachAsync(int? id);
+        Task<UserDTO> GetCoachByIdAsync(int? id);
+
+        Task<UserDTO> GetCoachByNameAsync(string? name);
 
         Task<List<UserDTO>> GetCoachesAsync();
 

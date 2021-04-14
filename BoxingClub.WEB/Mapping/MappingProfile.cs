@@ -45,18 +45,18 @@ namespace BoxingClub.WEB.Mapping
             CreateMap<UserDTO, SignIn>().ReverseMap();
 
             CreateMap<ApplicationUser, SignIn>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
-                                                                 .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
-                                                                 .ForMember(dest => dest.RememberMe, opt => opt.Ignore()).ReverseMap();
+                                                                      .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
+                                                                      .ForMember(dest => dest.RememberMe, opt => opt.Ignore()).ReverseMap();
 
             CreateMap<ApplicationUser, UserDTO>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
-                                                                    .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
-                                                                    .ForMember(dest => dest.RememberMe, opt => opt.Ignore())
-                                                                    .ReverseMap();
+                                                                       .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
+                                                                       .ForMember(dest => dest.RememberMe, opt => opt.Ignore())
+                                                                       .ReverseMap();
           
             CreateMap<AccountResultDTO, IdentityResult>(MemberList.Source).ReverseMap();
             CreateMap<AccountErrorDTO, IdentityError>(MemberList.Source).ReverseMap();
             CreateMap<SignInResultDTO, SignInResult>(MemberList.Source).ReverseMap();
-
+            CreateMap<ApplicationUser, ApplicationUser>();
 
 /*            CreateMap<Coach, CoachDTO>().ReverseMap();
             CreateMap<CoachDTO, CoachViewModel>().ReverseMap();*/

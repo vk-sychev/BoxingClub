@@ -30,13 +30,13 @@ namespace BoxingClub.BLL.Services
             return coachDTOs;
         }
 
-        public async Task<UserDTO> GetCoachAsync(int? id)
+        public async Task<UserDTO> GetCoachByIdAsync(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "Coach's id is null");
             }
-            var coach = await _database.Coaches.GetAsync(id.Value);
+            var coach = await _database.Coaches.GetByIdAsync(id.Value);
             if (coach == null)
             {
                 throw new NotFoundException($"Coach with id = {id.Value} isn't found", "");
@@ -67,6 +67,21 @@ namespace BoxingClub.BLL.Services
                 throw new NotFoundException($"Coach with id = {id.Value} isn't found", "");
             }
             await _database.SaveAsync();
+        }
+
+        public async Task<UserDTO> GetCoachByNameAsync(string? name)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name), "Coach's name is null");
+            }
+            var coach = await _database.Coaches.GetByNameAsync(name);
+            if (coach == null)
+            {
+                throw new NotFoundException($"Coach with name = {name} isn't found", "");
+            }
+            var mappedCoach = _mapper.Map<UserDTO>(coach);
+            return mappedCoach;
         }
     }
 }

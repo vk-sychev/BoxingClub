@@ -33,11 +33,20 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.BornDate)
                 </td>
-                <td>
-                    @Html.ActionLink("Edit", "UpdateStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
-                    @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
-                    @Html.ActionLink("Delete from group", "DeleteFromBoxingGroup", "Home", new { id = item.Id, returnId = Model.Id })
-                </td>
+                @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Manager")))
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "UpdateStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
+                        @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
+                        @Html.ActionLink("Delete from group", "DeleteFromBoxingGroup", "Home", new { id = item.Id, returnId = Model.Id })
+                    </td>
+                }
+                else if(User.Identity.IsAuthenticated && User.IsInRole("Coach"))
+                {
+                    <td>
+                        @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) 
+                    </td>
+                }
             </tr>
         }
     </tbody>
@@ -46,6 +55,6 @@
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
         @Html.ActionLink("Edit", "EditBoxingGroup", new { id = Model.Id })
-    }|
+    @Html.Raw("|")}
     <a asp-action="Index" asp-controller="Home">Back to List</a>
 </div>

@@ -61,7 +61,7 @@
             }
             else if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
             {
-                                <td>
+                <td>
                     @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id })
                 </td>
                 <td>

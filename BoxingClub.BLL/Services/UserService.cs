@@ -16,7 +16,7 @@ namespace BoxingClub.BLL.Implementation.Services
         private readonly IRoleProvider _roleProvider;
         private readonly IUserProvider _userProvider;
         private readonly IMapper _mapper;
-        private const string DefaultRoleName = "Manager";
+        private const string DefaultRoleName = "User";
 
         public UserService(IUserProvider userProvider,
                            IRoleProvider roleProvider,

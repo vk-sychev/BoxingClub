@@ -60,6 +60,9 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<IdentityResult> SignUpAsync(ApplicationUser user, string password, string roleName)
         {
+            var identityUser = new ApplicationUser();
+            user.Id = identityUser.Id;
+            
 /*            var identityUser = new ApplicationUser(user.UserName)
             {
                 Email = user.Email
