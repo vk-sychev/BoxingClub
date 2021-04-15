@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
+using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
 
 namespace BoxingClub.BLL.Implementation.Services
 {
@@ -44,7 +46,27 @@ namespace BoxingClub.BLL.Implementation.Services
         public async Task<List<UserDTO>> GetUsersAsync()
         {
             var users = await _userProvider.GetUsersAsync();
-            return _mapper.Map<List<UserDTO>>(users);
+            var mappedUsers = new List<UserDTO>();
+            foreach (var user in users)
+            {
+                var role = await _userProvider.GetUserRole(user);
+                if (role == null)
+                {
+                    throw new ArgumentNullException(nameof(role), "Role is null");
+                }
+
+                var roleObject = await _roleProvider.FindRoleByNameAsync(role);
+                if (role == null)
+                {
+                    throw new NotFoundException($"Role with name = {role} isn't found", "");
+                }
+
+                var mappedUser = _mapper.Map<UserDTO>(user);
+                var mappedRole = _mapper.Map<RoleDTO>(roleObject);
+                mappedUser.Role = mappedRole;
+                mappedUsers.Add(mappedUser);
+            }
+            return mappedUsers;
         }
 
         public async Task<bool> IsInRoleAsync(UserDTO user, string roleName)
@@ -92,6 +114,18 @@ namespace BoxingClub.BLL.Implementation.Services
             }
             var result = await _userProvider.SignUpAsync(_mapper.Map<ApplicationUser>(user), password, DefaultRoleName);
             return _mapper.Map<AccountResultDTO>(result);
+        }
+
+        public async Task DeleteUserAsync(string id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id), "User's id is null");
+            }
+            if (! await _userProvider.DeleteUserAsync(id))
+            {
+                throw new NotFoundException($"User with id = {id} isn't found", "");
+            }
         }
     }
 }

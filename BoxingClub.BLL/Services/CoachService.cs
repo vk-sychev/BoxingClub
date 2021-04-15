@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.Services
 {

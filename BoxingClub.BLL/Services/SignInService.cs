@@ -3,10 +3,12 @@ using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
+using BoxingClub.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.Implementation.Services
 {

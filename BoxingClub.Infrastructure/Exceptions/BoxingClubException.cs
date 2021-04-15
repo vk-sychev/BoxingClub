@@ -12,5 +12,8 @@ namespace BoxingClub.Infrastructure.Exceptions
         {
             Property = prop;
         }
+        public BoxingClubException(string message) : base(message)
+        {
+        }
     }
 }
