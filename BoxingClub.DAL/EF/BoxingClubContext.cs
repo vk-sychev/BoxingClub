@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.EF
 {
-    public class BoxingClubContext : IdentityDbContext
+    public class BoxingClubContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Student> Students { get; set; }
 
         public DbSet<BoxingGroup> BoxingGroups { get; set; }
 
-        public DbSet<Coach> Coaches { get; set; }
+        //public DbSet<Coach> Coaches { get; set; }
 
         public BoxingClubContext(DbContextOptions<BoxingClubContext> options) : base(options) { }
 
@@ -23,6 +23,6 @@ namespace BoxingClub.DAL.EF
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
-        }
+         }
     }
 }

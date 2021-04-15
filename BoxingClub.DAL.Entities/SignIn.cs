@@ -5,9 +5,10 @@ using System.Text;
 
 namespace BoxingClub.DAL.Entities
 {
-    public class User
+    public class SignIn
     {
         public string Id { get; set; }
+
         public string UserName { get; set; }
 
         public string Email { get; set; }

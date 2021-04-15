@@ -11,15 +11,14 @@ namespace BoxingClub.DAL.Implementation.Implementation
 {
     public class SignInProvider : ISignInProvider
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public SignInProvider(SignInManager<IdentityUser> signInManager)
+        public SignInProvider(SignInManager<ApplicationUser> signInManager)
         {
             _signInManager = signInManager;
         }
 
-
-        public async Task<SignInResult> SignInAsync(User user)
+        public async Task<SignInResult> SignInAsync(SignIn user) //Переименовать user в SignInModel
         {
             return await _signInManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false);
         }

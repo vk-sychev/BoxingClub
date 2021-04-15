@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Models
 {
-    public class CoachViewModel
+    public class UserViewModel
     {
-        [DisplayName("Coach")]
-        public int Id { get; set; }
+        //[DisplayName("Coach")]
+        public string Id { get; set; }
+
+        public string UserName { get; set; }
+
+        public RoleViewModel Role { get; set; }
 
         public string Name { get; set; }
 

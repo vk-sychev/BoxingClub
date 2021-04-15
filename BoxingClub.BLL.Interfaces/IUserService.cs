@@ -12,6 +12,8 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<UserDTO> FindUserByIdAsync(string id);
 
+        Task DeleteUserAsync(string id);
+
         Task<List<UserDTO>> GetUsersAsync();
 
         Task<bool> IsInRoleAsync(UserDTO user, string roleName);

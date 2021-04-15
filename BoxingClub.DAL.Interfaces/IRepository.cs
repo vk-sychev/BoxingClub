@@ -9,7 +9,7 @@ namespace BoxingClub.DAL.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
 
-        Task<T> GetAsync(int id);
+        Task<T> GetByIdAsync(int id);
 
         Task CreateAsync(T item);
 

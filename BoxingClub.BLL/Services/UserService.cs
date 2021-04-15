@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
+using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
 
 namespace BoxingClub.BLL.Implementation.Services
 {
@@ -16,7 +18,7 @@ namespace BoxingClub.BLL.Implementation.Services
         private readonly IRoleProvider _roleProvider;
         private readonly IUserProvider _userProvider;
         private readonly IMapper _mapper;
-        private const string DefaultRoleName = "Manager";
+        private const string DefaultRoleName = "User";
 
         public UserService(IUserProvider userProvider,
                            IRoleProvider roleProvider,
@@ -44,7 +46,27 @@ namespace BoxingClub.BLL.Implementation.Services
         public async Task<List<UserDTO>> GetUsersAsync()
         {
             var users = await _userProvider.GetUsersAsync();
-            return _mapper.Map<List<UserDTO>>(users);
+            var mappedUsers = new List<UserDTO>();
+            foreach (var user in users)
+            {
+                var role = await _userProvider.GetUserRole(user);
+                if (role == null)
+                {
+                    throw new ArgumentNullException(nameof(role), "Role is null");
+                }
+
+                var roleObject = await _roleProvider.FindRoleByNameAsync(role);
+                if (role == null)
+                {
+                    throw new NotFoundException($"Role with name = {role} isn't found", "");
+                }
+
+                var mappedUser = _mapper.Map<UserDTO>(user);
+                var mappedRole = _mapper.Map<RoleDTO>(roleObject);
+                mappedUser.Role = mappedRole;
+                mappedUsers.Add(mappedUser);
+            }
+            return mappedUsers;
         }
 
         public async Task<bool> IsInRoleAsync(UserDTO user, string roleName)
@@ -54,7 +76,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new ArgumentNullException(nameof(user), "User is null");
             }
 
-            var result = await _userProvider.IsInRoleAsync(_mapper.Map<User>(user), roleName);
+            var result = await _userProvider.IsInRoleAsync(_mapper.Map<ApplicationUser>(user), roleName);
             return result;
         }
 
@@ -64,7 +86,7 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new ArgumentNullException(nameof(user), "User is null");
             }
-            var result = await _userProvider.RemoveFromRoleAsync(_mapper.Map<User>(user), roleName);
+            var result = await _userProvider.RemoveFromRoleAsync(_mapper.Map<ApplicationUser>(user), roleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
 
@@ -74,7 +96,7 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new ArgumentNullException(nameof(userDTO), "User is null");
             }
-            var user = _mapper.Map<User>(userDTO);
+            var user = _mapper.Map<ApplicationUser>(userDTO);
             var result = await _userProvider.AddToRoleAsync(user, roleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
@@ -90,8 +112,20 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new InvalidOperationException($"Role with name {DefaultRoleName} doesn't exist");
             }
-            var result = await _userProvider.SignUpAsync(_mapper.Map<User>(user), password, DefaultRoleName);
+            var result = await _userProvider.SignUpAsync(_mapper.Map<ApplicationUser>(user), password, DefaultRoleName);
             return _mapper.Map<AccountResultDTO>(result);
+        }
+
+        public async Task DeleteUserAsync(string id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id), "User's id is null");
+            }
+            if (! await _userProvider.DeleteUserAsync(id))
+            {
+                throw new NotFoundException($"User with id = {id} isn't found", "");
+            }
         }
     }
 }

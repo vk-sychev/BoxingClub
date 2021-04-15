@@ -1,12 +1,19 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoxingClub.BLL.DTO
+namespace BoxingClub.DAL.Entities
 {
-    public class CoachDTO
+    public class ApplicationUser : IdentityUser
     {
-        public int Id { get; set; }
+        public ApplicationUser() : base()
+        {
+        }
+
+        public ApplicationUser(string userName) : base(userName)
+        {
+        }
 
         public string Name { get; set; }
 

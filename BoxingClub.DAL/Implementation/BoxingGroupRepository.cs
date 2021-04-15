@@ -35,7 +35,7 @@ namespace BoxingClub.DAL.Repositories
             return false;
         }
 
-        public async Task<BoxingGroup> GetAsync(int id)
+        public async Task<BoxingGroup> GetByIdAsync(int id)
         {
             var res = await _db.BoxingGroups.AsQueryable().Where(g => g.Id == id).Include(x => x.Coach).SingleOrDefaultAsync();
             return res;
@@ -46,15 +46,21 @@ namespace BoxingClub.DAL.Repositories
             return await _db.BoxingGroups.Include(x => x.Coach).ToListAsync();
         }
 
-        public async Task<BoxingGroup> GetBoxingGroupWithStudentsAsync(int? id)
+        public async Task<BoxingGroup> GetBoxingGroupWithStudentsAsync(int id)
         {
-            var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id.Value).Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync();
+            var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id).Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync();
             return res;
         }
 
         public void Update(BoxingGroup item)
         {
             _db.Entry(item).State = EntityState.Modified;
+        }
+
+        public async Task<List<BoxingGroup>> GetBoxingGroupsByCoachAsync(string id)
+        {
+            var groups = await _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id).ToListAsync();
+            return groups;
         }
     }
 }

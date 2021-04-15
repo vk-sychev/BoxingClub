@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BoxingClub.WEB.Controllers
 {
-    [Authorize(Roles = "Manager, Admin")]
+    [Authorize(Roles = "Manager, Admin, Coach")]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
@@ -34,6 +34,7 @@ namespace BoxingClub.WEB.Controllers
             _boxingGroupService = boxingGroupService;
         }
 
+        [Authorize(Roles = "Manager, Admin")]
         public async Task<IActionResult> GetAllStudents()
         {
             var studentDTOs = await _studentService.GetStudentsAsync();
@@ -41,12 +42,14 @@ namespace BoxingClub.WEB.Controllers
             return View(students);
         }
 
+        [Authorize(Roles = "Manager, Admin")]
         public async Task<IActionResult> CreateStudent()
         {
             ViewBag.Groups = await GetGroups();
             return View();
         }
 
+        [Authorize(Roles = "Manager, Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
         {
@@ -69,6 +72,7 @@ namespace BoxingClub.WEB.Controllers
             return RedirectToAction("GetAllStudents", "Student");
         }
 
+        [Authorize(Roles = "Manager, Admin")]
         private async Task<SelectList> GetGroups()
         {
             var groups = await _boxingGroupService.GetBoxingGroupsAsync();
@@ -77,6 +81,7 @@ namespace BoxingClub.WEB.Controllers
             return selectList;
         }
 
+        [Authorize(Roles = "Manager, Admin")]
         [Route("Student/UpdateStudent/{id}")]
         [HttpGet]
         public async Task<IActionResult> UpdateStudent(int? id, bool fromHomeController, int returnId)
@@ -91,6 +96,7 @@ namespace BoxingClub.WEB.Controllers
             return View(student);
         }
 
+        [Authorize(Roles = "Manager, Admin")]
         [HttpPost]
         [Route("Student/UpdateStudent/{id}")]
         public async Task<IActionResult> UpdateStudent(StudentFullViewModel studentViewModel, bool fromHomeController, int returnId)
@@ -111,6 +117,7 @@ namespace BoxingClub.WEB.Controllers
             return View(studentViewModel);
         }
 
+        [Authorize(Roles = "Manager, Admin, Coach")]
         [HttpGet]
         [Route("Student/DetailsStudent/{id}")]
         public async Task<IActionResult> DetailsStudent(int? id, bool fromHomeController, int returnId)

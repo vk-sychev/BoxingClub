@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.Services
 {
@@ -28,7 +29,7 @@ namespace BoxingClub.BLL.Services
             {
                 throw new ArgumentNullException(nameof(id), "Student's id is null");    
             }
-            var student = await _database.Students.GetAsync(id.Value);
+            var student = await _database.Students.GetByIdAsync(id.Value);
             if (student == null)
             {
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
@@ -85,7 +86,7 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(id), "Student's id is null");
             }
 
-            var student = await _database.Students.GetAsync(id.Value);
+            var student = await _database.Students.GetByIdAsync(id.Value);
             student.BoxingGroup = null;
             _database.Students.Update(student);
             await _database.SaveAsync();

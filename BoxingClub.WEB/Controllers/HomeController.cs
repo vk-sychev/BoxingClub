@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IMapper _mapper;
@@ -33,7 +33,21 @@ namespace BoxingClub.WEB.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
+            List<BoxingGroupDTO> groups;
+            if (User.IsInRole("User"))
+            {
+                return View("PendingRoleAssignment");
+            }
+
+            if (User.IsInRole("Coach"))
+            {
+                var coach = await _coachService.GetCoachByNameAsync(User.Identity.Name);
+                groups = await _boxingGroupService.GetBoxingGroupsByCoachAsync(coach.Id);
+            }
+            else
+            {
+                groups = await _boxingGroupService.GetBoxingGroupsAsync();
+            }
             var model = _mapper.Map<List<BoxingGroupFullViewModel>>(groups);
             return View(model);
         }
@@ -88,7 +102,7 @@ namespace BoxingClub.WEB.Controllers
         private async Task<SelectList> GetCoaches()
         {
             var coaches = await _coachService.GetCoachesAsync();
-            var coacheViewModels = _mapper.Map<List<CoachViewModel>>(coaches);
+            var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
             var selectList = new SelectList(coacheViewModels, "Id", "FullName");
             return selectList;
         }
@@ -115,6 +129,8 @@ namespace BoxingClub.WEB.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        [Authorize(Roles = "Admin, Coach, Manager")]
         [Route("Home/DetailsGroup/{id}")]
         [HttpGet]
         public async Task<IActionResult> DetailsBoxingGroup(int? id)
@@ -124,6 +140,8 @@ namespace BoxingClub.WEB.Controllers
             return View(model);
         }
 
+
+        [Authorize(Roles = "Admin, Manager")]
         [Route("Home/DeleteFromGroup/{id}")]
         public async Task<IActionResult> DeleteFromBoxingGroup(int? id, int? returnId)
         {

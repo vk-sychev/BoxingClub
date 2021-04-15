@@ -4,14 +4,17 @@ using BoxingClub.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BoxingClub.DAL.Migrations
+namespace BoxingClub.DAL.Implementation.Migrations
 {
+    /*
     [DbContext(typeof(BoxingClubContext))]
-    partial class BoxingClubContextModelSnapshot : ModelSnapshot
+    [Migration("20210414103654_ChangedOnDeleteEvent")]
+    partial class ChangedOnDeleteEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,64 +104,64 @@ namespace BoxingClub.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
+                            Id = "29f4eef5-74b1-4127-a0de-3c213e056f2b",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "7d6270c5-62cb-4598-90b8-712a18c47f88",
+                            ConcurrencyStamp = "41a9ab31-8104-4351-b68b-81daa5942e91",
                             Email = "Manager1@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER1@GMAIL.COM",
                             NormalizedUserName = "MANAGER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBIOTZu5j+mlmvOT9mA5QEoaiHMMrUuhQpHVWur5GVxnGHdzvvN/xBzpjDtrldJcug==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIUv7Jt+P4nl0GYct0EnK5NWPnNdfEdAa6yTY6GgrytZEzTdqGTmwVpppWeDTuagRQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b934d20c-ebb8-4cde-b743-1e806647e5a3",
+                            SecurityStamp = "b4c664e3-f867-4c04-b8a1-3862afd3258a",
                             TwoFactorEnabled = false,
                             UserName = "Manager1"
                         },
                         new
                         {
-                            Id = "2d4254a5-7782-4b9c-a987-42a83d30669a",
+                            Id = "16a57d93-3ee8-4fc5-9b5c-805eb4bc809a",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "0eef8bfd-0bfb-43b7-9888-6ddc8f37511d",
+                            ConcurrencyStamp = "abaae028-5235-45e6-8285-18c35252124c",
                             Email = "Manager2@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER2@GMAIL.COM",
                             NormalizedUserName = "MANAGER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEErkYh50oJwNHDYsoo9qirg+3FOHtbvNZa1MS7GQ6YgF4MS9Hvd00lg3pd6w7d/0dA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEH05GkNMApoG9hD+OZjabn7wp2aqPoNT4FKvJFJNStcvJPercn7oeFE32ypMDgho5A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "95d7baf6-da67-4277-bb6c-bfa9f58d3825",
+                            SecurityStamp = "a23e35a7-144a-4b1f-8153-dc28e7f78e2e",
                             TwoFactorEnabled = false,
                             UserName = "Manager2"
                         },
                         new
                         {
-                            Id = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
+                            Id = "e4eb0003-6ad3-4b69-8e08-358c32852410",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(2000, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "9d877141-b47b-434b-b13d-08f4c7ca5447",
+                            ConcurrencyStamp = "24903287-9e74-4007-8317-4d52ea6b68d7",
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Vasya",
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEcYBNPkGgCxhBa7RHEq4qdd3A1mHSZuXugT1e02Eu4rdI23i4oSD/v5WnWKMjXPnw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEH66MBFBzIlUcizYQFP2ku5RgOAw054Tnbq5YQC5MwillNg0idhked4svzubo+hHLg==",
                             Patronymic = "Konstantinovich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "08a1295e-5f60-41f2-a601-75d17a143c1f",
+                            SecurityStamp = "3f4c738e-1b34-4675-bcfe-83653aae978d",
                             Surname = "Sychev",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         },
                         new
                         {
-                            Id = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
+                            Id = "b647a658-188a-4531-bd66-599d9cb0d863",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1995, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "8ff9d236-d0d3-486b-8099-64260b7b2901",
+                            ConcurrencyStamp = "6228f37b-7163-47c9-99ea-4bf75d47c557",
                             Description = "CMS in boxing",
                             Email = "Coach1@gmail.com",
                             EmailConfirmed = false,
@@ -166,20 +169,20 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Pavel",
                             NormalizedEmail = "COACH1@GMAIL.COM",
                             NormalizedUserName = "COACH1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEO37bAmZ57QgDNQqz5hCm0fPpq5Y0e2RRUAajHxi7Dt5d+LJD6VfBqDZVxo4yJiHZg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIljr4VKyYeAIogdCY1V1pDVrmNzubI52PLmlBOGXhmRLwjObRC4wE4+9avHIvgAMQ==",
                             Patronymic = "Nikolayevich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c4f444d9-57c0-4aa4-ac8c-b24b9deddf89",
+                            SecurityStamp = "ccc799c1-00f4-4f8a-9dd6-6d3678983a07",
                             Surname = "Dorochin",
                             TwoFactorEnabled = false,
                             UserName = "Coach1"
                         },
                         new
                         {
-                            Id = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
+                            Id = "68549664-5671-4ded-97c5-5f1c3fde561a",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1991, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "ce4a3e53-a924-4c12-8083-229161279b44",
+                            ConcurrencyStamp = "66a7fc66-f763-44b4-9e90-8e6dd48b0a98",
                             Description = "CMS in boxing",
                             Email = "Coach2@gmail.com",
                             EmailConfirmed = false,
@@ -187,20 +190,20 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Vlad",
                             NormalizedEmail = "COACH2@GMAIL.COM",
                             NormalizedUserName = "COACH2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGEwVprG6C6orWnK1pdm4+llqFMyw1WKBOG/+YoNejaeNsGLgM4DbcsfTUbh7g6m/w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPIxVQGX/TdUBD7LFG4+yG9Uz6aZ28IJqfUtaqwcKymhGlqtXrpACv31XQDB5sIPeg==",
                             Patronymic = "Nikolayevich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "66015801-47a3-4d61-aeb2-60dca6f2ec5a",
+                            SecurityStamp = "ce5953f9-ea80-431f-8b62-f65ca656d66f",
                             Surname = "Dorochin",
                             TwoFactorEnabled = false,
                             UserName = "Coach2"
                         },
                         new
                         {
-                            Id = "a50a06a5-df07-4728-b6a0-93173c2ce4cf",
+                            Id = "2c380285-628b-491a-800e-927c78603a31",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1970, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "45ee15bb-8cf5-4043-a91d-86a798c10874",
+                            ConcurrencyStamp = "393ddf70-f52b-4915-a104-d1fc1a13866e",
                             Description = "MS in boxing",
                             Email = "Coach3@gmail.com",
                             EmailConfirmed = false,
@@ -208,9 +211,9 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Sergey",
                             NormalizedEmail = "COACH3@GMAIL.COM",
                             NormalizedUserName = "COACH3",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA/wCoxlJYH6Hpr05F6O8W4B/OgL5lkLqGURn7J4Vts53MypelCGu7/xNGh0J6N8vw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMjlLxffnyR2auWCQ1WPNxNl0S9SK2rnNYwBPmH31CDaB9E0Kbw2Sv7k2zCVJgqZTg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "988ae349-ed99-4a46-9cc4-77706a9be935",
+                            SecurityStamp = "f7c16b2e-1f55-4345-9c9d-e2a9e2a8116a",
                             Surname = "Goncharov",
                             TwoFactorEnabled = false,
                             UserName = "Coach3"
@@ -240,19 +243,19 @@ namespace BoxingClub.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            CoachId = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
+                            CoachId = "b647a658-188a-4531-bd66-599d9cb0d863",
                             Name = "Vityaz"
                         },
                         new
                         {
                             Id = 2,
-                            CoachId = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
+                            CoachId = "b647a658-188a-4531-bd66-599d9cb0d863",
                             Name = "Warrior"
                         },
                         new
                         {
                             Id = 3,
-                            CoachId = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
+                            CoachId = "68549664-5671-4ded-97c5-5f1c3fde561a",
                             Name = "Sarmat"
                         });
                 });
@@ -371,29 +374,29 @@ namespace BoxingClub.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "291c0120-8c27-47c5-83fe-9d7deb36f73c",
-                            ConcurrencyStamp = "28c18050-2080-4daa-85d7-63181f16ca0e",
+                            Id = "d0050d28-eac3-46bc-9da5-6cd5c2076de0",
+                            ConcurrencyStamp = "1ebbb59e-2a9f-44e5-83a9-884e09cd5e12",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6",
-                            ConcurrencyStamp = "4bce291f-b263-4af2-b909-b34f83fe140e",
+                            Id = "09cf7be3-ef77-48f3-ba78-2a882f08d33f",
+                            ConcurrencyStamp = "dfa4e118-2026-4955-b721-5a723a51e035",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "db460306-31c6-457a-989e-9e4317be99b9",
-                            ConcurrencyStamp = "f22b0614-a9a2-4d39-bf69-4d569abcb44b",
+                            Id = "3666f2ad-5233-4c24-a13c-eceb7cf559bc",
+                            ConcurrencyStamp = "5503252d-e1b1-4ff2-a1e5-9e5aa6da590c",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "8da509ca-2005-457d-8ca3-105792f04013",
-                            ConcurrencyStamp = "1aa92723-3e34-4d8b-a67a-fdafa6f28345",
+                            Id = "0f302d40-2d3f-4f36-a8a8-cf3eddf2775d",
+                            ConcurrencyStamp = "0282582d-42b7-4793-86e2-7095a9ad2ab4",
                             Name = "Coach",
                             NormalizedName = "COACH"
                         });
@@ -486,33 +489,33 @@ namespace BoxingClub.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
-                            RoleId = "291c0120-8c27-47c5-83fe-9d7deb36f73c"
+                            UserId = "e4eb0003-6ad3-4b69-8e08-358c32852410",
+                            RoleId = "d0050d28-eac3-46bc-9da5-6cd5c2076de0"
                         },
                         new
                         {
-                            UserId = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
-                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
+                            UserId = "29f4eef5-74b1-4127-a0de-3c213e056f2b",
+                            RoleId = "09cf7be3-ef77-48f3-ba78-2a882f08d33f"
                         },
                         new
                         {
-                            UserId = "2d4254a5-7782-4b9c-a987-42a83d30669a",
-                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
+                            UserId = "16a57d93-3ee8-4fc5-9b5c-805eb4bc809a",
+                            RoleId = "09cf7be3-ef77-48f3-ba78-2a882f08d33f"
                         },
                         new
                         {
-                            UserId = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
-                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
+                            UserId = "b647a658-188a-4531-bd66-599d9cb0d863",
+                            RoleId = "0f302d40-2d3f-4f36-a8a8-cf3eddf2775d"
                         },
                         new
                         {
-                            UserId = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
-                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
+                            UserId = "68549664-5671-4ded-97c5-5f1c3fde561a",
+                            RoleId = "0f302d40-2d3f-4f36-a8a8-cf3eddf2775d"
                         },
                         new
                         {
-                            UserId = "a50a06a5-df07-4728-b6a0-93173c2ce4cf",
-                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
+                            UserId = "2c380285-628b-491a-800e-927c78603a31",
+                            RoleId = "0f302d40-2d3f-4f36-a8a8-cf3eddf2775d"
                         });
                 });
 
@@ -611,4 +614,5 @@ namespace BoxingClub.DAL.Migrations
 #pragma warning restore 612, 618
         }
     }
+    */
 }

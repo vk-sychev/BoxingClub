@@ -4,6 +4,7 @@ using BoxingClub.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,37 +18,50 @@ namespace BoxingClub.DAL.Repositories
             _db = context;
         }
 
-        public async Task CreateAsync(Coach item)
+        public async Task CreateAsync(ApplicationUser item)
         {
-            await _db.Coaches.AddAsync(item);
+            await _db.Users.AddAsync(item);
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var coach = await _db.Coaches.FindAsync(id);
+            var coach = await _db.Users.FindAsync(id);
             if (coach != null)
             {
-                _db.Coaches.Remove(coach);
+                _db.Users.Remove(coach);
                 return true;
             }
             return false;
         }
 
-        public async Task<Coach> GetAsync(int id)
+        public async Task<ApplicationUser> GetByIdAsync(int id)
         {
-            var coach = await _db.Coaches.FindAsync(id);
+            var coach = await _db.Users.FindAsync(id);
             return coach;
         }
 
-        public async Task<IEnumerable<Coach>> GetAllAsync()
+        public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
         {
-            var coaches = await _db.Coaches.ToListAsync();
+            var coachRole = await _db.Roles.AsQueryable().Where(x => x.Name == "Coach").SingleOrDefaultAsync();
+            var coachesRole = await _db.UserRoles.AsQueryable().Where(x => x.RoleId == coachRole.Id).ToListAsync();
+            var coaches = new List<ApplicationUser>();
+            foreach(var item in coachesRole)
+            {
+                var user = await _db.Users.FindAsync(item.UserId);
+                coaches.Add(user);
+            }
             return coaches;
         }
 
-        public void Update(Coach item)
+        public void Update(ApplicationUser item)
         {
             _db.Entry(item).State = EntityState.Modified;
+        }
+
+        public async Task<ApplicationUser> GetByNameAsync(string name)
+        {
+            var coach = await _db.Users.AsQueryable().Where(x => x.UserName.ToUpper().Trim() == name.ToUpper().Trim()).SingleOrDefaultAsync();
+            return coach;
         }
     }
 }

@@ -14,9 +14,9 @@ namespace BoxingClub.DAL.Entities
 
         public string Name { get; set; }
 
-        public int CoachId { get; set; }
+        public string CoachId { get; set; }
 
-        public Coach Coach { get; set; }
+        public ApplicationUser Coach { get; set; }
 
         public List<Student> Students { get; set; } = new List<Student>();
     }

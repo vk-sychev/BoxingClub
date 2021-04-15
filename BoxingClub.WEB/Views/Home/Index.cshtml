@@ -12,43 +12,51 @@
         <a asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
     </p>
 }
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+
+@if (!Model.Any())
+{
+    <h5> You have no groups yet</h5>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
-                </td>
-                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                {
-                    <td>
-                        @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id })
-                    </td>
-                }
-                else if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
-                {
-                    <td>
-                        @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id })
-                    </td>
-                }
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FullName)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <td>
+                            @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id })
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id })
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
