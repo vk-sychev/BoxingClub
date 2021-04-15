@@ -97,7 +97,7 @@ namespace BoxingClub.BLL.Services
             return _mapper.Map<BoxingGroupDTO>(group);
         }
 
-        public async Task<List<BoxingGroupDTO>> GetBoxingGroupsByCoachAsync(string? id)
+        public async Task<List<BoxingGroupDTO>> GetBoxingGroupsByCoachAsync(string id)
         {
             if (id == null)
             {
