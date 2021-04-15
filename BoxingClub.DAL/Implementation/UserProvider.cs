@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,13 +45,22 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<ApplicationUser> FindUserByIdAsync(string id)
         {
-            return await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.GetRolesAsync(user);
+            return user;
         }
 
 
         public async Task<List<ApplicationUser>> GetUsersAsync()
         {
             return await _userManager.Users.ToListAsync();
+        }
+
+        public async Task<string> GetUserRole(ApplicationUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = await roles.ToAsyncEnumerable().SingleOrDefaultAsync();
+            return role;
         }
 
 

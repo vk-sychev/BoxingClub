@@ -17,7 +17,9 @@ namespace BoxingClub.DAL.Interfaces
 
         Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string roleName); 
 
-        Task<ApplicationUser> FindUserByIdAsync(string id); 
+        Task<ApplicationUser> FindUserByIdAsync(string id);
+
+        Task<string> GetUserRole(ApplicationUser user);
 
         Task<List<ApplicationUser>> GetUsersAsync();
 

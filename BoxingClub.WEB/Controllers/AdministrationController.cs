@@ -32,15 +32,36 @@ namespace BoxingClub.WEB.Controllers
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userService.GetUsersAsync();
-            var mappedRoles = _mapper.Map<List<UserViewModel>>(users);
-            return View(mappedRoles);
+            var mappedUsers = _mapper.Map<List<UserViewModel>>(users);
+            return View(mappedUsers);
         }
 
-        public async Task<IActionResult> DeleteUser(string? id)
+        [Route("Administration/DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
         {
             await _userService.DeleteUserAsync(id);
             return RedirectToAction("GetUsers", "Administration");
         }
+
+/*        [HttpGet]
+        [Route("Administration/DetailsUser/{id}")]
+        public async Task<IActionResult> DetailsUser(string id)
+        {
+            var user = await _userService.FindUserByIdAsync(id);
+            var mappedUser = _mapper.Map<UserViewModel>(user);
+            return View(mappedUser);
+        }
+
+        [HttpGet]
+        [Route("Administration/ManageRoles/{id}")]
+        public async Task<IActionResult> ManageRoles(string id)
+        {
+            var user = await _userService.FindUserByIdAsync(id);
+            var mappedUser = _mapper.Map<UserViewModel>(user);
+            return View(mappedUser);
+        }*/
+
+
 
 
 

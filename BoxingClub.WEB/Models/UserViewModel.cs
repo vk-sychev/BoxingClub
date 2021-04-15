@@ -13,6 +13,8 @@ namespace BoxingClub.WEB.Models
 
         public string UserName { get; set; }
 
+        public RoleViewModel Role { get; set; }
+
         public string Name { get; set; }
 
         public string Surname { get; set; }

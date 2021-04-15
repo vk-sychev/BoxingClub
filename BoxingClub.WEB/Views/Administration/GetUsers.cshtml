@@ -17,6 +17,9 @@
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
+                RoleName
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th></th>
@@ -32,10 +35,13 @@
                 @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Role.Name)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.ActionLink("Manage Role", "ManageRole", new { id=item.Id }) |
+                @*@Html.ActionLink("Manage Role", "ManageRole", new { id=item.Id }) |*@
                 @Html.ActionLink("Details", "DetailsUser", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "DeleteUser", new { id = item.Id })
             </td>
