@@ -4,14 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Boxing Groups</h1>
+<div class="d-flex justify-content-between mb-2">
+    <h1>Boxing Groups</h1>
 
-@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-{
-    <p>
-        <a asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
-    </p>
-}
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <p>
+            <a class = "btn btn-primary mt-2" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
+        </p>
+    }
+</div>
 
 @if (!Model.Any())
 {
@@ -35,10 +37,10 @@ else
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td class="field">
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td>
+                    <td class="field">
                         @Html.DisplayFor(modelItem => item.FullName)
                     </td>
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))

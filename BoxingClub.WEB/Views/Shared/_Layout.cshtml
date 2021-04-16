@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
+<body class="bg-page">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
             <div class="container">
@@ -22,16 +22,16 @@
                         @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Manager")))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Student" asp-action="GetAllStudents">All Students</a>
+                                <a class="nav-link" asp-area="" asp-controller="Student" asp-action="GetAllStudents">All Students</a>
                             </li>
                             @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Administration" asp-action="GetUsers">Manage Users</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Administration" asp-action="GetUsers">Manage Users</a>
                                 </li>
                             }
                         }
