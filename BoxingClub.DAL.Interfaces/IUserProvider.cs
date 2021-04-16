@@ -1,8 +1,6 @@
 ﻿using BoxingClub.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Interfaces
@@ -23,6 +21,10 @@ namespace BoxingClub.DAL.Interfaces
 
         Task<List<ApplicationUser>> GetUsersAsync();
 
+        Task<IEnumerable<ApplicationUser>> GetUsersByRoleAsync(string roleName);
+
         Task<IdentityResult> SignUpAsync(ApplicationUser user, string password, string roleName);
+
+        Task<ApplicationUser> GetUserByNameAsync(string name);
     }
 }

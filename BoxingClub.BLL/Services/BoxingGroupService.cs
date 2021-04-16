@@ -4,9 +4,7 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
@@ -97,13 +95,13 @@ namespace BoxingClub.BLL.Services
             return _mapper.Map<BoxingGroupDTO>(group);
         }
 
-        public async Task<List<BoxingGroupDTO>> GetBoxingGroupsByCoachAsync(string id)
+        public async Task<List<BoxingGroupDTO>> GetBoxingGroupsByCoachIdAsync(string coachId)
         {
-            if (id == null)
+            if (coachId == null)
             {
-                throw new ArgumentNullException(nameof(id), "Coach's id is null");
+                throw new ArgumentNullException(nameof(coachId), "Coach's id is null");
             }
-            var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachAsync(id);
+            var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachAsync(coachId);
             var mappedGroups = _mapper.Map<List<BoxingGroupDTO>>(groups);
             return mappedGroups;
         }

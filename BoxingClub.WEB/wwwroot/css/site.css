@@ -21,7 +21,8 @@ a.nav-link:hover {
 }
 
 .bg-page {
-    background-color: #FFFAFA;
+/*    background-color: #FFFAFA;*/
+    background-color: #fff;
 }
 
 .btn-primary {
@@ -97,3 +98,8 @@ body {
 th {
     font-size:20px;
 }
+
+/*body {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight:400;
+}*/

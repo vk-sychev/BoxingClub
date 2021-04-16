@@ -4,9 +4,7 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
@@ -126,6 +124,28 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new NotFoundException($"User with id = {id} isn't found", "");
             }
+        }
+
+        public async Task<UserDTO> FindUserByNameAsync(string name)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name), "User's name is null");
+            }
+            var user = await _userProvider.GetUserByNameAsync(name);
+            if (user == null)
+            {
+                throw new NotFoundException($"User with name = {name} isn't found", "");
+            }
+            var mappedUser = _mapper.Map<UserDTO>(user);
+            return mappedUser;
+        }
+
+        public async Task<List<UserDTO>> GetUsersByRoleAsync(string roleName)
+        {
+            var users = await _userProvider.GetUsersByRoleAsync(roleName);
+            var mappedUsers = _mapper.Map<List<UserDTO>>(users);
+            return mappedUsers;
         }
     }
 }

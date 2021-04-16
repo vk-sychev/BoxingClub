@@ -1,7 +1,5 @@
 ﻿using BoxingClub.BLL.DTO;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BoxingClub.BLL.Interfaces
@@ -12,9 +10,13 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<UserDTO> FindUserByIdAsync(string id);
 
+        Task<UserDTO> FindUserByNameAsync(string name);
+
         Task DeleteUserAsync(string id);
 
         Task<List<UserDTO>> GetUsersAsync();
+
+        Task<List<UserDTO>> GetUsersByRoleAsync(string roleName);
 
         Task<bool> IsInRoleAsync(UserDTO user, string roleName);
 

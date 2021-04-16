@@ -17,17 +17,17 @@ namespace BoxingClub.WEB.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IBoxingGroupService _boxingGroupService;
-        private readonly ICoachService _coachService;
+        private readonly IUserService _userService;
         private readonly IStudentService _studentService;
 
         public HomeController(IMapper mapper,
                               IBoxingGroupService boxingGroupService,
-                              ICoachService coachService,
+                              IUserService userService,
                               IStudentService studentService)
         {
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
-            _coachService = coachService;
+            _userService = userService;
             _studentService = studentService;
         }
 
@@ -41,8 +41,8 @@ namespace BoxingClub.WEB.Controllers
 
             if (User.IsInRole("Coach"))
             {
-                var coach = await _coachService.GetCoachByNameAsync(User.Identity.Name);
-                groups = await _boxingGroupService.GetBoxingGroupsByCoachAsync(coach.Id);
+                var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
+                groups = await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(coach.Id);
             }
             else
             {
@@ -101,7 +101,7 @@ namespace BoxingClub.WEB.Controllers
 
         private async Task<SelectList> GetCoaches()
         {
-            var coaches = await _coachService.GetCoachesAsync();
+            var coaches = await _userService.GetUsersByRoleAsync("Coach");
             var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
             var selectList = new SelectList(coacheViewModels, "Id", "FullName");
             return selectList;

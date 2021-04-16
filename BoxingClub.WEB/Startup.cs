@@ -8,7 +8,6 @@ using BoxingClub.DAL.Implementation.Implementation;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.DAL.Repositories;
 using BoxingClub.Web.Mapping;
-using BoxingClub.WEB.Controllers;
 using BoxingClub.WEB.Mapping;
 using BoxingClub.WEB.Models;
 using BoxingClub.WEB.Validations;
@@ -58,8 +57,6 @@ namespace BoxingClub.WEB
 
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
             services.AddTransient<IStudentService, StudentService>();
-            //services.AddTransient<IAccountService, AccountService>();
-            //services.AddTransient<IAccountProvider, AccountProvider>();
             
             services.AddTransient<IRoleProvider, RoleProvider>();
             services.AddTransient<IUserProvider, UserProvider>();
@@ -70,7 +67,6 @@ namespace BoxingClub.WEB
             services.AddTransient<ISignInService, SignInService>();
 
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
-            services.AddTransient<ICoachService, CoachService>();
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));

@@ -3,10 +3,8 @@ using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Implementation.Implementation
@@ -66,7 +64,6 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<bool> IsInRoleAsync(ApplicationUser user, string roleName)
         {
-            //var identityUser = _mapper.Map<ApplicationUser>(user);
             var res = await _userManager.IsInRoleAsync(user, roleName);
             return res;
         }
@@ -92,5 +89,16 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return result;
         }
 
+        public async Task<IEnumerable<ApplicationUser>> GetUsersByRoleAsync(string roleName)
+        {
+            var users = await _userManager.GetUsersInRoleAsync(roleName);
+            return users;
+        }
+
+        public async Task<ApplicationUser> GetUserByNameAsync(string name)
+        {
+            var user = await _userManager.FindByNameAsync(name);
+            return user;
+        }
     }
 }

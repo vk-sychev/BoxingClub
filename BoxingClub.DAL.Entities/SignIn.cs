@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace BoxingClub.DAL.Entities
+﻿namespace BoxingClub.DAL.Entities
 {
     public class SignIn
     {

@@ -1,8 +1,4 @@
-﻿using BoxingClub.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Interfaces
 {
@@ -11,8 +7,6 @@ namespace BoxingClub.DAL.Interfaces
         IStudentRepository Students { get; }
 
         IBoxingGroupRepository BoxingGroups { get; }
-
-        ICoachRepository Coaches { get; }
 
         Task SaveAsync();
     }

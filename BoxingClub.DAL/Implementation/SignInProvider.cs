@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using BoxingClub.DAL.Entities;
+﻿using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Implementation.Implementation

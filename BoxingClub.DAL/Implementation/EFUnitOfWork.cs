@@ -1,10 +1,5 @@
 using BoxingClub.DAL.EF;
-using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Repositories
@@ -15,7 +10,6 @@ namespace BoxingClub.DAL.Repositories
 
         private IStudentRepository _studentRepository;
         private IBoxingGroupRepository _boxingGroupRepository;
-        private ICoachRepository _coachRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
@@ -46,17 +40,6 @@ namespace BoxingClub.DAL.Repositories
             }
         }
 
-        public ICoachRepository Coaches
-        {
-            get
-            {
-                if(_coachRepository == null)
-                {
-                    _coachRepository = new CoachRepository(_db);
-                }
-                return _coachRepository;
-            }
-        }
 
         public async Task SaveAsync()
         {

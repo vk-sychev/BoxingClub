@@ -1,9 +1,7 @@
 ﻿using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;

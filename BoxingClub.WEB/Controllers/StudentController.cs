@@ -1,19 +1,11 @@
 ﻿using BoxingClub.WEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.DTO;
 using AutoMapper;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
-using Microsoft.AspNetCore.Diagnostics;
-using BoxingClub.Infrastructure.HttpSwitcher;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BoxingClub.WEB.Controllers
