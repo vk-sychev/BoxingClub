@@ -10,7 +10,7 @@
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
         <p>
-            <a class = "btn btn-primary mt-2" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
+            <a class="btn btn-primary mt-2" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
         </p>
     }
 </div>
@@ -37,24 +37,28 @@ else
             @foreach (var item in Model)
             {
                 <tr>
-                    <td class="field">
+                    <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td class="field">
+                    <td>
                         @Html.DisplayFor(modelItem => item.FullName)
                     </td>
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <td>
-                            @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }) |
-                            @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }) |
-                            @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id })
+                            <div class="d-flex justify-content-end">
+                                @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
+                                @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                            </div>
                         </td>
                     }
                     else
                     {
                         <td>
-                            @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id })
+                            <div class="d-flex justify-content-end">
+                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                            </div>
                         </td>
                     }
                 </tr>
