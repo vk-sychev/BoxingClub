@@ -6,13 +6,13 @@ namespace BoxingClub.BLL.Interfaces
 {
     public interface IUserService
     {
-        Task<AccountResultDTO> AddToRoleAsync(UserDTO user, string roleName);
+        Task<AccountResultDTO> AddToRoleAsync(string userId, string roleName);
 
-        Task<UserDTO> FindUserByIdAsync(string id);
+        Task<UserDTO> FindUserByIdAsync(string userId);
 
         Task<UserDTO> FindUserByNameAsync(string name);
 
-        Task DeleteUserAsync(string id);
+        Task DeleteUserByIdAsync(string userId);
 
         Task<List<UserDTO>> GetUsersAsync();
 
@@ -20,7 +20,7 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<bool> IsInRoleAsync(UserDTO user, string roleName);
 
-        Task<AccountResultDTO> RemoveFromRoleAsync(UserDTO user, string roleName);
+        Task<AccountResultDTO> RemoveFromRoleAsync(string userId, string roleName);
 
         Task<AccountResultDTO> SignUpAsync(UserDTO user, string password);
     }

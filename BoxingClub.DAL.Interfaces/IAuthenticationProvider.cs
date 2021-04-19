@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Interfaces
 {
-    public interface ISignInProvider
+    public interface IAuthenticationProvider
     {
         Task<SignInResult> SignInAsync(SignIn user);
 

@@ -12,11 +12,11 @@ namespace BoxingClub.WEB.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly ISignInService _signInService;
+        private readonly IAuthenticationService _signInService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AccountController(ISignInService signInService,
+        public AccountController(IAuthenticationService signInService,
                                  IUserService userService,
                                  IMapper mapper)
         {

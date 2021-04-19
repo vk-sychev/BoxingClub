@@ -24,9 +24,9 @@ namespace BoxingClub.DAL.Implementation.Implementation
             _mapper = mapper;
         }
 
-        public async Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string roleName)
+        public async Task<IdentityResult> AddToRoleAsync(string userId, string roleName)
         {
-            var identityUser = await _userManager.FindByIdAsync(user.Id);
+            var identityUser = await _userManager.FindByIdAsync(userId);
             return await _userManager.AddToRoleAsync(identityUser, roleName);
         }
 
@@ -57,7 +57,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
         public async Task<string> GetUserRole(ApplicationUser user)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            var role = await roles.ToAsyncEnumerable().SingleOrDefaultAsync();
+            var role = await roles.AsQueryable().SingleOrDefaultAsync();
             return role;
         }
 
@@ -69,9 +69,9 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
 
-        public async Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string roleName)
+        public async Task<IdentityResult> RemoveFromRoleAsync(string userId, string roleName)
         {
-            var identityUser = await _userManager.FindByIdAsync(user.Id);
+            var identityUser = await _userManager.FindByIdAsync(userId);
             return await _userManager.RemoveFromRoleAsync(identityUser, roleName);
         }
 

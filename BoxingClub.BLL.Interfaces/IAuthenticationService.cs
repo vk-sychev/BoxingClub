@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.BLL.Interfaces
 {
-    public interface ISignInService
+    public interface IAuthenticationService
     {
         Task<SignInResultDTO> SignInAsync(UserDTO user);
 

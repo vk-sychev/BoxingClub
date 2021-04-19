@@ -35,7 +35,7 @@ namespace BoxingClub.WEB.Controllers
         [Route("Administration/DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            await _userService.DeleteUserAsync(id);
+            await _userService.DeleteUserByIdAsync(id);
             return RedirectToAction("GetUsers", "Administration");
         }
 

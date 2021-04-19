@@ -11,11 +11,11 @@ namespace BoxingClub.DAL.Interfaces
 
         Task<bool> DeleteUserAsync(string id);
 
-        Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string roleName);
+        Task<IdentityResult> AddToRoleAsync(string id, string roleName);
 
-        Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string roleName); 
+        Task<IdentityResult> RemoveFromRoleAsync(string userId, string roleName); 
 
-        Task<ApplicationUser> FindUserByIdAsync(string id);
+        Task<ApplicationUser> FindUserByIdAsync(string userId);
 
         Task<string> GetUserRole(ApplicationUser user);
 

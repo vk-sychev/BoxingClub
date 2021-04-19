@@ -87,7 +87,7 @@ namespace BoxingClub.BLL.Services
             {
                 throw new ArgumentNullException(nameof(id), "Group's id is null");
             }
-            var group = await _database.BoxingGroups.GetBoxingGroupWithStudentsAsync(id.Value);
+            var group = await _database.BoxingGroups.GetBoxingGroupWithStudentsByIdAsync(id.Value);
             if (group == null)
             {
                 throw new NotFoundException($"Group with id = {id.Value} isn't found", "");
@@ -101,7 +101,7 @@ namespace BoxingClub.BLL.Services
             {
                 throw new ArgumentNullException(nameof(coachId), "Coach's id is null");
             }
-            var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachAsync(coachId);
+            var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdAsync(coachId);
             var mappedGroups = _mapper.Map<List<BoxingGroupDTO>>(groups);
             return mappedGroups;
         }

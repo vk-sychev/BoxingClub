@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
-    public class SignInProvider : ISignInProvider
+    public class SignInProvider : IAuthenticationProvider
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
 

@@ -27,21 +27,21 @@ namespace BoxingClub.BLL.Implementation.Services
             _roleProvider = roleProvider;
         }
 
-        public async Task<UserDTO> FindUserByIdAsync(string id)
+        public async Task<UserDTO> FindUserByIdAsync(string userId)
         {
-            if (id == null)
+            if (userId == null)
             {
-                throw new ArgumentNullException(nameof(id), "User's id is null");
+                throw new ArgumentNullException(nameof(userId), "User's id is null");
             }
-            var user = await _userProvider.FindUserByIdAsync(id);
+            var user = await _userProvider.FindUserByIdAsync(userId);
             if (user == null)
             {
-                throw new NotFoundException($"User with id = {id} isn't found", "");
+                throw new NotFoundException($"User with id = {userId} isn't found", "");
             }
             return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<List<UserDTO>> GetUsersAsync()
+        public async Task<List<UserDTO>> GetUsersAsync()//вопрос
         {
             var users = await _userProvider.GetUsersAsync();
             var mappedUsers = new List<UserDTO>();
@@ -50,11 +50,11 @@ namespace BoxingClub.BLL.Implementation.Services
                 var role = await _userProvider.GetUserRole(user);
                 if (role == null)
                 {
-                    throw new ArgumentNullException(nameof(role), "Role is null");
+                    throw new NotFoundException($"Role with name = {role} isn't found ", "");
                 }
 
                 var roleObject = await _roleProvider.FindRoleByNameAsync(role);
-                if (role == null)
+                if (roleObject == null)
                 {
                     throw new NotFoundException($"Role with name = {role} isn't found", "");
                 }
@@ -78,24 +78,23 @@ namespace BoxingClub.BLL.Implementation.Services
             return result;
         }
 
-        public async Task<AccountResultDTO> RemoveFromRoleAsync(UserDTO user, string roleName)
+        public async Task<AccountResultDTO> RemoveFromRoleAsync(string userId, string roleName)
         {
-            if (user == null)
+            if (userId == null)
             {
-                throw new ArgumentNullException(nameof(user), "User is null");
+                throw new ArgumentNullException(nameof(userId), "User's id is null");
             }
-            var result = await _userProvider.RemoveFromRoleAsync(_mapper.Map<ApplicationUser>(user), roleName);
+            var result = await _userProvider.RemoveFromRoleAsync(userId, roleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
 
-        public async Task<AccountResultDTO> AddToRoleAsync(UserDTO userDTO, string roleName)
+        public async Task<AccountResultDTO> AddToRoleAsync(string userId, string roleName)
         {
-            if (userDTO == null)
+            if (userId == null)
             {
-                throw new ArgumentNullException(nameof(userDTO), "User is null");
+                throw new ArgumentNullException(nameof(userId), "User's id is null");
             }
-            var user = _mapper.Map<ApplicationUser>(userDTO);
-            var result = await _userProvider.AddToRoleAsync(user, roleName);
+            var result = await _userProvider.AddToRoleAsync(userId, roleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
 
@@ -114,15 +113,15 @@ namespace BoxingClub.BLL.Implementation.Services
             return _mapper.Map<AccountResultDTO>(result);
         }
 
-        public async Task DeleteUserAsync(string id)
+        public async Task DeleteUserByIdAsync(string userId)
         {
-            if (id == null)
+            if (userId == null)
             {
-                throw new ArgumentNullException(nameof(id), "User's id is null");
+                throw new ArgumentNullException(nameof(userId), "User's id is null");
             }
-            if (! await _userProvider.DeleteUserAsync(id))
+            if (! await _userProvider.DeleteUserAsync(userId))
             {
-                throw new NotFoundException($"User with id = {id} isn't found", "");
+                throw new NotFoundException($"User with id = {userId} isn't found", "");
             }
         }
 
