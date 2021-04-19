@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.Infrastructure.Constants;
 using BoxingClub.WEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Constants.AdminRoleName)]
     public class AdministrationController : Controller
     {
         private readonly IRoleService _roleService;

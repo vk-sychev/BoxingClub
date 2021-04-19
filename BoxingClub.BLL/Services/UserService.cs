@@ -3,6 +3,7 @@ using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
+using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Infrastructure.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace BoxingClub.BLL.Implementation.Services
         private readonly IRoleProvider _roleProvider;
         private readonly IUserProvider _userProvider;
         private readonly IMapper _mapper;
-        private const string DefaultRoleName = "User";
+        private const string DefaultRoleName = Constants.UserRoleName;
 
         public UserService(IUserProvider userProvider,
                            IRoleProvider roleProvider,
@@ -29,7 +30,7 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public async Task<UserDTO> FindUserByIdAsync(string userId)
         {
-            if (userId == null)
+            if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException(nameof(userId), "User's id is null");
             }
@@ -41,16 +42,16 @@ namespace BoxingClub.BLL.Implementation.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<List<UserDTO>> GetUsersAsync()//вопрос
+        public async Task<List<UserDTO>> GetUsersAsync()
         {
             var users = await _userProvider.GetUsersAsync();
             var mappedUsers = new List<UserDTO>();
             foreach (var user in users)
             {
-                var role = await _userProvider.GetUserRole(user);
-                if (role == null)
+                var role = await _roleProvider.GetUserRole(user);
+                if (string.IsNullOrEmpty(role))
                 {
-                    throw new NotFoundException($"Role with name = {role} isn't found ", "");
+                    throw new NotFoundException($"Role for user = {user.UserName} isn't found ", "");
                 }
 
                 var roleObject = await _roleProvider.FindRoleByNameAsync(role);
@@ -65,37 +66,6 @@ namespace BoxingClub.BLL.Implementation.Services
                 mappedUsers.Add(mappedUser);
             }
             return mappedUsers;
-        }
-
-        public async Task<bool> IsInRoleAsync(UserDTO user, string roleName)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user), "User is null");
-            }
-
-            var result = await _userProvider.IsInRoleAsync(_mapper.Map<ApplicationUser>(user), roleName);
-            return result;
-        }
-
-        public async Task<AccountResultDTO> RemoveFromRoleAsync(string userId, string roleName)
-        {
-            if (userId == null)
-            {
-                throw new ArgumentNullException(nameof(userId), "User's id is null");
-            }
-            var result = await _userProvider.RemoveFromRoleAsync(userId, roleName);
-            return _mapper.Map<AccountResultDTO>(result);
-        }
-
-        public async Task<AccountResultDTO> AddToRoleAsync(string userId, string roleName)
-        {
-            if (userId == null)
-            {
-                throw new ArgumentNullException(nameof(userId), "User's id is null");
-            }
-            var result = await _userProvider.AddToRoleAsync(userId, roleName);
-            return _mapper.Map<AccountResultDTO>(result);
         }
 
         public async Task<AccountResultDTO> SignUpAsync(UserDTO user, string password)
@@ -115,7 +85,7 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public async Task DeleteUserByIdAsync(string userId)
         {
-            if (userId == null)
+            if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException(nameof(userId), "User's id is null");
             }
@@ -127,7 +97,7 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public async Task<UserDTO> FindUserByNameAsync(string name)
         {
-            if (name == null)
+            if (string.IsNullOrEmpty(name))
             {
                 throw new ArgumentNullException(nameof(name), "User's name is null");
             }
@@ -142,6 +112,10 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public async Task<List<UserDTO>> GetUsersByRoleAsync(string roleName)
         {
+            if (string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentNullException(nameof(roleName), "Role's name is null");
+            }
             var users = await _userProvider.GetUsersByRoleAsync(roleName);
             var mappedUsers = _mapper.Map<List<UserDTO>>(users);
             return mappedUsers;

@@ -60,11 +60,11 @@ namespace BoxingClub.WEB
             
             services.AddTransient<IRoleProvider, RoleProvider>();
             services.AddTransient<IUserProvider, UserProvider>();
-            services.AddTransient<IAuthenticationProvider, SignInProvider>();
+            services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
 
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IAuthenticationService, SignInService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
 
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
 

@@ -7,16 +7,18 @@ namespace BoxingClub.DAL.Interfaces
 {
     public interface IRoleProvider
     {
-        Task<IdentityResult> CreateRoleAsync(Role role);
-
-        Task<IdentityResult> DeleteRoleAsync(string id);
-
-        Task<IdentityResult> EditRoleAsync(Role role);
-
         Task<IdentityRole> FindRoleByIdAsync(string id);
 
         Task<IdentityRole> FindRoleByNameAsync(string roleName);
 
+        Task<bool> IsInRoleAsync(ApplicationUser user, string roleName);
+
+        Task<string> GetUserRole(ApplicationUser user);
+
         Task<List<IdentityRole>> GetRolesAsync();
+
+        Task<IdentityResult> AddToRoleAsync(string id, string roleName);
+
+        Task<IdentityResult> RemoveFromRoleAsync(string userId, string roleName);
     }
 }

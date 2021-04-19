@@ -6,13 +6,13 @@ namespace BoxingClub.BLL.Interfaces
 {
     public interface IRoleService
     {
-        Task<AccountResultDTO> CreateRoleAsync(RoleDTO role);
+        Task<RoleDTO> FindRoleByIdAsync(string userId);
 
-        Task<AccountResultDTO> DeleteRoleAsync(string id);
+        Task<bool> IsInRoleAsync(UserDTO user, string roleName);
 
-        Task<AccountResultDTO> EditRoleAsync(RoleDTO role);
+        Task<AccountResultDTO> RemoveFromRoleAsync(string userId, string roleName);
 
-        Task<RoleDTO> FindRoleByIdAsync(string id);
+        Task<AccountResultDTO> AddToRoleAsync(string userId, string roleName);
 
         Task<List<RoleDTO>> GetRolesAsync();
     }

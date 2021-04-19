@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.Infrastructure.Constants;
 using BoxingClub.WEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,7 +52,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.AdminRoleName)]
         [HttpGet]
         [Route("Home/EditGroup/{id}")]
         public async Task<IActionResult> EditBoxingGroup(int? id)
@@ -64,7 +65,7 @@ namespace BoxingClub.WEB.Controllers
             return View(mappedGroup);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.AdminRoleName)]
         [HttpPost]
         [Route("Home/EditGroup/{id}")]
         public async Task<IActionResult> EditBoxingGroup(BoxingGroupLiteViewModel model)
@@ -80,7 +81,7 @@ namespace BoxingClub.WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.AdminRoleName)]
         [HttpGet]
         [Route("Home/EditStudentsInGroup/{id}")]
         public async Task<IActionResult> EditStudentsInBoxingGroup(int? id)
@@ -89,7 +90,7 @@ namespace BoxingClub.WEB.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> CreateBoxingGroup()
         {
@@ -105,7 +106,7 @@ namespace BoxingClub.WEB.Controllers
             return selectList;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> CreateBoxingGroup(BoxingGroupLiteViewModel model)
         {
@@ -119,7 +120,7 @@ namespace BoxingClub.WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.AdminRoleName)]
         [Route("Home/DeleteGroup/{id}")]
         public async Task<IActionResult> DeleteBoxingGroup(int? id)
         {
@@ -128,7 +129,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, Coach, Manager")]
+        [Authorize(Roles = Constants.AdminRoleName + "," + Constants.ManagerRoleName + "," + Constants.CoachRoleName)]
         [Route("Home/DetailsGroup/{id}")]
         [HttpGet]
         public async Task<IActionResult> DetailsBoxingGroup(int? id)
@@ -139,7 +140,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = Constants.AdminRoleName + "," + Constants.ManagerRoleName)]
         [Route("Home/DeleteFromGroup/{id}")]
         public async Task<IActionResult> DeleteFromBoxingGroup(int? id, int? returnId)
         {

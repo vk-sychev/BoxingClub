@@ -8,12 +8,12 @@ using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullE
 
 namespace BoxingClub.BLL.Implementation.Services
 {
-    public class SignInService : IAuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly IAuthenticationProvider _signInProvider;
         private readonly IMapper _mapper;
 
-        public SignInService(IAuthenticationProvider signInProvider,
+        public AuthenticationService(IAuthenticationProvider signInProvider,
                              IMapper mapper)
         {
             _signInProvider = signInProvider;
