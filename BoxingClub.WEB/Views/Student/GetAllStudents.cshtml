@@ -1,12 +1,15 @@
 ﻿@model IEnumerable<BoxingClub.WEB.Models.StudentLiteViewModel>
+@using BoxingClub.Infrastructure.Constants
 
 @{ ViewData["Title"] = "All students"; }
 
-<h2>All students</h2>
-@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-{
-    @Html.ActionLink("Add Student", "CreateStudent", "Student")
-}
+<div class="d-flex justify-content-between mb-2">
+    <h1>All Students</h1>
+    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+    {
+        <p><a class="btn btn-primary mt-3" asp-action="CreateStudent" asp-controller="Student">Create New Student</a></p>
+    }
+</div>
 
 <table class="table">
 
@@ -47,25 +50,23 @@
             <td>
                 @Html.DisplayFor(modelItem => item.BoxingGroup.Name)
             </td>
-            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
             {
                 <td>
-                    @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id })
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "DetailsStudent", new { id = item.Id })
-                </td>
-                <td>
-                    @Html.ActionLink("Delete", "DeleteStudent", new { id = item.Id })
+                    <div class="d-flex justify-content-end">
+                        @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                        @Html.ActionLink("Details", "DetailsStudent", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
+                        @Html.ActionLink("Delete", "DeleteStudent", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                    </div>
                 </td>
             }
-            else if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
+            else if (User.Identity.IsAuthenticated && User.IsInRole(Constants.ManagerRoleName))
             {
                 <td>
-                    @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id })
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "DetailsStudent", new { id = item.Id })
+                    <div class="d-flex justify-content-end">
+                        @Html.ActionLink("Update", "UpdateStudent", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                        @Html.ActionLink("Details", "DetailsStudent", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
+                    </div>
                 </td>
             }
         </tr>
