@@ -1,4 +1,5 @@
 ﻿@model BoxingClub.WEB.Models.StudentFullViewModel
+@using BoxingClub.Infrastructure.Constants
 
 @{
     ViewData["Title"] = "Student's Details";
@@ -62,7 +63,7 @@
     </dl>
 </div>
 <div>
-    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
         @Html.ActionLink("Edit", "UpdateStudent", new { id = Model.Id })
         @Html.Raw("|")}

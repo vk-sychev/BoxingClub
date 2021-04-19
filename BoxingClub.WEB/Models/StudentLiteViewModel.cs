@@ -14,6 +14,7 @@ namespace BoxingClub.WEB.Models
         public string Patronymic { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "Date of Birth")]
         public DateTime BornDate { get; set; }
 
         public int BoxingGroupId { get; set; }
