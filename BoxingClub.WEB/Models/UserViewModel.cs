@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace BoxingClub.WEB.Models
+﻿namespace BoxingClub.WEB.Models
 {
     public class UserViewModel
     {
-        //[DisplayName("Coach")]
         public string Id { get; set; }
 
         public string UserName { get; set; }

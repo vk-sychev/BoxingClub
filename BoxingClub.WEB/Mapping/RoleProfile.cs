@@ -3,10 +3,6 @@ using BoxingClub.BLL.DTO;
 using BoxingClub.DAL.Entities;
 using BoxingClub.WEB.Models;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BoxingClub.Web.Mapping
 {

@@ -1,19 +1,15 @@
-﻿using AutoMapper;
-using BoxingClub.DAL.Entities;
+﻿using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
-    public class SignInProvider : ISignInProvider
+    public class AuthenticationProvider : IAuthenticationProvider
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public SignInProvider(SignInManager<ApplicationUser> signInManager)
+        public AuthenticationProvider(SignInManager<ApplicationUser> signInManager)
         {
             _signInManager = signInManager;
         }

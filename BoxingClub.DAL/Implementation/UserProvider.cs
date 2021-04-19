@@ -3,10 +3,8 @@ using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Implementation.Implementation
@@ -24,12 +22,6 @@ namespace BoxingClub.DAL.Implementation.Implementation
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
-        }
-
-        public async Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string roleName)
-        {
-            var identityUser = await _userManager.FindByIdAsync(user.Id);
-            return await _userManager.AddToRoleAsync(identityUser, roleName);
         }
 
         public async Task<bool> DeleteUserAsync(string id)
@@ -56,27 +48,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return await _userManager.Users.ToListAsync();
         }
 
-        public async Task<string> GetUserRole(ApplicationUser user)
-        {
-            var roles = await _userManager.GetRolesAsync(user);
-            var role = await roles.ToAsyncEnumerable().SingleOrDefaultAsync();
-            return role;
-        }
 
-
-        public async Task<bool> IsInRoleAsync(ApplicationUser user, string roleName)
-        {
-            //var identityUser = _mapper.Map<ApplicationUser>(user);
-            var res = await _userManager.IsInRoleAsync(user, roleName);
-            return res;
-        }
-
-
-        public async Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string roleName)
-        {
-            var identityUser = await _userManager.FindByIdAsync(user.Id);
-            return await _userManager.RemoveFromRoleAsync(identityUser, roleName);
-        }
 
         public async Task<IdentityResult> SignUpAsync(ApplicationUser user, string password, string roleName)
         {
@@ -92,5 +64,16 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return result;
         }
 
+        public async Task<IEnumerable<ApplicationUser>> GetUsersByRoleAsync(string roleName)
+        {
+            var users = await _userManager.GetUsersInRoleAsync(roleName);
+            return users;
+        }
+
+        public async Task<ApplicationUser> GetUserByNameAsync(string name)
+        {
+            var user = await _userManager.FindByNameAsync(name);
+            return user;
+        }
     }
 }

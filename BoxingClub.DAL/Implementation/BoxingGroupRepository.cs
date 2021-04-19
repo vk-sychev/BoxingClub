@@ -1,9 +1,7 @@
 ﻿using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
@@ -46,7 +44,7 @@ namespace BoxingClub.DAL.Repositories
             return await _db.BoxingGroups.Include(x => x.Coach).ToListAsync();
         }
 
-        public async Task<BoxingGroup> GetBoxingGroupWithStudentsAsync(int id)
+        public async Task<BoxingGroup> GetBoxingGroupWithStudentsByIdAsync(int id)
         {
             var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id).Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync();
             return res;
@@ -57,7 +55,7 @@ namespace BoxingClub.DAL.Repositories
             _db.Entry(item).State = EntityState.Modified;
         }
 
-        public async Task<List<BoxingGroup>> GetBoxingGroupsByCoachAsync(string id)
+        public async Task<List<BoxingGroup>> GetBoxingGroupsByCoachIdAsync(string id)
         {
             var groups = await _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id).ToListAsync();
             return groups;

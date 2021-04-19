@@ -2,15 +2,8 @@
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.WEB.Models;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 
@@ -19,11 +12,11 @@ namespace BoxingClub.WEB.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly ISignInService _signInService;
+        private readonly IAuthenticationService _signInService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public AccountController(ISignInService signInService,
+        public AccountController(IAuthenticationService signInService,
                                  IUserService userService,
                                  IMapper mapper)
         {
@@ -40,7 +33,7 @@ namespace BoxingClub.WEB.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel model)
-        {
+            {
             if (ModelState.IsValid)
             {
                 var user = _mapper.Map<UserDTO>(model);

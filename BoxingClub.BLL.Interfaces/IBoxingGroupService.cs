@@ -14,7 +14,7 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<List<BoxingGroupDTO>> GetBoxingGroupsAsync();
 
-        Task<List<BoxingGroupDTO>> GetBoxingGroupsByCoachAsync(string? id);
+        Task<List<BoxingGroupDTO>> GetBoxingGroupsByCoachIdAsync(string coachId);
 
         Task UpdateBoxingGroupAsync(BoxingGroupDTO groupDTO);
 

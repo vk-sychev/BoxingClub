@@ -1,5 +1,3 @@
-using System;
-
 namespace BoxingClub.WEB.Models
 {
     public class ErrorViewModel

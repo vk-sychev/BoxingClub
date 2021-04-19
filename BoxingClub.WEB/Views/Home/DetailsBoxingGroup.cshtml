@@ -1,20 +1,28 @@
 ﻿@model BoxingClub.WEB.Models.BoxingGroupFullViewModel
+@using BoxingClub.Infrastructure.Constants
 
 @{
     ViewData["Title"] = "Boxing Group's Details";
 }
 
-<h3>Boxing Group's Details</h3>
-
-<div>
-    <h4>Group Name: @Model.Name</h4>
-    <hr />
-    <h4>Coach Name: @Model.FullName</h4>
-    <hr />
-    <h4>Coach Description: @Model.Coach.Description</h4>
-    <hr />
-    <h4>Students: </h4>
+<div class="d-flex justify-content-between">
+    <h1>&#171;@Model.Name&#187; Details</h1>
+    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+    {
+        <div class="d-flex justify-content-between mt-2">
+            <p><a asp-action="Index" class="btn btn-secondary" asp-controller="Home">Back to List</a></p>
+            <p>@Html.ActionLink("Edit Boxing Group", "EditBoxingGroup", new { id = Model.Id }, new { @class = "btn btn-primary ml-5" })</p>
+        </div>
+    }
 </div>
+<div class="col-md-6">
+    <p class="coachName">
+        Coach: @Model.FullName <br />
+        Coach Description: @Model.Coach.Description
+    </p>
+</div>
+<h4 class="mt-2">Students: </h4>
+
 
 <table class="table">
     <tbody>
@@ -33,28 +41,25 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.BornDate)
                 </td>
-                @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Manager")))
+                @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName)))
                 {
                     <td>
-                        @Html.ActionLink("Edit", "UpdateStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
-                        @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) |
-                        @Html.ActionLink("Delete from group", "DeleteFromBoxingGroup", "Home", new { id = item.Id, returnId = Model.Id })
+                        <div class="d-flex justify-content-end">
+                            @Html.ActionLink("Edit", "UpdateStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                            @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
+                            @Html.ActionLink("Delete", "DeleteFromBoxingGroup", "Home", new { id = item.Id, returnId = Model.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                        </div>
                     </td>
                 }
-                else if(User.Identity.IsAuthenticated && User.IsInRole("Coach"))
+                else if (User.Identity.IsAuthenticated && User.IsInRole(Constants.CoachRoleName))
                 {
                     <td>
-                        @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }) 
+                        <div class="d-flex justify-content-end">
+                            @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                        </div>
                     </td>
                 }
             </tr>
         }
     </tbody>
 </table>
-<div>
-    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-    {
-        @Html.ActionLink("Edit", "EditBoxingGroup", new { id = Model.Id })
-    @Html.Raw("|")}
-    <a asp-action="Index" asp-controller="Home">Back to List</a>
-</div>

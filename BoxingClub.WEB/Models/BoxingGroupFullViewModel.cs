@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Models
 {
@@ -15,6 +12,7 @@ namespace BoxingClub.WEB.Models
 
         public UserViewModel Coach { get; set; }
 
+        [DisplayName("Full Name")]
         public string FullName { get { return $"{Coach.Surname} {Coach.Name} {Coach.Patronymic}"; } }
 
         [DisplayName("Coach")]

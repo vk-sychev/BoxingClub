@@ -1,9 +1,6 @@
 ﻿using BoxingClub.Infrastructure.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.Infrastructure.HttpSwitcher

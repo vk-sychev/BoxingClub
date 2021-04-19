@@ -1,17 +1,19 @@
 ﻿@model IEnumerable<BoxingClub.WEB.Models.BoxingGroupFullViewModel>
-
+@using BoxingClub.Infrastructure.Constants
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Boxing Groups</h1>
+<div class="d-flex justify-content-between mb-2">
+    <h1>Boxing Groups</h1>
 
-@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-{
-    <p>
-        <a asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
-    </p>
-}
+    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+    {
+        <p>
+            <a class="btn btn-primary mt-3" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
+        </p>
+    }
+</div>
 
 @if (!Model.Any())
 {
@@ -41,18 +43,22 @@ else
                     <td>
                         @Html.DisplayFor(modelItem => item.FullName)
                     </td>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
                     {
                         <td>
-                            @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }) |
-                            @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }) |
-                            @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id })
+                            <div class="d-flex justify-content-end">
+                                @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
+                                @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                            </div>
                         </td>
                     }
                     else
                     {
                         <td>
-                            @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id })
+                            <div class="d-flex justify-content-end">
+                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                            </div>
                         </td>
                     }
                 </tr>

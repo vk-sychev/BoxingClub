@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.Infrastructure.Constants;
+using BoxingClub.Web.CustomAttributes;
 using BoxingClub.WEB.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [AuthorizeRoles(Constants.AdminRoleName)]
     public class AdministrationController : Controller
     {
         private readonly IRoleService _roleService;
@@ -39,7 +37,7 @@ namespace BoxingClub.WEB.Controllers
         [Route("Administration/DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            await _userService.DeleteUserAsync(id);
+            await _userService.DeleteUserByIdAsync(id);
             return RedirectToAction("GetUsers", "Administration");
         }
 

@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.Infrastructure.Constants;
+using BoxingClub.Web.CustomAttributes;
 using BoxingClub.WEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Controllers
@@ -17,17 +17,17 @@ namespace BoxingClub.WEB.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IBoxingGroupService _boxingGroupService;
-        private readonly ICoachService _coachService;
+        private readonly IUserService _userService;
         private readonly IStudentService _studentService;
 
         public HomeController(IMapper mapper,
                               IBoxingGroupService boxingGroupService,
-                              ICoachService coachService,
+                              IUserService userService,
                               IStudentService studentService)
         {
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
-            _coachService = coachService;
+            _userService = userService;
             _studentService = studentService;
         }
 
@@ -41,8 +41,8 @@ namespace BoxingClub.WEB.Controllers
 
             if (User.IsInRole("Coach"))
             {
-                var coach = await _coachService.GetCoachByNameAsync(User.Identity.Name);
-                groups = await _boxingGroupService.GetBoxingGroupsByCoachAsync(coach.Id);
+                var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
+                groups = await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(coach.Id);
             }
             else
             {
@@ -53,7 +53,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
         [Route("Home/EditGroup/{id}")]
         public async Task<IActionResult> EditBoxingGroup(int? id)
@@ -66,7 +66,7 @@ namespace BoxingClub.WEB.Controllers
             return View(mappedGroup);
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpPost]
         [Route("Home/EditGroup/{id}")]
         public async Task<IActionResult> EditBoxingGroup(BoxingGroupLiteViewModel model)
@@ -82,7 +82,7 @@ namespace BoxingClub.WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
         [Route("Home/EditStudentsInGroup/{id}")]
         public async Task<IActionResult> EditStudentsInBoxingGroup(int? id)
@@ -91,7 +91,7 @@ namespace BoxingClub.WEB.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> CreateBoxingGroup()
         {
@@ -101,13 +101,13 @@ namespace BoxingClub.WEB.Controllers
 
         private async Task<SelectList> GetCoaches()
         {
-            var coaches = await _coachService.GetCoachesAsync();
+            var coaches = await _userService.GetUsersByRoleAsync("Coach");
             var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
             var selectList = new SelectList(coacheViewModels, "Id", "FullName");
             return selectList;
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> CreateBoxingGroup(BoxingGroupLiteViewModel model)
         {
@@ -121,7 +121,7 @@ namespace BoxingClub.WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Home/DeleteGroup/{id}")]
         public async Task<IActionResult> DeleteBoxingGroup(int? id)
         {
@@ -130,7 +130,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, Coach, Manager")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         [Route("Home/DetailsGroup/{id}")]
         [HttpGet]
         public async Task<IActionResult> DetailsBoxingGroup(int? id)
@@ -141,7 +141,7 @@ namespace BoxingClub.WEB.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, Manager")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [Route("Home/DeleteFromGroup/{id}")]
         public async Task<IActionResult> DeleteFromBoxingGroup(int? id, int? returnId)
         {

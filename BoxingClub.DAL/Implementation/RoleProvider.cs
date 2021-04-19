@@ -3,9 +3,8 @@ using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Implementation.Implementation
@@ -13,32 +12,42 @@ namespace BoxingClub.DAL.Implementation.Implementation
     public class RoleProvider : IRoleProvider
     {
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 
         public RoleProvider(RoleManager<IdentityRole> roleManager,
+                            UserManager<ApplicationUser> userManager,
                             IMapper mapper)
         {
             _mapper = mapper;
             _roleManager = roleManager;
+            _userManager = userManager;
         }
 
-        public async Task<IdentityResult> CreateRoleAsync(Role role)
+        public async Task<string> GetUserRole(ApplicationUser user)
         {
-            var identityRole = _mapper.Map<IdentityRole>(role);
-            return await _roleManager.CreateAsync(identityRole);
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault();
+            return role;
         }
 
-        public async Task<IdentityResult> DeleteRoleAsync(string id)
+        public async Task<IdentityResult> AddToRoleAsync(string userId, string roleName)
         {
-            var role = _roleManager.FindByIdAsync(id);
-            return await _roleManager.DeleteAsync(role.Result);
+            var identityUser = await _userManager.FindByIdAsync(userId);
+            return await _userManager.AddToRoleAsync(identityUser, roleName);
         }
 
-        public async Task<IdentityResult> EditRoleAsync(Role role)
+
+        public async Task<bool> IsInRoleAsync(ApplicationUser user, string roleName)
         {
-            var identityRole = await _roleManager.FindByIdAsync(role.Id);
-            identityRole.Name = role.Name;
-            return await _roleManager.UpdateAsync(identityRole);
+            var res = await _userManager.IsInRoleAsync(user, roleName);
+            return res;
+        }
+
+        public async Task<IdentityResult> RemoveFromRoleAsync(string userId, string roleName)
+        {
+            var identityUser = await _userManager.FindByIdAsync(userId);
+            return await _userManager.RemoveFromRoleAsync(identityUser, roleName);
         }
 
         public async Task<IdentityRole> FindRoleByIdAsync(string id)

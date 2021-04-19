@@ -1,9 +1,6 @@
 ﻿using BoxingClub.WEB.Models;
 using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BoxingClub.WEB.Validations
 {
@@ -14,7 +11,8 @@ namespace BoxingClub.WEB.Validations
             var todaysDate = DateTime.Today;
             RuleFor(x => x.Name).NotNull();
             RuleFor(x => x.Surname).NotNull();
-            RuleFor(x => x.BornDate).NotNull()
+            RuleFor(x => x.BornDate).NotEmpty()
+                                    .WithMessage("Date of Birth must not be empty")
                                     .LessThan(todaysDate)
                                     .WithMessage($"Date of Birth must be less than today's date: { todaysDate }")
                                     .Must(x => x.Year > todaysDate.Year - 100)
