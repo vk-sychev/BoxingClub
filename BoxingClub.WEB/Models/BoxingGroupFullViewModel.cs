@@ -12,6 +12,7 @@ namespace BoxingClub.WEB.Models
 
         public UserViewModel Coach { get; set; }
 
+        [DisplayName("Full Name")]
         public string FullName { get { return $"{Coach.Surname} {Coach.Name} {Coach.Patronymic}"; } }
 
         [DisplayName("Coach")]

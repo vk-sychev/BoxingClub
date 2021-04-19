@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using BoxingClub.Infrastructure.Constants
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,7 +20,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Manager")))
+                        @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName)))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -28,7 +29,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Student" asp-action="GetAllStudents">All Students</a>
                             </li>
-                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="Administration" asp-action="GetUsers">Manage Users</a>

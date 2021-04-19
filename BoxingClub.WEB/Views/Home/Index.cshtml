@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<BoxingClub.WEB.Models.BoxingGroupFullViewModel>
-
+@using BoxingClub.Infrastructure.Constants
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,10 +7,10 @@
 <div class="d-flex justify-content-between mb-2">
     <h1>Boxing Groups</h1>
 
-    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
         <p>
-            <a class="btn btn-primary mt-2" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
+            <a class="btn btn-primary mt-3" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
         </p>
     }
 </div>
@@ -43,7 +43,7 @@ else
                     <td>
                         @Html.DisplayFor(modelItem => item.FullName)
                     </td>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
                     {
                         <td>
                             <div class="d-flex justify-content-end">

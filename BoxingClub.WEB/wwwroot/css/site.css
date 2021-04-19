@@ -90,6 +90,10 @@ body {
 
 /*fonts*/
 
+.coachName {
+    font-size:20px;
+}
+
 /*.field {
     font-weight:400 !important;
     font-size: 20px;
