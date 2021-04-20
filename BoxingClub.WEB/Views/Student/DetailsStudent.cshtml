@@ -7,7 +7,30 @@
     var returnId = ViewBag.returnId;
 }
 
-<h1>Student's Details</h1>
+
+<div class="d-flex justify-content-between mb-2">
+    <h1>Student's Details</h1>
+    <div class="d-flex justify-content-end mt-2">
+        @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+        {
+            <div>
+                @Html.ActionLink("Edit Student", "EditStudent", "Student", new { id = Model.Id }, new { @class = "btn btn-primary" })
+            </div>
+        }
+        @if (fromHomeController)
+        {
+            <div class="ml-5">
+                <a asp-action="DetailsGroup" asp-controller="Home" class="btn btn-secondary" asp-route-id=@returnId>Back to groups List</a>
+            </div>
+        }
+        else
+        {
+            <div class="ml-5">
+                <a asp-action="GetAllStudents" asp-controller="Student" class="btn btn-secondary">Back to students List</a>
+            </div>
+        }
+    </div>
+</div>
 
 <div>
     <hr />
@@ -62,19 +85,4 @@
         </dd>
     </dl>
 </div>
-<div>
-    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
-    {
-        @Html.ActionLink("Edit", "UpdateStudent", new { id = Model.Id })
-        @Html.Raw("|")}
-    @if (fromHomeController)
-    {
-        <div>
-            <a asp-action="DetailsGroup" asp-controller="Home" asp-route-id=@returnId>Back to groups List</a>
-        </div>
-    }
-    else
-    {
-        <a asp-action="GetAllStudents" asp-controller="Student">Back to students List</a>
-    }
-</div>
+

@@ -10,7 +10,7 @@ namespace BoxingClub.BLL.Interfaces
 
         Task DeleleBoxingGroupAsync(int? id);
 
-        Task<BoxingGroupDTO> GetBoxingGroupAsync(int? id);
+        Task<BoxingGroupDTO> GetBoxingGroupByIdAsync(int? id);
 
         Task<List<BoxingGroupDTO>> GetBoxingGroupsAsync();
 
@@ -18,6 +18,6 @@ namespace BoxingClub.BLL.Interfaces
 
         Task UpdateBoxingGroupAsync(BoxingGroupDTO groupDTO);
 
-        Task<BoxingGroupDTO> GetBoxingGroupWithStudentsAsync(int? id);
+        Task<BoxingGroupDTO> GetBoxingGroupWithStudentsByIdAsync(int? id);
     }
 }

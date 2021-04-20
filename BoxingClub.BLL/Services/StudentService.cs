@@ -20,7 +20,7 @@ namespace BoxingClub.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<StudentFullDTO> GetStudentAsync(int? id)
+        public async Task<StudentFullDTO> GetStudentByIdAsync(int? id)
         {
             if (id == null)
             {

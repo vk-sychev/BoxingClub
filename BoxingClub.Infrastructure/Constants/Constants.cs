@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BoxingClub.Infrastructure.Constants
+﻿namespace BoxingClub.Infrastructure.Constants
 {
     public static class Constants
     {
