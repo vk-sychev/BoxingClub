@@ -17,7 +17,7 @@
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
-                Role
+                @Html.DisplayNameFor(model => model.RoleName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
@@ -36,15 +36,16 @@
                     @Html.DisplayFor(modelItem => item.FullName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Role.Name)
+                    @Html.DisplayFor(modelItem => item.RoleName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
                     <div class="d-flex justify-content-end">
-                        @Html.ActionLink("Details", "DetailsUser", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" }) 
-                        @Html.ActionLink("Delete", "DeleteUser", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                        @Html.ActionLink("Edit", "EditUser", "Administration", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                        @Html.ActionLink("Details", "DetailsUser", "Administration", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
+                        @Html.ActionLink("Delete", "DeleteUser", "Administration", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
                     </div>
                 </td>
             </tr>

@@ -17,8 +17,6 @@ namespace BoxingClub.WEB.Models
         [Display(Name = "Date of Birth")]
         public DateTime BornDate { get; set; }
 
-        public int BoxingGroupId { get; set; }
-
         public BoxingGroupLiteViewModel BoxingGroup { get; set; }
     }
 }

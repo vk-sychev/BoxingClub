@@ -21,5 +21,8 @@ namespace BoxingClub.WEB.Models
 
         [DisplayName("Full Name")]
         public string FullName { get { return $"{Surname} {Name} {Patronymic}"; } }
+
+        [DisplayName("Role")]
+        public string RoleName { get { return (Role != null) ? Role.Name : ""; } }
     }
 }

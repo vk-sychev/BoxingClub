@@ -7,7 +7,7 @@ namespace BoxingClub.WEB.Validations
     {
         public BoxingGroupLiteViewModelValidator()
         {
-            RuleFor(x => x.CoachId).NotNull().NotEmpty().WithMessage("Coach has to be selected!");
+            //RuleFor(x => x.Coach).NotNull().NotEmpty().WithMessage("Coach has to be selected!");
             RuleFor(x => x.Name).NotNull().NotEmpty();
         }
     }

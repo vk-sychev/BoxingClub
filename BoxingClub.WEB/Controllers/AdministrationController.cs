@@ -49,6 +49,15 @@ namespace BoxingClub.WEB.Controllers
             var mappedUser = _mapper.Map<UserViewModel>(user);
             return View(mappedUser);
         }
+
+        [HttpGet]
+        [Route("Administration/EditUser/{id}")]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await _userService.FindUserByIdAsync(id);
+            var mappedUser = _mapper.Map<UserViewModel>(user);
+            return View(mappedUser);
+        }
     }
 }
 
