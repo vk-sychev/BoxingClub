@@ -18,5 +18,7 @@ namespace BoxingClub.DAL.Interfaces
         Task<IdentityResult> SignUpAsync(ApplicationUser user, string password, string roleName);
 
         Task<ApplicationUser> GetUserByNameAsync(string name);
+
+        Task<IdentityResult> UpdateUserAsync(ApplicationUser user);
     }
 }

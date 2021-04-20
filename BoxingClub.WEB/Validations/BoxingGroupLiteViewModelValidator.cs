@@ -1,5 +1,6 @@
 ﻿using BoxingClub.WEB.Models;
 using FluentValidation;
+using System.Text.RegularExpressions;
 
 namespace BoxingClub.WEB.Validations
 {
@@ -7,8 +8,14 @@ namespace BoxingClub.WEB.Validations
     {
         public BoxingGroupLiteViewModelValidator()
         {
-            //RuleFor(x => x.Coach).NotNull().NotEmpty().WithMessage("Coach has to be selected!");
-            RuleFor(x => x.Name).NotNull().NotEmpty();
+            string pattern = @"^[a-zA-Z]+\b";
+            RuleFor(x => x.CoachId).NotNull()
+                                   .WithMessage("'Coach' has to be selected!");
+
+            RuleFor(x => x.Name).NotNull()
+                                .NotEmpty()
+                                .Matches(pattern)
+                                .WithMessage("Name must contains only letters");
         }
     }
 }

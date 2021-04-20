@@ -26,6 +26,9 @@ namespace BoxingClub.WEB.Models
         [DisplayName("Date of Entry")]
         public DateTime DateOfEntry { get; set; }
 
+        [DisplayName("Boxing Group")]
+        public int BoxingGroupId { get; set; }
+
         public BoxingGroupLiteViewModel BoxingGroup { get; set; }
     }
 }

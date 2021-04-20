@@ -20,7 +20,7 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task CreateAsync(Student item)
         {
-            var group = await _db.BoxingGroups.FindAsync(item.BoxingGroup.Id);
+            var group = await _db.BoxingGroups.FindAsync(item.BoxingGroupId);
             item.BoxingGroup = group;
             await _db.Students.AddAsync(item);
         }

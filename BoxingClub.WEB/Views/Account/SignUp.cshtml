@@ -12,42 +12,42 @@
         <form asp-action="SignUp">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UserName" class="control-label">Username</label>
+                <label asp-for="UserName" class="control-label font-weight-bold">Username</label>
                 <input asp-for="UserName" class="form-control" placeholder="Username"/>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label font-weight-bold"></label>
                 <input asp-for="Email" class="form-control" placeholder="Email"/>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name" class="control-label font-weight-bold"></label>
+                <input asp-for="Name" class="form-control" placeholder="Name"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Surname" class="control-label"></label>
-                <input asp-for="Surname" class="form-control" />
+                <label asp-for="Surname" class="control-label font-weight-bold"></label>
+                <input asp-for="Surname" class="form-control" placeholder="Surname"/>
                 <span asp-validation-for="Surname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Patronymic" class="control-label"></label>
+                <label asp-for="Patronymic" class="control-label font-weight-bold"></label>
                 <input asp-for="Patronymic" class="form-control" />
                 <span asp-validation-for="Patronymic" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BornDate" class="control-label"> Date of Birth</label>
+                <label asp-for="BornDate" class="control-label font-weight-bold"> Date of Birth</label>
                 <input asp-for="BornDate" class="form-control" />
                 <span asp-validation-for="BornDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
+                <label asp-for="Password" class="control-label font-weight-bold"></label>
                 <input asp-for="Password" class="form-control" placeholder="Password"/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <label asp-for="ConfirmPassword" class="control-label font-weight-bold"></label>
                 <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password"/>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>

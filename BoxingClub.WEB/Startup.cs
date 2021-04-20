@@ -8,6 +8,7 @@ using BoxingClub.DAL.Implementation.Implementation;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.DAL.Repositories;
 using BoxingClub.Web.Mapping;
+using BoxingClub.Web.Validations;
 using BoxingClub.WEB.Mapping;
 using BoxingClub.WEB.Models;
 using BoxingClub.WEB.Validations;
@@ -88,7 +89,7 @@ namespace BoxingClub.WEB
             services.AddTransient<IValidator<SignUpViewModel>, SignUpViewModelValidator>();
             services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();
             services.AddTransient<IValidator<StudentFullViewModel>, StudentFullViewModelValidator>();
-            services.AddTransient<IValidator<RoleViewModel>, RoleViewModelValidator>();
+            services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
             services.AddTransient<IValidator<BoxingGroupLiteViewModel>, BoxingGroupLiteViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>

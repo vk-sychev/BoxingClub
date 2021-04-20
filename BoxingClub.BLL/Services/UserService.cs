@@ -132,5 +132,52 @@ namespace BoxingClub.BLL.Implementation.Services
             var mappedUsers = _mapper.Map<List<UserDTO>>(users);
             return mappedUsers;
         }
+
+        public async Task<AccountResultDTO> UpdateUserAsync(UserDTO user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user), "User is null");
+            }
+
+            var userFromDb = await _userProvider.FindUserByIdAsync(user.Id);
+
+            userFromDb.Name = user.Name;
+            userFromDb.Surname = user.Surname;
+            userFromDb.Patronymic = user.Patronymic;
+            userFromDb.UserName = user.UserName;
+            userFromDb.Description = user.Description;
+
+            var oldRole = await _roleProvider.GetUserRole(userFromDb);
+            var newRoleId = user.Role.Id;
+            var roleResult = await ChangeRole(user.Id, oldRole, newRoleId);
+
+            if (roleResult.Succeeded)
+            {
+                var result = await _userProvider.UpdateUserAsync(userFromDb);
+                var mappedResult = _mapper.Map<AccountResultDTO>(result);
+                return mappedResult;
+            }
+            return roleResult;                  
+        }
+
+        private async Task<AccountResultDTO> ChangeRole(string userId, string oldRoleName, string newRoleId)
+        {
+            //провалидировать аргументы
+            var newRole = await _roleProvider.FindRoleByIdAsync(newRoleId); //валидация
+            var newRoleName = newRole.Name;
+
+            if (!oldRoleName.Equals(newRoleName))
+            {
+                var result = await _roleProvider.RemoveFromRoleAsync(userId, oldRoleName);
+                if (result.Succeeded)
+                {
+                    result = await _roleProvider.AddToRoleAsync(userId, newRoleName);
+                }
+                var mappedResult = _mapper.Map<AccountResultDTO>(result);
+                return mappedResult;
+            }
+            return new AccountResultDTO { Succeeded = true };
+        }
     }
 }

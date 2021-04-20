@@ -17,5 +17,7 @@ namespace BoxingClub.BLL.Interfaces
         Task<List<UserDTO>> GetUsersByRoleAsync(string roleName);
 
         Task<AccountResultDTO> SignUpAsync(UserDTO user, string password);
+
+        Task<AccountResultDTO> UpdateUserAsync(UserDTO user);
     }
 }

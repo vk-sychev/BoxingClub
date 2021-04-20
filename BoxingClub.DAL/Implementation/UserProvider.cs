@@ -48,8 +48,6 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return await _userManager.Users.ToListAsync();
         }
 
-
-
         public async Task<IdentityResult> SignUpAsync(ApplicationUser user, string password, string roleName)
         {
             var identityUser = new ApplicationUser();
@@ -74,6 +72,12 @@ namespace BoxingClub.DAL.Implementation.Implementation
         {
             var user = await _userManager.FindByNameAsync(name);
             return user;
+        }
+
+        public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
+        {           
+            var result = await _userManager.UpdateAsync(user);
+            return result;
         }
     }
 }
