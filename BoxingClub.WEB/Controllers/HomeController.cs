@@ -34,12 +34,12 @@ namespace BoxingClub.WEB.Controllers
         public async Task<IActionResult> Index()
         {
             List<BoxingGroupDTO> groups;
-            if (User.IsInRole("User"))
+            if (User.IsInRole(Constants.UserRoleName))
             {
                 return View("PendingRoleAssignment");
             }
 
-            if (User.IsInRole("Coach"))
+            if (User.IsInRole(Constants.CoachRoleName))
             {
                 var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
                 groups = await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(coach.Id);
@@ -58,7 +58,7 @@ namespace BoxingClub.WEB.Controllers
         [Route("Home/EditGroup/{id}")]
         public async Task<IActionResult> EditBoxingGroup(int? id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupAsync(id);
+            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id);
             var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
 
             ViewBag.Coaches = await GetCoaches();
@@ -87,7 +87,7 @@ namespace BoxingClub.WEB.Controllers
         [Route("Home/EditStudentsInGroup/{id}")]
         public async Task<IActionResult> EditStudentsInBoxingGroup(int? id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupAsync(id);
+            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id);
             return View();
         }
 
@@ -135,7 +135,7 @@ namespace BoxingClub.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> DetailsBoxingGroup(int? id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupWithStudentsAsync(id);
+            var group = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id);
             var model = _mapper.Map<BoxingGroupFullViewModel>(group);
             return View(model);
         }

@@ -1,13 +1,17 @@
 ﻿@model BoxingClub.WEB.Models.BoxingGroupLiteViewModel
 
 @{
-    ViewData["Title"] = "EditBoxingGroup";
+    ViewData["Title"] = "Edit Boxing Group";
 }
 <div class="d-flex justify-content-between mb-2">
     <h1>Edit Boxing Group</h1>
     <div class="d-flex justify-content-between mt-2">
-        <p><a asp-action="Index" class="btn btn-secondary" asp-controller="Home">Back to List</a></p>
-        <p>@Html.ActionLink("Group's details", "DetailsBoxingGroup", new { Id = Model.Id }, new { @class = "btn btn-primary ml-5" })</p>
+        <div>
+            @Html.ActionLink("Group's Details", "DetailsBoxingGroup", new { Id = Model.Id }, new { @class = "btn btn-primary" })
+        </div>
+        <div class="ml-5">
+            <a asp-action="Index" class="btn btn-secondary" asp-controller="Home">Back to List</a>
+        </div>
     </div>
 </div>
 

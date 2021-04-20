@@ -6,7 +6,7 @@ namespace BoxingClub.BLL.Interfaces
 {
     public interface IStudentService 
     {
-        Task<StudentFullDTO> GetStudentAsync(int? id);
+        Task<StudentFullDTO> GetStudentByIdAsync(int? id);
 
         Task<List<StudentLiteDTO>> GetStudentsAsync();
 

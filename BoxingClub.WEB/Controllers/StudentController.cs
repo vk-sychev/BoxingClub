@@ -1,5 +1,4 @@
 ﻿using BoxingClub.WEB.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -76,15 +75,15 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Student/UpdateStudent/{id}")]
+        [Route("Student/EditStudent/{id}")]
         [HttpGet]
-        public async Task<IActionResult> UpdateStudent(int? id, bool fromHomeController, int returnId)
+        public async Task<IActionResult> EditStudent(int? id, bool fromHomeController, int returnId)
         {
 
             ViewBag.Groups = await GetGroups();
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;
-            var studentDTO = await _studentService.GetStudentAsync(id);
+            var studentDTO = await _studentService.GetStudentByIdAsync(id);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
 
             return View(student);
@@ -92,8 +91,8 @@ namespace BoxingClub.WEB.Controllers
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpPost]
-        [Route("Student/UpdateStudent/{id}")]
-        public async Task<IActionResult> UpdateStudent(StudentFullViewModel studentViewModel, bool fromHomeController, int returnId)
+        [Route("Student/EditStudent/{id}")]
+        public async Task<IActionResult> EditStudent(StudentFullViewModel studentViewModel, bool fromHomeController, int returnId)
         {
             if (ModelState.IsValid)
             {
@@ -115,7 +114,7 @@ namespace BoxingClub.WEB.Controllers
         [Route("Student/DetailsStudent/{id}")]
         public async Task<IActionResult> DetailsStudent(int? id, bool fromHomeController, int returnId)
         {
-            var studentDTO = await _studentService.GetStudentAsync(id);
+            var studentDTO = await _studentService.GetStudentByIdAsync(id);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;

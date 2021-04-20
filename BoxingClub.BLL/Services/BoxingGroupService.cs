@@ -29,7 +29,7 @@ namespace BoxingClub.BLL.Services
             return groupDTOs;
         }
 
-        public async Task<BoxingGroupDTO> GetBoxingGroupAsync(int? id)
+        public async Task<BoxingGroupDTO> GetBoxingGroupByIdAsync(int? id)
         {
             if (id == null)
             {
@@ -81,7 +81,7 @@ namespace BoxingClub.BLL.Services
             await _database.SaveAsync();
         }
 
-        public async Task<BoxingGroupDTO> GetBoxingGroupWithStudentsAsync(int? id)
+        public async Task<BoxingGroupDTO> GetBoxingGroupWithStudentsByIdAsync(int? id)
         {
             if (id == null)
             {

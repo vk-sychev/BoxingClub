@@ -9,9 +9,9 @@
 
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
-        <p>
-            <a class="btn btn-primary mt-3" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
-        </p>
+        <div class="mt-2">
+            <a class="btn btn-primary" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
+        </div>
     }
 </div>
 
