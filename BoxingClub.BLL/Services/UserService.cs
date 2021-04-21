@@ -142,6 +142,11 @@ namespace BoxingClub.BLL.Implementation.Services
 
             var userFromDb = await _userProvider.FindUserByIdAsync(user.Id);
 
+            if (userFromDb == null)
+            {
+                throw new NotFoundException($"User with id = {user.Id} isn't found", "");
+            }
+
             userFromDb.Name = user.Name;
             userFromDb.Surname = user.Surname;
             userFromDb.Patronymic = user.Patronymic;
@@ -149,7 +154,12 @@ namespace BoxingClub.BLL.Implementation.Services
             userFromDb.Description = user.Description;
 
             var oldRole = await _roleProvider.GetUserRole(userFromDb);
+            if (string.IsNullOrEmpty(oldRole))
+            {
+                throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found ", "");
+            }
             var newRoleId = user.Role.Id;
+
             var roleResult = await ChangeRole(user.Id, oldRole, newRoleId);
 
             if (roleResult.Succeeded)
@@ -163,8 +173,21 @@ namespace BoxingClub.BLL.Implementation.Services
 
         private async Task<AccountResultDTO> ChangeRole(string userId, string oldRoleName, string newRoleId)
         {
-            //провалидировать аргументы
-            var newRole = await _roleProvider.FindRoleByIdAsync(newRoleId); //валидация
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException(nameof(userId), "UserId is null");
+            }
+
+            if (string.IsNullOrEmpty(newRoleId))
+            {
+                throw new ArgumentNullException(nameof(newRoleId), "newRoleId is null");
+            }
+
+            var newRole = await _roleProvider.FindRoleByIdAsync(newRoleId); 
+            if (newRole == null)
+            {
+                throw new NotFoundException($"Role for user = {userId} isn't found ", "");
+            }
             var newRoleName = newRole.Name;
 
             if (!oldRoleName.Equals(newRoleName))

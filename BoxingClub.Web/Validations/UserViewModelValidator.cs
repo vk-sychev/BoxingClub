@@ -1,10 +1,6 @@
 ﻿using BoxingClub.WEB.Models;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace BoxingClub.Web.Validations
 {
@@ -12,20 +8,23 @@ namespace BoxingClub.Web.Validations
     {
         public UserViewModelValidator()
         {
-            string pattern = @"^[a-zA-Z]+\b";
+            string pattern = @"^[a-zA-Zа-яА-Я]+\b";
+            var passwordUserNamePattern = @"^\w+\b";
             RuleFor(x => x.Name).NotNull()
                                 .Matches(pattern)
-                                .WithMessage("Name must contains only letters");
+                                .WithMessage("Name must contain only letters");
 
             RuleFor(x => x.Surname).NotNull()
                                    .Matches(pattern)
-                                   .WithMessage("Surname must contains only letters");
+                                   .WithMessage("Surname must contain only letters");
 
             RuleFor(x => x.UserName).NotNull()
-                                    .MinimumLength(5);
+                                    .MinimumLength(5)
+                                    .Matches(passwordUserNamePattern)
+                                    .WithMessage("Username must comtain only English letters and/or digits");
 
             RuleFor(x => x.Patronymic).Must(x => x == null || (x.Length > 0 && Regex.IsMatch(x, pattern)))
-                                      .WithMessage("Patronymic must contains only letters");
+                                      .WithMessage("Patronymic must contain only letters");
 
             RuleFor(x => x.Role.Id).NotNull()
                                    .WithMessage("'Role' has to be selected");

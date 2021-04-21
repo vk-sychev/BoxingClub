@@ -9,15 +9,15 @@ namespace BoxingClub.WEB.Validations
     {
         public StudentFullViewModelValidator()
         {
-            string pattern = @"^[a-zA-Z]+\b";
+            string pattern = @"^[a-zA-Zа-яА-Я]+\b";
             var todaysDate = DateTime.Today;
             RuleFor(x => x.Name).NotNull()
                                 .Matches(pattern)
-                                .WithMessage("Name must contains only letters");
+                                .WithMessage("Name must contain only letters");
 
             RuleFor(x => x.Surname).NotNull()
                                    .Matches(pattern)
-                                   .WithMessage("Surname must contains only letters");
+                                   .WithMessage("Surname must contain only letters");
 
             RuleFor(x => x.BornDate).NotEmpty()
                                     .WithMessage("Date of Birth must not be empty")
@@ -27,7 +27,7 @@ namespace BoxingClub.WEB.Validations
                                     .WithMessage($"Year of Birth must be greater than {todaysDate.Year - 100}");
 
             RuleFor(x => x.Patronymic).Must(x => x == null || (x.Length > 0 && Regex.IsMatch(x, pattern)))
-                                      .WithMessage("Patronymic must contains only letters");
+                                      .WithMessage("Patronymic must contain only letters");
 
             RuleFor(x => x.DateOfEntry).NotNull()
                                        .Must(x => x <= todaysDate)

@@ -12,15 +12,17 @@ namespace BoxingClub.WEB.Validations
         {
             _configuration = configuration;
             var passwordLength = Convert.ToInt32(_configuration.GetSection("PasswordSettings").GetSection("RequiredLength").Value);
+            var passwordUserNamePattern = @"^\w+\b";
 
             RuleFor(x => x.UserName).NotNull()
-                                    .NotEmpty()
+                                    .MinimumLength(5)
+                                    .Matches(passwordUserNamePattern)
                                     .WithName("Username");
 
             RuleFor(x => x.Password).NotNull()
                                     .NotEmpty()
                                     .MinimumLength(passwordLength)
-                                    .Matches(@"^\w+\b");
+                                    .Matches(passwordUserNamePattern);
         }
     }
 }

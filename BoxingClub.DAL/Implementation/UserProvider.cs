@@ -75,7 +75,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
         public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
-        {           
+        {   
             var result = await _userManager.UpdateAsync(user);
             return result;
         }

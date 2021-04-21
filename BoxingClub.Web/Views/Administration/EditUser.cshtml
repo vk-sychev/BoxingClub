@@ -4,7 +4,13 @@
     ViewData["Title"] = "Edit User";
 }
 
-<h1>Edit User</h1>
+
+<div class="d-flex justify-content-between mb-2">
+    <h1>Edit User</h1>
+    <div class="mt-2">
+        <a asp-action="GetUsers" asp-controller="Administration" class="btn btn-secondary">Back to users List</a>
+    </div>
+</div>
 
 <hr />
 <div class="row">
@@ -17,14 +23,14 @@
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label font-weight-bold"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Surname" class="control-label font-weight-bold"></label>
                 <input asp-for="Surname" class="form-control" />
                 <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label font-weight-bold"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Patronymic" class="control-label font-weight-bold"></label>
@@ -37,10 +43,10 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Role.Id" class="control-label font-weight-bold"></label>
+                <label asp-for="Role.Id" class="control-label font-weight-bold">Role</label>
                 <div>
                     <select asp-for="Role.Id" class="form-select custom-select" asp-items="ViewBag.Roles">
-                        @*<option selected="selected" disabled="disabled">Choose coach</option>*@
+                        <option selected="selected" disabled="disabled">@Model.Role.Name</option>
                     </select>
                 </div>
                 <span asp-validation-for="Role.Id" class="text-danger"></span>
@@ -50,10 +56,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
