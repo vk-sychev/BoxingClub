@@ -11,17 +11,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.BLL.Implementati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.Infrastructure", "BoxingClub.Infrastructure\BoxingClub.Infrastructure.csproj", "{E778A16A-9D3E-4E9E-9040-36219090F55B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.DAL.Interfaces", "BoxingClub.DAL.Interfaces\BoxingClub.DAL.Interfaces.csproj", "{C1E5171E-50BF-40CA-9B0B-A4B38A9A0104}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.DAL.Interfaces", "BoxingClub.DAL.Interfaces\BoxingClub.DAL.Interfaces.csproj", "{C1E5171E-50BF-40CA-9B0B-A4B38A9A0104}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.DAL.Entities", "BoxingClub.DAL.Entities\BoxingClub.DAL.Entities.csproj", "{65A946E1-6CF8-4AFF-BFEF-FE7AE5575207}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.DAL.Entities", "BoxingClub.DAL.Entities\BoxingClub.DAL.Entities.csproj", "{65A946E1-6CF8-4AFF-BFEF-FE7AE5575207}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.BLL.Interfaces", "BoxingClub.BLL.Interfaces\BoxingClub.BLL.Interfaces.csproj", "{4D941C3B-74A0-4EDC-A60B-E909E500CFCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.BLL.Interfaces", "BoxingClub.BLL.Interfaces\BoxingClub.BLL.Interfaces.csproj", "{4D941C3B-74A0-4EDC-A60B-E909E500CFCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxingClub.BLL.DomainEntities", "BoxingClub.BLL.DomainEntities\BoxingClub.BLL.DomainEntities.csproj", "{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.BLL.DomainEntities", "BoxingClub.BLL.DomainEntities\BoxingClub.BLL.DomainEntities.csproj", "{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BoxingClub.DAL", "BoxingClub.DAL", "{9D33341B-1024-4D86-A88B-B1986191CCEE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BoxingClub.BLL", "BoxingClub.BLL", "{305567E5-E451-4719-AE8A-DD4080225402}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests.BoxingClub.BLL", "UnitTests.BoxingClub.BLL\UnitTests.BoxingClub.BLL.csproj", "{75E87953-7E5F-49D3-8429-65B439E57AFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D354D520-A84C-4DDD-A4B6-E4CBAB5C4F9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75E87953-7E5F-49D3-8429-65B439E57AFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75E87953-7E5F-49D3-8429-65B439E57AFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75E87953-7E5F-49D3-8429-65B439E57AFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75E87953-7E5F-49D3-8429-65B439E57AFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
