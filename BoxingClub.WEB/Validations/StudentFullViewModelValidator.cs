@@ -1,8 +1,8 @@
-﻿using BoxingClub.WEB.Models;
+﻿using BoxingClub.Web.Models;
 using FluentValidation;
 using System;
 
-namespace BoxingClub.WEB.Validations
+namespace BoxingClub.Web.Validations
 {
     public class StudentFullViewModelValidator : AbstractValidator<StudentFullViewModel>
     {

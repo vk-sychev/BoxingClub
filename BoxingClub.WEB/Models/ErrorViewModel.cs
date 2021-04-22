@@ -1,4 +1,4 @@
-namespace BoxingClub.WEB.Models
+namespace BoxingClub.Web.Models
 {
     public class ErrorViewModel
     {

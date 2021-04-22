@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BoxingClub.WEB.Models
+namespace BoxingClub.Web.Models
 {
     public class StudentFullViewModel
     {

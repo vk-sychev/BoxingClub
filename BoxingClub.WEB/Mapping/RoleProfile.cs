@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DTO;
 using BoxingClub.DAL.Entities;
-using BoxingClub.WEB.Models;
+using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace BoxingClub.Web.Mapping

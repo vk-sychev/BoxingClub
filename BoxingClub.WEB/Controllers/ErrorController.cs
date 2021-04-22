@@ -1,12 +1,12 @@
 ﻿using BoxingClub.Infrastructure.HttpSwitcher;
-using BoxingClub.WEB.Models;
+using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace BoxingClub.WEB.Controllers
+namespace BoxingClub.Web.Controllers
 {
     [AllowAnonymous]
     public class ErrorController : Controller

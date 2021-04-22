@@ -8,9 +8,8 @@ using BoxingClub.DAL.Implementation.Implementation;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.DAL.Repositories;
 using BoxingClub.Web.Mapping;
-using BoxingClub.WEB.Mapping;
-using BoxingClub.WEB.Models;
-using BoxingClub.WEB.Validations;
+using BoxingClub.Web.Models;
+using BoxingClub.Web.Validations;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +25,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 
-namespace BoxingClub.WEB
+namespace BoxingClub.Web
 {
     public class Startup
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace BoxingClub.WEB.Models
+namespace BoxingClub.Web.Models
 {
     public class BoxingGroupFullViewModel
     {

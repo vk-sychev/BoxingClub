@@ -2,13 +2,13 @@
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
-using BoxingClub.WEB.Models;
+using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BoxingClub.WEB.Controllers
+namespace BoxingClub.Web.Controllers
 {
     [AuthorizeRoles(Constants.AdminRoleName)]
     public class AdministrationController : Controller
