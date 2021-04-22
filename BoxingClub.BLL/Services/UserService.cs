@@ -57,7 +57,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 var roleObject = await _roleProvider.FindRoleByNameAsync(role);
                 if (roleObject == null)
                 {
-                    throw new NotFoundException($"Role with name = {role} isn't found", "");
+                    throw new InvalidOperationException($"Role with name = {role} isn't found");
                 }
 
                 var mappedUser = _mapper.Map<UserDTO>(user);
@@ -79,7 +79,7 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new InvalidOperationException($"Role with name {DefaultRoleName} doesn't exist");
             }
-            var result = await _userProvider.SignUpAsync(_mapper.Map<ApplicationUser>(user), password, DefaultRoleName);
+            var result = await _userProvider.CreateUserAsync(_mapper.Map<ApplicationUser>(user), password, DefaultRoleName);
             return _mapper.Map<AccountResultDTO>(result);
         }
 
@@ -89,10 +89,19 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new ArgumentNullException(nameof(userId), "User's id is null");
             }
-            if (! await _userProvider.DeleteUserAsync(userId))
+
+            var user = await _userProvider.FindUserByIdAsync(userId);
+            if (user == null)
             {
                 throw new NotFoundException($"User with id = {userId} isn't found", "");
             }
+
+            var res = await _userProvider.DeleteUserAsync(user);
+/*
+            if (!res)
+            {
+                throw new NotFoundException($"User with id = {userId} isn't found", "");
+            }*/
         }
 
         public async Task<UserDTO> FindUserByNameAsync(string name)

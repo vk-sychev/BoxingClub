@@ -24,15 +24,9 @@ namespace BoxingClub.DAL.Implementation.Implementation
             _mapper = mapper;
         }
 
-        public async Task<bool> DeleteUserAsync(string id)
+        public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user != null)
-            {
-                await _userManager.DeleteAsync(user);
-                return true;
-            }
-            return false;
+            return await _userManager.DeleteAsync(user);
         }
 
         public async Task<ApplicationUser> FindUserByIdAsync(string id)
@@ -43,18 +37,17 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
 
-        public async Task<List<ApplicationUser>> GetUsersAsync()
+        public Task<List<ApplicationUser>> GetUsersAsync()
         {
-            return await _userManager.Users.ToListAsync();
+            return _userManager.Users.ToListAsync();
         }
 
 
-
-        public async Task<IdentityResult> SignUpAsync(ApplicationUser user, string password, string roleName)
+        public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, string roleName)
         {
             var identityUser = new ApplicationUser();
             user.Id = identityUser.Id;
-            
+
             var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
@@ -64,16 +57,14 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return result;
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetUsersByRoleAsync(string roleName)
+        public Task<IList<ApplicationUser>> GetUsersByRoleAsync(string roleName)
         {
-            var users = await _userManager.GetUsersInRoleAsync(roleName);
-            return users;
+            return _userManager.GetUsersInRoleAsync(roleName);
         }
 
-        public async Task<ApplicationUser> GetUserByNameAsync(string name)
+        public Task<ApplicationUser> GetUserByNameAsync(string name)
         {
-            var user = await _userManager.FindByNameAsync(name);
-            return user;
+            return _userManager.FindByNameAsync(name);
         }
     }
 }

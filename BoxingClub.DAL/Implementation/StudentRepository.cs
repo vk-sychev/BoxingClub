@@ -38,7 +38,7 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task<Student> GetByIdAsync(int id)
         {
-            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).Where(g => g.Id == id).SingleOrDefaultAsync();
+            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).Where(s => s.Id == id).SingleOrDefaultAsync();
         }
 
 
