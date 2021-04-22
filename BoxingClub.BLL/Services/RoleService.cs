@@ -22,16 +22,16 @@ namespace BoxingClub.BLL.Implementation.Services
             _mapper = mapper;
         }
 
-        public async Task<RoleDTO> FindRoleByIdAsync(string userId)
+        public async Task<RoleDTO> FindRoleByIdAsync(string id)
         {
-            if (string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(id))
             {
-                throw new ArgumentNullException(nameof(userId), "Role's id is null");
+                throw new ArgumentNullException(nameof(id), "Role's id is null");
             }
-            var role = await _roleProvider.FindRoleByIdAsync(userId);
+            var role = await _roleProvider.FindRoleByIdAsync(id);
             if (role == null)
             {
-                throw new NotFoundException($"Role with id = {userId} isn't found", "");
+                throw new NotFoundException($"Role with id = {id} isn't found", "");
             }
             return _mapper.Map<RoleDTO>(role);
         }
