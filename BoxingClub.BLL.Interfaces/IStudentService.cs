@@ -16,6 +16,6 @@ namespace BoxingClub.BLL.Interfaces
 
         Task UpdateStudentAsync(StudentFullDTO studentDTO);
 
-        Task DeleteFromGroupAsync(int? id);
+        Task DeleteFromGroupAsync(int? studentId);
     }
 }

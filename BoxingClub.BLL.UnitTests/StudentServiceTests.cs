@@ -6,7 +6,6 @@ using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Web.Mapping;
-using BoxingClub.WEB.Mapping;
 using Moq;
 using Moq.Language;
 using NUnit.Framework;
@@ -27,7 +26,8 @@ namespace BoxingClub.BLL.UnitTests
         private Mock<IUnitOfWork> _mockUoW;
         private IStudentService _studentService;
 
-        [OneTimeSetUp]
+
+        [SetUp]
         public void SetUp()
         {
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
@@ -54,16 +54,12 @@ namespace BoxingClub.BLL.UnitTests
 
             await _studentService.CreateStudentAsync(student);
 
-            _mockUoW.Verify(uow => uow.Students, Times.Once);
             _mockRepository.Verify(repo => repo.CreateAsync(It.IsAny<Student>()), Times.Once);
         }
 
         [Test]
         public void CreateAsync_InputNull_ShouldThrowArgumentNullException()
         {
-            /*            _mockRepository.Setup(repo => repo.CreateAsync(null));
-                        _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);*/
-
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.CreateStudentAsync(null));
         }
 
@@ -101,20 +97,109 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public void GetStudentByIdAsync_InvalidInput_ShouldThrowNotFoundException()
         {
-            int studentId = 20000;
-            _mockRepository.Setup(repo => repo.GetByIdAsync(studentId).Result);
+            _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.GetStudentByIdAsync(studentId));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.GetStudentByIdAsync(It.IsAny<int>()));
         }
 
 
         [Test]
         public async Task DeleteStudentAsync_ValidInput()
         {
+            var student = new Student()
+            {
+                Id = 1,
+                Name = "Test",
+                Surname = "Test"
+            };
 
+            _mockRepository.Setup(repo => repo.GetByIdAsync(student.Id).Result).Returns(student);
+            _mockRepository.Setup(repo => repo.Delete(It.IsAny<Student>()));
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+
+            await _studentService.DeleteStudentAsync(student.Id);
+
+            _mockRepository.Verify(repo => repo.GetByIdAsync(student.Id), Times.Once);
+            _mockRepository.Verify(repo => repo.Delete(It.IsAny<Student>()), Times.Once);
+            _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
         }
 
 
+        [Test]
+        public void DeleteStudentAsync_InvalidInput_ShouldThrowNotFoundException()
+        {
+            _mockRepository.Setup(repo => repo.Delete(It.IsAny<Student>()));
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+
+            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.DeleteStudentAsync(It.IsAny<int>()));
+        }
+
+        [Test]
+        public void DeleteStudentAsync_InvalidInput_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.DeleteStudentAsync(null));
+        }
+
+        [Test]
+        public async Task UpdateStudentAsync_ValidInput()
+        {
+            var student = new StudentFullDTO()
+            {
+                Id = 1,
+                Name = "Test",
+                Surname = "Test"
+            };
+
+            _mockRepository.Setup(repo => repo.Update(It.IsAny<Student>()));
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+
+            await _studentService.UpdateStudentAsync(student);
+
+            _mockRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
+            _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
+        }
+
+        [Test]
+        public void UpdateStudentAsync_InvalidInput_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.UpdateStudentAsync(null));
+        }
+
+        [Test]
+        public async Task DeleteFromGroup_ValidInput()
+        {
+            var student = new Student()
+            {
+                Id = 1,
+                Name = "Test",
+                Surname = "Test"
+            };
+
+            _mockRepository.Setup(repo => repo.Update(It.IsAny<Student>()));
+            _mockRepository.Setup(repo => repo.GetByIdAsync(student.Id).Result).Returns(student);
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+
+            await _studentService.DeleteFromGroupAsync(student.Id);
+
+            _mockRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<int>()), Times.Once);
+            _mockRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
+            _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
+        }
+
+        [Test]
+        public void DeleteFromGroup_InvalidInput_ShouldThrowNotFoundException()
+        {
+            _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+
+            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.GetStudentByIdAsync(It.IsAny<int>()));
+        }
+
+        [Test]
+        public void DeleteFromGroup_InvalidInput_ArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.DeleteFromGroupAsync(null));
+        }
     }
 }

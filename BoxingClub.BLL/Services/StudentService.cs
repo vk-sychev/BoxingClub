@@ -61,7 +61,7 @@ namespace BoxingClub.BLL.Services
 
             var student = await _database.Students.GetByIdAsync(id.Value);
 
-            if(student == null)
+            if (student == null)
             {
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
             }
@@ -80,14 +80,20 @@ namespace BoxingClub.BLL.Services
             return _database.SaveAsync();
         }
 
-        public async Task DeleteFromGroupAsync(int? id)
+        public async Task DeleteFromGroupAsync(int? studentId)
         {
-            if (id == null)
+            if (studentId == null)
             {
-                throw new ArgumentNullException(nameof(id), "Student's id is null");
+                throw new ArgumentNullException(nameof(studentId), "Student's id is null");
             }
 
-            var student = await _database.Students.GetByIdAsync(id.Value);
+            var student = await _database.Students.GetByIdAsync(studentId.Value);
+
+            if (student == null)
+            {
+                throw new NotFoundException($"Student with id = {studentId.Value} isn't found", "");
+            }
+
             student.BoxingGroup = null;
             _database.Students.Update(student);
             await _database.SaveAsync();
