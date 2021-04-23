@@ -16,16 +16,19 @@ namespace BoxingClub.BLL.Implementation.Services
     {
         private readonly IRoleProvider _roleProvider;
         private readonly IUserProvider _userProvider;
+        private readonly IAuthenticationProvider _authenticationProvider;
         private readonly IMapper _mapper;
         private const string DefaultRoleName = Constants.UserRoleName;
 
         public UserService(IUserProvider userProvider,
                            IRoleProvider roleProvider,
+                           IAuthenticationProvider authenticationProvider,
                            IMapper mapper)
         {
             _userProvider = userProvider;
-            _mapper = mapper;
             _roleProvider = roleProvider;
+            _authenticationProvider = authenticationProvider;
+            _mapper = mapper;
         }
 
         public async Task<UserDTO> FindUserByIdAsync(string userId)
@@ -79,7 +82,16 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new InvalidOperationException($"Role with name {DefaultRoleName} doesn't exist");
             }
-            var result = await _userProvider.CreateUserAsync(_mapper.Map<ApplicationUser>(user), password, DefaultRoleName);
+
+            var mappedUser = _mapper.Map<ApplicationUser>(user);
+            var result = await _userProvider.CreateUserAsync(mappedUser, password);
+
+            if (result.Succeeded)
+            {
+                await _roleProvider.AddToRoleAsync(mappedUser.Id, DefaultRoleName);
+                await _authenticationProvider.SignInAsync(mappedUser, isPersistent: false);
+            }
+
             return _mapper.Map<AccountResultDTO>(result);
         }
 

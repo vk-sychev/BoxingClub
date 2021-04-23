@@ -41,18 +41,12 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
 
-        public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, string roleName)
+        public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password)
         {
             var identityUser = new ApplicationUser();
             user.Id = identityUser.Id;
 
-            var result = await _userManager.CreateAsync(user, password);
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(user, roleName);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-            }
-            return result;
+            return await _userManager.CreateAsync(user, password);
         }
 
         public async Task<IList<ApplicationUser>> GetUsersByRoleAsync(string roleName)

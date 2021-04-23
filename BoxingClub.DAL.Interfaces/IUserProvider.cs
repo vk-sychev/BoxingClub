@@ -7,7 +7,7 @@ namespace BoxingClub.DAL.Interfaces
 {
     public interface IUserProvider
     {
-        Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, string roleName);
+        Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password);
 
         Task<IdentityResult> DeleteUserAsync(ApplicationUser user);
 
