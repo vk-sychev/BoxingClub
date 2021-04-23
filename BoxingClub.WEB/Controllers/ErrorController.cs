@@ -22,13 +22,10 @@ namespace BoxingClub.Web.Controllers
         public IActionResult Error()
         {
             var exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            ErrorViewModel errorViewModel = new ErrorViewModel
-            {
-                Message = exceptionDetails.Error.Message,
-                StatusCode = HttpCodeHelper.GetSwitchHttpCode(exceptionDetails.Error.GetType())
-            };
+            var error = HttpCodeHelper.GetSwitchHttpCode(exceptionDetails.Error.GetType());
             _logger.LogError(exceptionDetails.Error.Message);
-            return View(errorViewModel);
+            ViewBag.Message = error.Message;
+            return View();
         }
     }
 }

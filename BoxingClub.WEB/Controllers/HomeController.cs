@@ -33,11 +33,12 @@ namespace BoxingClub.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<BoxingGroupDTO> groups;
             if (User.IsInRole(Constants.UserRoleName))
             {
                 return View("PendingRoleAssignment");
             }
+
+            List<BoxingGroupDTO> groups;
 
             if (User.IsInRole(Constants.CoachRoleName))
             {
@@ -101,7 +102,7 @@ namespace BoxingClub.Web.Controllers
 
         private async Task<SelectList> GetCoaches()
         {
-            var coaches = await _userService.GetUsersByRoleAsync("Coach");
+            var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
             var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
             var selectList = new SelectList(coacheViewModels, "Id", "FullName");
             return selectList;

@@ -42,7 +42,7 @@ namespace BoxingClub.BLL.Implementation.Services
             return _mapper.Map<List<RoleDTO>>(roles);
         }
 
-        public Task<bool> IsInRoleAsync(UserDTO user, string roleName)
+        public async Task<bool> IsInRoleAsync(UserDTO user, string roleName)
         {
             if (user == null)
             {
@@ -54,7 +54,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new ArgumentNullException(nameof(roleName), "Role is null");
             }
 
-            var result = _roleProvider.IsInRoleAsync(_mapper.Map<ApplicationUser>(user), roleName);
+            var result = await _roleProvider.IsInRoleAsync(_mapper.Map<ApplicationUser>(user), roleName);
             return result;
         }
 

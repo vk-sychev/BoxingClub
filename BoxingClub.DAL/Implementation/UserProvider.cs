@@ -13,7 +13,6 @@ namespace BoxingClub.DAL.Implementation.Implementation
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IMapper _mapper;
 
         public UserProvider(UserManager<ApplicationUser> userManager,
                             SignInManager<ApplicationUser> signInManager,
@@ -21,7 +20,6 @@ namespace BoxingClub.DAL.Implementation.Implementation
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _mapper = mapper;
         }
 
         public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
@@ -37,9 +35,9 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
 
-        public Task<List<ApplicationUser>> GetUsersAsync()
+        public async Task<List<ApplicationUser>> GetUsersAsync()
         {
-            return _userManager.Users.ToListAsync();
+            return await _userManager.Users.ToListAsync();
         }
 
 
@@ -57,14 +55,14 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return result;
         }
 
-        public Task<IList<ApplicationUser>> GetUsersByRoleAsync(string roleName)
+        public async Task<IList<ApplicationUser>> GetUsersByRoleAsync(string roleName)
         {
-            return _userManager.GetUsersInRoleAsync(roleName);
+            return await _userManager.GetUsersInRoleAsync(roleName);
         }
 
-        public Task<ApplicationUser> GetUserByNameAsync(string name)
+        public async Task<ApplicationUser> GetUserByNameAsync(string name)
         {
-            return _userManager.FindByNameAsync(name);
+            return await _userManager.FindByNameAsync(name);
         }
     }
 }
