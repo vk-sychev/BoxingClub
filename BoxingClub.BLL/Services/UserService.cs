@@ -97,11 +97,11 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var res = await _userProvider.DeleteUserAsync(user);
-/*
-            if (!res)
+
+            if (!res.Succeeded)
             {
-                throw new NotFoundException($"User with id = {userId} isn't found", "");
-            }*/
+                throw new InvalidOperationException($"Cannot delete user with id = {userId}");
+            }
         }
 
         public async Task<UserDTO> FindUserByNameAsync(string name)
