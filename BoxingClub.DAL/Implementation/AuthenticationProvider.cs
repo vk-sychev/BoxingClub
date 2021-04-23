@@ -19,6 +19,11 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return await _signInManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false);
         }
 
+        public async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        {
+            await _signInManager.SignInAsync(user, isPersistent);
+        }
+
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();

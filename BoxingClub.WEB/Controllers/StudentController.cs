@@ -1,4 +1,4 @@
-﻿using BoxingClub.WEB.Models;
+﻿using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
 
-namespace BoxingClub.WEB.Controllers
+namespace BoxingClub.Web.Controllers
 {
     [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
     public class StudentController : Controller

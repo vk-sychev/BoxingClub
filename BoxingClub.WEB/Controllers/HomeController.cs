@@ -3,14 +3,14 @@ using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
-using BoxingClub.WEB.Models;
+using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BoxingClub.WEB.Controllers
+namespace BoxingClub.Web.Controllers
 {
     [Authorize]
     public class HomeController : Controller
@@ -33,11 +33,12 @@ namespace BoxingClub.WEB.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<BoxingGroupDTO> groups;
             if (User.IsInRole(Constants.UserRoleName))
             {
                 return View("PendingRoleAssignment");
             }
+
+            List<BoxingGroupDTO> groups;
 
             if (User.IsInRole(Constants.CoachRoleName))
             {
@@ -93,7 +94,7 @@ namespace BoxingClub.WEB.Controllers
 
         private async Task<SelectList> GetCoaches()
         {
-            var coaches = await _userService.GetUsersByRoleAsync("Coach");
+            var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
             var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
             var selectList = new SelectList(coacheViewModels, "Id", "FullName");
             return selectList;

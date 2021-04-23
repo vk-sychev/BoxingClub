@@ -1,4 +1,4 @@
-﻿using BoxingClub.WEB.Models;
+﻿using BoxingClub.Web.Models;
 using FluentValidation;
 using System.Text.RegularExpressions;
 

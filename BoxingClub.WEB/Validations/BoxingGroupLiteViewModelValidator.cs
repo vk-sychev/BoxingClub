@@ -1,7 +1,7 @@
-﻿using BoxingClub.WEB.Models;
+﻿using BoxingClub.Web.Models;
 using FluentValidation;
 
-namespace BoxingClub.WEB.Validations
+namespace BoxingClub.Web.Validations
 {
     public class BoxingGroupLiteViewModelValidator : AbstractValidator<BoxingGroupLiteViewModel>
     {
