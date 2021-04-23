@@ -22,15 +22,9 @@ namespace BoxingClub.DAL.Repositories
             await _db.BoxingGroups.AddAsync(item);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public void Delete(BoxingGroup item)
         {
-            var group = await _db.BoxingGroups.FindAsync(id);
-            if (group != null)
-            {
-                _db.BoxingGroups.Remove(group);
-                return true;
-            }
-            return false;
+            _db.BoxingGroups.Remove(item);
         }
 
         public async Task<BoxingGroup> GetByIdAsync(int id)

@@ -13,7 +13,6 @@ namespace BoxingClub.DAL.Implementation.Implementation
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IMapper _mapper;
 
         public UserProvider(UserManager<ApplicationUser> userManager,
                             SignInManager<ApplicationUser> signInManager,
@@ -21,18 +20,11 @@ namespace BoxingClub.DAL.Implementation.Implementation
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _mapper = mapper;
         }
 
-        public async Task<bool> DeleteUserAsync(string id)
+        public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user != null)
-            {
-                await _userManager.DeleteAsync(user);
-                return true;
-            }
-            return false;
+            return await _userManager.DeleteAsync(user);
         }
 
         public async Task<ApplicationUser> FindUserByIdAsync(string id)
@@ -48,30 +40,23 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return await _userManager.Users.ToListAsync();
         }
 
-        public async Task<IdentityResult> SignUpAsync(ApplicationUser user, string password, string roleName)
+
+        public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password)
         {
             var identityUser = new ApplicationUser();
             user.Id = identityUser.Id;
-            
-            var result = await _userManager.CreateAsync(user, password);
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(user, roleName);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-            }
-            return result;
+
+            return await _userManager.CreateAsync(user, password);
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetUsersByRoleAsync(string roleName)
+        public async Task<IList<ApplicationUser>> GetUsersByRoleAsync(string roleName)
         {
-            var users = await _userManager.GetUsersInRoleAsync(roleName);
-            return users;
+            return await _userManager.GetUsersInRoleAsync(roleName);
         }
 
         public async Task<ApplicationUser> GetUserByNameAsync(string name)
         {
-            var user = await _userManager.FindByNameAsync(name);
-            return user;
+            return await _userManager.FindByNameAsync(name);
         }
 
         public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DTO;
 using BoxingClub.DAL.Entities;
-using BoxingClub.WEB.Models;
+using BoxingClub.Web.Models;
 
-namespace BoxingClub.WEB.Mapping
+namespace BoxingClub.Web.Mapping
 {
     public class UserProfile : Profile
     {

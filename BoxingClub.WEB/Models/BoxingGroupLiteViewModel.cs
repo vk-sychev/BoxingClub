@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace BoxingClub.WEB.Models
+namespace BoxingClub.Web.Models
 {
     public class BoxingGroupLiteViewModel
     {

@@ -1,10 +1,10 @@
-﻿using BoxingClub.WEB.Models;
+﻿using BoxingClub.Web.Models;
 using FluentValidation;
 using System;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 
-namespace BoxingClub.WEB.Validations
+namespace BoxingClub.Web.Validations
 {
     public class SignUpViewModelValidator : AbstractValidator<SignUpViewModel>
     {

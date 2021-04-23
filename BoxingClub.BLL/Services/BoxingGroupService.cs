@@ -71,13 +71,14 @@ namespace BoxingClub.BLL.Services
             {
                 throw new ArgumentNullException(nameof(id), "Group's id is null");
             }
+            var boxingGroup = await _database.BoxingGroups.GetByIdAsync(id.Value);           
 
-            var res = await _database.BoxingGroups.DeleteAsync(id.Value);
-
-            if (!res)
+            if (boxingGroup == null)
             {
                 throw new NotFoundException($"Group with id = {id.Value} isn't found", "");
             }
+
+            _database.BoxingGroups.Delete(boxingGroup);
             await _database.SaveAsync();
         }
 

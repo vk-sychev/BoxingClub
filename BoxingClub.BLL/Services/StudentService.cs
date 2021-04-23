@@ -58,10 +58,14 @@ namespace BoxingClub.BLL.Services
             {
                 throw new ArgumentNullException(nameof(id), "Student's id is null");
             }
-            if(! await _database.Students.DeleteAsync(id.Value))
+
+            var student = await _database.Students.GetByIdAsync(id.Value);
+
+            if(student == null)
             {
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
             }
+            _database.Students.Delete(student);
             await _database.SaveAsync();
         }
 

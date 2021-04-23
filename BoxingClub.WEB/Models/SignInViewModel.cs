@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BoxingClub.WEB.Models
+namespace BoxingClub.Web.Models
 {
     public class SignInViewModel
     {

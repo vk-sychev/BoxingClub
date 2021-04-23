@@ -25,20 +25,14 @@ namespace BoxingClub.DAL.Repositories
             await _db.Students.AddAsync(item);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public void Delete(Student item)
         {
-            var student = await _db.Students.FindAsync(id);
-            if (student != null)
-            {
-                _db.Students.Remove(student);
-                return true;
-            }
-            return false;
+            _db.Students.Remove(item);
         }
 
         public async Task<Student> GetByIdAsync(int id)
         {
-            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).Where(g => g.Id == id).SingleOrDefaultAsync();
+            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).Where(s => s.Id == id).SingleOrDefaultAsync();
         }
 
 

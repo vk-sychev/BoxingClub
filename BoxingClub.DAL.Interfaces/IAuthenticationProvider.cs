@@ -8,6 +8,8 @@ namespace BoxingClub.DAL.Interfaces
     {
         Task<SignInResult> SignInAsync(SignIn user);
 
+        Task SignInAsync(ApplicationUser user, bool isPersistent);
+
         Task SignOutAsync();
     }
 }

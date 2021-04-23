@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
 
-namespace BoxingClub.WEB
+namespace BoxingClub.Web
 {
     public class Program
     {

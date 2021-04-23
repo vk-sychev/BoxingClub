@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
-using BoxingClub.WEB.Models;
+using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 
-namespace BoxingClub.WEB.Controllers
+namespace BoxingClub.Web.Controllers
 {
     [AllowAnonymous]
     public class AccountController : Controller
