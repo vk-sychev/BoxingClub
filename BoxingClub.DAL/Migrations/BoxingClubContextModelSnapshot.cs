@@ -16,8 +16,206 @@ namespace BoxingClub.DAL.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("BornDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Patronymic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
+                            AccessFailedCount = 0,
+                            BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "7d6270c5-62cb-4598-90b8-712a18c47f88",
+                            Email = "Manager1@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MANAGER1@GMAIL.COM",
+                            NormalizedUserName = "MANAGER1",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBIOTZu5j+mlmvOT9mA5QEoaiHMMrUuhQpHVWur5GVxnGHdzvvN/xBzpjDtrldJcug==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "b934d20c-ebb8-4cde-b743-1e806647e5a3",
+                            TwoFactorEnabled = false,
+                            UserName = "Manager1"
+                        },
+                        new
+                        {
+                            Id = "2d4254a5-7782-4b9c-a987-42a83d30669a",
+                            AccessFailedCount = 0,
+                            BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "0eef8bfd-0bfb-43b7-9888-6ddc8f37511d",
+                            Email = "Manager2@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MANAGER2@GMAIL.COM",
+                            NormalizedUserName = "MANAGER2",
+                            PasswordHash = "AQAAAAEAACcQAAAAEErkYh50oJwNHDYsoo9qirg+3FOHtbvNZa1MS7GQ6YgF4MS9Hvd00lg3pd6w7d/0dA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "95d7baf6-da67-4277-bb6c-bfa9f58d3825",
+                            TwoFactorEnabled = false,
+                            UserName = "Manager2"
+                        },
+                        new
+                        {
+                            Id = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
+                            AccessFailedCount = 0,
+                            BornDate = new DateTime(2000, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "9d877141-b47b-434b-b13d-08f4c7ca5447",
+                            Email = "Admin@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            Name = "Vasya",
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEcYBNPkGgCxhBa7RHEq4qdd3A1mHSZuXugT1e02Eu4rdI23i4oSD/v5WnWKMjXPnw==",
+                            Patronymic = "Konstantinovich",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "08a1295e-5f60-41f2-a601-75d17a143c1f",
+                            Surname = "Sychev",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        },
+                        new
+                        {
+                            Id = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
+                            AccessFailedCount = 0,
+                            BornDate = new DateTime(1995, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "8ff9d236-d0d3-486b-8099-64260b7b2901",
+                            Description = "CMS in boxing",
+                            Email = "Coach1@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            Name = "Pavel",
+                            NormalizedEmail = "COACH1@GMAIL.COM",
+                            NormalizedUserName = "COACH1",
+                            PasswordHash = "AQAAAAEAACcQAAAAEO37bAmZ57QgDNQqz5hCm0fPpq5Y0e2RRUAajHxi7Dt5d+LJD6VfBqDZVxo4yJiHZg==",
+                            Patronymic = "Nikolayevich",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "c4f444d9-57c0-4aa4-ac8c-b24b9deddf89",
+                            Surname = "Dorochin",
+                            TwoFactorEnabled = false,
+                            UserName = "Coach1"
+                        },
+                        new
+                        {
+                            Id = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
+                            AccessFailedCount = 0,
+                            BornDate = new DateTime(1991, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "ce4a3e53-a924-4c12-8083-229161279b44",
+                            Description = "CMS in boxing",
+                            Email = "Coach2@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            Name = "Vlad",
+                            NormalizedEmail = "COACH2@GMAIL.COM",
+                            NormalizedUserName = "COACH2",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGEwVprG6C6orWnK1pdm4+llqFMyw1WKBOG/+YoNejaeNsGLgM4DbcsfTUbh7g6m/w==",
+                            Patronymic = "Nikolayevich",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "66015801-47a3-4d61-aeb2-60dca6f2ec5a",
+                            Surname = "Dorochin",
+                            TwoFactorEnabled = false,
+                            UserName = "Coach2"
+                        },
+                        new
+                        {
+                            Id = "a50a06a5-df07-4728-b6a0-93173c2ce4cf",
+                            AccessFailedCount = 0,
+                            BornDate = new DateTime(1970, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "45ee15bb-8cf5-4043-a91d-86a798c10874",
+                            Description = "MS in boxing",
+                            Email = "Coach3@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            Name = "Sergey",
+                            NormalizedEmail = "COACH3@GMAIL.COM",
+                            NormalizedUserName = "COACH3",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA/wCoxlJYH6Hpr05F6O8W4B/OgL5lkLqGURn7J4Vts53MypelCGu7/xNGh0J6N8vw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "988ae349-ed99-4a46-9cc4-77706a9be935",
+                            Surname = "Goncharov",
+                            TwoFactorEnabled = false,
+                            UserName = "Coach3"
+                        });
+                });
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>
                 {
@@ -26,8 +224,8 @@ namespace BoxingClub.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CoachId")
-                        .HasColumnType("int");
+                    b.Property<string>("CoachId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -42,75 +240,20 @@ namespace BoxingClub.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            CoachId = 1,
+                            CoachId = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
                             Name = "Vityaz"
                         },
                         new
                         {
                             Id = 2,
-                            CoachId = 1,
+                            CoachId = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
                             Name = "Warrior"
                         },
                         new
                         {
                             Id = 3,
-                            CoachId = 2,
+                            CoachId = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
                             Name = "Sarmat"
-                        });
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.Coach", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("BornDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Patronymic")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Coaches");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BornDate = new DateTime(1995, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "CMS in boxing",
-                            Name = "Pavel",
-                            Patronymic = "Nikolayevich",
-                            Surname = "Dorochin"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BornDate = new DateTime(1991, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "CMS in boxing",
-                            Name = "Vlad",
-                            Patronymic = "Nikolayevich",
-                            Surname = "Dorochin"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            BornDate = new DateTime(1970, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "MS in boxing",
-                            Name = "Sergey",
-                            Surname = "Goncharov"
                         });
                 });
 
@@ -229,16 +372,30 @@ namespace BoxingClub.DAL.Migrations
                         new
                         {
                             Id = "291c0120-8c27-47c5-83fe-9d7deb36f73c",
-                            ConcurrencyStamp = "6ab550b8-7392-4793-b87f-672bea80a163",
+                            ConcurrencyStamp = "28c18050-2080-4daa-85d7-63181f16ca0e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6",
-                            ConcurrencyStamp = "84f84536-55ff-4715-bea3-afb97dac9d3d",
+                            ConcurrencyStamp = "4bce291f-b263-4af2-b909-b34f83fe140e",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "db460306-31c6-457a-989e-9e4317be99b9",
+                            ConcurrencyStamp = "f22b0614-a9a2-4d39-bf69-4d569abcb44b",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "8da509ca-2005-457d-8ca3-105792f04013",
+                            ConcurrencyStamp = "1aa92723-3e34-4d8b-a67a-fdafa6f28345",
+                            Name = "Coach",
+                            NormalizedName = "COACH"
                         });
                 });
 
@@ -264,121 +421,6 @@ namespace BoxingClub.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7049f435-9b35-481a-b97d-da94c627f75a",
-                            Email = "Manager1@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MANAGER1@GMAIL.COM",
-                            NormalizedUserName = "MANAGER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEALHcgn10nfulcxov9gtfDCUG3qDLqpiWqTMy/AV3hpO2RUBZ7OOlpo0cSH0QdLEEQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "1af415f4-2af7-431b-8dfe-92c225c9b64d",
-                            TwoFactorEnabled = false,
-                            UserName = "Manager1"
-                        },
-                        new
-                        {
-                            Id = "2d4254a5-7782-4b9c-a987-42a83d30669a",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "57ef55a5-f78d-465f-ae96-a8df7d15ca54",
-                            Email = "Manager2@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MANAGER2@GMAIL.COM",
-                            NormalizedUserName = "MANAGER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJQvbpWWktqqGThy551mr/4m9iZA2LpcblYIdBWz5pHNsAV0Jsim/ROwZMlhjNZWVA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "d49c32c5-6604-4803-9150-cdecabf91cde",
-                            TwoFactorEnabled = false,
-                            UserName = "Manager2"
-                        },
-                        new
-                        {
-                            Id = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "6499a3ce-6a59-4bd4-ae20-d44f5639aafb",
-                            Email = "admin@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@GMAIL.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKmo3W36SXXvAiJXBmbznlPR/HzbIB7OZnGCC+s2U35+4WAi5W1hiT5PT9L2Rj/bPQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "43ecb5aa-e093-4871-b220-9f241eee8fe0",
-                            TwoFactorEnabled = false,
-                            UserName = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -456,6 +498,21 @@ namespace BoxingClub.DAL.Migrations
                         {
                             UserId = "2d4254a5-7782-4b9c-a987-42a83d30669a",
                             RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
+                        },
+                        new
+                        {
+                            UserId = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
+                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
+                        },
+                        new
+                        {
+                            UserId = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
+                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
+                        },
+                        new
+                        {
+                            UserId = "a50a06a5-df07-4728-b6a0-93173c2ce4cf",
+                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
                         });
                 });
 
@@ -480,11 +537,9 @@ namespace BoxingClub.DAL.Migrations
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>
                 {
-                    b.HasOne("BoxingClub.DAL.Entities.Coach", "Coach")
-                        .WithMany("BoxingGroups")
-                        .HasForeignKey("CoachId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", "Coach")
+                        .WithMany()
+                        .HasForeignKey("CoachId");
 
                     b.Navigation("Coach");
                 });
@@ -509,7 +564,7 @@ namespace BoxingClub.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -518,7 +573,7 @@ namespace BoxingClub.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -533,7 +588,7 @@ namespace BoxingClub.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -542,7 +597,7 @@ namespace BoxingClub.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -552,11 +607,6 @@ namespace BoxingClub.DAL.Migrations
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>
                 {
                     b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.Coach", b =>
-                {
-                    b.Navigation("BoxingGroups");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<BoxingClub.Web.Models.UserViewModel>
+
+@{
+    ViewData["Title"] = "All Users";
+}
+
+<h1 class="mb-3">All Users</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                Role
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <div class="d-flex justify-content-end">
+                        @Html.ActionLink("Details", "DetailsUser", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" }) 
+                        @Html.ActionLink("Delete", "DeleteUser", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

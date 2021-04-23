@@ -1,50 +1,65 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
-using BoxingClub.WEB.Models;
+using BoxingClub.Infrastructure.Constants;
+using BoxingClub.Web.CustomAttributes;
+using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace BoxingClub.WEB.Controllers
+namespace BoxingClub.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IBoxingGroupService _boxingGroupService;
-        private readonly ICoachService _coachService;
+        private readonly IUserService _userService;
         private readonly IStudentService _studentService;
 
         public HomeController(IMapper mapper,
                               IBoxingGroupService boxingGroupService,
-                              ICoachService coachService,
+                              IUserService userService,
                               IStudentService studentService)
         {
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
-            _coachService = coachService;
+            _userService = userService;
             _studentService = studentService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
+            if (User.IsInRole(Constants.UserRoleName))
+            {
+                return View("PendingRoleAssignment");
+            }
+
+            List<BoxingGroupDTO> groups;
+
+            if (User.IsInRole(Constants.CoachRoleName))
+            {
+                var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
+                groups = await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(coach.Id);
+            }
+            else
+            {
+                groups = await _boxingGroupService.GetBoxingGroupsAsync();
+            }
             var model = _mapper.Map<List<BoxingGroupFullViewModel>>(groups);
             return View(model);
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
         [Route("Home/EditGroup/{id}")]
-        public async Task<IActionResult> EditGroup(int? id)
+        public async Task<IActionResult> EditBoxingGroup(int? id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupAsync(id);
+            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id);
             var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
 
             ViewBag.Coaches = await GetCoaches();
@@ -52,15 +67,15 @@ namespace BoxingClub.WEB.Controllers
             return View(mappedGroup);
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpPost]
         [Route("Home/EditGroup/{id}")]
-        public async Task<IActionResult> EditGroup(BoxingGroupLiteViewModel model)
+        public async Task<IActionResult> EditBoxingGroup(BoxingGroupLiteViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var group = _mapper.Map<BoxingGroupDTO>(model);
-                await _boxingGroupService.UpdateGroupAsync(group);
+                await _boxingGroupService.UpdateBoxingGroupAsync(group);
                 return RedirectToAction("index", "home");
             }
             ViewBag.Coaches = await GetCoaches();
@@ -68,18 +83,18 @@ namespace BoxingClub.WEB.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
         [Route("Home/EditStudentsInGroup/{id}")]
-        public async Task<IActionResult> EditStudentsInGroup(int? id)
+        public async Task<IActionResult> EditStudentsInBoxingGroup(int? id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupAsync(id);
+            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id);
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
-        public async Task<IActionResult> CreateGroup()
+        public async Task<IActionResult> CreateBoxingGroup()
         {
             ViewBag.Coaches = await GetCoaches();
             return View();
@@ -87,45 +102,49 @@ namespace BoxingClub.WEB.Controllers
 
         private async Task<SelectList> GetCoaches()
         {
-            var coaches = await _coachService.GetCoachesAsync();
-            var coacheViewModels = _mapper.Map<List<CoachViewModel>>(coaches);
+            var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
+            var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
             var selectList = new SelectList(coacheViewModels, "Id", "FullName");
             return selectList;
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpPost]
-        public async Task<IActionResult> CreateGroup(BoxingGroupLiteViewModel model)
+        public async Task<IActionResult> CreateBoxingGroup(BoxingGroupLiteViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var groupDTO = _mapper.Map<BoxingGroupDTO>(model);
-                await _boxingGroupService.CreateGroupAsync(groupDTO);
+                await _boxingGroupService.CreateBoxingGroupAsync(groupDTO);
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Coaches = await GetCoaches();
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Home/DeleteGroup/{id}")]
-        public async Task<IActionResult> DeleteGroup(int? id)
+        public async Task<IActionResult> DeleteBoxingGroup(int? id)
         {
-            await _boxingGroupService.DeleleGroupAsync(id);
+            await _boxingGroupService.DeleleBoxingGroupAsync(id);
             return RedirectToAction("Index", "Home");
         }
 
+
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         [Route("Home/DetailsGroup/{id}")]
         [HttpGet]
-        public async Task<IActionResult> DetailsGroup(int? id)
+        public async Task<IActionResult> DetailsBoxingGroup(int? id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupWithStudentsAsync(id);
+            var group = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id);
             var model = _mapper.Map<BoxingGroupFullViewModel>(group);
             return View(model);
         }
 
+
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [Route("Home/DeleteFromGroup/{id}")]
-        public async Task<IActionResult> DeleteFromGroup(int? id, int? returnId)
+        public async Task<IActionResult> DeleteFromBoxingGroup(int? id, int? returnId)
         {
             await _studentService.DeleteFromGroupAsync(id);
             return RedirectToAction("DetailsGroup", new { id = returnId.Value });

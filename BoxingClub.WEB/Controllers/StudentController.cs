@@ -1,31 +1,24 @@
-﻿using BoxingClub.WEB.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.DTO;
 using AutoMapper;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
-using Microsoft.AspNetCore.Diagnostics;
-using BoxingClub.Infrastructure.HttpSwitcher;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using BoxingClub.Infrastructure.Constants;
+using BoxingClub.Web.CustomAttributes;
 
-namespace BoxingClub.WEB.Controllers
+namespace BoxingClub.Web.Controllers
 {
-    [Authorize(Roles = "Manager, Admin")]
+    [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
         private readonly IBoxingGroupService _boxingGroupService;
         private readonly IMapper _mapper;
 
-        public StudentController(IStudentService studentService, 
+        public StudentController(IStudentService studentService,
                                  IMapper mapper,
                                  IBoxingGroupService boxingGroupService)
         {
@@ -34,6 +27,7 @@ namespace BoxingClub.WEB.Controllers
             _boxingGroupService = boxingGroupService;
         }
 
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         public async Task<IActionResult> GetAllStudents()
         {
             var studentDTOs = await _studentService.GetStudentsAsync();
@@ -41,12 +35,14 @@ namespace BoxingClub.WEB.Controllers
             return View(students);
         }
 
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         public async Task<IActionResult> CreateStudent()
         {
             ViewBag.Groups = await GetGroups();
             return View();
         }
 
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpPost]
         public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
         {
@@ -62,13 +58,14 @@ namespace BoxingClub.WEB.Controllers
         }
 
         [Route("Student/DeleteStudent/{id}")]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         public async Task<IActionResult> DeleteStudent(int? id)
         {
             await _studentService.DeleteStudentAsync(id);
             return RedirectToAction("GetAllStudents", "Student");
         }
 
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         private async Task<SelectList> GetGroups()
         {
             var groups = await _boxingGroupService.GetBoxingGroupsAsync();
@@ -77,23 +74,25 @@ namespace BoxingClub.WEB.Controllers
             return selectList;
         }
 
-        [Route("Student/UpdateStudent/{id}")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [Route("Student/EditStudent/{id}")]
         [HttpGet]
-        public async Task<IActionResult> UpdateStudent(int? id, bool fromHomeController, int returnId)
+        public async Task<IActionResult> EditStudent(int? id, bool fromHomeController, int returnId)
         {
 
             ViewBag.Groups = await GetGroups();
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;
-            var studentDTO = await _studentService.GetStudentAsync(id);
+            var studentDTO = await _studentService.GetStudentByIdAsync(id);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
 
             return View(student);
         }
 
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpPost]
-        [Route("Student/UpdateStudent/{id}")]
-        public async Task<IActionResult> UpdateStudent(StudentFullViewModel studentViewModel, bool fromHomeController, int returnId)
+        [Route("Student/EditStudent/{id}")]
+        public async Task<IActionResult> EditStudent(StudentFullViewModel studentViewModel, bool fromHomeController, int returnId)
         {
             if (ModelState.IsValid)
             {
@@ -115,7 +114,7 @@ namespace BoxingClub.WEB.Controllers
         [Route("Student/DetailsStudent/{id}")]
         public async Task<IActionResult> DetailsStudent(int? id, bool fromHomeController, int returnId)
         {
-            var studentDTO = await _studentService.GetStudentAsync(id);
+            var studentDTO = await _studentService.GetStudentByIdAsync(id);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;

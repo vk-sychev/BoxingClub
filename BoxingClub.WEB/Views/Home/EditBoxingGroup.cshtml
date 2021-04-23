@@ -1,0 +1,48 @@
+﻿@model BoxingClub.Web.Models.BoxingGroupLiteViewModel
+
+@{
+    ViewData["Title"] = "Edit Boxing Group";
+}
+<div class="d-flex justify-content-between mb-2">
+    <h1>Edit Boxing Group</h1>
+    <div class="d-flex justify-content-between mt-2">
+        <div>
+            @Html.ActionLink("Group's Details", "DetailsBoxingGroup", new { Id = Model.Id }, new { @class = "btn btn-primary" })
+        </div>
+        <div class="ml-5">
+            <a asp-action="Index" class="btn btn-secondary" asp-controller="Home">Back to List</a>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditBoxingGroup">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label font-weight-bold"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoachId" class="control-label font-weight-bold"></label>
+                <div>
+                    <select asp-for="CoachId" class="form-select custom-select" asp-items="ViewBag.Coaches">
+                        <option selected="selected" disabled="disabled">Choose coach</option>
+                    </select>
+                </div>
+                <span asp-validation-for="CoachId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

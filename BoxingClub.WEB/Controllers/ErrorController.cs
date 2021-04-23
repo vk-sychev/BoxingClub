@@ -1,16 +1,12 @@
 ﻿using BoxingClub.Infrastructure.HttpSwitcher;
-using BoxingClub.WEB.Models;
+using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BoxingClub.WEB.Controllers
+namespace BoxingClub.Web.Controllers
 {
     [AllowAnonymous]
     public class ErrorController : Controller
@@ -26,13 +22,10 @@ namespace BoxingClub.WEB.Controllers
         public IActionResult Error()
         {
             var exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            ErrorViewModel errorViewModel = new ErrorViewModel
-            {
-                Message = exceptionDetails.Error.Message,
-                StatusCode = HttpCodeHelper.GetSwitchHttpCode(exceptionDetails.Error.GetType())
-            };
+            var error = HttpCodeHelper.GetSwitchHttpCode(exceptionDetails.Error.GetType());
             _logger.LogError(exceptionDetails.Error.Message);
-            return View(errorViewModel);
+            ViewBag.Message = error.Message;
+            return View();
         }
     }
 }

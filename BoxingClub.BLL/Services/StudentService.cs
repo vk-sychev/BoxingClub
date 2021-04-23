@@ -4,11 +4,9 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.Services
 {
@@ -22,13 +20,13 @@ namespace BoxingClub.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<StudentFullDTO> GetStudentAsync(int? id)
+        public async Task<StudentFullDTO> GetStudentByIdAsync(int? id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id), "Student's id is null");    
             }
-            var student = await _database.Students.GetAsync(id.Value);
+            var student = await _database.Students.GetByIdAsync(id.Value);
             if (student == null)
             {
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
@@ -60,10 +58,14 @@ namespace BoxingClub.BLL.Services
             {
                 throw new ArgumentNullException(nameof(id), "Student's id is null");
             }
-            if(! await _database.Students.DeleteAsync(id.Value))
+
+            var student = await _database.Students.GetByIdAsync(id.Value);
+
+            if(student == null)
             {
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
             }
+            _database.Students.Delete(student);
             await _database.SaveAsync();
         }
 
@@ -85,7 +87,7 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(id), "Student's id is null");
             }
 
-            var student = await _database.Students.GetAsync(id.Value);
+            var student = await _database.Students.GetByIdAsync(id.Value);
             student.BoxingGroup = null;
             _database.Students.Update(student);
             await _database.SaveAsync();

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BoxingClub.WEB.Models
+namespace BoxingClub.Web.Models
 {
     public class StudentFullViewModel
     {
@@ -17,7 +15,7 @@ namespace BoxingClub.WEB.Models
         public string Patronymic { get; set; }
 
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayName("Date of Birth")]
         public DateTime BornDate { get; set; }
 
         public int Height { get; set; }
@@ -25,9 +23,10 @@ namespace BoxingClub.WEB.Models
         public double Weight { get; set; }
 
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayName("Date of Entry")]
         public DateTime DateOfEntry { get; set; }
 
+        [DisplayName("Boxing Group")]
         public int BoxingGroupId { get; set; }
 
         public BoxingGroupLiteViewModel BoxingGroup { get; set; }

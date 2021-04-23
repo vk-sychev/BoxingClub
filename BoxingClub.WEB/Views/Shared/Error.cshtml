@@ -1,14 +1,14 @@
-﻿@model ErrorViewModel
-@{
+﻿@{
     ViewData["Title"] = "Error";
 }
 
 <h1 class="text-danger">Error!</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
-<h2 class="text-danger">Status code: @Model.StatusCode</h2>
-<h2 class="text-danger">@Model.Message</h2>
+<h2 class="text-danger">@ViewBag.Message</h2>
+
+<br/>
 
 <div>
-    <a asp-action="Index" asp-controller="home">Back to student's list</a>
+    <a asp-action="Index" class="btn btn-primary" asp-controller="Home">To group's List</a>
 </div>
 

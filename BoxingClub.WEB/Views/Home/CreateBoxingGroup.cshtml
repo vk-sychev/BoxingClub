@@ -1,0 +1,44 @@
+﻿@model BoxingClub.Web.Models.BoxingGroupLiteViewModel
+
+@{
+    ViewData["Title"] = "Create Boxing Group";
+}
+<div class="d-flex justify-content-between">
+    <h1>New Boxing Group</h1>
+    <div class="mt-2">
+        <a asp-action="Index" class="btn btn-secondary" asp-controller="Home">Back to List</a>
+    </div>
+</div>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateBoxingGroup">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoachId" class="control-label"></label>
+                <div>
+                    <select asp-for="CoachId" class="form-select custom-select" asp-items="ViewBag.Coaches">
+                        <option selected="selected" disabled="disabled">Choose coach</option>
+                    </select>
+                </div>
+                <span asp-validation-for="CoachId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

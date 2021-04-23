@@ -1,13 +1,15 @@
 using AutoMapper;
+using BoxingClub.BLL.Implementation.Services;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Services;
 using BoxingClub.DAL.EF;
+using BoxingClub.DAL.Entities;
+using BoxingClub.DAL.Implementation.Implementation;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.DAL.Repositories;
-using BoxingClub.WEB.Controllers;
-using BoxingClub.WEB.Mapping;
-using BoxingClub.WEB.Models;
-using BoxingClub.WEB.Validations;
+using BoxingClub.Web.Mapping;
+using BoxingClub.Web.Models;
+using BoxingClub.Web.Validations;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -20,10 +22,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
+using System;
+using System.Collections.Generic;
 
-namespace BoxingClub.WEB
+namespace BoxingClub.Web
 {
     public class Startup
     {
@@ -41,27 +43,35 @@ namespace BoxingClub.WEB
                 options.UseSqlServer(
                     Configuration.GetConnectionString("BoxingClubDB")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            var passwordConfig = Configuration.GetSection("PasswordSettings");
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.Password.RequiredLength = 3;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
+                options.Password.RequiredLength = Convert.ToInt32(passwordConfig.GetSection("RequiredLength").Value);
+                options.Password.RequireNonAlphanumeric = Convert.ToBoolean(passwordConfig.GetSection("RequireNonAlphanumeric").Value);
+                options.Password.RequireUppercase = Convert.ToBoolean(passwordConfig.GetSection("RequireUppercase").Value);
+                options.Password.RequireLowercase = Convert.ToBoolean(passwordConfig.GetSection("RequireLowercase").Value);
             })
             .AddEntityFrameworkStores<BoxingClubContext>();
 
-            services.AddTransient<IUnitOfWork, EFUnitOfWork>();
+            services.AddScoped<IUnitOfWork, EFUnitOfWork>();
             services.AddTransient<IStudentService, StudentService>();
-            services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<IAccountProvider, AccountProvider>();
+            
+            services.AddTransient<IRoleProvider, RoleProvider>();
+            services.AddTransient<IUserProvider, UserProvider>();
+            services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
+
+            services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
-            services.AddTransient<ICoachService, CoachService>();            
 
-            var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
+            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
+            var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
             mapperConfig.AssertConfigurationIsValid();
-            //IMapper mapper = mapperConfig.CreateMapper();
 
-            services.AddAutoMapper(typeof(MappingProfile)); 
+            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile), typeof(UserProfile));
 
             services.AddMvc(options =>
             {
@@ -71,7 +81,8 @@ namespace BoxingClub.WEB
                 options.Filters.Add(new AuthorizeFilter(policy));
 
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            }).AddFluentValidation();
+            })
+            .AddFluentValidation();
 
             services.AddTransient<IValidator<SignUpViewModel>, SignUpViewModelValidator>();
             services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();

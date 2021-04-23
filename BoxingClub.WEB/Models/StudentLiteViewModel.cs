@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BoxingClub.WEB.Models
+namespace BoxingClub.Web.Models
 {
     public class StudentLiteViewModel
     {
@@ -17,7 +14,7 @@ namespace BoxingClub.WEB.Models
         public string Patronymic { get; set; }
 
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Date of Birth")]
         public DateTime BornDate { get; set; }
 
         public int BoxingGroupId { get; set; }

@@ -1,10 +1,15 @@
-﻿@model BoxingClub.WEB.Models.StudentFullViewModel
+﻿@model BoxingClub.Web.Models.StudentFullViewModel
 
 @{
-    ViewData["Title"] = "CreateStudent";
+    ViewData["Title"] = "Create Student";
 }
 
-<h1>CreateStudent</h1>
+<div class="d-flex justify-content-between mb-2">
+    <h1>New Student</h1>
+    <div class="mt-2">
+        <a asp-action="GetAllStudents" asp-controller="Student" class="btn btn-secondary">Back to students List</a>
+    </div>
+</div>
 
 <hr />
 <div class="row">
@@ -48,7 +53,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="BoxingGroupId" class="control-label"></label>
-                <select asp-for="BoxingGroupId" asp-items="ViewBag.Groups">
+                <select asp-for="BoxingGroupId" class="form-select custom-select" asp-items="ViewBag.Groups">
                     <option selected="selected" disabled="disabled">Choose group</option>
                 </select>
                 <br />
@@ -60,10 +65,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="GetAllStudents" asp-controller="Student">Back to students List</a>
 </div>
 
 @section Scripts {

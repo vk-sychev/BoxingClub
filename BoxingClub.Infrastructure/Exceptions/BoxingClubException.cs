@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BoxingClub.Infrastructure.Exceptions
 {
@@ -11,6 +9,9 @@ namespace BoxingClub.Infrastructure.Exceptions
         public BoxingClubException(string message, string prop) : base(message)
         {
             Property = prop;
+        }
+        public BoxingClubException(string message) : base(message)
+        {
         }
     }
 }
