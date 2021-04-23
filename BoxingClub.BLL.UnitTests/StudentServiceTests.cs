@@ -27,13 +27,17 @@ namespace BoxingClub.BLL.UnitTests
         private IStudentService _studentService;
 
 
-        [SetUp]
-        public void SetUp()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
             _mapper = mapperConfig.CreateMapper();
+        }
 
+        [SetUp]
+        public void SetUp()
+        {
             _mockRepository = new Mock<IStudentRepository>();
             _mockUoW = new Mock<IUnitOfWork>();
             _studentService = new StudentService(_mockUoW.Object, _mapper);
