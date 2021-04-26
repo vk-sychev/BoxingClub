@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.UnitTests
 {
@@ -24,7 +25,7 @@ namespace BoxingClub.BLL.UnitTests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
+            var mapperProfiles = new List<Profile>() { new ResultProfile(), new UserProfile() };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
             _mapper = mapperConfig.CreateMapper();
         }
@@ -46,6 +47,22 @@ namespace BoxingClub.BLL.UnitTests
             await _authService.SignInAsync(userDTO);
 
             _mockAuthProvider.Verify(p => p.SignInAsync(It.IsAny<SignIn>()), Times.Once);
+        }
+
+        [Test]
+        public void SignInAsync_InvalidInput_ShouldThrowArgimentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _authService.SignInAsync(null));
+        }
+
+        [Test]
+        public async Task SignOutAsync()
+        {
+            _mockAuthProvider.Setup(p => p.SignOutAsync());
+
+            await _authService.SignOutAsync();
+
+            _mockAuthProvider.Verify(p => p.SignOutAsync(), Times.Once);
         }
     }
 }

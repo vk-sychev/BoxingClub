@@ -30,7 +30,7 @@ namespace BoxingClub.BLL.UnitTests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
+            var mapperProfiles = new List<Profile>() { new StudentProfile() };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
             _mapper = mapperConfig.CreateMapper();
         }
@@ -59,6 +59,7 @@ namespace BoxingClub.BLL.UnitTests
             await _studentService.CreateStudentAsync(student);
 
             _mockRepository.Verify(repo => repo.CreateAsync(It.IsAny<Student>()), Times.Once);
+            _mockUoW.Verify(uow => uow.SaveAsync());
         }
 
         [Test]
@@ -197,7 +198,7 @@ namespace BoxingClub.BLL.UnitTests
             _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.GetStudentByIdAsync(It.IsAny<int>()));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.DeleteFromGroupAsync(It.IsAny<int>()));
         }
 
         [Test]
