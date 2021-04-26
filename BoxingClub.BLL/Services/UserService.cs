@@ -174,10 +174,7 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             ChangeUserProperties(userFromDb, user);
-            var oldRole = await GetUserRole(userFromDb);
-            
-            var newRoleId = user.Role.Id;
-            var roleResult = await ChangeUserRole(user.Id, oldRole, newRoleId);
+            var roleResult = await ChangeUserRole(userFromDb, user.Role.Id);
 
             if (roleResult.Succeeded)
             {
@@ -191,12 +188,12 @@ namespace BoxingClub.BLL.Implementation.Services
 
         private async Task<string> GetUserRole(ApplicationUser userFromDb)
         {
-            var oldRole = await _roleProvider.GetUserRole(userFromDb);
-            if (string.IsNullOrEmpty(oldRole))
+            var role = await _roleProvider.GetUserRole(userFromDb);
+            if (string.IsNullOrEmpty(role))
             {
                 throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found ", "");
             }
-            return oldRole;
+            return role;
         }
 
         private void ChangeUserProperties(ApplicationUser userFromDb, UserDTO user)
@@ -208,12 +205,10 @@ namespace BoxingClub.BLL.Implementation.Services
             userFromDb.Description = user.Description;
         }
 
-        private async Task<AccountResultDTO> ChangeUserRole(string userId, string oldRoleName, string newRoleId)
+        private async Task<AccountResultDTO> ChangeUserRole(ApplicationUser userFromDb, string newRoleId)
         {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentNullException(nameof(userId), "UserId is null");
-            }
+            var oldRoleName = await GetUserRole(userFromDb);
+            var userId = userFromDb.Id;
 
             if (string.IsNullOrEmpty(newRoleId))
             {
@@ -229,13 +224,13 @@ namespace BoxingClub.BLL.Implementation.Services
             var newRoleName = newRole.Name;
             if (!oldRoleName.Equals(newRoleName))
             {
-                var result = await ChangeRole(userId, oldRoleName, newRoleName);
+                var result = await ChangeRoleIfChanged(userId, oldRoleName, newRoleName);
                 return result;
             }
             return new AccountResultDTO { Succeeded = true };
         }
 
-        private async Task<AccountResultDTO> ChangeRole(string userId, string oldRoleName, string newRoleName)
+        private async Task<AccountResultDTO> ChangeRoleIfChanged(string userId, string oldRoleName, string newRoleName)
         {
             var result = await _roleProvider.RemoveFromRoleAsync(userId, oldRoleName);
             if (result.Succeeded)
