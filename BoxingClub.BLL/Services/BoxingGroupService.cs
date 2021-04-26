@@ -98,7 +98,7 @@ namespace BoxingClub.BLL.Services
 
         public async Task<List<BoxingGroupDTO>> GetBoxingGroupsByCoachIdAsync(string coachId)
         {
-            if (coachId == null)
+            if (string.IsNullOrEmpty(coachId))
             {
                 throw new ArgumentNullException(nameof(coachId), "Coach's id is null");
             }
