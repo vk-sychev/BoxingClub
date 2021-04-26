@@ -61,11 +61,16 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"User with id = {userId} isn't found", "");
             }
 
-            var role = await FindUserRole(user);
-            var mappedRole = _mapper.Map<RoleDTO>(role);
+            var mappedUser = await AssignRole(user);
+            return mappedUser;
+        }
+
+
+        private async Task<UserDTO> AssignRole(ApplicationUser user)
+        {
+            var mappedRole = await FindUserRole(user);
             var mappedUser = _mapper.Map<UserDTO>(user);
             mappedUser.Role = mappedRole;
-
             return mappedUser;
         }
 
@@ -75,9 +80,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var mappedUsers = new List<UserDTO>();
             foreach (var user in users)
             {
-                var mappedUser = _mapper.Map<UserDTO>(user);
-                var mappedRole = await FindUserRole(user);
-                mappedUser.Role = mappedRole;
+                var mappedUser = await AssignRole(user);
                 mappedUsers.Add(mappedUser);
             }
             return mappedUsers;
@@ -104,7 +107,9 @@ namespace BoxingClub.BLL.Implementation.Services
                 await _authenticationProvider.SignInAsync(mappedUser, isPersistent: false);
             }
 
-            return _mapper.Map<AccountResultDTO>(result);
+            var mappedResult = _mapper.Map<AccountResultDTO>(result);
+
+            return mappedResult;
         }
 
         public async Task DeleteUserByIdAsync(string userId)
@@ -168,11 +173,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"User with id = {user.Id} isn't found", "");
             }
 
-            userFromDb.Name = user.Name;
-            userFromDb.Surname = user.Surname;
-            userFromDb.Patronymic = user.Patronymic;
-            userFromDb.UserName = user.UserName;
-            userFromDb.Description = user.Description;
+            ChangeUserProperties(userFromDb, user);
 
             var oldRole = await _roleProvider.GetUserRole(userFromDb);
             if (string.IsNullOrEmpty(oldRole))
@@ -190,6 +191,15 @@ namespace BoxingClub.BLL.Implementation.Services
                 return mappedResult;
             }
             return roleResult;                  
+        }
+
+        private void ChangeUserProperties(ApplicationUser userFromDb, UserDTO user)
+        {
+            userFromDb.Name = user.Name;
+            userFromDb.Surname = user.Surname;
+            userFromDb.Patronymic = user.Patronymic;
+            userFromDb.UserName = user.UserName;
+            userFromDb.Description = user.Description;
         }
 
         private async Task<AccountResultDTO> ChangeRole(string userId, string oldRoleName, string newRoleId)
