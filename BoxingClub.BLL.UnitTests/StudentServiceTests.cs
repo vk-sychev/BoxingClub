@@ -2,16 +2,12 @@
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Services;
-using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Web.Mapping;
 using Moq;
-using Moq.Language;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using BoxingClub.Infrastructure.Exceptions;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
@@ -63,7 +59,7 @@ namespace BoxingClub.BLL.UnitTests
         }
 
         [Test]
-        public void CreateAsync_InputNull_ShouldThrowArgumentNullException()
+        public void CreateStudentAsync_InputNull_ShouldThrowArgumentNullException()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.CreateStudentAsync(null));
         }
@@ -77,6 +73,7 @@ namespace BoxingClub.BLL.UnitTests
 
             var list = await _studentService.GetStudentsAsync();
 
+            _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
             Assert.AreEqual(studentsList.Count, list.Count);
         }
 
@@ -89,6 +86,7 @@ namespace BoxingClub.BLL.UnitTests
 
             var student = await _studentService.GetStudentByIdAsync(studentId);
 
+            _mockRepository.Verify(repo => repo.GetByIdAsync(studentId), Times.Once);
             Assert.IsNotNull(student);
             Assert.AreEqual(studentId, student.Id);
         }
