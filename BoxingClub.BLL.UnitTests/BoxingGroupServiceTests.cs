@@ -9,6 +9,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BoxingClub.BLL.UnitTests
 {
@@ -36,10 +37,15 @@ namespace BoxingClub.BLL.UnitTests
             _boxingGroupService = new BoxingGroupService(_mapper, _mockUoW.Object);
         }
 
-        public void GetBoxingGroupsAsync_ValidInput()
+        public async Task GetBoxingGroupsAsync_ValidInput()
         {
-            var boxingGroupsList = new List<BoxingGroup>() { new BoxingGroup { Id = 1} }
-            _mockRepository.Setup(repo => repo.GetAllAsync().Result).Returns
+            var boxingGroupsList = new List<BoxingGroup>() { new BoxingGroup { Id = 1 }, new BoxingGroup { Id = 2 }, new BoxingGroup { Id = 3 } };
+            _mockRepository.Setup(repo => repo.GetAllAsync().Result).Returns(boxingGroupsList);
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            var boxingGroups = await _boxingGroupService.GetBoxingGroupsAsync();
+
+            _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
         }
     }
 }

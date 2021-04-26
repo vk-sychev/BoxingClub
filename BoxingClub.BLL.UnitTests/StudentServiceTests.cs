@@ -77,6 +77,7 @@ namespace BoxingClub.BLL.UnitTests
 
             var list = await _studentService.GetStudentsAsync();
 
+            _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
             Assert.AreEqual(studentsList.Count, list.Count);
         }
 
