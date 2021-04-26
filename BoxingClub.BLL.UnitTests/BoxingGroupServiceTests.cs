@@ -97,7 +97,7 @@ namespace BoxingClub.BLL.UnitTests
         }
 
         [Test]
-        public void UpdateBoxingGroupAsync_ShouldThrowArgumentNullException()
+        public void UpdateBoxingGroupAsync_InvalidInput_ShouldThrowArgumentNullException()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.UpdateBoxingGroupAsync(null));
         }
@@ -114,6 +114,40 @@ namespace BoxingClub.BLL.UnitTests
 
             _mockRepository.Verify(repo => repo.CreateAsync(It.IsAny<BoxingGroup>()), Times.Once);
             _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
+        }
+
+        [Test]
+        public void CreateBoxingGroupAsync_InvalidInput_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.CreateBoxingGroupAsync(null));
+        }
+
+        [Test]
+        public async Task DeleleBoxingGroupAsync_ValidInput()
+        {
+            var boxingGroup = new BoxingGroup { Id = 1, Name = "Test" };
+
+            _mockRepository.Setup(repo => repo.GetByIdAsync(boxingGroup.Id).Result).Returns(boxingGroup);
+            _mockRepository.Setup(repo => repo.Delete(It.IsAny<BoxingGroup>()));
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            await _boxingGroupService.DeleleBoxingGroupAsync(boxingGroup.Id);
+
+            _mockRepository.Verify(repo => repo.GetByIdAsync(boxingGroup.Id), Times.Once);
+            _mockRepository.Verify(repo => repo.Delete(It.IsAny<BoxingGroup>()), Times.Once);
+            _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
+        }
+
+        [Test]
+        public void DeleleBoxingGroupAsync_InvalidInput_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.DeleleBoxingGroupAsync(null));
+        }
+
+        [Test]
+        public void DeleleBoxingGroupAsync_InvalidInput_ShouldThrowNotFoundException()
+        {
+
         }
     }
 }
