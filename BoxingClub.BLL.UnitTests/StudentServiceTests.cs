@@ -2,16 +2,12 @@
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Services;
-using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Web.Mapping;
 using Moq;
-using Moq.Language;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using BoxingClub.Infrastructure.Exceptions;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
