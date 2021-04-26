@@ -224,13 +224,13 @@ namespace BoxingClub.BLL.Implementation.Services
             var newRoleName = newRole.Name;
             if (!oldRoleName.Equals(newRoleName))
             {
-                var result = await ChangeRoleIfChanged(userId, oldRoleName, newRoleName);
+                var result = await UpdateRoleIfChanged(userId, oldRoleName, newRoleName);
                 return result;
             }
             return new AccountResultDTO { Succeeded = true };
         }
 
-        private async Task<AccountResultDTO> ChangeRoleIfChanged(string userId, string oldRoleName, string newRoleName)
+        private async Task<AccountResultDTO> UpdateRoleIfChanged(string userId, string oldRoleName, string newRoleName)
         {
             var result = await _roleProvider.RemoveFromRoleAsync(userId, oldRoleName);
             if (result.Succeeded)
