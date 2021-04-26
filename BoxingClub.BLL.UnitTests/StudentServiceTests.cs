@@ -2,16 +2,12 @@
 using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Services;
-using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Web.Mapping;
 using Moq;
-using Moq.Language;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using BoxingClub.Infrastructure.Exceptions;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
@@ -27,13 +23,17 @@ namespace BoxingClub.BLL.UnitTests
         private IStudentService _studentService;
 
 
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            var mapperProfiles = new List<Profile>() { new StudentProfile() };
+            var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
+            _mapper = mapperConfig.CreateMapper();
+        }
+
         [SetUp]
         public void SetUp()
         {
-            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
-            var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
-            _mapper = mapperConfig.CreateMapper();
-
             _mockRepository = new Mock<IStudentRepository>();
             _mockUoW = new Mock<IUnitOfWork>();
             _studentService = new StudentService(_mockUoW.Object, _mapper);
@@ -55,10 +55,11 @@ namespace BoxingClub.BLL.UnitTests
             await _studentService.CreateStudentAsync(student);
 
             _mockRepository.Verify(repo => repo.CreateAsync(It.IsAny<Student>()), Times.Once);
+            _mockUoW.Verify(uow => uow.SaveAsync());
         }
 
         [Test]
-        public void CreateAsync_InputNull_ShouldThrowArgumentNullException()
+        public void CreateStudentAsync_InputNull_ShouldThrowArgumentNullException()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.CreateStudentAsync(null));
         }
@@ -72,6 +73,7 @@ namespace BoxingClub.BLL.UnitTests
 
             var list = await _studentService.GetStudentsAsync();
 
+            _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
             Assert.AreEqual(studentsList.Count, list.Count);
         }
 
@@ -84,6 +86,7 @@ namespace BoxingClub.BLL.UnitTests
 
             var student = await _studentService.GetStudentByIdAsync(studentId);
 
+            _mockRepository.Verify(repo => repo.GetByIdAsync(studentId), Times.Once);
             Assert.IsNotNull(student);
             Assert.AreEqual(studentId, student.Id);
         }
@@ -193,7 +196,7 @@ namespace BoxingClub.BLL.UnitTests
             _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.GetStudentByIdAsync(It.IsAny<int>()));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.DeleteFromGroupAsync(It.IsAny<int>()));
         }
 
         [Test]
