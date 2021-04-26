@@ -132,7 +132,7 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public void DeleteStudentAsync_InvalidInput_ShouldThrowNotFoundException()
         {
-            _mockRepository.Setup(repo => repo.Delete(It.IsAny<Student>()));
+            _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
 
             Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.DeleteStudentAsync(It.IsAny<int>()));
