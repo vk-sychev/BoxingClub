@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Services;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
+using BoxingClub.Infrastructure.Exceptions;
 using BoxingClub.Web.Mapping;
 using Moq;
 using NUnit.Framework;
@@ -10,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.UnitTests
 {
@@ -37,7 +40,8 @@ namespace BoxingClub.BLL.UnitTests
             _boxingGroupService = new BoxingGroupService(_mapper, _mockUoW.Object);
         }
 
-        public async Task GetBoxingGroupsAsync_ValidInput()
+        [Test]
+        public async Task GetBoxingGroupsAsync_ReturnList()
         {
             var boxingGroupsList = new List<BoxingGroup>() { new BoxingGroup { Id = 1 }, new BoxingGroup { Id = 2 }, new BoxingGroup { Id = 3 } };
             _mockRepository.Setup(repo => repo.GetAllAsync().Result).Returns(boxingGroupsList);
@@ -46,6 +50,70 @@ namespace BoxingClub.BLL.UnitTests
             var boxingGroups = await _boxingGroupService.GetBoxingGroupsAsync();
 
             _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
+            Assert.AreEqual(boxingGroupsList.Count, boxingGroups.Count);
+        }
+
+        [Test]
+        public async Task GetBoxingGroupByIdAsync_ValidInput()
+        {
+            var boxingGroupId = 1;
+            _mockRepository.Setup(repo => repo.GetByIdAsync(boxingGroupId).Result).Returns(new BoxingGroup { Id = boxingGroupId });
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            var boxingGroup = await _boxingGroupService.GetBoxingGroupByIdAsync(boxingGroupId);
+
+            _mockRepository.Verify(repo => repo.GetByIdAsync(boxingGroupId), Times.Once);
+            Assert.IsNotNull(boxingGroup);
+            Assert.AreEqual(boxingGroupId, boxingGroup.Id);
+        }
+
+        [Test]
+        public void GetBoxingGroupByIdAsync_InvalidInput_ShouldThrowNotFoundException()
+        {
+            _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            Assert.ThrowsAsync<NotFoundException>(async () => await _boxingGroupService.GetBoxingGroupByIdAsync(It.IsAny<int>()));
+        }
+
+        [Test]
+        public void GetBoxingGroupByIdAsync_InvalidInput_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.GetBoxingGroupByIdAsync(null));
+        }
+
+        [Test]
+        public async Task UpdateBoxingGroupAsync_ValidInput()
+        {
+            var boxingGroup = new BoxingGroupDTO { Id = 1, Name = "Test" };
+
+            _mockRepository.Setup(repo => repo.Update(It.IsAny<BoxingGroup>()));
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            await _boxingGroupService.UpdateBoxingGroupAsync(boxingGroup);
+
+            _mockRepository.Verify(repo => repo.Update(It.IsAny<BoxingGroup>()), Times.Once);
+            _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
+        }
+
+        [Test]
+        public void UpdateBoxingGroupAsync_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.UpdateBoxingGroupAsync(null));
+        }
+
+        [Test]
+        public async Task CreateBoxingGroupAsync_ValidInput()
+        {
+            var boxingGroup = new BoxingGroupDTO { Id = 1, Name = "Test" };
+
+            _mockRepository.Setup(repo => repo.CreateAsync(It.IsAny<BoxingGroup>()));
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            await _boxingGroupService.CreateBoxingGroupAsync(boxingGroup);
+
+            _mockRepository.Verify(repo => repo.CreateAsync(It.IsAny<BoxingGroup>()), Times.Once);
+            _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
         }
     }
 }

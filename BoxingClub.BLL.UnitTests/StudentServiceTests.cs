@@ -63,7 +63,7 @@ namespace BoxingClub.BLL.UnitTests
         }
 
         [Test]
-        public void CreateAsync_InputNull_ShouldThrowArgumentNullException()
+        public void CreateStudentAsync_InputNull_ShouldThrowArgumentNullException()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.CreateStudentAsync(null));
         }
@@ -90,6 +90,7 @@ namespace BoxingClub.BLL.UnitTests
 
             var student = await _studentService.GetStudentByIdAsync(studentId);
 
+            _mockRepository.Verify(repo => repo.GetByIdAsync(studentId), Times.Once);
             Assert.IsNotNull(student);
             Assert.AreEqual(studentId, student.Id);
         }
