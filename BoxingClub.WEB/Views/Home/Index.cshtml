@@ -28,7 +28,7 @@ else
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FullName)
+                    @Html.DisplayNameFor(model => model.CoachFullName)
                 </th>
                 <th></th>
             </tr>
@@ -41,7 +41,7 @@ else
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FullName)
+                        @Html.DisplayFor(modelItem => item.CoachFullName)
                     </td>
                     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
                     {
