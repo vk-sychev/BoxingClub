@@ -18,5 +18,7 @@ namespace BoxingClub.DAL.Interfaces
         Task<List<ApplicationUser>> GetUsersAsync();
 
         Task<IList<ApplicationUser>> GetUsersByRoleAsync(string roleName);
+
+        Task<IdentityResult> UpdateUserAsync(ApplicationUser user);
     }
 }

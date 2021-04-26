@@ -1,6 +1,7 @@
 ﻿using BoxingClub.Web.Models;
 using FluentValidation;
 using System;
+using System.Text.RegularExpressions;
 
 namespace BoxingClub.Web.Validations
 {
@@ -8,9 +9,16 @@ namespace BoxingClub.Web.Validations
     {
         public StudentFullViewModelValidator()
         {
+            string pattern = @"^[a-zA-Zа-яА-Я]+\b";
             var todaysDate = DateTime.Today;
-            RuleFor(x => x.Name).NotNull();
-            RuleFor(x => x.Surname).NotNull();
+            RuleFor(x => x.Name).NotNull()
+                                .Matches(pattern)
+                                .WithMessage("Name must contain only letters");
+
+            RuleFor(x => x.Surname).NotNull()
+                                   .Matches(pattern)
+                                   .WithMessage("Surname must contain only letters");
+
             RuleFor(x => x.BornDate).NotEmpty()
                                     .WithMessage("Date of Birth must not be empty")
                                     .LessThan(todaysDate)
@@ -18,7 +26,8 @@ namespace BoxingClub.Web.Validations
                                     .Must(x => x.Year > todaysDate.Year - 100)
                                     .WithMessage($"Year of Birth must be greater than {todaysDate.Year - 100}");
 
-            RuleFor(x => x.Patronymic).Must(x => x == null || x.Length > 0);
+            RuleFor(x => x.Patronymic).Must(x => x == null || (x.Length > 0 && Regex.IsMatch(x, pattern)))
+                                      .WithMessage("Patronymic must contain only letters");
 
             RuleFor(x => x.DateOfEntry).NotNull()
                                        .Must(x => x <= todaysDate)
@@ -26,8 +35,15 @@ namespace BoxingClub.Web.Validations
                                        .GreaterThan(x => x.BornDate)
                                        .WithMessage("Date of entry must be greater than the date of birth");
 
-            RuleFor(x => x.Height).NotNull().NotEmpty().LessThanOrEqualTo(220);
-            RuleFor(x => x.Weight).NotNull().NotEmpty().LessThanOrEqualTo(130);
+            RuleFor(x => x.Height).NotNull()
+                                  .NotEmpty()
+                                  .LessThanOrEqualTo(220);
+
+            RuleFor(x => x.Weight).NotNull()
+                                  .NotEmpty()
+                                  .LessThanOrEqualTo(130);
+            RuleFor(x => x.BoxingGroupId).NotNull()
+                                         .WithMessage("'Boxing Group' has to be selected");
         }
     }
 }

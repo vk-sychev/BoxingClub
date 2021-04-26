@@ -58,5 +58,11 @@ namespace BoxingClub.DAL.Implementation.Implementation
         {
             return await _userManager.FindByNameAsync(name);
         }
+
+        public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
+        {   
+            var result = await _userManager.UpdateAsync(user);
+            return result;
+        }
     }
 }

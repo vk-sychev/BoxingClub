@@ -13,7 +13,7 @@ namespace BoxingClub.Web.Mapping
             CreateMap<RoleDTO, RoleViewModel>().ReverseMap();
             CreateMap<RoleDTO, Role>().ReverseMap();
             CreateMap<RoleDTO, IdentityRole>(MemberList.Source).ReverseMap();
-            CreateMap<RoleViewModel, IdentityRole>(MemberList.Source).ReverseMap();
+
             CreateMap<Role, IdentityRole>(MemberList.Source).ForMember(src => src.Id, dest => dest.Ignore()).ReverseMap();
         }
     }

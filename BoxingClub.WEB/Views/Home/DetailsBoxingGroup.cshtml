@@ -21,49 +21,55 @@
 </div>
 <div class="col-md-6">
     <p class="coachName">
-        Coach: @Model.FullName <br />
+        Coach: @Model.CoachFullName <br />
         Coach Description: @Model.Coach.Description
     </p>
 </div>
 <h4 class="mt-2">Students: </h4>
 
-
-<table class="table">
-    <tbody>
-        @foreach (var item in Model.Students)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Surname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Patronymic)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BornDate)
-                </td>
-                @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName)))
-                {
+@if (!Model.Students.Any())
+{
+    <h5>Here are no students yet</h5>
+}
+else
+{
+    <table class="table">
+        <tbody>
+            @foreach (var item in Model.Students)
+            {
+                <tr>
                     <td>
-                        <div class="d-flex justify-content-end">
-                            @Html.ActionLink("Edit", "EditStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
-                            @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
-                            @Html.ActionLink("Delete", "DeleteFromBoxingGroup", "Home", new { id = item.Id, returnId = Model.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
-                        </div>
+                        @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                }
-                else if (User.Identity.IsAuthenticated && User.IsInRole(Constants.CoachRoleName))
-                {
                     <td>
-                        <div class="d-flex justify-content-end">
-                            @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
-                        </div>
+                        @Html.DisplayFor(modelItem => item.Surname)
                     </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patronymic)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BornDate)
+                    </td>
+                    @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName)))
+                    {
+                        <td>
+                            <div class="d-flex justify-content-end">
+                                @Html.ActionLink("Edit", "EditStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                                @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
+                                @Html.ActionLink("Delete", "DeleteFromBoxingGroup", "Home", new { id = item.Id, returnId = Model.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                            </div>
+                        </td>
+                    }
+                    else if (User.Identity.IsAuthenticated && User.IsInRole(Constants.CoachRoleName))
+                    {
+                        <td>
+                            <div class="d-flex justify-content-end">
+                                @Html.ActionLink("Details", "DetailsStudent", "Student", new { id = item.Id, fromHomeController = true, returnId = Model.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -31,14 +31,14 @@
             <input asp-for="@returnId" type="hidden">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label font-weight-bold"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Surname" class="control-label font-weight-bold"></label>
                 <input asp-for="Surname" class="form-control" />
                 <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label font-weight-bold"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Patronymic" class="control-label font-weight-bold"></label>
@@ -66,7 +66,7 @@
                 <span asp-validation-for="DateOfEntry" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BoxingGroupId" class="control-label font-weight-bold"></label>
+                <label asp-for="BoxingGroupId" class="control-label font-weight-bold">Boxing Group</label>
                 <div>
                     <select asp-for="BoxingGroupId" class="form-select custom-select" asp-items="ViewBag.Groups">
                         <option selected="selected" disabled="disabled">Choose group</option>

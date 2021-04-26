@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BoxingClub.Web.Models
@@ -17,6 +18,7 @@ namespace BoxingClub.Web.Models
         [Display(Name = "Date of Birth")]
         public DateTime BornDate { get; set; }
 
+        [DisplayName("Boxing Group")]
         public int BoxingGroupId { get; set; }
 
         public BoxingGroupLiteViewModel BoxingGroup { get; set; }

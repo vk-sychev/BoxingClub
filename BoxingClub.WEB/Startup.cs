@@ -87,7 +87,7 @@ namespace BoxingClub.Web
             services.AddTransient<IValidator<SignUpViewModel>, SignUpViewModelValidator>();
             services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();
             services.AddTransient<IValidator<StudentFullViewModel>, StudentFullViewModelValidator>();
-            services.AddTransient<IValidator<RoleViewModel>, RoleViewModelValidator>();
+            services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
             services.AddTransient<IValidator<BoxingGroupLiteViewModel>, BoxingGroupLiteViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>

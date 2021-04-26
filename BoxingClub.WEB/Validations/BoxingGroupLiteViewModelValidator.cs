@@ -7,8 +7,14 @@ namespace BoxingClub.Web.Validations
     {
         public BoxingGroupLiteViewModelValidator()
         {
-            RuleFor(x => x.CoachId).NotNull().NotEmpty().WithMessage("Coach has to be selected!");
-            RuleFor(x => x.Name).NotNull().NotEmpty();
+            string pattern = @"^[a-zA-Zа-яА-Я]+\b";
+            RuleFor(x => x.CoachId).NotNull()
+                                   .WithMessage("'Coach' has to be selected!");
+
+            RuleFor(x => x.Name).NotNull()
+                                .NotEmpty()
+                                .Matches(pattern)
+                                .WithMessage("Name must contain only letters");
         }
     }
 }

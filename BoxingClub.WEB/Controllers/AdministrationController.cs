@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using BoxingClub.BLL.DTO;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
 using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -49,6 +51,46 @@ namespace BoxingClub.Web.Controllers
             var mappedUser = _mapper.Map<UserViewModel>(user);
             return View(mappedUser);
         }
+
+        private async Task<SelectList> GetRoles()
+        {
+            var roles = await _roleService.GetRolesAsync();
+            var mappedRoles = _mapper.Map<List<RoleViewModel>>(roles);
+            var selectList = new SelectList(mappedRoles, "Id", "Name");
+            return selectList;
+        }
+
+        [HttpGet]
+        [Route("Administration/EditUser/{id}")]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await _userService.FindUserByIdAsync(id);
+            var mappedUser = _mapper.Map<UserViewModel>(user);
+            ViewBag.Roles = await GetRoles();
+            return View(mappedUser);
+        }
+
+        [HttpPost]
+        [Route("Administration/EditUser/{id}")]
+        public async Task<IActionResult> EditUser(UserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var mappedModel = _mapper.Map<UserDTO>(model);
+                var result = await _userService.UpdateUserAsync(mappedModel);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("GetUsers", "Administration");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            ViewBag.Roles = await GetRoles();
+            return View(model);
+        }
+
     }
 }
 

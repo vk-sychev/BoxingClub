@@ -9,9 +9,9 @@ namespace BoxingClub.Web.Models
         [DisplayName("Group's Name")]
         public string Name { get; set; }
 
-        public UserViewModel Coach { get; set; }
-
         [DisplayName("Coach")]
         public string CoachId { get; set; }
+
+        public UserViewModel Coach { get; set; }
     }
 }

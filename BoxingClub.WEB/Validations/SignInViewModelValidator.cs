@@ -1,14 +1,28 @@
 ﻿using BoxingClub.Web.Models;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace BoxingClub.Web.Validations
 {
     public class SignInViewModelValidator : AbstractValidator<SignInViewModel>
     {
-        public SignInViewModelValidator()
+        private readonly IConfiguration _configuration;
+        public SignInViewModelValidator(IConfiguration configuration)
         {
-            RuleFor(x => x.UserName).NotNull().NotEmpty().WithName("Username");
-            RuleFor(x => x.Password).NotNull().NotEmpty().MinimumLength(3);
+            _configuration = configuration;
+            var passwordLength = Convert.ToInt32(_configuration.GetSection("PasswordSettings").GetSection("RequiredLength").Value);
+            var passwordUserNamePattern = @"^\w+\b";
+
+            RuleFor(x => x.UserName).NotNull()
+                                    .MinimumLength(5)
+                                    .Matches(passwordUserNamePattern)
+                                    .WithName("Username");
+
+            RuleFor(x => x.Password).NotNull()
+                                    .NotEmpty()
+                                    .MinimumLength(passwordLength)
+                                    .Matches(passwordUserNamePattern);
         }
     }
 }

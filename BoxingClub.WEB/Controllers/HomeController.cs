@@ -76,21 +76,13 @@ namespace BoxingClub.Web.Controllers
             {
                 var group = _mapper.Map<BoxingGroupDTO>(model);
                 await _boxingGroupService.UpdateBoxingGroupAsync(group);
-                return RedirectToAction("index", "home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.Coaches = await GetCoaches();
 
             return View(model);
         }
 
-        [AuthorizeRoles(Constants.AdminRoleName)]
-        [HttpGet]
-        [Route("Home/EditStudentsInGroup/{id}")]
-        public async Task<IActionResult> EditStudentsInBoxingGroup(int? id)
-        {
-            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id);
-            return View();
-        }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]

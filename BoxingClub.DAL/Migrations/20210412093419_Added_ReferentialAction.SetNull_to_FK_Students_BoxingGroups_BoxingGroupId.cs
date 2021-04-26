@@ -23,7 +23,7 @@ namespace BoxingClub.DAL.Migrations
                                "BoxingGroupId",
                                "BoxingGroups",
                                principalColumn: "Id",
-                               onDelete: ReferentialAction.SetNull);    
+                               onDelete: ReferentialAction.Restrict);    
         }
     }
 }

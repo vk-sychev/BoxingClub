@@ -31,7 +31,8 @@ namespace BoxingClub.Web.Mapping
                                                                        .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
                                                                        .ForMember(dest => dest.RememberMe, opt => opt.Ignore())
                                                                        .ForMember(dest => dest.Role, opt => opt.Ignore())
-                                                                       .ReverseMap();
+                                                                       .ReverseMap();          
+
         }
     }
 }
