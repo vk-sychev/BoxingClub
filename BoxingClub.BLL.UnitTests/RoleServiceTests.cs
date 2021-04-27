@@ -123,7 +123,7 @@ namespace BoxingClub.BLL.UnitTests
 
         [Test]
         [TestCaseSource(nameof(CasesIdentityResult))]
-        public async Task RemoveFromRoleAsync_ValidInput(IdentityResult identityResult) // вопрос про IdentityResult
+        public async Task RemoveFromRoleAsync_ValidInput(IdentityResult identityResult) 
         {
             string userId = "test";
             string roleName = "testRole";
