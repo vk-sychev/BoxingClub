@@ -135,10 +135,10 @@ namespace BoxingClub.Web.Controllers
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Home/DeleteFromGroup/{id}")]
-        public async Task<IActionResult> DeleteFromBoxingGroup(int? id, int? returnId)
+        [Route("Home/DeleteFromGroup/{studentId}")]
+        public async Task<IActionResult> DeleteFromBoxingGroup(int? studentId, int? returnId)
         {
-            await _studentService.DeleteFromGroupAsync(id);
+            await _studentService.DeleteFromGroupAsync(studentId);
             return RedirectToAction("DetailsGroup", new { id = returnId.Value });
         }
     }

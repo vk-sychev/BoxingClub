@@ -6,7 +6,7 @@ namespace BoxingClub.BLL.Interfaces
 {
     public interface IRoleService
     {
-        Task<RoleDTO> FindRoleByIdAsync(string userId);
+        Task<RoleDTO> FindRoleByIdAsync(string id);
 
         Task<bool> IsInRoleAsync(UserDTO user, string roleName);
 
