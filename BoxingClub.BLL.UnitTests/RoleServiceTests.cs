@@ -97,13 +97,84 @@ namespace BoxingClub.BLL.UnitTests
             Assert.AreEqual(inRole, result);
         }
 
-        [Test]
-        public void IsInRoleAsync_UserIsNull_ShouldThrowArgumentNullException()
-        {
-            var roleName = "testRole";
-            var exceptionMessage = "Role's id is null";
 
-            var exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await _roleService.IsInRoleAsync(null, roleName));
+        static readonly object[] CasesForIsInRole =
+        {
+            new object[] { null, "testRole", "User is null"},
+            new object[] { new UserDTO() { Id = "test" }, null, "Role is null" }
+        };
+
+
+        [Test]
+        [TestCaseSource(nameof(CasesForIsInRole))]
+        public void IsInRoleAsync_InvalidInput_ShouldThrowArgumentNullException(UserDTO user, string roleName, string exceptionMessage)
+        {
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await _roleService.IsInRoleAsync(user, roleName));
+            Assert.AreEqual(exceptionMessage, exception.Message);
+        }
+
+
+
+        static readonly IdentityResult[] CasesIdentityResult =
+        {
+            new IdentityResult(),
+            IdentityResult.Success
+        };
+
+        [Test]
+        [TestCaseSource(nameof(CasesIdentityResult))]
+        public async Task RemoveFromRoleAsync_ValidInput(IdentityResult identityResult) // вопрос про IdentityResult
+        {
+            string userId = "test";
+            string roleName = "testRole";
+
+            _mockRoleProvider.Setup(p => p.RemoveFromRoleAsync(It.IsAny<string>(), It.IsAny<string>()).Result).Returns(identityResult);
+
+            var result = await _roleService.RemoveFromRoleAsync(userId, roleName);
+
+            _mockRoleProvider.Verify(p => p.RemoveFromRoleAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(identityResult.Succeeded, result.Succeeded);
+        }
+
+
+
+        static readonly object[] CasesForAddRemoveFromRoleInvalidInput =
+{
+            new object[] { null, "testRole", "User's id is null"},
+            new object[] { "testId", null, "Role is null" }
+        };
+
+        [Test]
+        [TestCaseSource(nameof(CasesForAddRemoveFromRoleInvalidInput))]
+        public void RemoveFromRoleAsync_InvalidInput_ShouldThrowArgumentNullException(string userId, string roleName, string exceptionMessage)
+        {
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await _roleService.RemoveFromRoleAsync(userId, roleName));
+            Assert.AreEqual(exceptionMessage, exception.Message);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(CasesIdentityResult))]
+        public async Task AddToRoleAsync_ValidInput(IdentityResult identityResult)
+        {
+            string userId = "test";
+            string roleName = "testRole";
+
+            _mockRoleProvider.Setup(p => p.AddToRoleAsync(It.IsAny<string>(), It.IsAny<string>()).Result).Returns(identityResult);
+
+            var result = await _roleService.AddToRoleAsync(userId, roleName);
+
+            _mockRoleProvider.Verify(p => p.AddToRoleAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(identityResult.Succeeded, result.Succeeded);
+        }
+
+
+        [Test]
+        [TestCaseSource(nameof(CasesForAddRemoveFromRoleInvalidInput))]
+        public void AddToRoleAsync_InvalidInput_ShouldThrowArgumentNullException(string userId, string roleName, string exceptionMessage)
+        {
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await _roleService.AddToRoleAsync(userId, roleName));
             Assert.AreEqual(exceptionMessage, exception.Message);
         }
     }
