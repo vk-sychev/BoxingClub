@@ -5,6 +5,7 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Web.Mapping;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -38,15 +39,26 @@ namespace BoxingClub.BLL.UnitTests
             _authService = new AuthenticationService(_mockAuthProvider.Object, _mapper);
         }
 
+
+        static readonly SignInResult[] CasesSignInResult =
+{
+            new SignInResult(),
+            SignInResult.Success
+        };
+
+
         [Test]
-        public async Task SignInAsync_ValidInput()
+        [TestCaseSource(nameof(CasesSignInResult))]
+        public async Task SignInAsync_ValidInput(SignInResult signInResult)
         {
             var userDTO = new UserDTO { Id = "1", Name = "Test" };
-            _mockAuthProvider.Setup(p => p.SignInAsync(It.IsAny<SignIn>()).Result);
+            _mockAuthProvider.Setup(p => p.SignInAsync(It.IsAny<SignIn>()).Result).Returns(signInResult);
 
-            await _authService.SignInAsync(userDTO);
+            var result = await _authService.SignInAsync(userDTO);
 
             _mockAuthProvider.Verify(p => p.SignInAsync(It.IsAny<SignIn>()), Times.Once);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(signInResult.Succeeded, result.Succeeded);
         }
 
         [Test]
