@@ -190,7 +190,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var role = await _roleProvider.GetUserRole(userFromDb);
             if (string.IsNullOrEmpty(role))
             {
-                throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found ", "");
+                throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found", "");
             }
             return role;
         }
@@ -217,7 +217,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var newRole = await _roleProvider.FindRoleByIdAsync(newRoleId); 
             if (newRole == null)
             {
-                throw new NotFoundException($"Role for user = {userId} isn't found ", "");
+                throw new NotFoundException($"Role for user = {userId} isn't found", "");
             }
 
             var newRoleName = newRole.Name;

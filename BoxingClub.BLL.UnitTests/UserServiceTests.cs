@@ -33,8 +33,8 @@ namespace BoxingClub.BLL.UnitTests
             new ApplicationUser { Id = "test2" },
             new ApplicationUser { Id = "test3" }
         };
-        private static readonly ApplicationUser user = new ApplicationUser() { Id = "testId", UserName = "Test" };
         private static readonly IdentityRole role = new IdentityRole() { Id = "testId", Name = "Test" };
+        private static readonly ApplicationUser user = new ApplicationUser() { Id = "testId", UserName = "Test" };
         private static readonly string roleName = role.Name;
         private static readonly string roleId = role.Id;
         private static readonly string userId = user.Id;
@@ -181,7 +181,7 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public async Task SignUpAsync_ValidInput()
         {
-            var identityResult = IdentityResult.Success;       
+            var identityResult = IdentityResult.Success;
 
             _mockRoleProvider.Setup(p => p.FindRoleByNameAsync(It.IsAny<string>()).Result).Returns(role);
             _mockUserProvider.Setup(p => p.CreateUserAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()).Result).Returns(identityResult);
@@ -313,6 +313,156 @@ namespace BoxingClub.BLL.UnitTests
         public void GetUsersByRoleAsync_InvalidInput()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _userService.GetUsersByRoleAsync(null));
+        }
+
+        [Test]
+        public async Task UpdateUserAsync_ValidInput()
+        {
+            var newRoleDTO = new RoleDTO { Id = "newTest", Name = "newTest" };
+            var newRole = new IdentityRole { Id = "newTest", Name = "newTest" };
+            var userDTO = new UserDTO { Id = "test", Name = "Test", Role = newRoleDTO };
+            var identityResult = IdentityResult.Success;
+
+            _mockUserProvider.Setup(p => p.FindUserByIdAsync(It.IsAny<string>()).Result).Returns(user);
+            _mockRoleProvider.Setup(p => p.GetUserRole(It.IsAny<ApplicationUser>()).Result).Returns(role.Name);
+            _mockRoleProvider.Setup(p => p.FindRoleByIdAsync(It.IsAny<string>()).Result).Returns(newRole);
+            _mockRoleProvider.Setup(p => p.RemoveFromRoleAsync(It.IsAny<string>(), It.IsAny<string>()).Result).Returns(identityResult);
+            _mockRoleProvider.Setup(p => p.AddToRoleAsync(It.IsAny<string>(), It.IsAny<string>()).Result).Returns(identityResult);
+            _mockUserProvider.Setup(p => p.UpdateUserAsync(It.IsAny<ApplicationUser>()).Result).Returns(identityResult);
+
+            var result = await _userService.UpdateUserAsync(userDTO);
+
+            _mockUserProvider.Verify(p => p.FindUserByIdAsync(It.IsAny<string>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.GetUserRole(It.IsAny<ApplicationUser>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.FindRoleByIdAsync(It.IsAny<string>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.RemoveFromRoleAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.AddToRoleAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            _mockUserProvider.Verify(p => p.UpdateUserAsync(It.IsAny<ApplicationUser>()), Times.Once);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(identityResult.Succeeded, result.Succeeded);
+        }
+
+
+        [Test]
+        public void UpdateUserAsync_InputIsNull_ShouldThrowArgumentNullException()
+        {
+            var exceptionMessage = "User is null";
+
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await _userService.UpdateUserAsync(null));
+            Assert.AreEqual(exceptionMessage, exception.Message);
+        }
+
+        [Test]
+        public void UpdateUserAsync_InvalidInput_ShouldThrowNotFoundException()
+        {
+            var exceptionMessage = $"User with id = {userDTO.Id} isn't found";
+            _mockUserProvider.Setup(p => p.FindUserByIdAsync(It.IsAny<string>()).Result);
+
+            var exception = Assert.ThrowsAsync<NotFoundException>(async () => await _userService.UpdateUserAsync(userDTO));
+
+            _mockUserProvider.Verify(p => p.FindUserByIdAsync(It.IsAny<string>()), Times.Once);
+            Assert.AreEqual(exceptionMessage, exception.Message);
+        }
+
+
+        [Test]
+        public void UpdateUserAsync_ValidInput_RoleNameNotFound_ShouldThrowNotFoundException()
+        {
+            var newRoleDTO = new RoleDTO { Id = "newTest", Name = "newTest" };
+            var userDTO = new UserDTO { Id = "test", Name = "Test", UserName = "TestUserName", Role = newRoleDTO };
+            var exceptionMessage = $"Role for user = {userDTO.UserName} isn't found";
+
+            _mockUserProvider.Setup(p => p.FindUserByIdAsync(It.IsAny<string>()).Result).Returns(user);
+            _mockRoleProvider.Setup(p => p.GetUserRole(It.IsAny<ApplicationUser>()).Result);
+
+            var exception = Assert.ThrowsAsync<NotFoundException>(async () => await _userService.UpdateUserAsync(userDTO));
+
+            _mockUserProvider.Verify(p => p.FindUserByIdAsync(It.IsAny<string>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.GetUserRole(It.IsAny<ApplicationUser>()), Times.Once);
+            Assert.AreEqual(exceptionMessage, exception.Message);
+        }
+
+        [Test]
+        public void UpdateUserAsync_ValidInput_newRoleIdIsNull_ShouldThrowArgumentNullException()
+        {
+            var newRoleDTO = new RoleDTO { Id = null, Name = "newTest" };
+            var userDTO = new UserDTO { Id = "test", Name = "Test", UserName = "TestUserName", Role = newRoleDTO };
+            var exceptionMessage = "newRoleId is null";
+
+            _mockUserProvider.Setup(p => p.FindUserByIdAsync(It.IsAny<string>()).Result).Returns(user);
+            _mockRoleProvider.Setup(p => p.GetUserRole(It.IsAny<ApplicationUser>()).Result).Returns(role.Name);
+
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await _userService.UpdateUserAsync(userDTO));
+
+            _mockUserProvider.Verify(p => p.FindUserByIdAsync(It.IsAny<string>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.GetUserRole(It.IsAny<ApplicationUser>()), Times.Once);
+            Assert.AreEqual(exceptionMessage, exception.Message);
+        }
+
+        [Test]
+        public void UpdateUserAsync_ValidInput_newRoleNotFound_ShouldThrowNotFoundException()
+        {
+            var newRoleDTO = new RoleDTO { Id = "newTest", Name = "newTest" };
+            var userDTO = new UserDTO { Id = "test", Name = "Test", UserName = "TestUserName", Role = newRoleDTO };
+            var exceptionMessage = $"Role for user = {userId} isn't found";
+
+            _mockUserProvider.Setup(p => p.FindUserByIdAsync(It.IsAny<string>()).Result).Returns(user);
+            _mockRoleProvider.Setup(p => p.GetUserRole(It.IsAny<ApplicationUser>()).Result).Returns(role.Name);
+            _mockRoleProvider.Setup(p => p.FindRoleByIdAsync(It.IsAny<string>()).Result);
+
+            var exception = Assert.ThrowsAsync<NotFoundException>(async () => await _userService.UpdateUserAsync(userDTO));
+
+            _mockUserProvider.Verify(p => p.FindUserByIdAsync(It.IsAny<string>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.GetUserRole(It.IsAny<ApplicationUser>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.FindRoleByIdAsync(It.IsAny<string>()), Times.Once);
+            Assert.AreEqual(exceptionMessage, exception.Message);
+        }
+
+        [Test]
+        public async Task UpdateUserAsync_ValidInput_SameOldRoleAndNewRole()
+        {
+            var newRoleDTO = new RoleDTO { Id = "testId", Name = "Test" };
+            var newRole = new IdentityRole { Id = "testId", Name = "Test" };
+            var userDTO = new UserDTO { Id = "test", Name = "Test", Role = newRoleDTO };
+            var identityResult = IdentityResult.Success;
+
+            _mockUserProvider.Setup(p => p.FindUserByIdAsync(It.IsAny<string>()).Result).Returns(user);
+            _mockRoleProvider.Setup(p => p.GetUserRole(It.IsAny<ApplicationUser>()).Result).Returns(role.Name);
+            _mockRoleProvider.Setup(p => p.FindRoleByIdAsync(It.IsAny<string>()).Result).Returns(newRole);
+            _mockUserProvider.Setup(p => p.UpdateUserAsync(It.IsAny<ApplicationUser>()).Result).Returns(identityResult);
+
+            var result = await _userService.UpdateUserAsync(userDTO);
+
+            _mockUserProvider.Verify(p => p.FindUserByIdAsync(It.IsAny<string>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.GetUserRole(It.IsAny<ApplicationUser>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.FindRoleByIdAsync(It.IsAny<string>()), Times.Once);
+            _mockUserProvider.Verify(p => p.UpdateUserAsync(It.IsAny<ApplicationUser>()), Times.Once);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(identityResult.Succeeded, result.Succeeded);
+        }
+
+        [Test]
+        public async Task UpdateUserAsync_ValidInput_ErrorOnChangingRole()
+        {
+            var newRoleDTO = new RoleDTO { Id = "newTest", Name = "newTest" };
+            var newRole = new IdentityRole { Id = "newTest", Name = "newTest" };
+            var userDTO = new UserDTO { Id = "test", Name = "Test", UserName = "TestUserName", Role = newRoleDTO };
+            var identityResult = new IdentityResult();
+
+            _mockUserProvider.Setup(p => p.FindUserByIdAsync(It.IsAny<string>()).Result).Returns(user);
+            _mockRoleProvider.Setup(p => p.GetUserRole(It.IsAny<ApplicationUser>()).Result).Returns(role.Name);
+            _mockRoleProvider.Setup(p => p.FindRoleByIdAsync(It.IsAny<string>()).Result).Returns(newRole);
+            _mockRoleProvider.Setup(p => p.RemoveFromRoleAsync(It.IsAny<string>(), It.IsAny<string>()).Result).Returns(identityResult);
+
+            var result = await _userService.UpdateUserAsync(userDTO);
+
+            _mockUserProvider.Verify(p => p.FindUserByIdAsync(It.IsAny<string>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.GetUserRole(It.IsAny<ApplicationUser>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.FindRoleByIdAsync(It.IsAny<string>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.RemoveFromRoleAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(identityResult.Succeeded, result.Succeeded);
         }
     }
 }
