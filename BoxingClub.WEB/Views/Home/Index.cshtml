@@ -2,11 +2,22 @@
 @using BoxingClub.Infrastructure.Constants
 @{
     ViewData["Title"] = "Index";
-    var activePage = ViewBag.ActivePage;
+    string hasPreviousPage = Model.HasPreviousPage ? "" : "disabled";
+    string hasNextPage = Model.HasNextPage ? "" : "disabled";
+    var pageSize = ViewBag.pageSize;
 }
 
 <div class="d-flex justify-content-between mb-2">
     <h1>Boxing Groups</h1>
+
+
+    <div>
+        <select asp-for="page" class="form-control" asp-items="new SelectList(ViewBag.Sizes, pageSize)"> </select>
+        <div class="ml-5">
+            <a asp-action="Index" class="btn btn-secondary" asp-controller="Home" asp-route-pageIndex="@(Model.PageIndex)" asp-route-pageSize="@pageSize">View by</a>
+        </div>
+    </div>
+
 
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
@@ -26,10 +37,10 @@ else
         <thead>
             <tr>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.BoxingGroups.Name)*@ Name
+                    Group's Name
                 </th>
                 <th>
-                    @* @Html.DisplayNameFor(model => model.CoachFullName)*@ Full Name
+                    Full Name
                 </th>
                 <th></th>
             </tr>
@@ -69,43 +80,33 @@ else
 }
 
 
-<div class="d-flex justify-content-end">
-    <div class="mr-2">
-        @if (Model.HasPreviousPage)
-        {
-            <a asp-action="Index"
-               asp-route-pageIndex="@(Model.PageIndex - 1)"
-               class="btn btn-outline-dark">
-                <i class="glyphicon glyphicon-chevron-left"></i>
-                Previous
-            </a>
-        }
-    </div>
+<ul class="pagination">
+    <li class="page-item @(1 == Model.PageIndex ? "disabled" : "")">
+        <a class="page-link" asp-controller="Home" , asp-route-pageIndex="1">1</a>
+    </li>
+
+    <li class="page-item @hasPreviousPage">
+        <a asp-action="Index" asp-route-pageIndex="@(Model.PageIndex - 1)" class="page-link">Previous</a>
+    </li>
 
     @if (Model.TotalPages != 0)
     {
-        <ul class="pagination justify-content-end">
-            @for (int i = Model.StartPage; i <= Model.LastPage; i++)
-            {
-                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
-                    <a class="page-link" asp-controller="Home", asp-route-pageIndex="@i">@i</a>
-                </li>
-            }
-        </ul>
+        @for (int i = Model.StartPage; i <= Model.LastPage; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link" asp-controller="Home" , asp-route-pageIndex="@i">@i</a>
+            </li>
+        }
     }
 
-    <div class="ml-2">
-        @if (Model.HasNextPage)
-        {
-            <a asp-action="Index"
-               asp-route-pageIndex="@(Model.PageIndex + 1)"
-               class="btn btn-outline-dark">
-                Next
-                <i class="glyphicon glyphicon-chevron-right"></i>
-            </a>
-        }
-    </div>
-</div>
+    <li class="page-item @hasNextPage">
+        <a asp-action="Index" asp-route-pageIndex="@(Model.PageIndex + 1)" class="page-link">Next</a>
+    </li>
+
+    <li class="page-item @(Model.TotalPages == Model.PageIndex ? "disabled" : "")">
+        <a class="page-link" asp-controller="Home" , asp-route-pageIndex="@Model.TotalPages">@Model.TotalPages</a>
+    </li>
+</ul>
 
 
 

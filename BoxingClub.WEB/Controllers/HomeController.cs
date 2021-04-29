@@ -32,7 +32,7 @@ namespace BoxingClub.Web.Controllers
             _studentService = studentService;
         }
 
-        public async Task<IActionResult> Index(int? pageIndex)
+        public async Task<IActionResult> Index(int? pageIndex, int? pageSize)
         {
             if (User.IsInRole(Constants.UserRoleName))
             {
@@ -40,7 +40,7 @@ namespace BoxingClub.Web.Controllers
             }
 
             List<BoxingGroupDTO> groups;
-            int pageSize = 1;
+            //int pageSize = 1;
             //PageViewModel<BoxingGroupFullViewModel> pageViewModel;
 
             /*            if (User.IsInRole(Constants.CoachRoleName))
@@ -50,13 +50,16 @@ namespace BoxingClub.Web.Controllers
                         }
                         else*/
             //{
-            var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(pageIndex ?? 1, pageSize);
+            var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(pageIndex ?? 1, pageSize?? 3);
             var mappedItems = _mapper.Map<List<BoxingGroupFullViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<BoxingGroupFullViewModel>(pageModel.Count, pageIndex ?? 1, pageSize, mappedItems);
+            var pageViewModel = new PageViewModel<BoxingGroupFullViewModel>(pageModel.Count, pageIndex ?? 1, pageSize?? 3, mappedItems);
             //pageViewModel = _mapper.Map<PageViewModel<BoxingGroupFullViewModel>>(pageModel);
 
 
             //}
+            var sizes = new List<int> { 1, 2, 3, 4, 5 };
+            ViewBag.Sizes = sizes;
+            ViewBag.pageSize = pageSize ?? 3;
 
             return View(pageViewModel);
         }
