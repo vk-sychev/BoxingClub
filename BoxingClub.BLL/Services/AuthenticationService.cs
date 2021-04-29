@@ -10,13 +10,13 @@ namespace BoxingClub.BLL.Implementation.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IAuthenticationProvider _signInProvider;
+        private readonly IAuthenticationProvider _authenticationProvider;
         private readonly IMapper _mapper;
 
-        public AuthenticationService(IAuthenticationProvider signInProvider,
-                             IMapper mapper)
+        public AuthenticationService(IAuthenticationProvider authenticationProvider,
+                                     IMapper mapper)
         {
-            _signInProvider = signInProvider;
+            _authenticationProvider = authenticationProvider;
             _mapper = mapper;
         }
 
@@ -26,13 +26,14 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new ArgumentNullException(nameof(user), "User is null");
             }
-            var result = await _signInProvider.SignInAsync(_mapper.Map<SignIn>(user));
+            var mappedUser = _mapper.Map<SignIn>(user);
+            var result = await _authenticationProvider.SignInAsync(mappedUser);
             return _mapper.Map<SignInResultDTO>(result);
         }
 
         public Task SignOutAsync()
         {
-            return _signInProvider.SignOutAsync();
+            return _authenticationProvider.SignOutAsync();
         }
     }
 }
