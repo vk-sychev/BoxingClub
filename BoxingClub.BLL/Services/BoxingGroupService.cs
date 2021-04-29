@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
@@ -105,6 +106,16 @@ namespace BoxingClub.BLL.Services
             var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdAsync(coachId);
             var mappedGroups = _mapper.Map<List<BoxingGroupDTO>>(groups);
             return mappedGroups;
+        }
+
+        public async Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsPaginatedAsync(int pageIndex, int pageSize)
+        {
+            //validation
+            var groups = await _database.BoxingGroups.GetBoxingGroupsPaginatedAsync(pageIndex, pageSize);
+            var groupDTOs = _mapper.Map<List<BoxingGroupDTO>>(groups);
+            var count = await _database.BoxingGroups.GetCountOfBoxingGroupsAsync();
+            var model = new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
+            return model;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BoxingClub.BLL.DTO;
+﻿using BoxingClub.BLL.DomainEntities;
 using System.Threading.Tasks;
 
 namespace BoxingClub.BLL.Interfaces

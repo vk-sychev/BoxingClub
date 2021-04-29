@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
@@ -7,6 +7,7 @@ using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace BoxingClub.Web.Controllers
             _studentService = studentService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageIndex)
         {
             if (User.IsInRole(Constants.UserRoleName))
             {
@@ -39,18 +40,25 @@ namespace BoxingClub.Web.Controllers
             }
 
             List<BoxingGroupDTO> groups;
+            int pageSize = 1;
+            //PageViewModel<BoxingGroupFullViewModel> pageViewModel;
 
-            if (User.IsInRole(Constants.CoachRoleName))
-            {
-                var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
-                groups = await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(coach.Id);
-            }
-            else
-            {
-                groups = await _boxingGroupService.GetBoxingGroupsAsync();
-            }
-            var model = _mapper.Map<List<BoxingGroupFullViewModel>>(groups);
-            return View(model);
+            /*            if (User.IsInRole(Constants.CoachRoleName))
+                        {
+                            var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
+                            groups = await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(coach.Id);
+                        }
+                        else*/
+            //{
+            var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(pageIndex ?? 1, pageSize);
+            var mappedItems = _mapper.Map<List<BoxingGroupFullViewModel>>(pageModel.Items);
+            var pageViewModel = new PageViewModel<BoxingGroupFullViewModel>(pageModel.Count, pageIndex ?? 1, pageSize, mappedItems);
+            //pageViewModel = _mapper.Map<PageViewModel<BoxingGroupFullViewModel>>(pageModel);
+
+
+            //}
+
+            return View(pageViewModel);
         }
 
 

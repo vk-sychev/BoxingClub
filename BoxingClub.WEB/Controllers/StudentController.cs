@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BoxingClub.BLL.Interfaces;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BoxingClub.Infrastructure.Constants;

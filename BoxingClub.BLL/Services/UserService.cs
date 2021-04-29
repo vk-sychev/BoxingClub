@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;

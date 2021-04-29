@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 namespace BoxingClub.DAL.Repositories
 {
@@ -53,6 +54,20 @@ namespace BoxingClub.DAL.Repositories
         {
             var groups = await _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id).ToListAsync();
             return groups;
+        }
+
+        public async Task<List<BoxingGroup>> GetBoxingGroupsPaginatedAsync(int pageIndex, int pageSize)
+        {
+            var query = _db.BoxingGroups.Include(x => x.Coach);
+            var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return list;
+        }
+
+        public async Task<int> GetCountOfBoxingGroupsAsync()
+        {
+            var query = _db.BoxingGroups.Include(x => x.Coach);
+            var count = await query.CountAsync();
+            return count;
         }
     }
 }

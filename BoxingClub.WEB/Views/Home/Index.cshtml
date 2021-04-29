@@ -1,7 +1,8 @@
-﻿@model IEnumerable<BoxingClub.Web.Models.BoxingGroupFullViewModel>
+﻿@model PageViewModel<BoxingGroupFullViewModel>
 @using BoxingClub.Infrastructure.Constants
 @{
     ViewData["Title"] = "Index";
+    var activePage = ViewBag.ActivePage;
 }
 
 <div class="d-flex justify-content-between mb-2">
@@ -15,7 +16,7 @@
     }
 </div>
 
-@if (!Model.Any())
+@if (!Model.Items.Any())
 {
     <h5> You have no groups yet</h5>
 }
@@ -25,16 +26,16 @@ else
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Name)
+                    @*@Html.DisplayNameFor(model => model.BoxingGroups.Name)*@ Name
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CoachFullName)
+                    @* @Html.DisplayNameFor(model => model.CoachFullName)*@ Full Name
                 </th>
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model)
+        <tbody id="tableBody">
+            @foreach (var item in Model.Items)
             {
                 <tr>
                     <td>
@@ -66,3 +67,45 @@ else
         </tbody>
     </table>
 }
+
+
+<div class="d-flex justify-content-end">
+    <div class="mr-2">
+        @if (Model.HasPreviousPage)
+        {
+            <a asp-action="Index"
+               asp-route-pageIndex="@(Model.PageIndex - 1)"
+               class="btn btn-outline-dark">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                Previous
+            </a>
+        }
+    </div>
+
+    @if (Model.TotalPages != 0)
+    {
+        <ul class="pagination justify-content-end">
+            @for (int i = Model.StartPage; i <= Model.LastPage; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link" asp-controller="Home", asp-route-pageIndex="@i">@i</a>
+                </li>
+            }
+        </ul>
+    }
+
+    <div class="ml-2">
+        @if (Model.HasNextPage)
+        {
+            <a asp-action="Index"
+               asp-route-pageIndex="@(Model.PageIndex + 1)"
+               class="btn btn-outline-dark">
+                Next
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </a>
+        }
+    </div>
+</div>
+
+
+

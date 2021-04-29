@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using Microsoft.AspNetCore.Identity;
 
 namespace BoxingClub.Web.Mapping
