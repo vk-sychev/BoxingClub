@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
+using System.Linq;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -28,11 +29,23 @@ namespace BoxingClub.Web.Controllers
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        public async Task<IActionResult> GetAllStudents()
+        public async Task<IActionResult> GetAllStudents(int? pageIndex, int? pageSize)
         {
-            var studentDTOs = await _studentService.GetStudentsAsync();
-            var students = _mapper.Map<List<StudentLiteViewModel>>(studentDTOs);
-            return View(students);
+            var pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+            if (!pageModel.Items.Any())
+            {
+                pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+                pageIndex = 1;
+            }
+
+            var students = _mapper.Map<List<StudentLiteViewModel>>(pageModel.Items);
+            var pageViewModel = new PageViewModel<StudentLiteViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, students);
+
+            var sizes = new List<int> { 1, 2, 3, 4, 5 };
+            ViewBag.Sizes = sizes;
+            ViewBag.pageSize = pageSize ?? 3;
+
+            return View(pageViewModel);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]

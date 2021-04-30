@@ -117,5 +117,14 @@ namespace BoxingClub.BLL.Services
             var model = new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
             return model;
         }
+
+        public async Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, int pageIndex, int pageSize)
+        {
+            var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdPaginatedAsync(id, pageIndex, pageSize);
+            var groupDTOs = _mapper.Map<List<BoxingGroupDTO>>(groups);
+            var count = await _database.BoxingGroups.GetCountOfBoxingGroupsByCoachIdAsync(id);
+            var model = new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
+            return model;
+        }
     }
 }

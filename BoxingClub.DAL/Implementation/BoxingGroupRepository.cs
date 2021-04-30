@@ -65,7 +65,21 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task<int> GetCountOfBoxingGroupsAsync()
         {
-            var query = _db.BoxingGroups.Include(x => x.Coach);
+            var query = _db.BoxingGroups.AsQueryable().Include(x => x.Coach);
+            var count = await query.CountAsync();
+            return count;
+        }
+
+        public async Task<List<BoxingGroup>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, int pageIndex, int pageSize)
+        {
+            var query = _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id);
+            var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return list;
+        }
+
+        public async Task<int> GetCountOfBoxingGroupsByCoachIdAsync(string id)
+        {
+            var query = _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id);
             var count = await query.CountAsync();
             return count;
         }

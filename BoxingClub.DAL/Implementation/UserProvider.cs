@@ -64,5 +64,19 @@ namespace BoxingClub.DAL.Implementation.Implementation
             var result = await _userManager.UpdateAsync(user);
             return result;
         }
+
+        public async Task<List<ApplicationUser>> GetUsersPaginatedAsync(int pageIndex, int pageSize)
+        {
+            var query = _userManager.Users;
+            var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return list;
+        }
+
+        public async Task<int> GetCountOfUsersAsync()
+        {
+            var query = _userManager.Users;
+            var count = await query.CountAsync();
+            return count;
+        }
     }
 }

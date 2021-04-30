@@ -98,5 +98,14 @@ namespace BoxingClub.BLL.Services
             _database.Students.Update(student);
             await _database.SaveAsync();
         }
+
+        public async Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
+        {
+            var students = await _database.Students.GetStudentsPaginatedAsync(pageIndex, pageSize);
+            var studentDTOs = _mapper.Map<List<StudentLiteDTO>>(students);
+            var count = await _database.Students.GetCountOfStudentsAsync();
+            var model = new PageModelDTO<StudentLiteDTO>() { Items = studentDTOs, Count = count };
+            return model;
+        }
     }
 }

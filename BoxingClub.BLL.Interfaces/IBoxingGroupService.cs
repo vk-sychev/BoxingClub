@@ -22,5 +22,7 @@ namespace BoxingClub.BLL.Interfaces
         Task<BoxingGroupDTO> GetBoxingGroupWithStudentsByIdAsync(int? id);
 
         Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsPaginatedAsync(int pageIndex, int pageSize);
+
+        Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, int pageIndex, int pageSize);
     }
 }

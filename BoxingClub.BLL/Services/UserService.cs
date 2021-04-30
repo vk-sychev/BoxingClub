@@ -239,5 +239,14 @@ namespace BoxingClub.BLL.Implementation.Services
             var mappedResult = _mapper.Map<AccountResultDTO>(result);
             return mappedResult;
         }
+
+        public async Task<PageModelDTO<UserDTO>> GetUsersPaginatedAsync(int pageIndex, int pageSize)
+        {
+            var users = _userProvider.GetUsersPaginatedAsync(pageIndex, pageSize);
+            var userDTOs = _mapper.Map<List<UserDTO>>(users);
+            var count = await _userProvider.GetCountOfUsersAsync();
+            var model = new PageModelDTO<UserDTO>() { Items = userDTOs, Count = count };
+            return model;
+        }
     }
 }

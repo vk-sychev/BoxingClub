@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BoxingClub.Web.Controllers
@@ -39,24 +40,31 @@ namespace BoxingClub.Web.Controllers
                 return View("PendingRoleAssignment");
             }
 
-            List<BoxingGroupDTO> groups;
-            //int pageSize = 1;
-            //PageViewModel<BoxingGroupFullViewModel> pageViewModel;
+            List<BoxingGroupFullViewModel> groups;
+            PageModelDTO<BoxingGroupDTO> pageModel;
 
-            /*            if (User.IsInRole(Constants.CoachRoleName))
-                        {
-                            var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
-                            groups = await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(coach.Id);
-                        }
-                        else*/
-            //{
-            var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(pageIndex ?? 1, pageSize?? 3);
-            var mappedItems = _mapper.Map<List<BoxingGroupFullViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<BoxingGroupFullViewModel>(pageModel.Count, pageIndex ?? 1, pageSize?? 3, mappedItems);
-            //pageViewModel = _mapper.Map<PageViewModel<BoxingGroupFullViewModel>>(pageModel);
+            if (User.IsInRole(Constants.CoachRoleName))
+            {
+                var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
+                pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, pageIndex ?? 1, pageSize ?? 3);
+                if (!pageModel.Items.Any())
+                {
+                    pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, 1, pageSize ?? 3);
+                    pageIndex = 1;
+                }
+            }
+            else
+            {
+                pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+                if (!pageModel.Items.Any())
+                {
+                    pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(1, pageSize ?? 3);
+                    pageIndex = 1;
+                }           
+            }
+            groups = _mapper.Map<List<BoxingGroupFullViewModel>>(pageModel.Items);
+            var pageViewModel = new PageViewModel<BoxingGroupFullViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, groups);
 
-
-            //}
             var sizes = new List<int> { 1, 2, 3, 4, 5 };
             ViewBag.Sizes = sizes;
             ViewBag.pageSize = pageSize ?? 3;
@@ -65,12 +73,13 @@ namespace BoxingClub.Web.Controllers
         }
 
 
+
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
         [Route("Home/EditGroup/{id}")]
         public async Task<IActionResult> EditBoxingGroup(int? id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id);
+            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id.Value);
             var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
 
             ViewBag.Coaches = await GetCoaches();
@@ -129,7 +138,7 @@ namespace BoxingClub.Web.Controllers
         [Route("Home/DeleteGroup/{id}")]
         public async Task<IActionResult> DeleteBoxingGroup(int? id)
         {
-            await _boxingGroupService.DeleleBoxingGroupAsync(id);
+            await _boxingGroupService.DeleleBoxingGroupAsync(id.Value);
             return RedirectToAction("Index", "Home");
         }
 
@@ -139,7 +148,7 @@ namespace BoxingClub.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> DetailsBoxingGroup(int? id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id);
+            var group = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id.Value);
             var model = _mapper.Map<BoxingGroupFullViewModel>(group);
             return View(model);
         }

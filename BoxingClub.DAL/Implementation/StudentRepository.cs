@@ -17,7 +17,6 @@ namespace BoxingClub.DAL.Repositories
             _db = context;
         }
 
-
         public async Task CreateAsync(Student item)
         {
             var group = await _db.BoxingGroups.FindAsync(item.BoxingGroupId);
@@ -44,6 +43,20 @@ namespace BoxingClub.DAL.Repositories
         public void Update(Student item)
         {
             _db.Entry(item).State = EntityState.Modified;
+        }
+
+        public async Task<List<Student>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
+        {
+            var query = _db.Students.AsQueryable().Include(x => x.BoxingGroup);
+            var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return list;
+        }
+
+        public async Task<int> GetCountOfStudentsAsync()
+        {
+            var query = _db.Students.AsQueryable().Include(x => x.BoxingGroup);
+            var count = await query.CountAsync();
+            return count;
         }
     }
 }

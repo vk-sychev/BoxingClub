@@ -14,6 +14,8 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<List<UserDTO>> GetUsersAsync();
 
+        Task<PageModelDTO<UserDTO>> GetUsersPaginatedAsync(int pageIndex, int pageSize);
+
         Task<List<UserDTO>> GetUsersByRoleAsync(string roleName);
 
         Task<AccountResultDTO> SignUpAsync(UserDTO user, string password);
