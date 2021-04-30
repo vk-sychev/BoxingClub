@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BoxingClub.Web.Controllers
@@ -29,11 +30,23 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers(int? pageIndex, int? pageSize)
         {
-            var users = await _userService.GetUsersAsync();
-            var mappedUsers = _mapper.Map<List<UserViewModel>>(users);
-            return View(mappedUsers);
+            var pageModel = await _userService.GetUsersPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+            if (!pageModel.Items.Any())
+            {
+                pageModel = await _userService.GetUsersPaginatedAsync(1, pageSize ?? 3);
+                pageIndex = 1;
+            }
+
+            var users = _mapper.Map<List<UserViewModel>>(pageModel.Items);
+            var pageViewModel = new PageViewModel<UserViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, users);
+
+            var sizes = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
+            ViewBag.Sizes = sizes;
+            ViewBag.pageSize = pageSize ?? 3;
+
+            return View(pageViewModel);
         }
 
         [Route("Administration/DeleteUser/{id}")]

@@ -242,8 +242,15 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public async Task<PageModelDTO<UserDTO>> GetUsersPaginatedAsync(int pageIndex, int pageSize)
         {
-            var users = _userProvider.GetUsersPaginatedAsync(pageIndex, pageSize);
-            var userDTOs = _mapper.Map<List<UserDTO>>(users);
+            var users = await _userProvider.GetUsersPaginatedAsync(pageIndex, pageSize);
+            var userDTOs = new List<UserDTO>();
+
+            foreach (var user in users)
+            {
+                var mappedUser = await AssignRole(user);
+                userDTOs.Add(mappedUser);
+            }
+
             var count = await _userProvider.GetCountOfUsersAsync();
             var model = new PageModelDTO<UserDTO>() { Items = userDTOs, Count = count };
             return model;

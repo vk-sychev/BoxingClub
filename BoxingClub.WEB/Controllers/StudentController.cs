@@ -34,7 +34,7 @@ namespace BoxingClub.Web.Controllers
             var pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
             if (!pageModel.Items.Any())
             {
-                pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+                pageModel = await _studentService.GetStudentsPaginatedAsync(1, pageSize ?? 3);
                 pageIndex = 1;
             }
 
