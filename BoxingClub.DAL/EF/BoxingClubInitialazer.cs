@@ -215,7 +215,8 @@ namespace BoxingClub.DAL.EF
                     DateOfEntry = new DateTime(2020, 2, 20),
                     Height = 175,
                     Weight = 88,
-                    BoxingGroupId = 1
+                    BoxingGroupId = 1,
+                    NumberOfFights = 3
                 },
 
                 new Student
@@ -227,7 +228,8 @@ namespace BoxingClub.DAL.EF
                     DateOfEntry = new DateTime(2019, 1, 15),
                     Height = 180,
                     Weight = 87,
-                    BoxingGroupId = 2
+                    BoxingGroupId = 2,
+                    NumberOfFights = 5
                 },
 
                 new Student
@@ -239,7 +241,8 @@ namespace BoxingClub.DAL.EF
                     DateOfEntry = new DateTime(2020, 02, 28),
                     Height = 175,
                     Weight = 81,
-                    BoxingGroupId = 1
+                    BoxingGroupId = 1,
+                    NumberOfFights = 2
                 },
 
                 new Student
@@ -251,7 +254,8 @@ namespace BoxingClub.DAL.EF
                     BornDate = new DateTime(2000, 04, 03),
                     DateOfEntry = new DateTime(2021, 02, 02),
                     Height = 176,
-                    Weight = 73
+                    Weight = 73,
+                    NumberOfFights = 10
                 });
         }
     }

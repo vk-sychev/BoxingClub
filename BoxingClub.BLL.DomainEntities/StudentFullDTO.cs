@@ -18,6 +18,10 @@ namespace BoxingClub.BLL.DomainEntities
 
         public double Weight { get; set; }
 
+        public int NumberOfFights { get; set; }
+
+        public bool Experienced { get; set; }
+
         public DateTime DateOfEntry { get; set; }
 
         public int BoxingGroupId { get; set; }

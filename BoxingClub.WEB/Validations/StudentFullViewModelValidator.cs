@@ -37,13 +37,19 @@ namespace BoxingClub.Web.Validations
 
             RuleFor(x => x.Height).NotNull()
                                   .NotEmpty()
+                                  .GreaterThanOrEqualTo(0)
                                   .LessThanOrEqualTo(220);
 
             RuleFor(x => x.Weight).NotNull()
                                   .NotEmpty()
+                                  .GreaterThanOrEqualTo(0)
                                   .LessThanOrEqualTo(130);
             RuleFor(x => x.BoxingGroupId).NotNull()
                                          .WithMessage("'Boxing Group' has to be selected");
+
+            RuleFor(x => x.NumberOfFights).NotNull()
+                                          .NotEmpty()
+                                          .GreaterThanOrEqualTo(0);
         }
     }
 }

@@ -21,6 +21,8 @@ namespace BoxingClub.Web.Models
         [DisplayName("Boxing Group")]
         public int BoxingGroupId { get; set; }
 
+        public bool Experienced { get; set; }
+
         public BoxingGroupLiteViewModel BoxingGroup { get; set; }
     }
 }

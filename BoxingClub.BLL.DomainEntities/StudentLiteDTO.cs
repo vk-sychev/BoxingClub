@@ -14,6 +14,8 @@ namespace BoxingClub.BLL.DomainEntities
 
         public DateTime BornDate { get; set; }
 
+        public bool Experienced { get; set; }
+
         public int BoxingGroupId { get; set; }
 
         public BoxingGroupDTO BoxingGroup { get; set; }

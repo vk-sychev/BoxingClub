@@ -72,6 +72,25 @@
             @Html.DisplayFor(model => model.Weight)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Experienced)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Experienced)
+            {
+                @Html.Raw("Yes")
+            }
+            else
+            {
+                @Html.Raw("No")
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberOfFights)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumberOfFights)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DateOfEntry)
         </dt>
         <dd class="col-sm-10">

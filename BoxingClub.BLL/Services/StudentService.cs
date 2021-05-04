@@ -4,6 +4,7 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
@@ -48,8 +49,23 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(studentDTO), "Student is null");
             }
             var student = _mapper.Map<Student>(studentDTO);
+            student.Experienced = IsExperienced(student.DateOfEntry, student.NumberOfFights);
             await _database.Students.CreateAsync(student);
             await _database.SaveAsync();
+        }
+
+        private bool IsExperienced(DateTime dateOfEntry, int numberOfFights)
+        {
+            var dateOfEntryYear = dateOfEntry.Year;
+            var currentYear = DateTime.Now.Year;
+            var diff = currentYear - dateOfEntryYear;
+
+            var durationRule = diff >= 3;
+            var fightsRule = numberOfFights >= 5;
+
+            var result = durationRule && fightsRule;
+
+            return result;
         }
 
         public async Task DeleteStudentAsync(int? id)
@@ -76,6 +92,7 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(studentDTO), "Student is null");
             }
             var student = _mapper.Map<Student>(studentDTO);
+            student.Experienced = IsExperienced(student.DateOfEntry, student.NumberOfFights);
             _database.Students.Update(student);
             return _database.SaveAsync();
         }

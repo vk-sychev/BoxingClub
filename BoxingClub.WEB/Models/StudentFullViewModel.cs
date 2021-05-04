@@ -22,6 +22,10 @@ namespace BoxingClub.Web.Models
 
         public double Weight { get; set; }
 
+        public int NumberOfFights { get; set; }
+
+        public bool Experienced { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayName("Date of Entry")]
         public DateTime DateOfEntry { get; set; }
