@@ -2,6 +2,7 @@
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
+using BoxingClub.Infrastructure.Exceptions;
 using BoxingClub.Web.CustomAttributes;
 using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -24,9 +25,9 @@ namespace BoxingClub.Web.Controllers
                                         IUserService userService,
                                         IMapper mapper)
         {
-            _roleService = roleService;
-            _userService = userService;
-            _mapper = mapper;
+            _roleService = roleService ?? throw new ArgumentNullException(nameof(roleService), "roleService is null");
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService), "userService is null");
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
         }
 
         [HttpGet]

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
 using System.Linq;
+using BoxingClub.Infrastructure.Exceptions;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -23,9 +24,9 @@ namespace BoxingClub.Web.Controllers
                                  IMapper mapper,
                                  IBoxingGroupService boxingGroupService)
         {
-            _studentService = studentService;
-            _mapper = mapper;
-            _boxingGroupService = boxingGroupService;
+            _studentService = studentService ?? throw new ArgumentNullException(nameof(studentService), "studentService is null");
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
+            _boxingGroupService = boxingGroupService ?? throw new ArgumentNullException(nameof(boxingGroupService), "boxingGroupService is null");
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]

@@ -27,10 +27,10 @@ namespace BoxingClub.Web.Controllers
                               IUserService userService,
                               IStudentService studentService)
         {
-            _mapper = mapper;
-            _boxingGroupService = boxingGroupService;
-            _userService = userService;
-            _studentService = studentService;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
+            _boxingGroupService = boxingGroupService ?? throw new ArgumentNullException(nameof(boxingGroupService), "boxingGroupService is null");
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService), "userService is null");
+            _studentService = studentService ?? throw new ArgumentNullException(nameof(studentService), "studentService is null");
         }
 
         public async Task<IActionResult> Index(int? pageIndex, int? pageSize)

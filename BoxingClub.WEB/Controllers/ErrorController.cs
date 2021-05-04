@@ -1,4 +1,5 @@
-﻿using BoxingClub.Infrastructure.HttpSwitcher;
+﻿using BoxingClub.Infrastructure.Exceptions;
+using BoxingClub.Infrastructure.HttpSwitcher;
 using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
@@ -14,7 +15,7 @@ namespace BoxingClub.Web.Controllers
         private readonly ILogger<ErrorController> _logger;
         public ErrorController(ILogger<ErrorController> logger)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger), "logger is null");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
