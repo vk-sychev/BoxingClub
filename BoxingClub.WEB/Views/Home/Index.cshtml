@@ -14,7 +14,13 @@
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
         <div class="mt-2">
-            <a id="createButton" class="btn btn-primary" @*asp-action="CreateBoxingGroup" asp-controller="Home"*@>Create New Boxing Group</a>
+            <a class="btn btn-primary" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
+        </div>
+        <div class="mt-2">
+            <a id="createButton" class="btn btn-primary">Create New Boxing Group Ajax</a>
+        </div>
+        <div class="mt-2">
+            <a id="getButton" class="btn btn-primary">Get</a>
         </div>
     }
 </div>
@@ -80,9 +86,9 @@ else
                     }
                 </tr>
             }
-            <tr>
+@*            <tr>
                 @{await Html.RenderPartialAsync("_CreateEditBoxingGroupPartial", new BoxingGroupLiteViewModel()); }
-            </tr>
+            </tr>*@
         </tbody>
     </table>
 }
@@ -156,28 +162,26 @@ else
     })*@
 
     $(document).ready(function () {
-        $("#createButton").click(function () {
-@*            var view = "<tr>@{await Html.RenderPartialAsync("_CreateEditBoxingGroupPartial", new BoxingGroupLiteViewModel()); }</tr>"
-            $("#tableBody").append(view);*@
-            var data = {
-                    CoachId : "060342c3-9dc3-4597-bae1-9f19c991ebe9",
-                    Name : "TestAjax"
-            };
-  
+        var data = {
+            CoachId: "060342c3-9dc3-4597-bae1-9f19c991ebe9",
+            Name: "TestAjax"
+        };
 
+        var dataType = 'application/x-www-form-urlencoded';
+
+        $("#createButton").click(function () {
             $.ajax({
-                url: "Home/CreateBoxingGroup",
+                url: "Home/TestAjaxPost",
                 type: "POST",
-                data: data,
-                success: function (msg) {
-                    console.log(msg);
-                },
-                error: function (req, status, error) {
-                    console.log(error);
-                }
-            });
+                contentType: dataType,
+                data: data
+            })
+        });
+
+        $("#getButton").click(function () {
+            $.get("Home/CreateBoxingGroup")
         })
-    });
+    })
 
 </script>
 

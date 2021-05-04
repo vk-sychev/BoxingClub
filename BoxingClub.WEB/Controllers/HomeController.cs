@@ -135,6 +135,7 @@ namespace BoxingClub.Web.Controllers
             return View(model);
         }
 
+
         [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Home/DeleteGroup/{id}")]
         public async Task<IActionResult> DeleteBoxingGroup(int? id)
@@ -161,6 +162,16 @@ namespace BoxingClub.Web.Controllers
         {
             await _studentService.DeleteFromGroupAsync(studentId);
             return RedirectToAction("DetailsGroup", new { id = returnId.Value });
+        }
+
+        [HttpPost]
+        public IActionResult TestAjaxPost(BoxingGroupLiteViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
+            return View();
         }
     }
 }
