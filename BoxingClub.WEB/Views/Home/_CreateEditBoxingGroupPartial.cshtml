@@ -1,29 +1,32 @@
 ﻿@model BoxingClub.Web.Models.BoxingGroupLiteViewModel
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateBoxingGroup">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label font-weight-bold"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+
+<form id="boxingGroupForm">
+    <td>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </td>
+    <td>
+        <div class="form-group">
+            <div>
+                <select asp-for="CoachId" class="form-select custom-select" asp-items="ViewBag.Coaches">
+                    <option selected="selected" disabled="disabled">Choose coach</option>
+                </select>
             </div>
-            <div class="form-group">
-                <label asp-for="CoachId" class="control-label font-weight-bold"></label>
-                <div>
-                    <select asp-for="CoachId" class="form-select custom-select" asp-items="ViewBag.Coaches">
-                        <option selected="selected" disabled="disabled">Choose coach</option>
-                    </select>
-                </div>
-                <span asp-validation-for="CoachId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+            <span asp-validation-for="CoachId" class="text-danger"></span>
+        </div>
+    </td>
+    <td>
+        <div class="form-group d-flex justify-content-end">
+            <input type="submit" value="Create" class="btn btn-primary btn-sm" />
+            <a id="cancelButton" class="btn btn-secondary btn-sm mx-3">Cancel</a> 
+        </div>
+    </td>
+</form>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

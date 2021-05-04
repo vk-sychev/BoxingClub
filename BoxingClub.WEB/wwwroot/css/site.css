@@ -21,7 +21,6 @@ a.nav-link:hover {
 }
 
 .bg-page {
-/*    background-color: #FFFAFA;*/
     background-color: #fff;
 }
 
@@ -94,16 +93,6 @@ body {
     font-size:20px;
 }
 
-/*.field {
-    font-weight:400 !important;
-    font-size: 20px;
+#formTr {
+    display:none;
 }
-
-th {
-    font-size:20px;
-}*/
-
-/*body {
-    font-family: 'Source Sans Pro', sans-serif;
-    font-weight:400;
-}*/

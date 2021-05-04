@@ -80,7 +80,7 @@ namespace BoxingClub.Web
                                 .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
 
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .AddFluentValidation();
 

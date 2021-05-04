@@ -19,9 +19,6 @@
         <div class="mt-2">
             <a id="createButton" class="btn btn-primary">Create New Boxing Group Ajax</a>
         </div>
-        <div class="mt-2">
-            <a id="getButton" class="btn btn-primary">Get</a>
-        </div>
     }
 </div>
 
@@ -69,26 +66,26 @@ else
                     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
                     {
                         <td>
-                            <div class="d-flex justify-content-end">
-                                @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
-                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
-                                @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                            <div class="d-flex justify-content-end px-3">
+                                @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" })
+                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm ml-3" })
+                                @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm ml-3" })
                             </div>
                         </td>
                     }
                     else
                     {
                         <td>
-                            <div class="d-flex justify-content-end">
-                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                            <div class="d-flex justify-content-end px-3">
+                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" })
                             </div>
                         </td>
                     }
                 </tr>
             }
-@*            <tr>
+            <tr id="formTr">
                 @{await Html.RenderPartialAsync("_CreateEditBoxingGroupPartial", new BoxingGroupLiteViewModel()); }
-            </tr>*@
+            </tr>
         </tbody>
     </table>
 }
@@ -143,6 +140,11 @@ else
     </li>
 </ul>
 
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
 <script>
 @*    $(document).ready(function () {
         $("#createButton").click(function () {
@@ -162,24 +164,26 @@ else
     })*@
 
     $(document).ready(function () {
-        var data = {
-            CoachId: "060342c3-9dc3-4597-bae1-9f19c991ebe9",
-            Name: "TestAjax"
-        };
-
         var dataType = 'application/x-www-form-urlencoded';
 
+
         $("#createButton").click(function () {
+            $("#formTr").show();
+        })
+
+        $("#cancelButton").click(function () {
+            $("#formTr").hide();
+        })
+
+        $("#boxingGroupForm").submit(function () {
+            $.validator.unobtrusive.parse($('#boxingGroupForm'));
+            var data = $('#boxingGroupForm').serialize();
             $.ajax({
-                url: "Home/TestAjaxPost",
+                url: "Home/CreateBoxingGroup",
                 type: "POST",
                 contentType: dataType,
-                data: data
+                data: data,
             })
-        });
-
-        $("#getButton").click(function () {
-            $.get("Home/CreateBoxingGroup")
         })
     })
 
