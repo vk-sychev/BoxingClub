@@ -1,4 +1,4 @@
-﻿@model PageViewModel<BoxingGroupFullViewModel>
+﻿@model PageViewModel<BoxingGroupLiteViewModel>
 @using BoxingClub.Infrastructure.Constants
 @{
     ViewData["Title"] = "Index";
@@ -14,7 +14,7 @@
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
         <div class="mt-2">
-            <a class="btn btn-primary" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
+            <a id="createButton" class="btn btn-primary" @*asp-action="CreateBoxingGroup" asp-controller="Home"*@>Create New Boxing Group</a>
         </div>
     }
 </div>
@@ -80,6 +80,9 @@ else
                     }
                 </tr>
             }
+            <tr>
+                @{await Html.RenderPartialAsync("_CreateEditBoxingGroupPartial", new BoxingGroupLiteViewModel()); }
+            </tr>
         </tbody>
     </table>
 }
@@ -133,6 +136,50 @@ else
         <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-pageSize="@pageSize">Next</a>
     </li>
 </ul>
+
+<script>
+@*    $(document).ready(function () {
+        $("#createButton").click(function () {
+             $("#tableBody").append("<tr>")
+             $("tr:Last").append("<td>");
+                    $("td:Last").append("<input asp-for='Name' class='form-control'/>");
+                    $("td:Last").append("<span asp-validation-for='Name' class='text-danger'></span>");
+
+                $("tr:Last").append("<td>");
+                    $("td:Last").append("<div>");
+                        $("td:Last").append("<select asp-for='CoachId' class='form-select custom-select' asp-items='@ViewBag.Coaches'>");
+                            $("td:Last").append("<option selected='selected' disabled='disabled'>Choose coach</option>");
+                        $("td:Last").append("</select>")
+                        $("td:Last").append("<span asp-validation-for='CoachId' class='text-danger'></span>");
+                    $("td:Last").append("</div>");
+        })
+    })*@
+
+    $(document).ready(function () {
+        $("#createButton").click(function () {
+@*            var view = "<tr>@{await Html.RenderPartialAsync("_CreateEditBoxingGroupPartial", new BoxingGroupLiteViewModel()); }</tr>"
+            $("#tableBody").append(view);*@
+            var data = {
+                    CoachId : "060342c3-9dc3-4597-bae1-9f19c991ebe9",
+                    Name : "TestAjax"
+            };
+  
+
+            $.ajax({
+                url: "Home/CreateBoxingGroup",
+                type: "POST",
+                data: data,
+                success: function (msg) {
+                    console.log(msg);
+                },
+                error: function (req, status, error) {
+                    console.log(error);
+                }
+            });
+        })
+    });
+
+</script>
 
 
 

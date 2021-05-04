@@ -40,7 +40,7 @@ namespace BoxingClub.Web.Controllers
                 return View("PendingRoleAssignment");
             }
 
-            List<BoxingGroupFullViewModel> groups;
+            List<BoxingGroupLiteViewModel> groups;
             PageModelDTO<BoxingGroupDTO> pageModel;
 
             if (User.IsInRole(Constants.CoachRoleName))
@@ -62,12 +62,13 @@ namespace BoxingClub.Web.Controllers
                     pageIndex = 1;
                 }           
             }
-            groups = _mapper.Map<List<BoxingGroupFullViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<BoxingGroupFullViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, groups);
+            groups = _mapper.Map<List<BoxingGroupLiteViewModel>>(pageModel.Items);
+            var pageViewModel = new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, groups);
 
             var sizes = new List<int> { 1, 2, 3, 4, 5 };
             ViewBag.Sizes = sizes;
             ViewBag.pageSize = pageSize ?? 3;
+            ViewBag.Coaches = await GetCoaches();
 
             return View(pageViewModel);
         }
