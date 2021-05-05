@@ -21,7 +21,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
         {
             int specId = 1; // по-хорошему, надо бы это в параметрах передавать, но нужно будет менять интерфейс.
                             // Возможно, стоит создать общий интерфейс для спеков и отнаследовать от них другие интерфейсы, более конкретные
-            var spec = await _database.FighterExperienceSpecifications.GetByIdAsync(specId);
+            var spec = await _database.FighterExperienceSpecifications.GetByIdAsync(specId); //убираем базу, харкодим
 
             var diff = GetStudentTrainingPerod(student.DateOfEntry);
 

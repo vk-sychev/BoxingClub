@@ -127,14 +127,16 @@ namespace BoxingClub.BLL.Services
 
             var students = await _database.Students.GetAllAsync();
             var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
+            var validatedStudents = await AreStudentsInListExperienced(studentDTOs);
 
             List<StudentFullDTO> verifiedStudents = new List<StudentFullDTO>();
             
             if (filterOrder == FilterOrder.Experienced)
             {
-                verifiedStudents = await GetStudentsByFilterAsync(true, studentDTOs);
+               /* verifiedStudents = await GetStudentsByFilterAsync(true, studentDTOs);*/
+               studentDTOs = studentDTOs.Where(it => it.Expere)
             }
-            else if (filterOrder == FilterOrder.Newbies)
+            else 
             {
                 verifiedStudents = await GetStudentsByFilterAsync(false, studentDTOs);
             }
@@ -150,7 +152,7 @@ namespace BoxingClub.BLL.Services
 
         private async Task<List<StudentFullDTO>> GetStudentsByFilterAsync(bool filter, List<StudentFullDTO> studentDTOs)
         {
-            var validatedStudents = await AreStudentsInListExperienced(studentDTOs);
+
             var verifiedStudents = new List<StudentFullDTO>();
 
             foreach (var student in validatedStudents)
