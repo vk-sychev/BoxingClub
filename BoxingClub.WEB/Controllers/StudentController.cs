@@ -10,6 +10,7 @@ using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
 using System.Linq;
 using BoxingClub.Infrastructure.Exceptions;
+using BoxingClub.Web.Models.Enums;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -34,8 +35,9 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> GetAllStudents(int? pageIndex, int? pageSize, int? filter)
         {
             var pageModel = new PageModelDTO<StudentLiteDTO>();
+            var filterOrder = GetFilterOrder(filter);
 
-            if ((filter != 1) && (filter != 2))
+            if (filterOrder == FilterOrder.All)
             {
                 pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
                 if (!pageModel.Items.Any())
@@ -46,7 +48,7 @@ namespace BoxingClub.Web.Controllers
             }
             else
             {
-                if (filter == 1)
+                if (filterOrder == FilterOrder.Experienced)
                 {
                     pageModel = await _studentService.GetExperiencedStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
                     if (!pageModel.Items.Any())
@@ -54,7 +56,7 @@ namespace BoxingClub.Web.Controllers
                         pageModel = await _studentService.GetExperiencedStudentsPaginatedAsync(1, pageSize ?? 3);           
                     }
                 }
-                else
+                else if (filterOrder == FilterOrder.Newbies)
                 {
                     pageModel = await _studentService.GetNewbiesStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
                     if (!pageModel.Items.Any())
@@ -107,15 +109,6 @@ namespace BoxingClub.Web.Controllers
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        private async Task<SelectList> GetGroups()
-        {
-            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
-            var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
-            var selectList = new SelectList(groupViewModels, "Id", "Name");
-            return selectList;
-        }
-
-        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [Route("Student/EditStudent/{id}")]
         [HttpGet]
         public async Task<IActionResult> EditStudent(int? id, bool fromHomeController, int returnId)
@@ -160,6 +153,28 @@ namespace BoxingClub.Web.Controllers
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;
             return View(student);
+        }
+
+
+        private async Task<SelectList> GetGroups()
+        {
+            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
+            var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
+            var selectList = new SelectList(groupViewModels, "Id", "Name");
+            return selectList;
+        }
+
+        private FilterOrder GetFilterOrder(int? filter)
+        {
+            switch (filter)
+            {
+                case 1:
+                    return FilterOrder.Experienced;
+                case 2:
+                    return FilterOrder.Newbies;
+                default:
+                    return FilterOrder.All;
+            }
         }
     }
 }

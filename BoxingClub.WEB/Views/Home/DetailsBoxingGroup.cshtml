@@ -34,21 +34,50 @@
 else
 {
     <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Surname
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Patronymic
+                </th>
+                <th>
+                    Date Of Birth
+                </th>
+                <th>
+                    Date Of Entry
+                </th>
+                <th>
+                    Number Of Fights
+                </th>
+                <th></th>
+            </tr>
+        </thead>
         <tbody>
             @foreach (var item in Model.Students)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Name)
+                        @Html.DisplayFor(modelItem => item.Surname)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Surname)
+                        @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Patronymic)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.BornDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfEntry)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumberOfFights)
                     </td>
                     @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName)))
                     {
