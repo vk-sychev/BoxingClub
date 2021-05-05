@@ -110,7 +110,7 @@ namespace BoxingClub.DAL.EF
                 Name = "Vasya",
                 Surname = "Sychev",
                 Patronymic = "Konstantinovich",
-                BornDate = new DateTime(2000, 10, 10),  
+                BornDate = new DateTime(2000, 10, 10),
                 UserName = "Admin",
                 Email = "Admin@gmail.com"
             };
@@ -256,6 +256,28 @@ namespace BoxingClub.DAL.EF
                     Height = 176,
                     Weight = 73,
                     NumberOfFights = 10
+                });
+
+            modelBuilder.Entity<FighterExperienceSpecification>().HasData(
+                new FighterExperienceSpecification()
+                {
+                    Id = 1,
+                    NumberOfFights = 5,
+                    TrainingPeriod = 3
+                },
+
+                new FighterExperienceSpecification()
+                {
+                    Id = 2,
+                    NumberOfFights = 3,
+                    TrainingPeriod = 2
+                },
+
+                new FighterExperienceSpecification()
+                {
+                    Id = 3,
+                    NumberOfFights = 3,
+                    TrainingPeriod = 3
                 });
         }
     }

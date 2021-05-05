@@ -29,22 +29,49 @@ namespace BoxingClub.Web.Controllers
             _boxingGroupService = boxingGroupService ?? throw new ArgumentNullException(nameof(boxingGroupService), "boxingGroupService is null");
         }
 
+
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        public async Task<IActionResult> GetAllStudents(int? pageIndex, int? pageSize)
+        public async Task<IActionResult> GetAllStudents(int? pageIndex, int? pageSize, int? filter)
         {
-            var pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
-            if (!pageModel.Items.Any())
+            var pageModel = new PageModelDTO<StudentLiteDTO>();
+
+            if ((filter != 1) && (filter != 2))
             {
-                pageModel = await _studentService.GetStudentsPaginatedAsync(1, pageSize ?? 3);
-                pageIndex = 1;
+                pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+                if (!pageModel.Items.Any())
+                {
+                    pageModel = await _studentService.GetStudentsPaginatedAsync(1, pageSize ?? 3);
+                    pageIndex = 1;
+                }
             }
+            else
+            {
+                if (filter == 1)
+                {
+                    pageModel = await _studentService.GetExperiencedStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+                    if (!pageModel.Items.Any())
+                    {
+                        pageModel = await _studentService.GetExperiencedStudentsPaginatedAsync(1, pageSize ?? 3);           
+                    }
+                }
+                else
+                {
+                    pageModel = await _studentService.GetNewbiesStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+                    if (!pageModel.Items.Any())
+                    {
+                        pageModel = await _studentService.GetNewbiesStudentsPaginatedAsync(1, pageSize ?? 3);
+                    }
+                }
+                pageIndex = 1;
+            }   
 
             var students = _mapper.Map<List<StudentLiteViewModel>>(pageModel.Items);
             var pageViewModel = new PageViewModel<StudentLiteViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, students);
 
-            var sizes = new List<int> { 1, 2, 3, 4, 5 };
+            var sizes = new List<int> { 1, 2, 3, 4, 5 }; //в конфиг
             ViewBag.Sizes = sizes;
             ViewBag.pageSize = pageSize ?? 3;
+            ViewBag.filter = filter ?? 0;
 
             return View(pageViewModel);
         }

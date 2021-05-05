@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.BLL.Interfaces.Specifications;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
@@ -14,11 +17,15 @@ namespace BoxingClub.BLL.Services
     public class StudentService : IStudentService
     {
         private readonly IMapper _mapper;
+        private readonly IStudentSpecification _studentSpecification;
         private readonly IUnitOfWork _database; 
-        public StudentService(IUnitOfWork uow, IMapper mapper)
+        public StudentService(IUnitOfWork uow, 
+                              IMapper mapper,
+                              IStudentSpecification studentSpecification)
         {
             _database = uow;
             _mapper = mapper;
+            _studentSpecification = studentSpecification;
         }
 
         public async Task<StudentFullDTO> GetStudentByIdAsync(int? id)
@@ -49,23 +56,8 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(studentDTO), "Student is null");
             }
             var student = _mapper.Map<Student>(studentDTO);
-            student.Experienced = IsExperienced(student.DateOfEntry, student.NumberOfFights);
             await _database.Students.CreateAsync(student);
             await _database.SaveAsync();
-        }
-
-        private bool IsExperienced(DateTime dateOfEntry, int numberOfFights)
-        {
-            var dateOfEntryYear = dateOfEntry.Year;
-            var currentYear = DateTime.Now.Year;
-            var diff = currentYear - dateOfEntryYear;
-
-            var durationRule = diff >= 3;
-            var fightsRule = numberOfFights >= 5;
-
-            var result = durationRule && fightsRule;
-
-            return result;
         }
 
         public async Task DeleteStudentAsync(int? id)
@@ -92,7 +84,6 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(studentDTO), "Student is null");
             }
             var student = _mapper.Map<Student>(studentDTO);
-            student.Experienced = IsExperienced(student.DateOfEntry, student.NumberOfFights);
             _database.Students.Update(student);
             return _database.SaveAsync();
         }
@@ -119,10 +110,67 @@ namespace BoxingClub.BLL.Services
         public async Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
         {
             var students = await _database.Students.GetStudentsPaginatedAsync(pageIndex, pageSize);
-            var studentDTOs = _mapper.Map<List<StudentLiteDTO>>(students);
+            var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
             var count = await _database.Students.GetCountOfStudentsAsync();
-            var model = new PageModelDTO<StudentLiteDTO>() { Items = studentDTOs, Count = count };
+
+            var validatedStudents = await AreStudentsInListExperienced(studentDTOs);
+            var mappedStudents = _mapper.Map<List<StudentLiteDTO>>(validatedStudents);
+
+            var model = new PageModelDTO<StudentLiteDTO>() { Items = mappedStudents, Count = count };
             return model;
+        }
+
+        public async Task<PageModelDTO<StudentLiteDTO>> GetExperiencedStudentsPaginatedAsync(int pageIndex, int pageSize)
+        {
+            var students = await _database.Students.GetAllAsync();
+            var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
+            var verifiedStudents = new List<StudentFullDTO>();
+            var validatedStudents = await AreStudentsInListExperienced(studentDTOs);
+
+            foreach (var student in validatedStudents)
+            {
+                if (student.Experienced)
+                {
+                    verifiedStudents.Add(student);
+                }
+            }
+            var takenStudents = verifiedStudents.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            var mappedStudents = _mapper.Map<List<StudentLiteDTO>>(takenStudents);
+            var count = verifiedStudents.Count;
+
+            var model = new PageModelDTO<StudentLiteDTO>() { Items = mappedStudents, Count = count };
+            return model;
+        }
+
+        public async Task<PageModelDTO<StudentLiteDTO>> GetNewbiesStudentsPaginatedAsync(int pageIndex, int pageSize)
+        {
+            var students = await _database.Students.GetAllAsync();
+            var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
+            var verifiedStudents = new List<StudentFullDTO>();
+            var validatedStudents = await AreStudentsInListExperienced(studentDTOs);
+
+            foreach (var student in validatedStudents)
+            {
+                if (!student.Experienced)
+                {
+                    verifiedStudents.Add(student);
+                }
+            }
+            var takenStudents = verifiedStudents.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            var mappedStudents = _mapper.Map<List<StudentLiteDTO>>(takenStudents);
+            var count = verifiedStudents.Count;
+
+            var model = new PageModelDTO<StudentLiteDTO>() { Items = mappedStudents, Count = count };
+            return model;
+        }
+
+        private async Task<List<StudentFullDTO>> AreStudentsInListExperienced(List<StudentFullDTO> students)
+        {
+            foreach (var student in students)
+            {
+                student.Experienced = await _studentSpecification.IsValidAsync(student);
+            }
+            return students;
         }
     }
 }

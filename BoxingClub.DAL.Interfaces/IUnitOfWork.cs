@@ -8,6 +8,8 @@ namespace BoxingClub.DAL.Interfaces
 
         IBoxingGroupRepository BoxingGroups { get; }
 
+        IFighterExperienceSpecificationRepository FighterExperienceSpecifications { get; }
+
         Task SaveAsync();
     }
 }

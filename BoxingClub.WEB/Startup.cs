@@ -1,6 +1,8 @@
 using AutoMapper;
 using BoxingClub.BLL.Implementation.Services;
+using BoxingClub.BLL.Implementation.Specifications;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.BLL.Interfaces.Specifications;
 using BoxingClub.BLL.Services;
 using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
@@ -55,16 +57,18 @@ namespace BoxingClub.Web
             .AddEntityFrameworkStores<BoxingClubContext>();
 
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
+
+            services.AddTransient<IStudentSpecification, FighterExperienceSpecificationService>();
             services.AddTransient<IStudentService, StudentService>();
-            
+
             services.AddTransient<IRoleProvider, RoleProvider>();
             services.AddTransient<IUserProvider, UserProvider>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
 
+
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
-
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };

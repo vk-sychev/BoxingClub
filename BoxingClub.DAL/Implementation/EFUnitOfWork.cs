@@ -1,4 +1,5 @@
 using BoxingClub.DAL.EF;
+using BoxingClub.DAL.Implementation.Implementation;
 using BoxingClub.DAL.Interfaces;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace BoxingClub.DAL.Repositories
 
         private IStudentRepository _studentRepository;
         private IBoxingGroupRepository _boxingGroupRepository;
+        private IFighterExperienceSpecificationRepository _fighterExperienceSpecificationRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
@@ -37,6 +39,18 @@ namespace BoxingClub.DAL.Repositories
                     _boxingGroupRepository = new BoxingGroupRepository(_db);
                 }
                 return _boxingGroupRepository;
+            }
+        }
+
+        public IFighterExperienceSpecificationRepository FighterExperienceSpecifications
+        {
+            get
+            {
+                if (_fighterExperienceSpecificationRepository == null)
+                {
+                    _fighterExperienceSpecificationRepository = new FighterExperienceSpecificationRepository(_db);
+                }
+                return _fighterExperienceSpecificationRepository;
             }
         }
 

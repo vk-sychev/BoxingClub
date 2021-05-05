@@ -18,6 +18,6 @@ namespace BoxingClub.Web.Models
         [DisplayName("Full Name")]
         public string CoachFullName { get { return (Coach!=null)? $"{Coach.Surname} {Coach.Name} {Coach.Patronymic}" : ""; } }
 
-        public List<StudentLiteViewModel> Students { get; set; } = new List<StudentLiteViewModel>();
+        public List<StudentFullViewModel> Students { get; set; } = new List<StudentFullViewModel>();
     }
 }

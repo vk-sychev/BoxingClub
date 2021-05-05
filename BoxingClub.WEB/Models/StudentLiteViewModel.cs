@@ -14,14 +14,14 @@ namespace BoxingClub.Web.Models
 
         public string Patronymic { get; set; }
 
+        public bool Experienced { get; set; }
+
         [DataType(DataType.Date)]
         [Display(Name = "Date of Birth")]
         public DateTime BornDate { get; set; }
 
         [DisplayName("Boxing Group")]
         public int BoxingGroupId { get; set; }
-
-        public bool Experienced { get; set; }
 
         public BoxingGroupLiteViewModel BoxingGroup { get; set; }
     }

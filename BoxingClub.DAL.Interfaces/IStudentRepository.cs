@@ -8,8 +8,8 @@ namespace BoxingClub.DAL.Interfaces
 {
     public interface IStudentRepository : IRepository<Student>
     {
-        Task<List<Student>> GetStudentsPaginatedAsync(int pageIndex, int pageSize, Expression<Func<Student, bool>> filter);
+        Task<List<Student>> GetStudentsPaginatedAsync(int pageIndex, int pageSize);
 
-        Task<int> GetCountOfStudentsAsync(Expression<Func<Student, bool>> filter);
+        Task<int> GetCountOfStudentsAsync();
     }
 }
