@@ -35,36 +35,14 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> GetAllStudents(int? pageIndex, int? pageSize, int? filter)
         {
             var pageModel = new PageModelDTO<StudentLiteDTO>();
-            var filterOrder = GetFilterOrder(filter);
 
-            if (filterOrder == FilterOrder.All)
+            pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+            if (!pageModel.Items.Any())
             {
-                pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
-                if (!pageModel.Items.Any())
-                {
-                    pageModel = await _studentService.GetStudentsPaginatedAsync(1, pageSize ?? 3);
-                    pageIndex = 1;
-                }
-            }
-            else
-            {
-                if (filterOrder == FilterOrder.Experienced)
-                {
-                    pageModel = await _studentService.GetExperiencedStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
-                    if (!pageModel.Items.Any())
-                    {
-                        pageModel = await _studentService.GetExperiencedStudentsPaginatedAsync(1, pageSize ?? 3);           
-                    }
-                }
-                else if (filterOrder == FilterOrder.Newbies)
-                {
-                    pageModel = await _studentService.GetNewbiesStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
-                    if (!pageModel.Items.Any())
-                    {
-                        pageModel = await _studentService.GetNewbiesStudentsPaginatedAsync(1, pageSize ?? 3);
-                    }
-                }
+                pageModel = await _studentService.GetStudentsPaginatedAsync(1, pageSize ?? 3);
                 pageIndex = 1;
+            }
+            pageIndex = 1;
             }   
 
             var students = _mapper.Map<List<StudentLiteViewModel>>(pageModel.Items);
@@ -164,17 +142,5 @@ namespace BoxingClub.Web.Controllers
             return selectList;
         }
 
-        private FilterOrder GetFilterOrder(int? filter)
-        {
-            switch (filter)
-            {
-                case 1:
-                    return FilterOrder.Experienced;
-                case 2:
-                    return FilterOrder.Newbies;
-                default:
-                    return FilterOrder.All;
-            }
-        }
     }
 }
