@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,8 +29,6 @@ namespace BoxingClub.DAL.Entities
 
         public BoxingGroup BoxingGroup { get; set; }
 
-        public int? MedicalCertificateId { get; set; }
-
-        public MedicalCertificate MedicalCertificate { get; set; }
+        public List<MedicalCertificate> MedicalCertificates { get; set; }
     }
 }

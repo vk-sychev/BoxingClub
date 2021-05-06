@@ -12,9 +12,9 @@ namespace BoxingClub.DAL.Entities
 
         public DateTime DateOfIssue { get; set; }
 
-        public bool Result { get; set; }
+        public bool Result { get; set; } //enum
 
-        public int? StudentId { get; set; }
+        public int StudentId { get; set; }
 
         public Student Student { get; set; }
     }
