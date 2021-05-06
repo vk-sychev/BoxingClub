@@ -110,9 +110,8 @@ namespace BoxingClub.BLL.Services
 
 
 
-        public async Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedByFilterAsync(int pageIndex, int pageSize, int filter)
+        public async Task<PageModelDTO<StudentLiteDTO>> GetStudentsAsync(int pageIndex, int pageSize, int filter) //убрать async
         {
-            var model = new PageModelDTO<StudentLiteDTO>();
             var filterOrder = GetFilterOrder(filter);
 
             var students = await _database.Students.GetAllAsync();
@@ -124,7 +123,8 @@ namespace BoxingClub.BLL.Services
             {
                 mappedValidatedStudents = mappedValidatedStudents.Where(it => it.Experienced).ToList();
             }
-            else if (filterOrder == FilterOrder.Newbies)
+
+            if (filterOrder == FilterOrder.Newbies)
             {
                 mappedValidatedStudents = mappedValidatedStudents.Where(it => !it.Experienced).ToList();
             }
@@ -132,8 +132,7 @@ namespace BoxingClub.BLL.Services
             var takenStudents = mappedValidatedStudents.Skip((pageIndex - 1) * pageSize).Take(pageSize);
             var count = mappedValidatedStudents.Count;
 
-            model = new PageModelDTO<StudentLiteDTO>() { Items = takenStudents, Count = count };
-            return model;
+            return new PageModelDTO<StudentLiteDTO>() { Items = takenStudents, Count = count };
         }
 
 
