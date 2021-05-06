@@ -17,9 +17,15 @@ namespace BoxingClub.Web.Models
 
         public int LastPage { get; private set; }
 
-        public PageViewModel(int count, int pageIndex, int pageSize, IEnumerable<T> items)
+        public PageViewModel(int count, int? pageIndex, int? pageSize, IEnumerable<T> items)
         {
-            PageIndex = pageIndex;
+            PageIndex = pageIndex ?? 1;
+
+            if (pageSize == null)
+            {
+                pageSize = 3;
+            }
+
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             Items = items;
             int startPage = PageIndex - 2;

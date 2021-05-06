@@ -34,19 +34,18 @@ namespace BoxingClub.Web.Controllers
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         public async Task<IActionResult> GetAllStudents(int? pageIndex, int? pageSize, int? filter)
         {
-            var pageModel = new PageModelDTO<StudentLiteDTO>();
-
-            var filterOrder = GetFilterOrder(filter);
-
-            pageModel = await _studentService.GetStudentsAsync(pageIndex ?? 1, pageSize ?? 3, (int)filterOrder);
-            if (!pageModel.Items.Any())
+            var searchModel = new SearchModelDTO()
             {
-                pageModel = await _studentService.GetStudentsAsync(1, pageSize ?? 3, (int)filterOrder);
-                pageIndex = 1;
-            }             
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Filter = filter
+            };
+
+            var pageModel = await _studentService.GetStudentsAsync(searchModel);
+            pageIndex = searchModel.PageIndex;
 
             var students = _mapper.Map<List<StudentLiteViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<StudentLiteViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, students);
+            var pageViewModel = new PageViewModel<StudentLiteViewModel>(pageModel.Count, pageIndex, pageSize, students);
 
             var sizes = new List<int> { 1, 2, 3, 4, 5 }; //в конфиг
             ViewBag.Sizes = sizes;
@@ -141,19 +140,5 @@ namespace BoxingClub.Web.Controllers
             var selectList = new SelectList(groupViewModels, "Id", "Name");
             return selectList;
         }
-
-        private FilterOrder GetFilterOrder(int? filter)
-        {
-            switch (filter)
-            {
-                case 1:
-                    return FilterOrder.Experienced;
-                case 2:
-                    return FilterOrder.Newbies;
-                default:
-                    return FilterOrder.All;
-            }
-        }
-
     }
 }

@@ -240,9 +240,29 @@ namespace BoxingClub.BLL.Implementation.Services
             return mappedResult;
         }
 
-        public async Task<PageModelDTO<UserDTO>> GetUsersPaginatedAsync(int pageIndex, int pageSize)
+        public async Task<PageModelDTO<UserDTO>> GetUsersPaginatedAsync(SearchModelDTO searchDTO)
         {
-            var users = await _userProvider.GetUsersPaginatedAsync(pageIndex, pageSize);
+            if (searchDTO == null)
+            {
+                throw new ArgumentNullException(nameof(searchDTO), "SearchDTO is null");
+            }
+
+            if (searchDTO.PageIndex == null)
+            {
+                searchDTO.PageIndex = 1;
+            }
+
+            if (searchDTO.PageSize == null)
+            {
+                searchDTO.PageSize = 3;
+            }
+
+            var users = await _userProvider.GetUsersPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+            if (users.Count == 0)
+            {
+                searchDTO.PageIndex = 1;
+                users = await _userProvider.GetUsersPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+            }
             var userDTOs = new List<UserDTO>();
 
             foreach (var user in users)
