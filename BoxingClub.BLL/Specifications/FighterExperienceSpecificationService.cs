@@ -1,32 +1,21 @@
 ﻿using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces.Specifications;
-using BoxingClub.DAL.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using BoxingClub.BLL.Implementation.Specifications.SpecRules;
 
 namespace BoxingClub.BLL.Implementation.Specifications
 {
     public class FighterExperienceSpecificationService : IStudentSpecification
     {
-        private readonly IUnitOfWork _database;
+        private static readonly int TrainingPeriod = FighterExperienceRule.TrainingPeriod;
+        private static readonly int NumberOfFights = FighterExperienceRule.NumberOfFights;
 
-        public FighterExperienceSpecificationService(IUnitOfWork uow)
+        public bool IsValid(StudentFullDTO student)
         {
-            _database = uow;
-        }
-
-        public async Task<bool> IsValidAsync(StudentFullDTO student)
-        {
-            int specId = 1; // по-хорошему, надо бы это в параметрах передавать, но нужно будет менять интерфейс.
-                            // Возможно, стоит создать общий интерфейс для спеков и отнаследовать от них другие интерфейсы, более конкретные
-            var spec = await _database.FighterExperienceSpecifications.GetByIdAsync(specId); //убираем базу, харкодим
-
             var diff = GetStudentTrainingPerod(student.DateOfEntry);
 
-            var durationRule = diff >= spec.TrainingPeriod;
-            var fightsRule = student.NumberOfFights >= spec.NumberOfFights;
+            var durationRule = diff >= TrainingPeriod;
+            var fightsRule = student.NumberOfFights >= NumberOfFights;
 
             var result = durationRule && fightsRule;
 

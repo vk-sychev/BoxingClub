@@ -2,6 +2,7 @@
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
@@ -11,7 +12,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public AuthenticationProvider(SignInManager<ApplicationUser> signInManager)
         {
-            _signInManager = signInManager;
+            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager), "signInManager is null");
         }
 
         public async Task<SignInResult> SignInAsync(SignIn user)

@@ -2,20 +2,19 @@ using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Implementation.Implementation;
 using BoxingClub.DAL.Interfaces;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
         private readonly BoxingClubContext _db;
-
         private IStudentRepository _studentRepository;
         private IBoxingGroupRepository _boxingGroupRepository;
-        private IFighterExperienceSpecificationRepository _fighterExperienceSpecificationRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
-            _db = context;
+            _db = context ?? throw new ArgumentNullException(nameof(context), "context is null");
         }
 
         public IStudentRepository Students
@@ -39,18 +38,6 @@ namespace BoxingClub.DAL.Repositories
                     _boxingGroupRepository = new BoxingGroupRepository(_db);
                 }
                 return _boxingGroupRepository;
-            }
-        }
-
-        public IFighterExperienceSpecificationRepository FighterExperienceSpecifications
-        {
-            get
-            {
-                if (_fighterExperienceSpecificationRepository == null)
-                {
-                    _fighterExperienceSpecificationRepository = new FighterExperienceSpecificationRepository(_db);
-                }
-                return _fighterExperienceSpecificationRepository;
             }
         }
 

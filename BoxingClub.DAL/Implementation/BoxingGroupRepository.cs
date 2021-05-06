@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Repositories
 {
@@ -15,7 +16,7 @@ namespace BoxingClub.DAL.Repositories
 
         public BoxingGroupRepository(BoxingClubContext context)
         {
-            _db = context;
+            _db = context ?? throw new ArgumentNullException(nameof(context), "context is null");
         }
 
         public async Task CreateAsync(BoxingGroup item)

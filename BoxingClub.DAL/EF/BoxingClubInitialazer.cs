@@ -258,27 +258,6 @@ namespace BoxingClub.DAL.EF
                     NumberOfFights = 10
                 });
 
-            modelBuilder.Entity<FighterExperienceSpecification>().HasData(
-                new FighterExperienceSpecification()
-                {
-                    Id = 1,
-                    NumberOfFights = 5,
-                    TrainingPeriod = 3
-                },
-
-                new FighterExperienceSpecification()
-                {
-                    Id = 2,
-                    NumberOfFights = 3,
-                    TrainingPeriod = 2
-                },
-
-                new FighterExperienceSpecification()
-                {
-                    Id = 3,
-                    NumberOfFights = 3,
-                    TrainingPeriod = 3
-                });
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Repositories
 {
@@ -16,7 +17,7 @@ namespace BoxingClub.DAL.Repositories
 
         public StudentRepository(BoxingClubContext context)
         {
-            _db = context;
+            _db = context ?? throw new ArgumentNullException(nameof(context), "context is null");
         }
 
         public async Task CreateAsync(Student item)

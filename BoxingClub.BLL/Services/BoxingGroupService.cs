@@ -19,8 +19,8 @@ namespace BoxingClub.BLL.Services
         public BoxingGroupService(IMapper mapper,
                                   IUnitOfWork uow)
         {
-            _mapper = mapper;
-            _database = uow;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
+            _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
         }
 
         public async Task<List<BoxingGroupDTO>> GetBoxingGroupsAsync()

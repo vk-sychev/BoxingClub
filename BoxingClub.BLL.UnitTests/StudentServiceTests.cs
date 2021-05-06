@@ -36,7 +36,7 @@ namespace BoxingClub.BLL.UnitTests
         {
             _mockRepository = new Mock<IStudentRepository>();
             _mockUoW = new Mock<IUnitOfWork>();
-            _studentService = new StudentService(_mockUoW.Object, _mapper);
+            _studentService = new StudentService(_mockUoW.Object, _mapper, null); //замокать спецификации
         }
 
         [Test]

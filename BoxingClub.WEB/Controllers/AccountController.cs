@@ -21,9 +21,9 @@ namespace BoxingClub.Web.Controllers
                                  IUserService userService,
                                  IMapper mapper)
         {
-            _signInService = signInService ?? throw new ArgumentNullException(nameof(signInService), "signInService is null");
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService), "userService is null");
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
+            _signInService = signInService;
+            _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet]

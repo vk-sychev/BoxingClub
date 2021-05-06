@@ -15,7 +15,7 @@ namespace BoxingClub.Web.Controllers
         private readonly ILogger<ErrorController> _logger;
         public ErrorController(ILogger<ErrorController> logger)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger), "logger is null");
+            _logger = logger;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

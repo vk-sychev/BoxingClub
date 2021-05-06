@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
@@ -13,15 +14,12 @@ namespace BoxingClub.DAL.Implementation.Implementation
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IMapper _mapper;
 
         public RoleProvider(RoleManager<IdentityRole> roleManager,
-                            UserManager<ApplicationUser> userManager,
-                            IMapper mapper)
+                            UserManager<ApplicationUser> userManager)
         {
-            _mapper = mapper;
-            _roleManager = roleManager;
-            _userManager = userManager;
+            _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager), "roleManager is null");
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager), "userManager is null");
         }
 
         public async Task<string> GetUserRole(ApplicationUser user)

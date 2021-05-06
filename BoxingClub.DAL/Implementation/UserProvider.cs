@@ -6,20 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
     public class UserProvider : IUserProvider
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UserProvider(UserManager<ApplicationUser> userManager,
-                            SignInManager<ApplicationUser> signInManager,
-                            IMapper mapper)
+        public UserProvider(UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager), "userManager is null");
         }
 
         public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)

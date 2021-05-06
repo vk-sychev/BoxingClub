@@ -8,6 +8,6 @@ namespace BoxingClub.BLL.Interfaces.Specifications
 {
     public interface IStudentSpecification
     {
-        Task<bool> IsValidAsync(StudentFullDTO student);
+        bool IsValid(StudentFullDTO student);
     }
 }

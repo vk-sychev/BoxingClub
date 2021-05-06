@@ -25,10 +25,10 @@ namespace BoxingClub.BLL.Implementation.Services
                            IAuthenticationProvider authenticationProvider,
                            IMapper mapper)
         {
-            _userProvider = userProvider;
-            _roleProvider = roleProvider;
-            _authenticationProvider = authenticationProvider;
-            _mapper = mapper;
+            _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider), "userProvider is null");
+            _roleProvider = roleProvider ?? throw new ArgumentNullException(nameof(roleProvider), "roleProvider is null");
+            _authenticationProvider = authenticationProvider ?? throw new ArgumentNullException(nameof(authenticationProvider), "authenticationProvider is null");
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
         }
 
         private async Task<RoleDTO> FindUserRoleAsync(ApplicationUser user)

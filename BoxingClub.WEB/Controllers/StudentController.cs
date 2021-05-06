@@ -25,9 +25,9 @@ namespace BoxingClub.Web.Controllers
                                  IMapper mapper,
                                  IBoxingGroupService boxingGroupService)
         {
-            _studentService = studentService ?? throw new ArgumentNullException(nameof(studentService), "studentService is null");
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
-            _boxingGroupService = boxingGroupService ?? throw new ArgumentNullException(nameof(boxingGroupService), "boxingGroupService is null");
+            _studentService = studentService;
+            _mapper = mapper;
+            _boxingGroupService = boxingGroupService;
         }
 
 
@@ -36,14 +36,14 @@ namespace BoxingClub.Web.Controllers
         {
             var pageModel = new PageModelDTO<StudentLiteDTO>();
 
-            pageModel = await _studentService.GetStudentsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
+            var filterOrder = GetFilterOrder(filter);
+
+            pageModel = await _studentService.GetStudentsPaginatedByFilterAsync(pageIndex ?? 1, pageSize ?? 3, (int)filterOrder);
             if (!pageModel.Items.Any())
             {
-                pageModel = await _studentService.GetStudentsPaginatedAsync(1, pageSize ?? 3);
+                pageModel = await _studentService.GetStudentsPaginatedByFilterAsync(1, pageSize ?? 3, (int)filterOrder);
                 pageIndex = 1;
-            }
-            pageIndex = 1;
-            }   
+            }             
 
             var students = _mapper.Map<List<StudentLiteViewModel>>(pageModel.Items);
             var pageViewModel = new PageViewModel<StudentLiteViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, students);
@@ -140,6 +140,19 @@ namespace BoxingClub.Web.Controllers
             var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
             var selectList = new SelectList(groupViewModels, "Id", "Name");
             return selectList;
+        }
+
+        private FilterOrder GetFilterOrder(int? filter)
+        {
+            switch (filter)
+            {
+                case 1:
+                    return FilterOrder.Experienced;
+                case 2:
+                    return FilterOrder.Newbies;
+                default:
+                    return FilterOrder.All;
+            }
         }
 
     }

@@ -24,9 +24,9 @@ namespace BoxingClub.BLL.Services
                               IMapper mapper,
                               IStudentSpecification studentSpecification)
         {
-            _database = uow;
-            _mapper = mapper;
-            _studentSpecification = studentSpecification;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
+            _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
+            _studentSpecification = studentSpecification ?? throw new ArgumentNullException(nameof(studentSpecification), "studentSpecification is null");
         }
 
         public async Task<StudentFullDTO> GetStudentByIdAsync(int? id)
@@ -113,78 +113,48 @@ namespace BoxingClub.BLL.Services
         public async Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedByFilterAsync(int pageIndex, int pageSize, int filter)
         {
             var model = new PageModelDTO<StudentLiteDTO>();
-
             var filterOrder = GetFilterOrder(filter);
-            if (filterOrder == FilterOrder.All)
-            {
-                model = await GetStudentsPaginatedAsync(pageIndex, pageSize);
-                return model;
-            }
-            //оставить метод GetStudentsPaginatedByFilterAsync,
-            //закрыть контракты остальных, сделать три приватных метода - если приходит фильтр - метод GetStudentsPaginatedByFilterAsync,
-            //он будет вызывать еще один метод с разными парметрами фильтра(опытные, новички)
-            //если фильтра нет - вызываем метод GetStudentsPaginatedAsync
 
             var students = await _database.Students.GetAllAsync();
             var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
-            var validatedStudents = await AreStudentsInListExperienced(studentDTOs);
-
-            List<StudentFullDTO> verifiedStudents = new List<StudentFullDTO>();
+            var validatedStudents = AreStudentsInListExperienced(studentDTOs);
+            var mappedValidatedStudents = _mapper.Map<List<StudentLiteDTO>>(validatedStudents);
             
             if (filterOrder == FilterOrder.Experienced)
             {
-               /* verifiedStudents = await GetStudentsByFilterAsync(true, studentDTOs);*/
-               studentDTOs = studentDTOs.Where(it => it.Expere)
+                mappedValidatedStudents = mappedValidatedStudents.Where(it => it.Experienced).ToList();
             }
-            else 
+            else if (filterOrder == FilterOrder.Newbies)
             {
-                verifiedStudents = await GetStudentsByFilterAsync(false, studentDTOs);
+                mappedValidatedStudents = mappedValidatedStudents.Where(it => !it.Experienced).ToList();
             }
 
-            var takenStudents = verifiedStudents.Skip((pageIndex - 1) * pageSize).Take(pageSize);
-            var mappedStudents = _mapper.Map<List<StudentLiteDTO>>(takenStudents);
-            var count = verifiedStudents.Count;
+            var takenStudents = mappedValidatedStudents.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            var count = mappedValidatedStudents.Count;
 
-            model = new PageModelDTO<StudentLiteDTO>() { Items = mappedStudents, Count = count };
+            model = new PageModelDTO<StudentLiteDTO>() { Items = takenStudents, Count = count };
             return model;
         }
 
 
-        private async Task<List<StudentFullDTO>> GetStudentsByFilterAsync(bool filter, List<StudentFullDTO> studentDTOs)
-        {
-
-            var verifiedStudents = new List<StudentFullDTO>();
-
-            foreach (var student in validatedStudents)
-            {
-                if (student.Experienced == filter)
-                {
-                    verifiedStudents.Add(student);
-                }
-            }
-
-            return verifiedStudents;
-        }
-
-
-        private async Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
+        /*private async Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
         {
             var students = await _database.Students.GetStudentsPaginatedAsync(pageIndex, pageSize);
             var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
             var count = await _database.Students.GetCountOfStudentsAsync();
 
-            var validatedStudents = await AreStudentsInListExperienced(studentDTOs);
+            var validatedStudents = AreStudentsInListExperienced(studentDTOs);
             var mappedStudents = _mapper.Map<List<StudentLiteDTO>>(validatedStudents);
 
             var model = new PageModelDTO<StudentLiteDTO>() { Items = mappedStudents, Count = count };
             return model;
-        }
+        }*/
 
-        private async Task<List<StudentFullDTO>> AreStudentsInListExperienced(List<StudentFullDTO> students)
+        private List<StudentFullDTO> AreStudentsInListExperienced(List<StudentFullDTO> students)
         {
             foreach (var student in students)
             {
-                student.Experienced = await _studentSpecification.IsValidAsync(student);
+                student.Experienced = _studentSpecification.IsValid(student);
             }
             return students;
         }

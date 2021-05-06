@@ -24,10 +24,10 @@ namespace BoxingClub.Web.Controllers
         public AdministrationController(IRoleService roleService,
                                         IUserService userService,
                                         IMapper mapper)
-        {
-            _roleService = roleService ?? throw new ArgumentNullException(nameof(roleService), "roleService is null");
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService), "userService is null");
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
+        {   
+            _roleService = roleService;
+            _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet]

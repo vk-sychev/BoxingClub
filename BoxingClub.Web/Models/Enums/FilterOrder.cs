@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace BoxingClub.BLL.DomainEntities.Enums
+namespace BoxingClub.Web.Models.Enums
 {
     public enum FilterOrder
     {

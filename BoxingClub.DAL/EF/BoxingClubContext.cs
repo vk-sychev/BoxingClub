@@ -9,8 +9,6 @@ namespace BoxingClub.DAL.EF
 
         public DbSet<BoxingGroup> BoxingGroups { get; set; }
 
-        public DbSet<FighterExperienceSpecification> FighterExperienceSpecifications { get; set; }
-
         public BoxingClubContext(DbContextOptions<BoxingClubContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

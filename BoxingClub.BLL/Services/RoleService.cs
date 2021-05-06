@@ -19,7 +19,7 @@ namespace BoxingClub.BLL.Implementation.Services
                            IMapper mapper)
         {
             _roleProvider = roleProvider;
-            _mapper = mapper;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
         }
 
         public async Task<RoleDTO> FindRoleByIdAsync(string id)
