@@ -27,5 +27,9 @@ namespace BoxingClub.DAL.Entities
         public int? BoxingGroupId { get; set; }
 
         public BoxingGroup BoxingGroup { get; set; }
+
+        public int? MedicalCertificateId { get; set; }
+
+        public MedicalCertificate MedicalCertificate { get; set; }
     }
 }
