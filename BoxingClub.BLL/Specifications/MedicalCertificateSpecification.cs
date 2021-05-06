@@ -19,7 +19,12 @@ namespace BoxingClub.BLL.Implementation.Specifications
                 throw new ArgumentNullException(nameof(student), "Student is null");
             }
 
-            return GetMedicalCertificateDuration(student.LastMedicalCertificate) < 4; 
+            if (student.LastMedicalCertificate == null)
+            {
+                return false;
+            }
+
+            return GetMedicalCertificateDuration(student.LastMedicalCertificate.DateOfIssue) < ValidityPeriod; 
         }
 
         private int GetMedicalCertificateDuration(DateTime dateOfIssue)

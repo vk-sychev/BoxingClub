@@ -19,14 +19,17 @@ namespace BoxingClub.BLL.Services
     {
         private readonly IMapper _mapper;
         private readonly IStudentSpecification _studentSpecification;
+        private readonly IMedicalCertificateService _medicalCertificateService;
         private readonly IUnitOfWork _database; 
         public StudentService(IUnitOfWork uow, 
                               IMapper mapper,
-                              IStudentSpecification studentSpecification)
+                              IStudentSpecification studentSpecification,
+                              IMedicalCertificateService medicalCertificateService)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
             _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
             _studentSpecification = studentSpecification ?? throw new ArgumentNullException(nameof(studentSpecification), "studentSpecification is null");
+            _medicalCertificateService = medicalCertificateService ?? throw new ArgumentNullException(nameof(medicalCertificateService), "medicalCertificateService is null");
         }
 
         public async Task<StudentFullDTO> GetStudentByIdAsync(int? id)

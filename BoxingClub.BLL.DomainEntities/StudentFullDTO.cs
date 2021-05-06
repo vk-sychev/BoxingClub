@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BoxingClub.BLL.DomainEntities
 {
@@ -27,5 +28,7 @@ namespace BoxingClub.BLL.DomainEntities
         public int BoxingGroupId { get; set; }
 
         public BoxingGroupDTO BoxingGroup { get; set; }
+
+        public MedicalCertificateDTO LastMedicalCertificate { get; set; }
     }
 }

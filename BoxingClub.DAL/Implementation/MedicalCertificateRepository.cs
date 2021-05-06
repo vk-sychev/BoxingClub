@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
-    class MedicalCertificateRepository : IMedicalCertificateRepository
+    public class MedicalCertificateRepository : IMedicalCertificateRepository
     {
         private readonly BoxingClubContext _db;
 
@@ -28,6 +28,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public void Delete(MedicalCertificate item)
         {
+            //валидация
             _db.MedicalCertificates.Remove(item);
         }
 
@@ -43,7 +44,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<MedicalCertificate> GetByIdAsync(int id)
         {
-            return await _db.MedicalCertificates.AsQueryable().Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _db.MedicalCertificates.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void Update(MedicalCertificate item)
