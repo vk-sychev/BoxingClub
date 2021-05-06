@@ -38,10 +38,10 @@ namespace BoxingClub.Web.Controllers
 
             var filterOrder = GetFilterOrder(filter);
 
-            pageModel = await _studentService.GetStudentsPaginatedByFilterAsync(pageIndex ?? 1, pageSize ?? 3, (int)filterOrder);
+            pageModel = await _studentService.GetStudentsAsync(pageIndex ?? 1, pageSize ?? 3, (int)filterOrder);
             if (!pageModel.Items.Any())
             {
-                pageModel = await _studentService.GetStudentsPaginatedByFilterAsync(1, pageSize ?? 3, (int)filterOrder);
+                pageModel = await _studentService.GetStudentsAsync(1, pageSize ?? 3, (int)filterOrder);
                 pageIndex = 1;
             }             
 

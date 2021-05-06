@@ -10,7 +10,7 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<List<StudentLiteDTO>> GetStudentsAsync();
 
-        Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedByFilterAsync(int pageIndex, int pageSize, int filter);
+        Task<PageModelDTO<StudentLiteDTO>> GetStudentsAsync(int pageIndex, int pageSize, int filter);
 
         Task CreateStudentAsync(StudentFullDTO studentDTO);
 

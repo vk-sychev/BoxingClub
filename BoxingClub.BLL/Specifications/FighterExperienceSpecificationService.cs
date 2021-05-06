@@ -2,6 +2,8 @@
 using BoxingClub.BLL.Interfaces.Specifications;
 using System;
 using BoxingClub.BLL.Implementation.Specifications.SpecRules;
+using BoxingClub.Infrastructure.Exceptions;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.Implementation.Specifications
 {
@@ -12,7 +14,10 @@ namespace BoxingClub.BLL.Implementation.Specifications
 
         public bool IsValid(StudentFullDTO student)
         {
-            //валидация
+            if (student == null)
+            {
+                throw new ArgumentNullException(nameof(student), "Student is null");
+            }
             //тест 4 кейса
             var diff = GetStudentTrainingPerod(student.DateOfEntry);
 
