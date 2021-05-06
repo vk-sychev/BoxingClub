@@ -58,13 +58,12 @@ namespace BoxingClub.Web
 
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
 
-            services.AddTransient<IStudentSpecification, FighterExperienceSpecificationService>();
+            services.AddTransient<IStudentSpecification, FighterExperienceSpecification>();
             services.AddTransient<IStudentService, StudentService>();
 
             services.AddTransient<IRoleProvider, RoleProvider>();
             services.AddTransient<IUserProvider, UserProvider>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
-
 
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoxingClub.DAL.Entities.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,7 +13,7 @@ namespace BoxingClub.DAL.Entities
 
         public DateTime DateOfIssue { get; set; }
 
-        public bool Result { get; set; } //enum
+        public MedicalResult Result { get; set; } 
 
         public int StudentId { get; set; }
 

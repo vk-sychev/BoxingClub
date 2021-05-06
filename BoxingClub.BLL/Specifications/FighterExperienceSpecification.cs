@@ -7,7 +7,7 @@ using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullE
 
 namespace BoxingClub.BLL.Implementation.Specifications
 {
-    public class FighterExperienceSpecificationService : IStudentSpecification
+    public class FighterExperienceSpecification : IStudentSpecification
     {
         private static readonly int TrainingPeriod = FighterExperienceConstants.TrainingPeriod;
         private static readonly int NumberOfFights = FighterExperienceConstants.NumberOfFights;

@@ -8,6 +8,8 @@ namespace BoxingClub.DAL.Interfaces
 
         IBoxingGroupRepository BoxingGroups { get; }
 
+        IMedicalCertificateRepository MedicalCertificates { get; }
+
         Task SaveAsync();
     }
 }

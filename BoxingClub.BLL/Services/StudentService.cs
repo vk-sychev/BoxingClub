@@ -40,7 +40,8 @@ namespace BoxingClub.BLL.Services
             {
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
             }
-            return _mapper.Map<StudentFullDTO>(student);
+            var mappedStudent = _mapper.Map<StudentFullDTO>(student);
+            return mappedStudent;
         }
 
         public async Task<List<StudentLiteDTO>> GetStudentsAsync()
@@ -78,7 +79,7 @@ namespace BoxingClub.BLL.Services
             await _database.SaveAsync();
         }
 
-        public Task UpdateStudentAsync(StudentFullDTO studentDTO)
+        public async Task UpdateStudentAsync(StudentFullDTO studentDTO)
         {
             if (studentDTO == null)
             {
@@ -86,7 +87,7 @@ namespace BoxingClub.BLL.Services
             }
             var student = _mapper.Map<Student>(studentDTO);
             _database.Students.Update(student);
-            return _database.SaveAsync();
+            await _database.SaveAsync();
         }
 
         public async Task DeleteFromGroupAsync(int? studentId)

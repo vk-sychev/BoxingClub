@@ -1,4 +1,5 @@
 ﻿using BoxingClub.DAL.Entities;
+using BoxingClub.DAL.Entities.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -258,6 +259,69 @@ namespace BoxingClub.DAL.EF
                     NumberOfFights = 10
                 });
 
+            modelBuilder.Entity<MedicalCertificate>().HasData(
+                new MedicalCertificate()
+                {
+                    Id = 1,
+                    ClinicName = "Polyclinic 4",
+                    DateOfIssue = new DateTime(2021, 03, 10),
+                    Result = MedicalResult.Success,
+                    StudentId = 1
+                },
+
+                new MedicalCertificate()
+                {
+                    Id = 2,
+                    ClinicName = "Polyclinic 4",
+                    DateOfIssue = new DateTime(2020, 05, 02),
+                    Result = MedicalResult.Fail,
+                    StudentId = 1
+                },
+
+                new MedicalCertificate()
+                {
+                    Id = 3,
+                    ClinicName = "Polyclinic 13",
+                    DateOfIssue = new DateTime(2019, 10, 04),
+                    Result = MedicalResult.Success,
+                    StudentId = 1
+                },
+
+                new MedicalCertificate()
+                {
+                    Id = 4,
+                    ClinicName = "VODC",
+                    DateOfIssue = new DateTime(2018, 07, 14),
+                    Result = MedicalResult.Success,
+                    StudentId = 2
+                },
+
+                new MedicalCertificate()
+                {
+                    Id = 5,
+                    ClinicName = "VODC",
+                    DateOfIssue = new DateTime(2021, 04, 14),
+                    Result = MedicalResult.Fail,
+                    StudentId = 2
+                },
+
+                new MedicalCertificate()
+                {
+                    Id = 6,
+                    ClinicName = "Polyclinic 4",
+                    DateOfIssue = new DateTime(2020, 12, 06),
+                    Result = MedicalResult.Fail,
+                    StudentId = 3
+                },
+
+                new MedicalCertificate()
+                {
+                    Id = 7,
+                    ClinicName = "Polyclinic 1",
+                    DateOfIssue = new DateTime(2021, 05, 04),
+                    Result = MedicalResult.Success,
+                    StudentId = 3
+                });
         }
     }
 }

@@ -19,15 +19,18 @@ namespace BoxingClub.Web.Controllers
     {
         private readonly IStudentService _studentService;
         private readonly IBoxingGroupService _boxingGroupService;
+        private readonly IMedicalCertificateService _medicalCertificateService;
         private readonly IMapper _mapper;
 
         public StudentController(IStudentService studentService,
                                  IMapper mapper,
-                                 IBoxingGroupService boxingGroupService)
+                                 IBoxingGroupService boxingGroupService,
+                                 IMedicalCertificateService medicalCertificateService)
         {
             _studentService = studentService;
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
+            _medicalCertificateService = medicalCertificateService;
         }
 
 

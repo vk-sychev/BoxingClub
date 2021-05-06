@@ -18,7 +18,7 @@ namespace BoxingClub.BLL.UnitTests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _studentSpecification = new FighterExperienceSpecificationService();
+            _studentSpecification = new FighterExperienceSpecification();
         }
 
         private static readonly object[] Students =
