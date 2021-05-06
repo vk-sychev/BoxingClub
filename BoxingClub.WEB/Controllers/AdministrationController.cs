@@ -33,15 +33,11 @@ namespace BoxingClub.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers(int? pageIndex, int? pageSize)
         {
-            var pageModel = await _userService.GetUsersPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
-            if (!pageModel.Items.Any())
-            {
-                pageModel = await _userService.GetUsersPaginatedAsync(1, pageSize ?? 3);
-                pageIndex = 1;
-            }
+            var searchModel = new SearchModelDTO() { PageIndex = pageIndex, PageSize = pageSize };
+            var pageModel = await _userService.GetUsersPaginatedAsync(searchModel);
 
             var users = _mapper.Map<List<UserViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<UserViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, users);
+            var pageViewModel = new PageViewModel<UserViewModel>(pageModel.Count, pageIndex, pageSize, users);
 
             var sizes = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
             ViewBag.Sizes = sizes;

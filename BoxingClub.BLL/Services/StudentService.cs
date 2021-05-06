@@ -110,10 +110,24 @@ namespace BoxingClub.BLL.Services
 
 
 
-        public async Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedByFilterAsync(int pageIndex, int pageSize, int filter)
+        public async Task<PageModelDTO<StudentLiteDTO>> GetStudentsAsync(SearchModelDTO searchDTO) //убрать async
         {
-            var model = new PageModelDTO<StudentLiteDTO>();
-            var filterOrder = GetFilterOrder(filter);
+            if (searchDTO == null)
+            {
+                throw new ArgumentNullException(nameof(searchDTO), "SearchDTO is null");
+            }
+
+            var filterOrder = GetFilterOrder(searchDTO.Filter);
+
+            if (searchDTO.PageIndex == null)
+            {
+                searchDTO.PageIndex = 1;
+            }
+
+            if (searchDTO.PageSize == null)
+            {
+                searchDTO.PageSize = 3;
+            }
 
             var students = await _database.Students.GetAllAsync();
             var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
@@ -124,16 +138,22 @@ namespace BoxingClub.BLL.Services
             {
                 mappedValidatedStudents = mappedValidatedStudents.Where(it => it.Experienced).ToList();
             }
-            else if (filterOrder == FilterOrder.Newbies)
+
+            if (filterOrder == FilterOrder.Newbies)
             {
                 mappedValidatedStudents = mappedValidatedStudents.Where(it => !it.Experienced).ToList();
             }
 
-            var takenStudents = mappedValidatedStudents.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            var takenStudents = mappedValidatedStudents.Skip((searchDTO.PageIndex.Value - 1) * searchDTO.PageSize.Value).Take(searchDTO.PageSize.Value);
             var count = mappedValidatedStudents.Count;
 
-            model = new PageModelDTO<StudentLiteDTO>() { Items = takenStudents, Count = count };
-            return model;
+            if (takenStudents.Count() == 0)
+            {
+                searchDTO.PageIndex = 1;
+                takenStudents = mappedValidatedStudents.Skip((searchDTO.PageIndex.Value - 1) * searchDTO.PageSize.Value).Take(searchDTO.PageSize.Value);
+            }
+
+            return new PageModelDTO<StudentLiteDTO>() { Items = takenStudents, Count = count };
         }
 
 
@@ -159,7 +179,7 @@ namespace BoxingClub.BLL.Services
             return students;
         }
 
-        private FilterOrder GetFilterOrder(int filter)
+        private FilterOrder GetFilterOrder(int? filter)
         {
             switch (filter)
             {
