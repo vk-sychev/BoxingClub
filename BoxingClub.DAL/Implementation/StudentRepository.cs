@@ -42,13 +42,13 @@ namespace BoxingClub.DAL.Repositories
 
         public Task<Student> GetByIdAsync(int id)
         {
-            return _db.Students.Include(x => x.BoxingGroup).SingleOrDefaultAsync(s => s.Id == id);
+            return _db.Students.Include(x => x.BoxingGroup).Include(x => x.MedicalCertificates).SingleOrDefaultAsync(s => s.Id == id);
         }
 
 
         public Task<List<Student>> GetAllAsync()
         {
-            return _db.Students.Include(x => x.BoxingGroup).ToListAsync();
+            return _db.Students.Include(x => x.BoxingGroup).Include(x => x.MedicalCertificates).ToListAsync();
         }
 
         public void Update(Student item)

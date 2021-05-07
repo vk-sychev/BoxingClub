@@ -36,7 +36,7 @@
                     <td>
                         <div class="d-flex justify-content-end">
                             @Html.ActionLink("Edit", "EditMedicalCertificate", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" }) 
-                            @Html.ActionLink("Delete", "DeleteMedicalCertificate", new { id=item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                            @Html.ActionLink("Delete", "DeleteMedicalCertificate", new { id=item.Id, studentId = item.StudentId }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
                         </div>
                     </td>
                 </tr>

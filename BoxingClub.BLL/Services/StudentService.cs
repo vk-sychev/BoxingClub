@@ -46,7 +46,6 @@ namespace BoxingClub.BLL.Services
                 throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
             }
             var mappedStudent = _mapper.Map<StudentFullDTO>(student);
-            await AssignMedicalCertificatesForStudent(mappedStudent);
             return mappedStudent;
         }
 
@@ -118,8 +117,6 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(searchDTO), "SearchDTO is null");
             }
 
-            var filterOrder = GetFilterOrder(searchDTO.Filter);
-
             if (searchDTO.PageIndex == null)
             {
                 searchDTO.PageIndex = 1;
@@ -133,20 +130,15 @@ namespace BoxingClub.BLL.Services
             var students = await _database.Students.GetAllAsync();
             
             var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
-            studentDTOs = await GetMedicalCertificatesForStudents(studentDTOs);
+            AssignLastMedicalCertificateForStudent(studentDTOs);
 
             var validatedStudents = ValidateStudentsInList(studentDTOs);
             var mappedValidatedStudents = _mapper.Map<List<StudentLiteDTO>>(validatedStudents);
-            
-            if (filterOrder == FilterOrder.Experienced)
-            {
-                mappedValidatedStudents = mappedValidatedStudents.Where(it => it.Experienced).ToList();
-            }
 
-            if (filterOrder == FilterOrder.Newbies)
-            {
-                mappedValidatedStudents = mappedValidatedStudents.Where(it => !it.Experienced).ToList();
-            }
+            var experienceOrder = GetExperienceOrder(searchDTO.ExperienceFilter);
+            var medExaminationOrder = GetMedExaminationOrder(searchDTO.MedExaminationFilter);
+
+            mappedValidatedStudents = GetFilteredStudents(experienceOrder, medExaminationOrder, mappedValidatedStudents);
 
             var takenStudents = mappedValidatedStudents.Skip((searchDTO.PageIndex.Value - 1) * searchDTO.PageSize.Value).Take(searchDTO.PageSize.Value);
             var count = mappedValidatedStudents.Count;
@@ -161,21 +153,50 @@ namespace BoxingClub.BLL.Services
         }
 
 
-        private async Task<List<StudentFullDTO>> GetMedicalCertificatesForStudents(List<StudentFullDTO> students)
+        private void AssignLastMedicalCertificateForStudent(List<StudentFullDTO> students)
         {
             foreach(var student in students)
             {
-                await AssignMedicalCertificatesForStudent(student);
+                student.LastMedicalCertificate = student.MedicalCertificates.OrderBy(x => x.DateOfIssue).LastOrDefault();
             }
+        }
+
+        private List<StudentLiteDTO> GetFilteredStudents(ExperienceOrder experienceOrder, MedExaminationOrder medExaminationOrder, List<StudentLiteDTO> students)
+        {
+            var filteredByExperienceStudents = FilterByExperience(experienceOrder, students);
+            var filteredByMedExamination = FilterByMedExamination(medExaminationOrder, filteredByExperienceStudents);
+            return filteredByMedExamination;
+        }
+
+        private List<StudentLiteDTO> FilterByExperience(ExperienceOrder experienceOrder, List<StudentLiteDTO> students)
+        {
+            if (experienceOrder == ExperienceOrder.Experienced)
+            {
+                return students.Where(it => it.Experienced).ToList();
+            }
+
+            if (experienceOrder == ExperienceOrder.Newbies)
+            {
+                return students.Where(it => !it.Experienced).ToList();
+            }
+
             return students;
         }
 
-        private async Task AssignMedicalCertificatesForStudent(StudentFullDTO student)
+
+        private List<StudentLiteDTO> FilterByMedExamination(MedExaminationOrder medExaminationOrder, List<StudentLiteDTO> students)
         {
-            var medicalCertificates = await _database.MedicalCertificates.GetAllByStudentIdAsync(student.Id);
-            var mappedCertificates = _mapper.Map<List<MedicalCertificateDTO>>(medicalCertificates);
-            student.MedicalCertificates = mappedCertificates;
-            student.LastMedicalCertificate = mappedCertificates.OrderBy(x => x.DateOfIssue).LastOrDefault();
+            if (medExaminationOrder == MedExaminationOrder.Successed)
+            {
+                return students.Where(it => it.IsMedicalCertificateValid).ToList();
+            }
+
+            if (medExaminationOrder == MedExaminationOrder.Failed)
+            {
+                return students.Where(it => !it.IsMedicalCertificateValid).ToList();
+            }
+
+            return students;
         }
 
         private List<StudentFullDTO> ValidateStudentsInList(List<StudentFullDTO> students)
@@ -188,16 +209,29 @@ namespace BoxingClub.BLL.Services
             return students;
         }
 
-        private FilterOrder GetFilterOrder(int? filter)
+        private ExperienceOrder GetExperienceOrder(int? filter)
         {
             switch (filter)
             {
                 case 1:
-                    return FilterOrder.Experienced;
+                    return ExperienceOrder.Experienced;
                 case 2:
-                    return FilterOrder.Newbies;
+                    return ExperienceOrder.Newbies;
                 default:
-                    return FilterOrder.All;
+                    return ExperienceOrder.All;
+            }
+        }
+
+        private MedExaminationOrder GetMedExaminationOrder(int? filter)
+        {
+            switch (filter)
+            {
+                case 1:
+                    return MedExaminationOrder.Successed;
+                case 2:
+                    return MedExaminationOrder.Failed;
+                default:
+                    return MedExaminationOrder.All;
             }
         }
 

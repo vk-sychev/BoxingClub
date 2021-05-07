@@ -33,7 +33,7 @@ namespace BoxingClub.Web.Controllers
             _studentService = studentService;
         }
 
-        public async Task<IActionResult> Index(int? pageIndex, int? pageSize)
+        public async Task<IActionResult> Index([FromQuery] SearchModelDTO searchModel)
         {
             if (User.IsInRole(Constants.UserRoleName))
             {
@@ -42,25 +42,22 @@ namespace BoxingClub.Web.Controllers
 
             List<BoxingGroupLiteViewModel> groups;
             PageModelDTO<BoxingGroupDTO> pageModel;
-            var searchModel = new SearchModelDTO() { PageIndex = pageIndex, PageSize = pageSize };
 
             if (User.IsInRole(Constants.CoachRoleName))
             {
                 var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
                 pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, searchModel);
-                pageIndex = searchModel.PageIndex;
             }
             else
             {
                 pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(searchModel);
-                pageIndex = searchModel.PageIndex;
             }
             groups = _mapper.Map<List<BoxingGroupLiteViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, pageIndex, pageSize, groups);
+            var pageViewModel = new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, groups);
 
             var sizes = new List<int> { 1, 2, 3, 4, 5 };
             ViewBag.Sizes = sizes;
-            ViewBag.pageSize = pageSize ?? 3;
+            ViewBag.pageSize = searchModel.PageSize ?? 3;
 
             return View(pageViewModel);
         }
@@ -95,25 +92,18 @@ namespace BoxingClub.Web.Controllers
             return View(model);
         }
 
-
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
+        [Route("Home/CreateBoxingGroup")]
         public async Task<IActionResult> CreateBoxingGroup()
         {
             ViewBag.Coaches = await GetCoaches();
             return View();
         }
 
-        private async Task<SelectList> GetCoaches()
-        {
-            var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
-            var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
-            var selectList = new SelectList(coacheViewModels, "Id", "FullName");
-            return selectList;
-        }
-
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpPost]
+        [Route("Home/CreateBoxingGroup")]
         public async Task<IActionResult> CreateBoxingGroup(BoxingGroupLiteViewModel model)
         {
             if (ModelState.IsValid)
@@ -126,15 +116,6 @@ namespace BoxingClub.Web.Controllers
             return View(model);
         }
 
-        [AuthorizeRoles(Constants.AdminRoleName)]
-        [Route("Home/DeleteGroup/{id}")]
-        public async Task<IActionResult> DeleteBoxingGroup(int? id)
-        {
-            await _boxingGroupService.DeleleBoxingGroupAsync(id.Value);
-            return RedirectToAction("Index", "Home");
-        }
-
-
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         [Route("Home/DetailsGroup/{id}")]
         [HttpGet]
@@ -145,13 +126,30 @@ namespace BoxingClub.Web.Controllers
             return View(model);
         }
 
+        [AuthorizeRoles(Constants.AdminRoleName)]
+        [Route("Home/DeleteBoxingGroup/{id}")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBoxingGroup(int? id)
+        {
+            await _boxingGroupService.DeleleBoxingGroupAsync(id.Value);
+            return RedirectToAction("Index", "Home");
+        }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Home/DeleteFromGroup/{studentId}")]
+        [Route("Home/DetailsGroup/DeleteFromBoxingGroup/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFromBoxingGroup(int? studentId, int? returnId)
         {
             await _studentService.DeleteFromGroupAsync(studentId);
             return RedirectToAction("DetailsGroup", new { id = returnId.Value });
+        }
+
+        private async Task<SelectList> GetCoaches()
+        {
+            var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
+            var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
+            var selectList = new SelectList(coacheViewModels, "Id", "FullName");
+            return selectList;
         }
     }
 }

@@ -10,6 +10,8 @@ using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
 using System.Linq;
 using BoxingClub.Infrastructure.Exceptions;
+using System;
+using BoxingClub.DAL.Entities.Enums;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -34,31 +36,26 @@ namespace BoxingClub.Web.Controllers
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        public async Task<IActionResult> GetAllStudents(int? pageIndex, int? pageSize, int? filter)
+        [Route("Student/GetAllStudents")]
+        public async Task<IActionResult> GetAllStudents([FromQuery] SearchModelDTO searchModel)
         {
-            var searchModel = new SearchModelDTO()
-            {
-                PageIndex = pageIndex,
-                PageSize = pageSize,
-                Filter = filter
-            };
-
             var pageModel = await _studentService.GetStudentsAsync(searchModel);
-            pageIndex = searchModel.PageIndex;
 
             var students = _mapper.Map<List<StudentLiteViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<StudentLiteViewModel>(pageModel.Count, pageIndex, pageSize, students);
+            var pageViewModel = new PageViewModel<StudentLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, students);
 
             var sizes = new List<int> { 1, 2, 3, 4, 5 }; //в конфиг
             ViewBag.Sizes = sizes;
-            ViewBag.pageSize = pageSize ?? 3;
-            ViewBag.filter = filter ?? 0;
+            ViewBag.pageSize = searchModel.PageSize ?? 3;
+            ViewBag.experienceFilter = searchModel.ExperienceFilter ?? 0;
+            ViewBag.medExaminationFilter = searchModel.MedExaminationFilter ?? 0;
 
             return View(pageViewModel);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpGet]
+        [Route("Student/CreateStudent")]
         public async Task<IActionResult> CreateStudent()
         {
             ViewBag.Groups = await GetGroups();
@@ -66,6 +63,7 @@ namespace BoxingClub.Web.Controllers
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [Route("Student/CreateStudent")]
         [HttpPost]
         public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
         {
@@ -80,8 +78,9 @@ namespace BoxingClub.Web.Controllers
 
         }
 
-        [Route("Student/DeleteStudent/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName)]
+        [Route("Student/DeleteStudent/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(int? id)
         {
             await _studentService.DeleteStudentAsync(id);
@@ -185,10 +184,12 @@ namespace BoxingClub.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> DeleteMedicalCertificate(int? id)
+        [HttpDelete("{id}")]
+        [Route("Student/DetailsStudent/DeleteMedicalCertificate/{id}")]
+        public async Task<IActionResult> DeleteMedicalCertificate(int? id, int? studentId)
         {
             await _medicalCertificateService.DeleteMedicalCertificateAsync(id);
-            return RedirectToAction("GetAllStudents");
+            return RedirectToAction("DetailsStudent", new { id = studentId});
         }
 
         private async Task<SelectList> GetGroups()
@@ -198,5 +199,7 @@ namespace BoxingClub.Web.Controllers
             var selectList = new SelectList(groupViewModels, "Id", "Name");
             return selectList;
         }
+
+
     }
 }

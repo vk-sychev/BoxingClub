@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BoxingClub.BLL.DomainEntities.Enums
 {
-    public enum FilterOrder
+    public enum ExperienceOrder
     {
         All = 0,
         Experienced,

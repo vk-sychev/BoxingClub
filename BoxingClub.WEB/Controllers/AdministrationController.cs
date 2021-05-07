@@ -31,22 +31,23 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers(int? pageIndex, int? pageSize)
+        [Route("Administration/GetUsers")]
+        public async Task<IActionResult> GetUsers([FromQuery] SearchModelDTO searchModel)
         {
-            var searchModel = new SearchModelDTO() { PageIndex = pageIndex, PageSize = pageSize };
             var pageModel = await _userService.GetUsersPaginatedAsync(searchModel);
 
             var users = _mapper.Map<List<UserViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<UserViewModel>(pageModel.Count, pageIndex, pageSize, users);
+            var pageViewModel = new PageViewModel<UserViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, users);
 
             var sizes = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
             ViewBag.Sizes = sizes;
-            ViewBag.pageSize = pageSize ?? 3;
+            ViewBag.pageSize = searchModel.PageSize ?? 3;
 
             return View(pageViewModel);
         }
 
-        [Route("Administration/DeleteUser/{id}")]
+        [HttpDelete("{id}")]
+        [Route("Administration/DeleteStudent/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             await _userService.DeleteUserByIdAsync(id);
@@ -60,14 +61,6 @@ namespace BoxingClub.Web.Controllers
             var user = await _userService.FindUserByIdAsync(id);
             var mappedUser = _mapper.Map<UserViewModel>(user);
             return View(mappedUser);
-        }
-
-        private async Task<SelectList> GetRoles()
-        {
-            var roles = await _roleService.GetRolesAsync();
-            var mappedRoles = _mapper.Map<List<RoleViewModel>>(roles);
-            var selectList = new SelectList(mappedRoles, "Id", "Name");
-            return selectList;
         }
 
         [HttpGet]
@@ -100,7 +93,13 @@ namespace BoxingClub.Web.Controllers
             ViewBag.Roles = await GetRoles();
             return View(model);
         }
-
+        private async Task<SelectList> GetRoles()
+        {
+            var roles = await _roleService.GetRolesAsync();
+            var mappedRoles = _mapper.Map<List<RoleViewModel>>(roles);
+            var selectList = new SelectList(mappedRoles, "Id", "Name");
+            return selectList;
+        }
     }
 }
 

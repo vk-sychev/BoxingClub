@@ -10,6 +10,8 @@ namespace BoxingClub.BLL.DomainEntities
 
         public int? PageSize { get; set; }
 
-        public int? Filter { get; set; }
+        public int? ExperienceFilter { get; set; }
+
+        public int? MedExaminationFilter { get; set; }
     }
 }
