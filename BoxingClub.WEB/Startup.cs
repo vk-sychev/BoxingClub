@@ -69,12 +69,13 @@ namespace BoxingClub.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
+            services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
 
-            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
+/*            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
-            mapperConfig.AssertConfigurationIsValid();
+            mapperConfig.AssertConfigurationIsValid();*/
 
-            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile), typeof(UserProfile));
+            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile), typeof(UserProfile), typeof(MedicalCertificateProfile));
 
             services.AddMvc(options =>
             {
@@ -92,6 +93,7 @@ namespace BoxingClub.Web
             services.AddTransient<IValidator<StudentFullViewModel>, StudentFullViewModelValidator>();
             services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
             services.AddTransient<IValidator<BoxingGroupLiteViewModel>, BoxingGroupLiteViewModelValidator>();
+            services.AddTransient<IValidator<MedicalCertificateViewModel>, MedicalCertificateViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>
             {

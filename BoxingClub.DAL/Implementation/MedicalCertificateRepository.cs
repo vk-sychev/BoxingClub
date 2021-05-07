@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
@@ -21,6 +22,10 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task CreateAsync(MedicalCertificate item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Medical Certificate is null");
+            }
             var student = await _db.Students.FindAsync(item.StudentId);
             item.Student = student;
             await _db.MedicalCertificates.AddAsync(item);
@@ -28,27 +33,34 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public void Delete(MedicalCertificate item)
         {
-            //валидация
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Medical Certificate is null");
+            }
             _db.MedicalCertificates.Remove(item);
         }
 
-        public async Task<IEnumerable<MedicalCertificate>> GetAllAsync()
+        public Task<List<MedicalCertificate>> GetAllAsync()
         {
-            return await _db.MedicalCertificates.AsQueryable().ToListAsync();
+            return _db.MedicalCertificates.AsQueryable().ToListAsync();
         }
 
-        public async Task<List<MedicalCertificate>> GetAllByStudentIdAsync(int studentId)
+        public Task<List<MedicalCertificate>> GetAllByStudentIdAsync(int studentId)
         {
-            return await _db.MedicalCertificates.AsQueryable().Where(s => s.Id == studentId).ToListAsync();
+            return _db.MedicalCertificates.AsQueryable().Where(s => s.StudentId == studentId).ToListAsync();
         }
 
-        public async Task<MedicalCertificate> GetByIdAsync(int id)
+        public Task<MedicalCertificate> GetByIdAsync(int id)
         {
-            return await _db.MedicalCertificates.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+            return _db.MedicalCertificates.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void Update(MedicalCertificate item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Medical Certificate is null");
+            }
             _db.Entry(item).State = EntityState.Modified;
         }
     }

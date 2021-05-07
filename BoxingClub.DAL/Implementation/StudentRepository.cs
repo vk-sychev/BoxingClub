@@ -22,6 +22,10 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task CreateAsync(Student item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Student is null");
+            }
             var group = await _db.BoxingGroups.FindAsync(item.BoxingGroupId);
             item.BoxingGroup = group;
             await _db.Students.AddAsync(item);
@@ -29,36 +33,44 @@ namespace BoxingClub.DAL.Repositories
 
         public void Delete(Student item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Student is null");
+            }
             _db.Students.Remove(item);
         }
 
-        public async Task<Student> GetByIdAsync(int id)
+        public Task<Student> GetByIdAsync(int id)
         {
-            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).Where(s => s.Id == id).SingleOrDefaultAsync();
+            return _db.Students.Include(x => x.BoxingGroup).SingleOrDefaultAsync(s => s.Id == id);
         }
 
 
-        public async Task<IEnumerable<Student>> GetAllAsync()
+        public Task<List<Student>> GetAllAsync()
         {
-            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).ToListAsync();
+            return _db.Students.Include(x => x.BoxingGroup).ToListAsync();
         }
 
         public void Update(Student item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Student is null");
+            }
             _db.Entry(item).State = EntityState.Modified;
         }
 
-        public async Task<List<Student>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
+        public Task<List<Student>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
         {
             var query = _db.Students.AsQueryable().Include(x => x.BoxingGroup);
-            var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            var list = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return list;
         }
 
-        public async Task<int> GetCountOfStudentsAsync()
+        public Task<int> GetCountOfStudentsAsync()
         {
             var query = _db.Students.AsQueryable().Include(x => x.BoxingGroup);
-            var count = await query.CountAsync();
+            var count = query.CountAsync();
             return count;
         }
     }

@@ -24,6 +24,11 @@ namespace BoxingClub.BLL.Implementation.Specifications
                 return false;
             }
 
+            if (student.LastMedicalCertificate.Result == 0)
+            {
+                return false;
+            }
+
             return GetMedicalCertificateDuration(student.LastMedicalCertificate.DateOfIssue) < ValidityPeriod; 
         }
 

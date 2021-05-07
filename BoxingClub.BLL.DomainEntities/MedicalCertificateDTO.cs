@@ -13,5 +13,7 @@ namespace BoxingClub.BLL.DomainEntities
         public DateTime DateOfIssue { get; set; }
 
         public int Result { get; set; }
+
+        public int StudentId { get; set; }
     }
 }

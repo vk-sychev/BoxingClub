@@ -19,5 +19,7 @@ namespace BoxingClub.BLL.DomainEntities
         public int BoxingGroupId { get; set; }
 
         public BoxingGroupDTO BoxingGroup { get; set; }
+
+        public bool IsMedicalCertificateValid { get; set; }
     }
 }

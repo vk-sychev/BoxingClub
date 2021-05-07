@@ -10,7 +10,6 @@ using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
 using System.Linq;
 using BoxingClub.Infrastructure.Exceptions;
-using BoxingClub.Web.Models.Enums;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -59,6 +58,7 @@ namespace BoxingClub.Web.Controllers
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [HttpGet]
         public async Task<IActionResult> CreateStudent()
         {
             ViewBag.Groups = await GetGroups();
@@ -135,6 +135,61 @@ namespace BoxingClub.Web.Controllers
             return View(student);
         }
 
+
+
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [Route("Student/DetailsStudent/EditMedicalCertificate/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> EditMedicalCertificate(int? id)
+        {
+            var medicalCertificateDTO = await _medicalCertificateService.GetMedicalCertificateByIdAsync(id);
+            var medicalCertificate = _mapper.Map<MedicalCertificateViewModel>(medicalCertificateDTO);
+            return View(medicalCertificate);
+        }
+
+
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [Route("Student/DetailsStudent/EditMedicalCertificate/{id}")]
+        [HttpPost]
+        public async Task<IActionResult> EditMedicalCertificate(MedicalCertificateViewModel model)
+        { 
+            if (ModelState.IsValid)
+            {
+                var medicalCertificateDTO = _mapper.Map<MedicalCertificateDTO>(model);
+                await _medicalCertificateService.UpdateMedicalCertificateAsync(medicalCertificateDTO);
+                return RedirectToAction("DetailsStudent", "Student", new { id = model.StudentId});
+            }
+            return View(model);
+        }
+
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [Route("Student/DetailsStudent/CreateMedicalCertificate")]
+        [HttpGet]
+        public IActionResult CreateMedicalCertificate(int? id)
+        {
+            ViewBag.studentId = id;
+            return View();
+        }
+
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [Route("Student/DetailsStudent/CreateMedicalCertificate")]
+        [HttpPost]
+        public async Task<IActionResult> CreateMedicalCertificate(MedicalCertificateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var medicalCertificateDTO = _mapper.Map<MedicalCertificateDTO>(model);
+                await _medicalCertificateService.CreateMedicalCertificateAsync(medicalCertificateDTO);
+                return RedirectToAction("DetailsStudent", "Student", new { id = model.StudentId });
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> DeleteMedicalCertificate(int? id)
+        {
+            await _medicalCertificateService.DeleteMedicalCertificateAsync(id);
+            return RedirectToAction("GetAllStudents");
+        }
 
         private async Task<SelectList> GetGroups()
         {

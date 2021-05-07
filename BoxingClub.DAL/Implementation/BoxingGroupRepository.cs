@@ -21,67 +21,76 @@ namespace BoxingClub.DAL.Repositories
 
         public async Task CreateAsync(BoxingGroup item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "BoxingGroup is null");
+            }
             await _db.BoxingGroups.AddAsync(item);
         }
 
         public void Delete(BoxingGroup item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "BoxingGroup is null");
+            }
             _db.BoxingGroups.Remove(item);
         }
 
-        public async Task<BoxingGroup> GetByIdAsync(int id)
+        public Task<BoxingGroup> GetByIdAsync(int id)
         {
-            var res = await _db.BoxingGroups.AsQueryable().Where(g => g.Id == id).Include(x => x.Coach).SingleOrDefaultAsync();
-            return res;
+            return _db.BoxingGroups.Include(x => x.Coach).SingleOrDefaultAsync(g => g.Id == id);
         }
 
-        public async Task<IEnumerable<BoxingGroup>> GetAllAsync()
+        public Task<List<BoxingGroup>> GetAllAsync()
         {
-            return await _db.BoxingGroups.Include(x => x.Coach).ToListAsync();
+            return _db.BoxingGroups.Include(x => x.Coach).ToListAsync();
         }
 
-        public async Task<BoxingGroup> GetBoxingGroupWithStudentsByIdAsync(int id)
+        public Task<BoxingGroup> GetBoxingGroupWithStudentsByIdAsync(int id)
         {
-            var res = await _db.BoxingGroups.AsQueryable().Where(x => x.Id == id).Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync();
-            return res;
+           return _db.BoxingGroups.Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public void Update(BoxingGroup item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "BoxingGroup is null");
+            }
             _db.Entry(item).State = EntityState.Modified;
         }
 
-        public async Task<List<BoxingGroup>> GetBoxingGroupsByCoachIdAsync(string id)
+        public Task<List<BoxingGroup>> GetBoxingGroupsByCoachIdAsync(string id)
         {
-            var groups = await _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id).ToListAsync();
-            return groups;
+            return _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id).ToListAsync();
         }
 
-        public async Task<List<BoxingGroup>> GetBoxingGroupsPaginatedAsync(int pageIndex, int pageSize)
+        public Task<List<BoxingGroup>> GetBoxingGroupsPaginatedAsync(int pageIndex, int pageSize)
         {
             var query = _db.BoxingGroups.Include(x => x.Coach);
-            var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            var list = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return list;
         }
 
-        public async Task<int> GetCountOfBoxingGroupsAsync()
+        public Task<int> GetCountOfBoxingGroupsAsync()
         {
             var query = _db.BoxingGroups.AsQueryable().Include(x => x.Coach);
-            var count = await query.CountAsync();
+            var count = query.CountAsync();
             return count;
         }
 
-        public async Task<List<BoxingGroup>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, int pageIndex, int pageSize)
+        public Task<List<BoxingGroup>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, int pageIndex, int pageSize)
         {
             var query = _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id);
-            var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            var list = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return list;
         }
 
-        public async Task<int> GetCountOfBoxingGroupsByCoachIdAsync(string id)
+        public Task<int> GetCountOfBoxingGroupsByCoachIdAsync(string id)
         {
             var query = _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id);
-            var count = await query.CountAsync();
+            var count = query.CountAsync();
             return count;
         }
     }

@@ -29,6 +29,10 @@ namespace BoxingClub.BLL.DomainEntities
 
         public BoxingGroupDTO BoxingGroup { get; set; }
 
+        public List<MedicalCertificateDTO> MedicalCertificates { get; set; } = new List<MedicalCertificateDTO>();
+
         public MedicalCertificateDTO LastMedicalCertificate { get; set; }
+
+        public bool IsMedicalCertificateValid { get; set; }
     }
 }
