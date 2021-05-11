@@ -71,9 +71,9 @@ namespace BoxingClub.Web
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
 
-/*            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
+            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile(),new MedicalCertificateProfile() };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
-            mapperConfig.AssertConfigurationIsValid();*/
+            mapperConfig.AssertConfigurationIsValid();
 
             services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile), typeof(UserProfile), typeof(MedicalCertificateProfile));
 
