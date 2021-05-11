@@ -177,12 +177,14 @@ else
 
         $("#boxingGroupForm").submit(function () {
             $.validator.unobtrusive.parse($('#boxingGroupForm'));
+@*            var isValid = $('#boxingGroupForm').validate();*@
             var data = $('#boxingGroupForm').serialize();
             $.ajax({
                 url: "Home/CreateBoxingGroup",
                 type: "POST",
                 contentType: dataType,
                 data: data,
+                success : alert("success")
             })
         })
     })
