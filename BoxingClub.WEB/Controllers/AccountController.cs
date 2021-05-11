@@ -34,7 +34,7 @@ namespace BoxingClub.Web.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel model)
-            {
+        {
             if (ModelState.IsValid)
             {
                 var user = _mapper.Map<UserDTO>(model);

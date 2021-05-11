@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoxingClub.DAL.Entities.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -18,7 +19,7 @@ namespace BoxingClub.Web.Models
         [DisplayName("Date Of Issue")]
         public DateTime DateOfIssue { get; set; }
 
-        public int Result { get; set; }
+        public MedicalResult Result { get; set; }
 
         public int StudentId { get; set; }
     }

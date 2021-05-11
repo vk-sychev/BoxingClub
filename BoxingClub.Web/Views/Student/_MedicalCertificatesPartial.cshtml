@@ -3,7 +3,7 @@
 <div class="card-body">
     <div class="d-flex justify-content-between ">
         <h5 class="card-title">Medical Certificates</h5>
-        <a class="btn btn-primary btn-sm mb-3" asp-action="CreateMedicalCertificate" asp-controller="Student" asp-route-id="@Model.Id">Create New Medical Certificate</a>
+        <a class="btn btn-primary btn-sm mb-3" asp-action="CreateMedicalCertificate" asp-controller="MedicalCertificate" asp-route-id="@Model.Id">Create New Medical Certificate</a>
     </div>
     <table class="table">
         <thead>
@@ -35,8 +35,8 @@
                     </td>
                     <td>
                         <div class="d-flex justify-content-end">
-                            @Html.ActionLink("Edit", "EditMedicalCertificate", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" }) 
-                            @Html.ActionLink("Delete", "DeleteMedicalCertificate", new { id=item.Id, studentId = item.StudentId }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                            @Html.ActionLink("Edit", "EditMedicalCertificate", "MedicalCertificate", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" }) 
+                            @Html.ActionLink("Delete", "DeleteMedicalCertificate", "MedicalCertificate", new { id=item.Id, studentId = item.StudentId }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
                         </div>
                     </td>
                 </tr>

@@ -32,7 +32,7 @@ namespace BoxingClub.Web.Controllers
 
         [HttpGet]
         [Route("Administration/GetUsers")]
-        public async Task<IActionResult> GetUsers([FromQuery] SearchModelDTO searchModel)
+        public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
             var pageModel = await _userService.GetUsersPaginatedAsync(searchModel);
 

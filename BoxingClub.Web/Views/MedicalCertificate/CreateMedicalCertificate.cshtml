@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <label asp-for="Result" class="control-label font-weight-bold"></label>
                     <select asp-for="Result" class="form-select custom-select" asp-items="@Html.GetEnumSelectList<MedicalResult>()">
-                        <option selected="selected" disabled="disabled">Choose result</option>
+                        <option selected ="selected" disabled="disabled">Choose Result</option>
                     </select>
                     <br/>
                     <span asp-validation-for="Result" class="text-danger"></span>

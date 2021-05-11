@@ -33,7 +33,7 @@ namespace BoxingClub.Web.Controllers
             _studentService = studentService;
         }
 
-        public async Task<IActionResult> Index([FromQuery] SearchModelDTO searchModel)
+        public async Task<IActionResult> Index(SearchModelDTO searchModel)
         {
             if (User.IsInRole(Constants.UserRoleName))
             {
