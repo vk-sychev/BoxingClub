@@ -19,7 +19,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
                 throw new ArgumentNullException(nameof(student), "Student is null");
             }
             //тест 4 кейса
-            var diff = GetStudentTrainingPerod(student.DateOfEntry);
+            var diff = GetStudentTrainingPeriod(student.DateOfEntry);
 
             var durationRule = diff >= TrainingPeriod;
             var fightsRule = student.NumberOfFights >= NumberOfFights;
@@ -27,7 +27,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
             return durationRule && fightsRule;
         }
 
-        private int GetStudentTrainingPerod(DateTime dateOfEntry)
+        private int GetStudentTrainingPeriod(DateTime dateOfEntry)
         {
             var dateOfEntryYear = dateOfEntry.Year;
             var currentYear = DateTime.Now.Year;
