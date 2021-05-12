@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.DAL.Entities;
+using BoxingClub.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace BoxingClub.Web.Mapping
         public WeightCategoryProfile()
         {
             CreateMap<WeightCategory, WeightCategoryDTO>().ReverseMap();
+            CreateMap<WeightCategoryDTO, WeightCategoryViewModel>().ReverseMap();
         }
     }
 }

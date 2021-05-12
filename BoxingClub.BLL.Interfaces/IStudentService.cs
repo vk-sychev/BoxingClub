@@ -8,8 +8,6 @@ namespace BoxingClub.BLL.Interfaces
     {
         Task<StudentFullDTO> GetStudentByIdAsync(int? id);
 
-        //Task<List<StudentLiteDTO>> GetStudentsAsync();
-
         Task<PageModelDTO<StudentLiteDTO>> GetStudentsAsync(SearchModelDTO searchDTO);
 
         Task CreateStudentAsync(StudentFullDTO studentDTO);

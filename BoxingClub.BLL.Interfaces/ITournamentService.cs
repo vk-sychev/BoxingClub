@@ -1,10 +1,19 @@
-﻿using System;
+﻿using BoxingClub.BLL.DomainEntities;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace BoxingClub.BLL.Interfaces
 {
     public interface ITournamentService
     {
+        Task CreateTournamentAsync(TournamentDTO tournamentDTO);
+
+        Task DeleteTournamentAsync(int? id);
+
+        Task<TournamentDTO> GetTournamentByIdAsync(int? id);
+
+        Task<List<TournamentDTO>> GetTournamentsAsync();
+
+        Task UpdateTournamentAsync(TournamentDTO tournamentDTO);
     }
 }

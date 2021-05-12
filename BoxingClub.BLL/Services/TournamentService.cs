@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
+using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
@@ -11,7 +12,7 @@ using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullE
 
 namespace BoxingClub.BLL.Implementation.Services
 {
-    public class TournamentService
+    public class TournamentService : ITournamentService
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _database;

@@ -70,6 +70,7 @@ namespace BoxingClub.Web
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
+            services.AddTransient<ITournamentService, TournamentService>();
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), 
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
