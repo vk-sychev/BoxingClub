@@ -1,4 +1,5 @@
-﻿using BoxingClub.DAL.Entities.Enums;
+﻿
+using BoxingClub.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

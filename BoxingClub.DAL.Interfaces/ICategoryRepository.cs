@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.DAL.Interfaces
 {
-    public interface IMedicalCertificateRepository : IRepository<MedicalCertificate>
+    public interface ICategoryRepository:IRepository<Category>
     {
-        Task<List<MedicalCertificate>> GetMedicalCertificatesByStudentIdAsync(int studentId);
+        public Task<List<Category>> GetCategoriesByTournamentIdAsync(int id);
     }
 }

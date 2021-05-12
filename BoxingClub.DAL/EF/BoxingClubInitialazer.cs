@@ -1,5 +1,5 @@
 ﻿using BoxingClub.DAL.Entities;
-using BoxingClub.DAL.Entities.Enums;
+using BoxingClub.Infrastructure.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -217,7 +217,8 @@ namespace BoxingClub.DAL.EF
                     Height = 175,
                     Weight = 88,
                     BoxingGroupId = 1,
-                    NumberOfFights = 3
+                    NumberOfFights = 3,
+                    Gender = Gender.Male
                 },
 
                 new Student
@@ -230,7 +231,8 @@ namespace BoxingClub.DAL.EF
                     Height = 180,
                     Weight = 87,
                     BoxingGroupId = 2,
-                    NumberOfFights = 5
+                    NumberOfFights = 5,
+                    Gender = Gender.Male
                 },
 
                 new Student
@@ -243,7 +245,8 @@ namespace BoxingClub.DAL.EF
                     Height = 175,
                     Weight = 81,
                     BoxingGroupId = 1,
-                    NumberOfFights = 2
+                    NumberOfFights = 2,
+                    Gender = Gender.Male
                 },
 
                 new Student
@@ -256,7 +259,8 @@ namespace BoxingClub.DAL.EF
                     DateOfEntry = new DateTime(2021, 02, 02),
                     Height = 176,
                     Weight = 73,
-                    NumberOfFights = 10
+                    NumberOfFights = 10,
+                    Gender = Gender.Male
                 });
 
             modelBuilder.Entity<MedicalCertificate>().HasData(

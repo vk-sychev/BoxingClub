@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoxingClub.Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -24,6 +25,8 @@ namespace BoxingClub.DAL.Entities
         public int NumberOfFights { get; set; }
 
         public DateTime DateOfEntry { get; set; }
+
+        public Gender Gender { get; set; }
 
         public int? BoxingGroupId { get; set; }
 

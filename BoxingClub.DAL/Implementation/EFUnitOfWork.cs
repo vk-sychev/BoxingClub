@@ -12,6 +12,8 @@ namespace BoxingClub.DAL.Repositories
         private IStudentRepository _studentRepository;
         private IBoxingGroupRepository _boxingGroupRepository;
         private IMedicalCertificateRepository _medicalCertificateRepository;
+        private ITournamentRepository _tournamentRepository;
+        private ICategoryRepository _categoryRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
@@ -51,6 +53,30 @@ namespace BoxingClub.DAL.Repositories
                     _medicalCertificateRepository = new MedicalCertificateRepository(_db);
                 }
                 return _medicalCertificateRepository;
+            }
+        }
+
+        public ITournamentRepository Tournaments
+        {
+            get
+            {
+                if (_tournamentRepository == null)
+                {
+                    _tournamentRepository = new TournamentRepository(_db);
+                }
+                return _tournamentRepository;
+            }
+        }
+
+        public ICategoryRepository Categories
+        {
+            get
+            {
+                if (_categoryRepository == null)
+                {
+                    _categoryRepository = new CategoryRepository(_db);
+                }
+                return _categoryRepository;
             }
         }
 

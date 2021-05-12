@@ -26,8 +26,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
             {
                 throw new ArgumentNullException(nameof(item), "Medical Certificate is null");
             }
-            var student = await _db.Students.FindAsync(item.StudentId);
-            item.Student = student;
+
             await _db.MedicalCertificates.AddAsync(item);
         }
 
@@ -45,7 +44,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return _db.MedicalCertificates.AsQueryable().ToListAsync();
         }
 
-        public Task<List<MedicalCertificate>> GetAllByStudentIdAsync(int studentId)
+        public Task<List<MedicalCertificate>> GetMedicalCertificatesByStudentIdAsync(int studentId)
         {
             return _db.MedicalCertificates.AsQueryable().Where(s => s.StudentId == studentId).ToListAsync();
         }

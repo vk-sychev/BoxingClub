@@ -55,6 +55,8 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var medicalCertificate = _mapper.Map<MedicalCertificate>(certificateDTO);
+            medicalCertificate.Student = await _database.Students.GetByIdAsync(medicalCertificate.StudentId);
+
             await _database.MedicalCertificates.CreateAsync(medicalCertificate);
             await _database.SaveAsync();
         }
@@ -95,7 +97,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new ArgumentNullException(nameof(studentId), "Student's id is null");
             }
 
-            var medicalCertificates = await _database.MedicalCertificates.GetAllByStudentIdAsync(studentId.Value);
+            var medicalCertificates = await _database.MedicalCertificates.GetMedicalCertificatesByStudentIdAsync(studentId.Value);
             var mappedCertificates = _mapper.Map<List<MedicalCertificateDTO>>(medicalCertificates);
             return mappedCertificates;
         }
@@ -107,7 +109,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new ArgumentNullException(nameof(studentId), "Student's id is null");
             }
 
-            var medicalCertificates = await _database.MedicalCertificates.GetAllByStudentIdAsync(studentId.Value);
+            var medicalCertificates = await _database.MedicalCertificates.GetMedicalCertificatesByStudentIdAsync(studentId.Value);
             var lastCertificate = medicalCertificates.OrderBy(x => x.DateOfIssue).LastOrDefault();
             var mappedCertificate = _mapper.Map<MedicalCertificateDTO>(lastCertificate);
             return mappedCertificate;

@@ -110,8 +110,6 @@ namespace BoxingClub.BLL.Services
             await _database.SaveAsync();
         }
 
-
-
         public async Task<PageModelDTO<StudentLiteDTO>> GetStudentsAsync(SearchModelDTO searchDTO) //убрать async
         {
             if (searchDTO == null)

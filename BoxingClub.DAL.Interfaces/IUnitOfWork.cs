@@ -10,6 +10,10 @@ namespace BoxingClub.DAL.Interfaces
 
         IMedicalCertificateRepository MedicalCertificates { get; }
 
+        ITournamentRepository Tournaments { get; }
+
+        ICategoryRepository Categories { get; }
+
         Task SaveAsync();
     }
 }

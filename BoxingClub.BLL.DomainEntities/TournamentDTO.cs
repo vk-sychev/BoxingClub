@@ -19,5 +19,7 @@ namespace BoxingClub.BLL.DomainEntities
         public bool IsMedCertificateNecessary { get; set; }
 
         public List<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
+
+        public List<StudentFullDTO> Students { get; set; } = new List<StudentFullDTO>();
     }
 }

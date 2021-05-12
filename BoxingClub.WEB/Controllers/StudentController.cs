@@ -11,7 +11,6 @@ using BoxingClub.Web.CustomAttributes;
 using System.Linq;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
-using BoxingClub.DAL.Entities.Enums;
 
 namespace BoxingClub.Web.Controllers
 {

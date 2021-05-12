@@ -60,14 +60,14 @@ namespace BoxingClub.DAL.Repositories
 
         public Task<List<Student>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
         {
-            var query = _db.Students.AsQueryable().Include(x => x.BoxingGroup);
+            var query = _db.Students.Include(x => x.BoxingGroup);
             var list = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return list;
         }
 
         public Task<int> GetCountOfStudentsAsync()
         {
-            var query = _db.Students.AsQueryable().Include(x => x.BoxingGroup);
+            var query = _db.Students.Include(x => x.BoxingGroup);
             var count = query.CountAsync();
             return count;
         }

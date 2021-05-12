@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoxingClub.Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace BoxingClub.BLL.DomainEntities
@@ -25,6 +26,8 @@ namespace BoxingClub.BLL.DomainEntities
 
         public DateTime DateOfEntry { get; set; }
 
+        public Gender Gender { get; set; }
+
         public int BoxingGroupId { get; set; }
 
         public BoxingGroupDTO BoxingGroup { get; set; }
@@ -34,5 +37,7 @@ namespace BoxingClub.BLL.DomainEntities
         public MedicalCertificateDTO LastMedicalCertificate { get; set; }
 
         public bool IsMedicalCertificateValid { get; set; }
+
+        public CategoryDTO Category { get; set; }
     }
 }
