@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
-using BoxingClub.BLL.DomainEntities.Enums;
 using BoxingClub.BLL.Implementation.Specifications;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Interfaces.Specifications;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
+using BoxingClub.Infrastructure.Enums;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoxingClub.DAL.Entities.Enums
+namespace BoxingClub.Infrastructure.Enums
 {
     public enum MedicalResult
     {

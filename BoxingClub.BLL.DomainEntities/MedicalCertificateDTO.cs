@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoxingClub.Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,7 +13,7 @@ namespace BoxingClub.BLL.DomainEntities
 
         public DateTime DateOfIssue { get; set; }
 
-        public int Result { get; set; }
+        public MedicalResult Result { get; set; }
 
         public int StudentId { get; set; }
     }
