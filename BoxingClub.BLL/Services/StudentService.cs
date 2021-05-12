@@ -23,8 +23,7 @@ namespace BoxingClub.BLL.Services
         private readonly IStudentSpecification _medicalCertificateSpecification;
         private readonly IUnitOfWork _database; 
         public StudentService(IUnitOfWork uow, 
-                              IMapper mapper,
-                              IMedicalCertificateService medicalCertificateService)
+                              IMapper mapper)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
             _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
@@ -57,6 +56,9 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(studentDTO), "Student is null");
             }
             var student = _mapper.Map<Student>(studentDTO);
+            var boxingGroup = await _database.BoxingGroups.GetByIdAsync(student.BoxingGroupId.Value);
+            student.BoxingGroup = boxingGroup;
+
             await _database.Students.CreateAsync(student);
             await _database.SaveAsync();
         }
@@ -234,27 +236,5 @@ namespace BoxingClub.BLL.Services
                     return MedExaminationOrder.All;
             }
         }
-
-
-
-        /*private async Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
-        {
-            var students = await _database.Students.GetStudentsPaginatedAsync(pageIndex, pageSize);
-            var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
-            var count = await _database.Students.GetCountOfStudentsAsync();
-
-            var validatedStudents = AreStudentsInListExperienced(studentDTOs);
-            var mappedStudents = _mapper.Map<List<StudentLiteDTO>>(validatedStudents);
-
-            var model = new PageModelDTO<StudentLiteDTO>() { Items = mappedStudents, Count = count };
-            return model;
-        }*/
-
-        /*        public async Task<List<StudentLiteDTO>> GetStudentsAsync()
-                {
-                    var students = await _database.Students.GetAllAsync();
-                    var collection = _mapper.Map<List<StudentLiteDTO>>(students);
-                    return collection;
-                }*/
     }
 }

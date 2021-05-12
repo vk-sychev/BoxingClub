@@ -38,8 +38,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<bool> IsInRoleAsync(ApplicationUser user, string roleName)
         {
-            var res = await _userManager.IsInRoleAsync(user, roleName);
-            return res;
+            return await _userManager.IsInRoleAsync(user, roleName);
         }
 
         public async Task<IdentityResult> RemoveFromRoleAsync(string userId, string roleName)
@@ -60,8 +59,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<IdentityRole> FindRoleByNameAsync(string roleName)
         {
-            var role = await _roleManager.FindByNameAsync(roleName);
-            return role;
+           return await _roleManager.FindByNameAsync(roleName);
         }
     }
 }

@@ -26,8 +26,6 @@ namespace BoxingClub.DAL.Repositories
             {
                 throw new ArgumentNullException(nameof(item), "Student is null");
             }
-            var group = await _db.BoxingGroups.FindAsync(item.BoxingGroupId);
-            item.BoxingGroup = group;
             await _db.Students.AddAsync(item);
         }
 

@@ -71,7 +71,7 @@ namespace BoxingClub.BLL.UnitTests
             _mockRepository.Setup(repo => repo.GetAllAsync().Result).Returns(studentsList);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
 
-            var list = await _studentService.GetStudentsAsync();
+            var list = await _studentService.GetStudentsAsync(null); //serachDTO передать
 
             _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
             Assert.AreEqual(studentsList.Count, list.Count);

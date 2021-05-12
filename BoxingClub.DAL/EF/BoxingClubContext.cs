@@ -11,6 +11,16 @@ namespace BoxingClub.DAL.EF
 
         public DbSet<MedicalCertificate> MedicalCertificates { get; set; }
 
+        public DbSet<AgeCategory> AgeCategories { get; set; }
+
+        public DbSet<WeightCategory> WeightCategories { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Tournament> Tournaments { get; set; }
+
+
+
         public BoxingClubContext(DbContextOptions<BoxingClubContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

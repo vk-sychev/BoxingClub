@@ -322,6 +322,436 @@ namespace BoxingClub.DAL.EF
                     Result = MedicalResult.Success,
                     StudentId = 3
                 });
+
+
+            var ageCategory15_16yearsOld = new AgeCategory
+            {
+                Id = 1,
+                Name = "15-16 years old",
+                StartAge = 15,
+                EndAge = 16
+            };
+
+            var ageCategory17_18yearsOld = new AgeCategory
+            {
+                Id = 2,
+                Name = "Juniors",
+                StartAge = 17,
+                EndAge = 18
+            };
+
+            var ageCategoryAdult = new AgeCategory
+            {
+                Id = 3,
+                Name = "Adults",
+                StartAge = 19,
+                EndAge = 40
+            };
+
+            modelBuilder.Entity<AgeCategory>().HasData(ageCategory15_16yearsOld, ageCategory17_18yearsOld, ageCategoryAdult);
+
+
+            //Weight Categories for adult males and Junior-boys
+
+            var lightWeightCategoryForAdultMales = new WeightCategory
+            {
+                Id = 1,
+                Name = "Lightweight",
+                StartWeight = 56,
+                EndWeight = 60
+            };
+
+            var middleWeightCategoryForAdultMales = new WeightCategory
+            {
+                Id = 2,
+                Name = "Middleweight",
+                StartWeight = 69,
+                EndWeight = 75
+            };
+
+            var heavyWeightCategoryForAdultMales = new WeightCategory
+            {
+                Id = 3,
+                Name = "Heavyweight",
+                StartWeight = 81,
+                EndWeight = 91
+            };
+
+            var superHeavyWeightCategoryForAdultMales = new WeightCategory
+            {
+                Id = 4,
+                Name = "Super heavyweight",
+                StartWeight = 91
+            };
+
+
+
+            //Weight categories for adult females and junios-girls
+
+            var lightWeightCategoryForAdultFemales = new WeightCategory
+            {
+                Id = 5,
+                Name = "Lightweight",
+                StartWeight = 57,
+                EndWeight = 60
+            };
+
+            var middleWeightCategoryForAdultFemales = new WeightCategory
+            {
+                Id = 6,
+                Name = "Middleweight",
+                StartWeight = 69,
+                EndWeight = 75
+            };
+
+            var heavyWeightCategoryForAdultFemales = new WeightCategory
+            {
+                Id = 7,
+                Name = "Heavyweight",
+                StartWeight = 81,
+            };
+
+
+            //Weight categories for boys and girls 15-16 years old
+
+            var lightWeightCategoryForBoysAndGirls15_16YearsOld = new WeightCategory
+            {
+                Id = 8,
+                Name = "Lightweight",
+                StartWeight = 60,
+                EndWeight = 63
+            };
+
+            var middleWeightCategoryForBoysAndGirls15_16YearsOld = new WeightCategory
+            {
+                Id = 9,
+                Name = "Middleweight",
+                StartWeight = 70,
+                EndWeight = 75
+            };
+
+            var heavyWeightCategoryForBoysAndGirls15_16YearsOld = new WeightCategory
+            {
+                Id = 10,
+                Name = "Heavyweight",
+                StartWeight = 80
+            };
+
+            //adding males and junior-boys's weight categories;
+            modelBuilder.Entity<WeightCategory>().HasData(heavyWeightCategoryForAdultMales, 
+                                                          lightWeightCategoryForAdultMales, 
+                                                          middleWeightCategoryForAdultMales, 
+                                                          superHeavyWeightCategoryForAdultMales);
+
+
+            //adding females and junior-girls's weight categories;
+            modelBuilder.Entity<WeightCategory>().HasData(heavyWeightCategoryForAdultFemales, 
+                                                          lightWeightCategoryForAdultFemales, 
+                                                          middleWeightCategoryForAdultFemales);
+
+
+            //adding 15-16 years old boys and girls's categories;
+            modelBuilder.Entity<WeightCategory>().HasData(heavyWeightCategoryForBoysAndGirls15_16YearsOld,
+                                                          lightWeightCategoryForBoysAndGirls15_16YearsOld,
+                                                          middleWeightCategoryForBoysAndGirls15_16YearsOld);
+
+
+
+            //adding tournaments
+            var moscowJuniorBoxingChampionship = new Tournament()
+            {
+                Id = 1,
+                Name = "Moscow junior boxing championship",
+                Country = "Russia",
+                City = "Moscow",
+                Date = new DateTime(2021, 06, 25),
+                IsMedCertificateNecessary = true
+            };
+
+            var voronezhBoxingLeague = new Tournament()
+            {
+                Id = 2,
+                Name = "Voronezh Boxing League",
+                Country = "Russia",
+                City = "Voronezh",
+                Date = new DateTime(2021, 08, 10),
+                IsMedCertificateNecessary = false
+            };
+
+            var internationalWomensBoxingCompetition = new Tournament()
+            {
+                Id = 3,
+                Name = "International Women's Boxing Competition",
+                Country = "Belarus",
+                City = "Gomel",
+                Date = new DateTime(2021, 07, 13),
+                IsMedCertificateNecessary = true
+            };
+
+            var internationalBoxingTournamentCupOfTheGovernorOfStPetersburg = new Tournament()
+            {
+                Id = 4,
+                Name = "International boxing tournament - Cup of the Governor of St. Petersburg",
+                Country = "Russia",
+                City = "St. Petersburg",
+                Date = new DateTime(2021, 10, 17),
+                IsMedCertificateNecessary = false
+            };
+
+
+            modelBuilder.Entity<Tournament>().HasData(moscowJuniorBoxingChampionship, voronezhBoxingLeague, 
+                                                      internationalWomensBoxingCompetition, 
+                                                      internationalBoxingTournamentCupOfTheGovernorOfStPetersburg);
+
+            //adding categories to tournaments
+
+            //Moscow junior boxing championship
+
+            var juniorsBoysLightWeightMoscow = new Category
+            {
+                Id = 1,
+                AgeCategoryId = 2,
+                WeightCategoryId = 1,
+                Name = "Lightweight - Boys-juniors",
+                Gender = Gender.Male,
+                TournamentId = 1
+            };
+
+            var juniorsBoysMiddleWeightMoscow = new Category
+            {
+                Id = 2,
+                AgeCategoryId = 2,
+                WeightCategoryId = 2,
+                Name = "Middleweight - Boys-juniors",
+                Gender = Gender.Male,
+                TournamentId = 1
+            };
+
+            var juniorsBoysHeavyWeightMoscow = new Category
+            {
+                Id = 3,
+                AgeCategoryId = 2,
+                WeightCategoryId = 3,
+                Name = "Heavyweight - Boys-juniors",
+                Gender = Gender.Male,
+                TournamentId = 1
+            };
+
+            modelBuilder.Entity<Category>().HasData(juniorsBoysLightWeightMoscow, juniorsBoysMiddleWeightMoscow, juniorsBoysHeavyWeightMoscow);
+
+            //Voronezh Boxing League
+
+            //15-16 years girls and boys
+            var boys15_16YearsOldLightWeightVoronezh = new Category
+            {
+                Id = 4,
+                AgeCategoryId = 1,
+                WeightCategoryId = 8,
+                Name = "Lightweight - Boys 15-16 years old",
+                Gender = Gender.Male,
+                TournamentId = 2
+            };
+
+            var boys15_16YearsOldMiddleWeightVoronezh = new Category
+            {
+                Id = 5,
+                AgeCategoryId = 1,
+                WeightCategoryId = 9,
+                Name = "Middlweight - Boys 15-16 years old",
+                Gender = Gender.Male,
+                TournamentId = 2
+            };
+
+            var boys15_16YearsOldHeavyWeightVoronezh = new Category
+            {
+                Id = 6,
+                AgeCategoryId = 1,
+                WeightCategoryId = 10,
+                Name = "Heavyweight - Boys 15-16 years old",
+                Gender = Gender.Male,
+                TournamentId = 2
+            };
+
+
+            var girls15_16YearsOldLightWeightVoronezh = new Category
+            {
+                Id = 7,
+                AgeCategoryId = 1,
+                WeightCategoryId = 8,
+                Name = "Lightweight - Girls 15-16 years old",
+                Gender = Gender.Female,
+                TournamentId = 2
+            };
+
+            var girls15_16YearsOldMiddleWeightVoronezh = new Category
+            {
+                Id = 8,
+                AgeCategoryId = 1,
+                WeightCategoryId = 9,
+                Name = "Middleweight - Girls 15-16 years old",
+                Gender = Gender.Female,
+                TournamentId = 2
+            };
+
+            var girls15_16YearsOldHeavyWeightVoronezh = new Category
+            {
+                Id = 9,
+                AgeCategoryId = 1,
+                WeightCategoryId = 10,
+                Name = "Heavyweight - Girls 15-16 years old",
+                Gender = Gender.Female,
+                TournamentId = 2
+            };
+
+
+            var juniorsBoysLightWeightVoronezh = new Category
+            {
+                Id = 10,
+                AgeCategoryId = 2,
+                WeightCategoryId = 1,
+                Name = "Lightweight - Boys-juniors",
+                Gender = Gender.Male,
+                TournamentId = 2
+            };
+
+            var juniorsBoysMiddleWeightVoronezh = new Category
+            {
+                Id = 11,
+                AgeCategoryId = 2,
+                WeightCategoryId = 2,
+                Name = "Middleweight - Boys-juniors",
+                Gender = Gender.Male,
+                TournamentId = 2
+            };
+
+            var juniorsBoysHeavyWeightVoronezh = new Category
+            {
+                Id = 12,
+                AgeCategoryId = 2,
+                WeightCategoryId = 3,
+                Name = "Heavyweight - Boys-juniors",
+                Gender = Gender.Male,
+                TournamentId = 2
+            };
+
+
+            var juniorsGirlsLightWeightVoronezh = new Category
+            {
+                Id = 13,
+                AgeCategoryId = 2,
+                WeightCategoryId = 1,
+                Name = "Lightweight - Girls-juniors",
+                Gender = Gender.Female,
+                TournamentId = 2
+            };
+
+            var juniorsGirlsMiddleWeightVoronezh = new Category
+            {
+                Id = 14,
+                AgeCategoryId = 2,
+                WeightCategoryId = 2,
+                Name = "Middleweight - Girls-juniors",
+                Gender = Gender.Female,
+                TournamentId = 2
+            };
+
+            var juniorsGirlsHeavyWeightVoronezh = new Category
+            {
+                Id = 15,
+                AgeCategoryId = 2,
+                WeightCategoryId = 3,
+                Name = "Heavyweight - Girls-juniors",
+                Gender = Gender.Female,
+                TournamentId = 2
+            };
+
+
+            modelBuilder.Entity<Category>().HasData(boys15_16YearsOldLightWeightVoronezh, boys15_16YearsOldMiddleWeightVoronezh, boys15_16YearsOldHeavyWeightVoronezh,
+                                                    girls15_16YearsOldLightWeightVoronezh, girls15_16YearsOldMiddleWeightVoronezh, girls15_16YearsOldHeavyWeightVoronezh,
+                                                    juniorsBoysLightWeightVoronezh, juniorsBoysMiddleWeightVoronezh, juniorsBoysHeavyWeightVoronezh,
+                                                    juniorsGirlsLightWeightVoronezh, juniorsGirlsMiddleWeightVoronezh, juniorsGirlsHeavyWeightVoronezh);
+
+            //International boxing tournament - Cup of the Governor of St. Petersburg
+            var adultMalesLightWeightStPetersburg = new Category
+            {
+                Id = 16,
+                AgeCategoryId = 3,
+                WeightCategoryId = 1,
+                Name = "Lightweight - Males",
+                Gender = Gender.Male,
+                TournamentId = 4
+            };
+
+            var adultMalesMiddleWeightStPetersburg = new Category
+            {
+                Id = 17,
+                AgeCategoryId = 3,
+                WeightCategoryId = 2,
+                Name = "Miidleweight - Males",
+                Gender = Gender.Male,
+                TournamentId = 4
+            };
+
+            var adultMalesHeavyWeightStPetersburg = new Category
+            {
+                Id = 18,
+                AgeCategoryId = 3,
+                WeightCategoryId = 3,
+                Name = "Heavyweight - Males",
+                Gender = Gender.Male,
+                TournamentId = 4
+            };
+
+            var adultMalesSuperHeavyWeightStPetersburg = new Category
+            {
+                Id = 19,
+                AgeCategoryId = 3,
+                WeightCategoryId = 4,
+                Name = "Super heavyweight - Males",
+                Gender = Gender.Male,
+                TournamentId = 4
+            };
+
+
+            modelBuilder.Entity<Category>().HasData(adultMalesLightWeightStPetersburg, adultMalesMiddleWeightStPetersburg, 
+                                                    adultMalesHeavyWeightStPetersburg, adultMalesSuperHeavyWeightStPetersburg);
+
+
+
+            //International Women's Boxing Competition
+
+            var adultFemalesLightWeightGomel = new Category
+            {
+                Id = 20,
+                AgeCategoryId = 3,
+                WeightCategoryId = 5,
+                Name = "Lightweight - Females",
+                Gender = Gender.Female,
+                TournamentId = 3
+            };
+
+            var adultFemalesMiddleWeightGomel = new Category
+            {
+                Id = 21,
+                AgeCategoryId = 3,
+                WeightCategoryId = 6,
+                Name = "Miidleweight - Females",
+                Gender = Gender.Female,
+                TournamentId = 3
+            };
+
+            var adultFemalesHeavyWeightGomel = new Category
+            {
+                Id = 22,
+                AgeCategoryId = 3,
+                WeightCategoryId = 7,
+                Name = "Heavyweight - Females",
+                Gender = Gender.Female,
+                TournamentId = 3
+            };
+
+
+            modelBuilder.Entity<Category>().HasData(adultFemalesLightWeightGomel, adultFemalesMiddleWeightGomel, adultFemalesHeavyWeightGomel);
         }
     }
 }

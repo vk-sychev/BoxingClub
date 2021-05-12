@@ -27,16 +27,13 @@ namespace BoxingClub.DAL.Implementation.Implementation
         public async Task<ApplicationUser> FindUserByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            //await _userManager.GetRolesAsync(user);
             return user;
         }
-
 
         public async Task<List<ApplicationUser>> GetUsersAsync()
         {
             return await _userManager.Users.ToListAsync();
         }
-
 
         public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password)
         {
