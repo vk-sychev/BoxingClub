@@ -42,12 +42,14 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public Task<List<Category>> GetAllAsync()
         {
-            return _db.Categories.Include(w => w.WeightCategory).Include(a => a.AgeCategory).ToListAsync();
+            throw new NotImplementedException();
+            //return _db.Categories.Include(w => w.WeightCategory).Include(a => a.AgeCategory).ToListAsync();
         }
 
         public Task<Category> GetByIdAsync(int id)
         {
-            return _db.Categories.Include(w => w.WeightCategory).Include(a => a.AgeCategory).FirstOrDefaultAsync(x => x.Id == id);
+            throw new NotImplementedException();
+            //return _db.Categories.Include(w => w.WeightCategory).Include(a => a.AgeCategory).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void Update(Category item)
@@ -62,7 +64,8 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public Task<List<Category>> GetCategoriesByTournamentIdAsync(int id)
         {
-            return _db.Categories.AsQueryable().Where(x => x.TournamentId == id).Include(w => w.WeightCategory).Include(a => a.AgeCategory).ToListAsync();
+            //return _db.Categories.AsQueryable().Where(x => x.TournamentId == id).Include(w => w.WeightCategory).Include(a => a.AgeCategory).ToListAsync();
+            throw new NotImplementedException();
         }
     }
 }

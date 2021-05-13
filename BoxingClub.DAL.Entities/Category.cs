@@ -9,19 +9,9 @@ namespace BoxingClub.DAL.Entities
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public int? AgeWeightCategoryId { get; set; }
 
-        public int AgeCategoryId { get; set; }
-
-        public AgeCategory AgeCategory { get; set; }
-
-        public int WeightCategoryId { get; set; }
-
-        public WeightCategory WeightCategory { get; set; }
-
-        public int TournamentId { get; set; }
-
-        public Tournament Tournament { get; set; }
+        public AgeWeightCategory AgeWeightCategory { get; set; }
 
         public Gender Gender { get; set; }
     }

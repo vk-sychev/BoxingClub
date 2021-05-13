@@ -59,7 +59,7 @@ namespace BoxingClub.Web.Controllers
 
         [HttpPost]
         [Route("Tournament/CreateTournament")]
-        public async Task<IActionResult> CreateTournament(TournamentViewModel model)
+        public async Task<IActionResult> CreateTournament(TournamentViewModel model, List<AgeCategoryViewModel> AgeCategories, List<WeightCategoryViewModel> WeightCategories)
         {
             if (ModelState.IsValid)
             {

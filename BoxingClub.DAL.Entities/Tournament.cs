@@ -18,6 +18,6 @@ namespace BoxingClub.DAL.Entities
 
         public bool IsMedCertificateNecessary { get; set; }
 
-        public List<Category> Categories { get; set; } = new List<Category>();
+        public List<TournamentRequirement> Categories { get; set; } = new List<TournamentRequirement>();
     }
 }

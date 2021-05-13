@@ -362,7 +362,7 @@ namespace BoxingClub.DAL.EF
                 Id = 1,
                 Name = "Lightweight",
                 StartWeight = 56,
-                EndWeight = 60
+                EndWeight = 60,
             };
 
             var middleWeightCategoryForAdultMales = new WeightCategory
@@ -442,15 +442,15 @@ namespace BoxingClub.DAL.EF
             };
 
             //adding males and junior-boys's weight categories;
-            modelBuilder.Entity<WeightCategory>().HasData(heavyWeightCategoryForAdultMales, 
-                                                          lightWeightCategoryForAdultMales, 
-                                                          middleWeightCategoryForAdultMales, 
+            modelBuilder.Entity<WeightCategory>().HasData(heavyWeightCategoryForAdultMales,
+                                                          lightWeightCategoryForAdultMales,
+                                                          middleWeightCategoryForAdultMales,
                                                           superHeavyWeightCategoryForAdultMales);
 
 
             //adding females and junior-girls's weight categories;
-            modelBuilder.Entity<WeightCategory>().HasData(heavyWeightCategoryForAdultFemales, 
-                                                          lightWeightCategoryForAdultFemales, 
+            modelBuilder.Entity<WeightCategory>().HasData(heavyWeightCategoryForAdultFemales,
+                                                          lightWeightCategoryForAdultFemales,
                                                           middleWeightCategoryForAdultFemales);
 
 
@@ -459,6 +459,318 @@ namespace BoxingClub.DAL.EF
                                                           lightWeightCategoryForBoysAndGirls15_16YearsOld,
                                                           middleWeightCategoryForBoysAndGirls15_16YearsOld);
 
+
+
+
+            //Creating AgeWeightEntities
+
+            //junior-boys
+
+            var juniorBoysLightWeight = new AgeWeightCategory
+            {
+                Id = 1,
+                AgeCategoryId = 2,
+                WeightCategoryId = 1,
+            };
+
+            var juniorBoysMiddleWeight = new AgeWeightCategory
+            {
+                Id = 2,
+                AgeCategoryId = 2,
+                WeightCategoryId = 2,
+            };
+
+            var juniorBoysHeavyWeight = new AgeWeightCategory
+            {
+                Id = 3,
+                AgeCategoryId = 2,
+                WeightCategoryId = 3,
+            };
+
+            var juniorBoysSuperHeavyWeight = new AgeWeightCategory
+            {
+                Id = 4,
+                AgeCategoryId = 2,
+                WeightCategoryId = 4,
+            };
+
+
+            //junior-girls
+
+            var juniorGirlsLightWeight = new AgeWeightCategory
+            {
+                Id = 5,
+                AgeCategoryId = 2,
+                WeightCategoryId = 5,
+            };
+
+            var juniorGirlsMiddleWeight = new AgeWeightCategory
+            {
+                Id = 6,
+                AgeCategoryId = 2,
+                WeightCategoryId = 6,
+            };
+
+            var juniorGirlsHeavyWeight = new AgeWeightCategory
+            {
+                Id = 7,
+                AgeCategoryId = 2,
+                WeightCategoryId = 7,
+            };
+
+            modelBuilder.Entity<AgeWeightCategory>().HasData(juniorBoysLightWeight, juniorBoysMiddleWeight, juniorBoysHeavyWeight, juniorBoysSuperHeavyWeight,
+                                                             juniorGirlsLightWeight, juniorGirlsMiddleWeight, juniorGirlsHeavyWeight);
+
+
+            //15-16 years girls and boys
+            var lightWeight15_16YearsOld = new AgeWeightCategory
+            {
+                Id = 8,
+                AgeCategoryId = 1,
+                WeightCategoryId = 8,
+            };
+
+            var middleWeight15_16YearsOld = new AgeWeightCategory
+            {
+                Id = 9,
+                AgeCategoryId = 1,
+                WeightCategoryId = 9,
+            };
+
+            var heavyWeight15_16YearsOld = new AgeWeightCategory
+            {
+                Id = 10,
+                AgeCategoryId = 1,
+                WeightCategoryId = 10,
+            };
+
+            modelBuilder.Entity<AgeWeightCategory>().HasData(lightWeight15_16YearsOld, middleWeight15_16YearsOld, heavyWeight15_16YearsOld);
+
+
+            //adult males
+            var adultMalesLightWeight = new AgeWeightCategory
+            {
+                Id = 11,
+                AgeCategoryId = 3,
+                WeightCategoryId = 1,
+            };
+
+            var adultMalesMiddleWeight = new AgeWeightCategory
+            {
+                Id = 12,
+                AgeCategoryId = 3,
+                WeightCategoryId = 2,
+            };
+
+            var adultMalesHeavyWeight = new AgeWeightCategory
+            {
+                Id = 13,
+                AgeCategoryId = 3,
+                WeightCategoryId = 3,
+            };
+
+            var adultMalesSuperHeavyWeight = new AgeWeightCategory
+            {
+                Id = 14,
+                AgeCategoryId = 3,
+                WeightCategoryId = 4,
+            };
+
+
+            //adult females
+
+            var adultFemalesLightWeight = new AgeWeightCategory
+            {
+                Id = 15,
+                AgeCategoryId = 3,
+                WeightCategoryId = 5,
+            };
+
+            var adultFemalesMiddleWeight = new AgeWeightCategory
+            {
+                Id = 16,
+                AgeCategoryId = 3,
+                WeightCategoryId = 6,
+            };
+
+            var adultFemalesHeavyWeight = new AgeWeightCategory
+            {
+                Id = 17,
+                AgeCategoryId = 3,
+                WeightCategoryId = 7,
+            };
+
+
+            modelBuilder.Entity<AgeWeightCategory>().HasData(adultMalesLightWeight, adultMalesMiddleWeight, adultMalesHeavyWeight, adultMalesSuperHeavyWeight,
+                                                             adultFemalesLightWeight, adultFemalesMiddleWeight, adultFemalesHeavyWeight);
+
+
+
+            //Adding Categories entities
+
+            //males 15-16 Years
+
+            var category15_16YearsBoysLightWeight = new Category
+            {
+                Id = 1,
+                AgeWeightCategoryId = 8,
+                Gender = Gender.Male
+            };
+
+            var category15_16YearsBoysMiddleWeight = new Category
+            {
+                Id = 2,
+                AgeWeightCategoryId = 9,
+                Gender = Gender.Male
+            };
+
+            var category15_16YearsBoysHeavyWeight = new Category
+            {
+                Id = 3,
+                AgeWeightCategoryId = 10,
+                Gender = Gender.Male
+            };
+
+
+            //females 15-16 Years
+
+            var category15_16YearsGirlsLightWeight = new Category
+            {
+                Id = 4,
+                AgeWeightCategoryId = 8,
+                Gender = Gender.Female
+            };
+
+            var category15_16YearsGirlsMiddleWeight = new Category
+            {
+                Id = 5,
+                AgeWeightCategoryId = 9,
+                Gender = Gender.Female
+            };
+
+            var category15_16YearsGirlsHeavyWeight = new Category
+            {
+                Id = 6,
+                AgeWeightCategoryId = 10,
+                Gender = Gender.Female
+            };
+
+            modelBuilder.Entity<Category>().HasData(category15_16YearsBoysLightWeight, category15_16YearsBoysMiddleWeight, category15_16YearsBoysHeavyWeight,
+                                                    category15_16YearsGirlsLightWeight, category15_16YearsGirlsMiddleWeight, category15_16YearsGirlsHeavyWeight);
+
+            //junior boys 
+
+            var categoryJuniorBoysLightWeight = new Category
+            {
+                Id = 7,
+                AgeWeightCategoryId = 1,
+                Gender = Gender.Male
+            };
+
+            var categoryJuniorBoysMiddleWeight = new Category
+            {
+                Id = 8,
+                AgeWeightCategoryId = 2,
+                Gender = Gender.Male
+            };
+
+            var categoryJuniorBoysHeavyWeight = new Category
+            {
+                Id = 9,
+                AgeWeightCategoryId = 3,
+                Gender = Gender.Male
+            };
+
+            var categoryJuniorBoysSuperHeavyWeight = new Category
+            {
+                Id = 10,
+                AgeWeightCategoryId = 4,
+                Gender = Gender.Male
+            };
+
+
+            //junior girls
+
+            var categoryJuniorGirlsLightWeight = new Category
+            {
+                Id = 11,
+                AgeWeightCategoryId = 5,
+                Gender = Gender.Female
+            };
+
+            var categoryJuniorGirlsMiddleWeight = new Category
+            {
+                Id = 12,
+                AgeWeightCategoryId = 6,
+                Gender = Gender.Female
+            };
+
+            var categoryJuniorGirlsHeavyWeight = new Category
+            {
+                Id = 13,
+                AgeWeightCategoryId = 7,
+                Gender = Gender.Female
+            };
+
+            modelBuilder.Entity<Category>().HasData(categoryJuniorBoysLightWeight, categoryJuniorBoysMiddleWeight, categoryJuniorBoysHeavyWeight, categoryJuniorBoysSuperHeavyWeight,
+                                                    categoryJuniorGirlsLightWeight, categoryJuniorGirlsMiddleWeight, categoryJuniorGirlsHeavyWeight);
+
+            //adult males
+
+            var categoryAdultMalesLightWeight = new Category
+            {
+                Id = 14,
+                AgeWeightCategoryId = 11,
+                Gender = Gender.Male
+            };
+
+            var categoryAdultMalesMiddleWeight = new Category
+            {
+                Id = 15,
+                AgeWeightCategoryId = 12,
+                Gender = Gender.Male
+            };
+
+            var categoryAdultMalesHeavyWeight = new Category
+            {
+                Id = 16,
+                AgeWeightCategoryId = 13,
+                Gender = Gender.Male
+            };
+
+            var categoryAdultMalesSuperHeavyWeight = new Category
+            {
+                Id = 17,
+                AgeWeightCategoryId = 14,
+                Gender = Gender.Male
+            };
+
+
+            //adult females
+
+            var categoryAdultFemalesLightWeight = new Category
+            {
+                Id = 18,
+                AgeWeightCategoryId = 15,
+                Gender = Gender.Female
+            };
+
+            var categoryAdultFemalesMiddleWeight = new Category
+            {
+                Id = 19,
+                AgeWeightCategoryId = 16,
+                Gender = Gender.Female
+            };
+
+            var categoryAdultFemalesHeavyWeight = new Category
+            {
+                Id = 20,
+                AgeWeightCategoryId = 17,
+                Gender = Gender.Female
+            };
+
+            modelBuilder.Entity<Category>().HasData(categoryAdultMalesLightWeight, categoryAdultMalesMiddleWeight, categoryAdultMalesHeavyWeight, categoryAdultMalesSuperHeavyWeight,
+                                                    categoryAdultFemalesLightWeight, categoryAdultFemalesMiddleWeight, categoryAdultFemalesHeavyWeight);
 
 
             //adding tournaments
@@ -503,259 +815,260 @@ namespace BoxingClub.DAL.EF
             };
 
 
-            modelBuilder.Entity<Tournament>().HasData(moscowJuniorBoxingChampionship, voronezhBoxingLeague, 
-                                                      internationalWomensBoxingCompetition, 
+            modelBuilder.Entity<Tournament>().HasData(moscowJuniorBoxingChampionship, voronezhBoxingLeague,
+                                                      internationalWomensBoxingCompetition,
                                                       internationalBoxingTournamentCupOfTheGovernorOfStPetersburg);
 
-            //adding categories to tournaments
+
+            //adding Tournaments' requirements
 
             //Moscow junior boxing championship
-
-            var juniorsBoysLightWeightMoscow = new Category
+            //junior boys
+            var moscowJuniorBoxingChampionshipRequirementBoysLightWeight = new TournamentRequirement
             {
                 Id = 1,
-                AgeCategoryId = 2,
-                WeightCategoryId = 1,
-                Name = "Lightweight - Boys-juniors",
-                Gender = Gender.Male,
-                TournamentId = 1
+                TournamentId = 1,
+                CategoryId = 7
             };
 
-            var juniorsBoysMiddleWeightMoscow = new Category
+            var moscowJuniorBoxingChampionshipRequirementBoysMiddleWeight = new TournamentRequirement
             {
                 Id = 2,
-                AgeCategoryId = 2,
-                WeightCategoryId = 2,
-                Name = "Middleweight - Boys-juniors",
-                Gender = Gender.Male,
-                TournamentId = 1
+                TournamentId = 1,
+                CategoryId = 8
             };
 
-            var juniorsBoysHeavyWeightMoscow = new Category
+            var moscowJuniorBoxingChampionshipRequirementBoysHeavyWeight = new TournamentRequirement
             {
                 Id = 3,
-                AgeCategoryId = 2,
-                WeightCategoryId = 3,
-                Name = "Heavyweight - Boys-juniors",
-                Gender = Gender.Male,
-                TournamentId = 1
+                TournamentId = 1,
+                CategoryId = 9
             };
 
-            modelBuilder.Entity<Category>().HasData(juniorsBoysLightWeightMoscow, juniorsBoysMiddleWeightMoscow, juniorsBoysHeavyWeightMoscow);
+            var moscowJuniorBoxingChampionshipRequirementBoysSuperHeavyWeight = new TournamentRequirement
+            {
+                Id = 4,
+                TournamentId = 1,
+                CategoryId = 10
+            };
+
+            //junior girls
+
+            var moscowJuniorBoxingChampionshipRequirementGirlsLightWeight = new TournamentRequirement
+            {
+                Id = 5,
+                TournamentId = 1,
+                CategoryId = 11
+            };
+
+            var moscowJuniorBoxingChampionshipRequirementGirlsMiddleWeight = new TournamentRequirement
+            {
+                Id = 6,
+                TournamentId = 1,
+                CategoryId = 12
+            };
+
+            var moscowJuniorBoxingChampionshipRequirementGirlsHeavyWeight = new TournamentRequirement
+            {
+                Id = 7,
+                TournamentId = 1,
+                CategoryId = 13
+            };
+
+            modelBuilder.Entity<TournamentRequirement>().HasData(moscowJuniorBoxingChampionshipRequirementBoysLightWeight,
+                                                                 moscowJuniorBoxingChampionshipRequirementBoysMiddleWeight,
+                                                                 moscowJuniorBoxingChampionshipRequirementBoysHeavyWeight,
+                                                                 moscowJuniorBoxingChampionshipRequirementBoysSuperHeavyWeight);
+
+            modelBuilder.Entity<TournamentRequirement>().HasData(moscowJuniorBoxingChampionshipRequirementGirlsLightWeight,
+                                                                 moscowJuniorBoxingChampionshipRequirementGirlsMiddleWeight,
+                                                                 moscowJuniorBoxingChampionshipRequirementGirlsHeavyWeight);
+
 
             //Voronezh Boxing League
 
-            //15-16 years girls and boys
-            var boys15_16YearsOldLightWeightVoronezh = new Category
-            {
-                Id = 4,
-                AgeCategoryId = 1,
-                WeightCategoryId = 8,
-                Name = "Lightweight - Boys 15-16 years old",
-                Gender = Gender.Male,
-                TournamentId = 2
-            };
-
-            var boys15_16YearsOldMiddleWeightVoronezh = new Category
-            {
-                Id = 5,
-                AgeCategoryId = 1,
-                WeightCategoryId = 9,
-                Name = "Middlweight - Boys 15-16 years old",
-                Gender = Gender.Male,
-                TournamentId = 2
-            };
-
-            var boys15_16YearsOldHeavyWeightVoronezh = new Category
-            {
-                Id = 6,
-                AgeCategoryId = 1,
-                WeightCategoryId = 10,
-                Name = "Heavyweight - Boys 15-16 years old",
-                Gender = Gender.Male,
-                TournamentId = 2
-            };
-
-
-            var girls15_16YearsOldLightWeightVoronezh = new Category
-            {
-                Id = 7,
-                AgeCategoryId = 1,
-                WeightCategoryId = 8,
-                Name = "Lightweight - Girls 15-16 years old",
-                Gender = Gender.Female,
-                TournamentId = 2
-            };
-
-            var girls15_16YearsOldMiddleWeightVoronezh = new Category
+            //junior boys
+            var voronezhJuniorBoxingChampionshipRequirementBoysLightWeight = new TournamentRequirement
             {
                 Id = 8,
-                AgeCategoryId = 1,
-                WeightCategoryId = 9,
-                Name = "Middleweight - Girls 15-16 years old",
-                Gender = Gender.Female,
-                TournamentId = 2
+                TournamentId = 2,
+                CategoryId = 7
             };
 
-            var girls15_16YearsOldHeavyWeightVoronezh = new Category
+            var voronezhJuniorBoxingChampionshipRequirementBoysMiddleWeight = new TournamentRequirement
             {
                 Id = 9,
-                AgeCategoryId = 1,
-                WeightCategoryId = 10,
-                Name = "Heavyweight - Girls 15-16 years old",
-                Gender = Gender.Female,
-                TournamentId = 2
+                TournamentId = 2,
+                CategoryId = 8
             };
 
-
-            var juniorsBoysLightWeightVoronezh = new Category
+            var voronezhJuniorBoxingChampionshipRequirementBoysHeavyWeight = new TournamentRequirement
             {
                 Id = 10,
-                AgeCategoryId = 2,
-                WeightCategoryId = 1,
-                Name = "Lightweight - Boys-juniors",
-                Gender = Gender.Male,
-                TournamentId = 2
+                TournamentId = 2,
+                CategoryId = 9
             };
 
-            var juniorsBoysMiddleWeightVoronezh = new Category
+            var voronezhJuniorBoxingChampionshipRequirementBoysSuperHeavyWeight = new TournamentRequirement
             {
                 Id = 11,
-                AgeCategoryId = 2,
-                WeightCategoryId = 2,
-                Name = "Middleweight - Boys-juniors",
-                Gender = Gender.Male,
-                TournamentId = 2
+                TournamentId = 2,
+                CategoryId = 10
             };
 
-            var juniorsBoysHeavyWeightVoronezh = new Category
+
+            //Adult Males
+            var voronezhAdultMalesBoxingChampionshipRequirementBoysLightWeight = new TournamentRequirement
             {
                 Id = 12,
-                AgeCategoryId = 2,
-                WeightCategoryId = 3,
-                Name = "Heavyweight - Boys-juniors",
-                Gender = Gender.Male,
-                TournamentId = 2
+                TournamentId = 2,
+                CategoryId = 14
             };
 
-
-            var juniorsGirlsLightWeightVoronezh = new Category
+            var voronezhAdultMalesBoxingChampionshipRequirementBoysMiddleWeight = new TournamentRequirement
             {
                 Id = 13,
-                AgeCategoryId = 2,
-                WeightCategoryId = 1,
-                Name = "Lightweight - Girls-juniors",
-                Gender = Gender.Female,
-                TournamentId = 2
+                TournamentId = 2,
+                CategoryId = 15
             };
 
-            var juniorsGirlsMiddleWeightVoronezh = new Category
+            var voronezhAdultMalesBoxingChampionshipRequirementBoysHeavyWeight = new TournamentRequirement
             {
                 Id = 14,
-                AgeCategoryId = 2,
-                WeightCategoryId = 2,
-                Name = "Middleweight - Girls-juniors",
-                Gender = Gender.Female,
-                TournamentId = 2
+                TournamentId = 2,
+                CategoryId = 16
             };
 
-            var juniorsGirlsHeavyWeightVoronezh = new Category
+            var voronezhAdultMalesBoxingChampionshipRequirementBoysSuperHeavyWeight = new TournamentRequirement
             {
                 Id = 15,
-                AgeCategoryId = 2,
-                WeightCategoryId = 3,
-                Name = "Heavyweight - Girls-juniors",
-                Gender = Gender.Female,
-                TournamentId = 2
+                TournamentId = 2,
+                CategoryId = 17
             };
 
 
-            modelBuilder.Entity<Category>().HasData(boys15_16YearsOldLightWeightVoronezh, boys15_16YearsOldMiddleWeightVoronezh, boys15_16YearsOldHeavyWeightVoronezh,
-                                                    girls15_16YearsOldLightWeightVoronezh, girls15_16YearsOldMiddleWeightVoronezh, girls15_16YearsOldHeavyWeightVoronezh,
-                                                    juniorsBoysLightWeightVoronezh, juniorsBoysMiddleWeightVoronezh, juniorsBoysHeavyWeightVoronezh,
-                                                    juniorsGirlsLightWeightVoronezh, juniorsGirlsMiddleWeightVoronezh, juniorsGirlsHeavyWeightVoronezh);
 
-            //International boxing tournament - Cup of the Governor of St. Petersburg
-            var adultMalesLightWeightStPetersburg = new Category
+            //boys 15-16 years old
+
+            var voronezh15_16YearsOldBoxingChampionshipRequirementBoysLightWeight = new TournamentRequirement
             {
                 Id = 16,
-                AgeCategoryId = 3,
-                WeightCategoryId = 1,
-                Name = "Lightweight - Males",
-                Gender = Gender.Male,
-                TournamentId = 4
+                TournamentId = 2,
+                CategoryId = 1
             };
 
-            var adultMalesMiddleWeightStPetersburg = new Category
+            var voronezh15_16YearsOldBoxingChampionshipRequirementBoysMiddleWeight = new TournamentRequirement
             {
                 Id = 17,
-                AgeCategoryId = 3,
-                WeightCategoryId = 2,
-                Name = "Miidleweight - Males",
-                Gender = Gender.Male,
-                TournamentId = 4
+                TournamentId = 2,
+                CategoryId = 2
             };
 
-            var adultMalesHeavyWeightStPetersburg = new Category
+            var voronezh15_16YearsOldBoxingChampionshipRequirementBoysHeavyWeight = new TournamentRequirement
             {
                 Id = 18,
-                AgeCategoryId = 3,
-                WeightCategoryId = 3,
-                Name = "Heavyweight - Males",
-                Gender = Gender.Male,
-                TournamentId = 4
-            };
-
-            var adultMalesSuperHeavyWeightStPetersburg = new Category
-            {
-                Id = 19,
-                AgeCategoryId = 3,
-                WeightCategoryId = 4,
-                Name = "Super heavyweight - Males",
-                Gender = Gender.Male,
-                TournamentId = 4
+                TournamentId = 2,
+                CategoryId = 3
             };
 
 
-            modelBuilder.Entity<Category>().HasData(adultMalesLightWeightStPetersburg, adultMalesMiddleWeightStPetersburg, 
-                                                    adultMalesHeavyWeightStPetersburg, adultMalesSuperHeavyWeightStPetersburg);
+            modelBuilder.Entity<TournamentRequirement>().HasData(voronezhJuniorBoxingChampionshipRequirementBoysLightWeight,
+                                                                 voronezhJuniorBoxingChampionshipRequirementBoysMiddleWeight,
+                                                                 voronezhJuniorBoxingChampionshipRequirementBoysHeavyWeight,
+                                                                 voronezhJuniorBoxingChampionshipRequirementBoysSuperHeavyWeight);
 
+            modelBuilder.Entity<TournamentRequirement>().HasData(voronezhAdultMalesBoxingChampionshipRequirementBoysLightWeight,
+                                                                 voronezhAdultMalesBoxingChampionshipRequirementBoysMiddleWeight,
+                                                                 voronezhAdultMalesBoxingChampionshipRequirementBoysHeavyWeight,
+                                                                 voronezhAdultMalesBoxingChampionshipRequirementBoysSuperHeavyWeight);
+
+            modelBuilder.Entity<TournamentRequirement>().HasData(voronezh15_16YearsOldBoxingChampionshipRequirementBoysLightWeight,
+                                                                 voronezh15_16YearsOldBoxingChampionshipRequirementBoysMiddleWeight,
+                                                                 voronezh15_16YearsOldBoxingChampionshipRequirementBoysHeavyWeight);
 
 
             //International Women's Boxing Competition
 
-            var adultFemalesLightWeightGomel = new Category
+            var gomelAdultFemalesBoxingChampionshipRequirementLightWeight = new TournamentRequirement
+            {
+                Id = 19,
+                TournamentId = 3,
+                CategoryId = 18
+            };
+
+            var gomelAdultFemalesBoxingChampionshipRequirementMiddleWeight = new TournamentRequirement
             {
                 Id = 20,
-                AgeCategoryId = 3,
-                WeightCategoryId = 5,
-                Name = "Lightweight - Females",
-                Gender = Gender.Female,
-                TournamentId = 3
+                TournamentId = 3,
+                CategoryId = 19
             };
 
-            var adultFemalesMiddleWeightGomel = new Category
+            var gomelAdultFemalesBoxingChampionshipRequirementHeavyWeight = new TournamentRequirement
             {
                 Id = 21,
-                AgeCategoryId = 3,
-                WeightCategoryId = 6,
-                Name = "Miidleweight - Females",
-                Gender = Gender.Female,
-                TournamentId = 3
+                TournamentId = 3,
+                CategoryId = 20
             };
 
-            var adultFemalesHeavyWeightGomel = new Category
+            modelBuilder.Entity<TournamentRequirement>().HasData(gomelAdultFemalesBoxingChampionshipRequirementLightWeight,
+                                                                 gomelAdultFemalesBoxingChampionshipRequirementMiddleWeight,
+                                                                 gomelAdultFemalesBoxingChampionshipRequirementHeavyWeight);
+
+
+            //International boxing tournament - Cup of the Governor of St. Petersburg
+
+            //girls 15-16 years Old
+            var stPetersburg15_16YearsOldGirlsBoxingChampionshipRequirementLightWeight = new TournamentRequirement
             {
                 Id = 22,
-                AgeCategoryId = 3,
-                WeightCategoryId = 7,
-                Name = "Heavyweight - Females",
-                Gender = Gender.Female,
-                TournamentId = 3
+                TournamentId = 4,
+                CategoryId = 4
+            };
+
+            var stPetersburg15_16YearsOldGirlsBoxingChampionshipRequirementMiddleWeight = new TournamentRequirement
+            {
+                Id = 23,
+                TournamentId = 4,
+                CategoryId = 5
+            };
+
+            var stPetersburg15_16YearsOldGirlsBoxingChampionshipRequirementHeavyWeight = new TournamentRequirement
+            {
+                Id = 24,
+                TournamentId = 4,
+                CategoryId = 6
             };
 
 
-            modelBuilder.Entity<Category>().HasData(adultFemalesLightWeightGomel, adultFemalesMiddleWeightGomel, adultFemalesHeavyWeightGomel);
+            //boys 15-16 years Old
+            var stPetersburg15_16YearsOldBoysBoxingChampionshipRequirementLightWeight = new TournamentRequirement
+            {
+                Id = 25,
+                TournamentId = 4,
+                CategoryId = 1
+            };
+
+            var stPetersburg15_16YearsOldBoysBoxingChampionshipRequirementMiddleWeight = new TournamentRequirement
+            {
+                Id = 26,
+                TournamentId = 4,
+                CategoryId = 2
+            };
+
+            var stPetersburg15_16YearsOldBoysBoxingChampionshipRequirementHeavyWeight = new TournamentRequirement
+            {
+                Id = 27,
+                TournamentId = 4,
+                CategoryId = 3
+            };
+
+            modelBuilder.Entity<TournamentRequirement>().HasData(stPetersburg15_16YearsOldGirlsBoxingChampionshipRequirementLightWeight,
+                                                                 stPetersburg15_16YearsOldGirlsBoxingChampionshipRequirementMiddleWeight,
+                                                                 stPetersburg15_16YearsOldGirlsBoxingChampionshipRequirementHeavyWeight);
+
+            modelBuilder.Entity<TournamentRequirement>().HasData(stPetersburg15_16YearsOldBoysBoxingChampionshipRequirementLightWeight,
+                                                                 stPetersburg15_16YearsOldBoysBoxingChampionshipRequirementMiddleWeight,
+                                                                 stPetersburg15_16YearsOldBoysBoxingChampionshipRequirementHeavyWeight);
         }
     }
 }

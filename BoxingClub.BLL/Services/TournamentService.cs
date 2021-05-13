@@ -32,7 +32,7 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var tournament = _mapper.Map<Tournament>(tournamentDTO);
-            tournament.Categories = await _database.Categories.GetCategoriesByTournamentIdAsync(tournament.Id);
+            //tournament.Categories = await _database.Categories.GetCategoriesByTournamentIdAsync(tournament.Id);
 
             await _database.Tournaments.CreateAsync(tournament);
             await _database.SaveAsync();
