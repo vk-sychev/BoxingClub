@@ -57,6 +57,20 @@ namespace BoxingClub.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        [Route("Tournament/CreateTournament")]
+        public async Task<IActionResult> CreateTournament(TournamentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
+            ViewBag.AgeCategories = await GetAgeCategories();
+            ViewBag.WeightCategories = await GetWeightCategories();
+
+            return View(model);
+        }
+
         private async Task<List<AgeCategoryViewModel>> GetAgeCategories()
         {
             var ageCategories = await _tournamentService.GetAgeCategories();

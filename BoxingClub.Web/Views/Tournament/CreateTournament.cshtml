@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "CreateTournament";
     List<AgeCategoryViewModel> ageCategories = ViewBag.AgeCategories;
+    List<WeightCategoryViewModel> weightCategories = ViewBag.WeightCategories;
 }
 
 <h1>New Tournament</h1>
@@ -46,6 +47,21 @@
                     </ul>
                 </div>
                 <span asp-validation-for="AgeCategories" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeightCategories" class="control-label font-weight-bold"></label>
+                <div>
+                    <ul>
+                        @foreach (var item in weightCategories)
+                        {
+                            <li>
+                                <input type="checkbox" asp-for="@item.IsSelected">
+                                <label asp-for="@item.IsSelected">@item.FullName</label>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <span asp-validation-for="WeightCategories" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
