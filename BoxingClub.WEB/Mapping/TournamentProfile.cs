@@ -13,8 +13,26 @@ namespace BoxingClub.Web.Mapping
     {
         public TournamentProfile()
         {
-            CreateMap<Tournament, TournamentDTO>(MemberList.Source).ReverseMap();
+            CreateMap<Tournament, TournamentDTO>(MemberList.Source).ForMember(dest => dest.AgeCategories, opt => opt.MapFrom(src => src.Categories.Select(x => x.AgeCategory)))
+                                                                   .ForMember(dest => dest.WeightCategories, opt => opt.MapFrom(src => src.Categories.Select(x => x.WeightCategory)))
+                                                                   .ForSourceMember(src => src.Categories, opt => opt.DoNotValidate())
+                                                                   .ReverseMap()
+                                                                   .ForMember(dest => dest.Categories, opt => opt.Ignore());
+
             CreateMap<TournamentDTO, TournamentViewModel>().ReverseMap();
+        }
+    }
+
+    public class AgeCategoryResolver : IValueResolver<Tournament, TournamentDTO, List<AgeCategory>>
+    {
+        public List<AgeCategory> Resolve(Tournament source, TournamentDTO destination, List<AgeCategory> destMember, ResolutionContext context)
+        {
+            List<AgeCategory> ageCategories = new List<AgeCategory>();
+            foreach(var item in source.Categories)
+            {
+                ageCategories.Add(item.AgeCategory);
+            }
+            return ageCategories;
         }
     }
 }

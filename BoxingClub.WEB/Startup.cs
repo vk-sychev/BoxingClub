@@ -76,7 +76,7 @@ namespace BoxingClub.Web
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
                                                        new AgeCategoryProfile(), new WeightCategoryProfile(), new CategoryProfile()};
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
-            mapperConfig.AssertConfigurationIsValid();
+            //mapperConfig.AssertConfigurationIsValid();
 
             services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile), 
                                    typeof(UserProfile), typeof(MedicalCertificateProfile), typeof(TournamentProfile),

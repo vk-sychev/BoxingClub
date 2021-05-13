@@ -92,5 +92,19 @@ namespace BoxingClub.BLL.Implementation.Services
             var mappedTournaments = _mapper.Map<List<TournamentDTO>>(tournaments);
             return mappedTournaments;
         }
+
+        public async Task<List<AgeCategoryDTO>> GetAgeCategories()
+        {
+            var ageCategories = await _database.AgeCategories.GetAllAsync();
+            var mappedAgeCategories = _mapper.Map<List<AgeCategoryDTO>>(ageCategories);
+            return mappedAgeCategories;
+        }
+
+        public async Task<List<WeightCategoryDTO>> GetWeightCategories()
+        {
+            var weightCategories = await _database.WeightCategories.GetAllAsync();
+            var mappedWeightCategories = _mapper.Map<List<WeightCategoryDTO>>(weightCategories);
+            return mappedWeightCategories;
+        }
     }
 }

@@ -12,6 +12,6 @@ namespace BoxingClub.DAL.Entities
 
         public int StartWeight { get; set; }
 
-        public int EndWeight { get; set; }
+        public int? EndWeight { get; set; }
     }
 }

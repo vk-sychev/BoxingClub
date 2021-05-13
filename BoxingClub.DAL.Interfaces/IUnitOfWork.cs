@@ -14,6 +14,10 @@ namespace BoxingClub.DAL.Interfaces
 
         ICategoryRepository Categories { get; }
 
+        IAgeCategoryRepository AgeCategories { get; }
+
+        IWeightCategoryRepository WeightCategories { get; }
+
         Task SaveAsync();
     }
 }

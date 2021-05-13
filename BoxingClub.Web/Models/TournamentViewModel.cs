@@ -23,7 +23,9 @@ namespace BoxingClub.Web.Models
         [DisplayName("Needs Med Examination?")]
         public bool IsMedCertificateNecessary { get; set; }
 
-        public List<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
+        public List<AgeCategoryViewModel> AgeCategories { get; set; } = new List<AgeCategoryViewModel>();
+
+        public List<WeightCategoryViewModel> WeightCategories { get; set; } = new List<WeightCategoryViewModel>();
 
         public List<StudentFullViewModel> Students { get; set; } = new List<StudentFullViewModel>();
     }

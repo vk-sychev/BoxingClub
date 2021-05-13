@@ -15,5 +15,9 @@ namespace BoxingClub.BLL.Interfaces
         Task<List<TournamentDTO>> GetTournamentsAsync();
 
         Task UpdateTournamentAsync(TournamentDTO tournamentDTO);
+
+        Task<List<AgeCategoryDTO>> GetAgeCategories();
+
+        Task<List<WeightCategoryDTO>> GetWeightCategories();
     }
 }
