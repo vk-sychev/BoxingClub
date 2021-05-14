@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +30,7 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> GetAllTournaments()
         {
             var tournaments = await _tournamentService.GetTournamentsAsync();
-            var mappedTournaments = _mapper.Map<List<TournamentViewModel>>(tournaments);
+            var mappedTournaments = _mapper.Map<List<TournamentLiteViewModel>>(tournaments);
             return View(mappedTournaments);
         }
 
@@ -38,51 +39,92 @@ namespace BoxingClub.Web.Controllers
         [Route("Tournament/EditTournament/{id}")]
         public async Task<IActionResult> EditTournament(int? id)
         {
-            ViewBag.AgeCategories = await GetAgeCategories();
-            ViewBag.WeightCategories = await GetWeightCategories();
-
             var tournament = await _tournamentService.GetTournamentByIdAsync(id);
-            var mappedTournament = _mapper.Map<TournamentViewModel>(tournament);
-            return View(mappedTournament);
+            var mappedTournament = _mapper.Map<TournamentFullViewModel>(tournament);
+            var editModel = new CreateEditTournamentViewModel()
+            {
+                Tournament = mappedTournament,
+                Categories = SetSelectedCategories(await GetCategories(), mappedTournament.Categories)
+            };
+            return View(editModel);
         }
 
+        [HttpPost]
+        [Route("Tournament/EditTournament/{id}")]
+        public async Task<IActionResult> EditTournament(CreateEditTournamentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Tournament.Categories = GetSelectedCategories(model.Categories);
+                var tournament = _mapper.Map<TournamentFullDTO>(model.Tournament);
+                await _tournamentService.UpdateTournamentAsync(tournament);
+                return RedirectToAction("GetAllTournaments", "Tournament");
+            }
+
+            return View(model);
+        }
 
         [HttpGet]
         [Route("Tournament/CreateTournament")]
         public async Task<IActionResult> CreateTournament()
         {
-            ViewBag.AgeCategories = await GetAgeCategories();
-            ViewBag.WeightCategories = await GetWeightCategories();
-            
-            return View();
+            var createModel = new CreateEditTournamentViewModel()
+            {
+                Categories = await GetCategories()
+            };
+            return View(createModel);
         }
 
         [HttpPost]
         [Route("Tournament/CreateTournament")]
-        public async Task<IActionResult> CreateTournament(TournamentViewModel model, List<AgeCategoryViewModel> AgeCategories, List<WeightCategoryViewModel> WeightCategories)
+        public async Task<IActionResult> CreateTournament(CreateEditTournamentViewModel model)
         {
             if (ModelState.IsValid)
             {
-
+                model.Tournament.Categories = GetSelectedCategories(model.Categories);
+                var tournament = _mapper.Map<TournamentFullDTO>(model.Tournament);
+                await _tournamentService.CreateTournamentAsync(tournament);
+                return RedirectToAction("GetAllTournaments", "Tournament");
             }
-            ViewBag.AgeCategories = await GetAgeCategories();
-            ViewBag.WeightCategories = await GetWeightCategories();
 
             return View(model);
         }
 
-        private async Task<List<AgeCategoryViewModel>> GetAgeCategories()
+
+        private List<CategoryViewModel> GetSelectedCategories(List<CategoryViewModel> categories)
         {
-            var ageCategories = await _tournamentService.GetAgeCategories();
-            var mappedAgeCategories = _mapper.Map<List<AgeCategoryViewModel>>(ageCategories);
-            return mappedAgeCategories;
+            List<CategoryViewModel> selectedCategories = new List<CategoryViewModel>();
+
+            foreach(var item in categories)
+            {
+                if (item.IsSelected)
+                {
+                    selectedCategories.Add(item);
+                }
+            }
+
+            return selectedCategories;
         }
 
-        private async Task<List<WeightCategoryViewModel>> GetWeightCategories()
+
+        private List<CategoryViewModel> SetSelectedCategories(List<CategoryViewModel> allCategories, List<CategoryViewModel> selectedCategories)
         {
-            var weightCategories = await _tournamentService.GetWeightCategories();
-            var mappedWeightCategories = _mapper.Map<List<WeightCategoryViewModel>>(weightCategories);
-            return mappedWeightCategories;
+            foreach (var item in selectedCategories)
+            {
+                var category = allCategories.FirstOrDefault(x => x.Id == item.Id);
+                if (item.Id == category.Id)
+                {
+                    category.IsSelected = true;
+                }
+            }
+            return allCategories;
+        }
+
+        private async Task<List<CategoryViewModel>> GetCategories()
+        {
+            var categories = await _tournamentService.GetCategories();
+            var mappedCategories = _mapper.Map<List<CategoryViewModel>>(categories);
+            return mappedCategories;
         }
     }
 }

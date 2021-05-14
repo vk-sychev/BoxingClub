@@ -1,42 +1,56 @@
-﻿@model BoxingClub.Web.Models.TournamentViewModel
+﻿@model BoxingClub.Web.Models.CreateEditTournamentViewModel
 
 @{
     ViewData["Title"] = "EditTournament";
 }
 
-<h1>EditTournament</h1>
+<h1>Edit Tournament</h1>
 
-<h4>TournamentViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="EditTournament">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Tournament.Id" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="@Model.Tournament.Name" class="control-label"></label>
+                <input asp-for="@Model.Tournament.Name" class="form-control" />
+                <span asp-validation-for="@Model.Tournament.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Country" class="control-label"></label>
-                <input asp-for="Country" class="form-control" />
-                <span asp-validation-for="Country" class="text-danger"></span>
+                <label asp-for="@Model.Tournament.Country" class="control-label"></label>
+                <input asp-for="@Model.Tournament.Country" class="form-control" />
+                <span asp-validation-for="@Model.Tournament.Country" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
+                <label asp-for="@Model.Tournament.City" class="control-label"></label>
+                <input asp-for="@Model.Tournament.City" class="form-control" />
+                <span asp-validation-for="@Model.Tournament.City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <label asp-for="@Model.Tournament.Date" class="control-label"></label>
+                <input asp-for="@Model.Tournament.Date" class="form-control" />
+                <span asp-validation-for="@Model.Tournament.Date" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsMedCertificateNecessary" /> @Html.DisplayNameFor(model => model.IsMedCertificateNecessary)
+                    <input class="form-check-input" asp-for="@Model.Tournament.IsMedCertificateNecessary" /> @Html.DisplayNameFor(model => model.Tournament.IsMedCertificateNecessary)
                 </label>
             </div>
+            <div class="form-group form-check">
+                @for (int i = 0; i < Model.Categories.Count; i++)
+                {
+                    <div>
+                        <input type="hidden" asp-for="@Model.Categories[i].Id" />
+                        <input type="hidden" asp-for="@Model.Categories[i].Name" />
+                        <input class="form-check-input" asp-for="@Model.Categories[i].IsSelected" />
+                        <label class="form-check-label" asp-for="@Model.Categories[i].IsSelected">
+                            @Model.Categories[i].Name
+                        </label>
+                    </div>
+                }
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -51,4 +65,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-

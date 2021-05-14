@@ -41,16 +41,16 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public Task<List<Tournament>> GetAllAsync()
         {
-            return _db.Tournaments.Include(c => c.Categories)
-                                      .ThenInclude(x => x.Category)
-                                          .ThenInclude(x => x.AgeWeightCategory)
-                                              .ThenInclude(x => x.AgeCategory)
-                                              .ToListAsync();
+            return _db.Tournaments.ToListAsync();
         }
 
         public Task<Tournament> GetByIdAsync(int id)
         {
-            return _db.Tournaments.Include(c => c.Categories)
+            return _db.Tournaments.Include(tr => tr.TournamentRequirements)
+                                  .Include(t => t.Categories)
+                                  .ThenInclude(aw => aw.AgeWeightCategory)
+                                  .ThenInclude(a => a.WeightCategory)
+                                  .ThenInclude(w => w.AgeCategories)
                                   .SingleOrDefaultAsync(x => x.Id == id);
         }
 
@@ -61,6 +61,10 @@ namespace BoxingClub.DAL.Implementation.Implementation
                 throw new ArgumentNullException(nameof(item), "Tournament is null");
             }
             _db.Entry(item).State = EntityState.Modified;
+            _db.Entry(item.Categories).State = EntityState.Modified;
         }
+
+
+
     }
 }

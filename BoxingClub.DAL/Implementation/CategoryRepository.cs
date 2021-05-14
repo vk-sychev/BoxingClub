@@ -42,15 +42,22 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public Task<List<Category>> GetAllAsync()
         {
-            throw new NotImplementedException();
-            //return _db.Categories.Include(w => w.WeightCategory).Include(a => a.AgeCategory).ToListAsync();
+            
+            return _db.Categories.Include(aw => aw.AgeWeightCategory)
+                                 .ThenInclude(a => a.AgeCategory)
+                                 .Include(aw => aw.AgeWeightCategory)
+                                 .ThenInclude(w => w.WeightCategory)
+                                 .ToListAsync();
         }
 
         public Task<Category> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
-            //return _db.Categories.Include(w => w.WeightCategory).Include(a => a.AgeCategory).FirstOrDefaultAsync(x => x.Id == id);
-        }
+            return _db.Categories.Include(aw => aw.AgeWeightCategory)
+                                 .ThenInclude(a => a.AgeCategory)
+                                 .Include(aw => aw.AgeWeightCategory)
+                                 .ThenInclude(w => w.WeightCategory)
+                                 .FirstOrDefaultAsync(x => x.Id == id);
+                    }
 
         public void Update(Category item)
         {
@@ -66,6 +73,16 @@ namespace BoxingClub.DAL.Implementation.Implementation
         {
             //return _db.Categories.AsQueryable().Where(x => x.TournamentId == id).Include(w => w.WeightCategory).Include(a => a.AgeCategory).ToListAsync();
             throw new NotImplementedException();
+        }
+
+        public void DeleteRange(List<Category> categories)
+        {
+            if (categories == null)
+            {
+                throw new ArgumentNullException(nameof(categories), "Categories is null");
+            }
+
+            _db.RemoveRange(categories);
         }
     }
 }

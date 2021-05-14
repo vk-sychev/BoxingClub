@@ -14,5 +14,9 @@ namespace BoxingClub.DAL.Entities
         public AgeWeightCategory AgeWeightCategory { get; set; }
 
         public Gender Gender { get; set; }
+
+        public List<Tournament> Tournaments { get; set; } = new List<Tournament>();
+
+        public List<TournamentRequirement> TournamentRequirements { get; set; } = new List<TournamentRequirement>();
     }
 }

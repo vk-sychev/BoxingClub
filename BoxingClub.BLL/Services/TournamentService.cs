@@ -6,6 +6,7 @@ using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
@@ -24,7 +25,7 @@ namespace BoxingClub.BLL.Implementation.Services
             _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
         }
 
-        public async Task CreateTournamentAsync(TournamentDTO tournamentDTO)
+        public async Task CreateTournamentAsync(TournamentFullDTO tournamentDTO)
         {
             if (tournamentDTO == null)
             {
@@ -32,10 +33,22 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var tournament = _mapper.Map<Tournament>(tournamentDTO);
-            //tournament.Categories = await _database.Categories.GetCategoriesByTournamentIdAsync(tournament.Id);
+            tournament.Categories = await GetSelectedCategories(tournament.Categories);
 
             await _database.Tournaments.CreateAsync(tournament);
             await _database.SaveAsync();
+        }
+
+        private async Task<List<Category>> GetSelectedCategories(List<Category> categoryIds)
+        {
+            List<Category> selectedCategories = new List<Category>();
+            var categories = await _database.Categories.GetAllAsync();
+            foreach (var item in categoryIds)
+            {
+                var category = categories.FirstOrDefault(x => x.Id == item.Id);
+                selectedCategories.Add(category);
+            }
+            return selectedCategories;
         }
 
         public async Task DeleteTournamentAsync(int? id)
@@ -56,7 +69,7 @@ namespace BoxingClub.BLL.Implementation.Services
             await _database.SaveAsync();
         }
 
-        public async Task<TournamentDTO> GetTournamentByIdAsync(int? id)
+        public async Task<TournamentFullDTO> GetTournamentByIdAsync(int? id)
         {
             if (id == null)
             {
@@ -70,11 +83,11 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"Tournament with id = {id.Value} isn't found", "");
             }
 
-            var mappedTournament = _mapper.Map<TournamentDTO>(tournament);
+            var mappedTournament = _mapper.Map<TournamentFullDTO>(tournament);
             return mappedTournament;
         }
 
-        public async Task UpdateTournamentAsync(TournamentDTO tournamentDTO)
+        public async Task UpdateTournamentAsync(TournamentFullDTO tournamentDTO)
         {
             if (tournamentDTO == null)
             {
@@ -82,29 +95,52 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var tournament = _mapper.Map<Tournament>(tournamentDTO);
+
+            var tournamentFromDb = await _database.Tournaments.GetByIdAsync(tournament.Id);
+            var oldCategories = tournamentFromDb.Categories;
+            tournament.Categories = await GetSelectedCategories(tournament.Categories);
+
+            //если выбрано 0 категорий
+
             _database.Tournaments.Update(tournament);
             await _database.SaveAsync();
         }
 
-        public async Task<List<TournamentDTO>> GetTournamentsAsync()
+        public async Task<List<TournamentLiteDTO>> GetTournamentsAsync()
         {
             var tournaments = await _database.Tournaments.GetAllAsync();
-            var mappedTournaments = _mapper.Map<List<TournamentDTO>>(tournaments);
+            var mappedTournaments = _mapper.Map<List<TournamentLiteDTO>>(tournaments);
             return mappedTournaments;
         }
 
-        public async Task<List<AgeCategoryDTO>> GetAgeCategories()
+        public async Task<List<CategoryDTO>> GetCategories()
         {
-            var ageCategories = await _database.AgeCategories.GetAllAsync();
-            var mappedAgeCategories = _mapper.Map<List<AgeCategoryDTO>>(ageCategories);
-            return mappedAgeCategories;
+            var categories = await _database.Categories.GetAllAsync();
+            var mappedCategories = _mapper.Map<List<CategoryDTO>>(categories);
+            return mappedCategories;
         }
 
-        public async Task<List<WeightCategoryDTO>> GetWeightCategories()
+        private async Task UpdateTournamentCategories(List<Category> oldCategories, List<Category> newCategories)
         {
-            var weightCategories = await _database.WeightCategories.GetAllAsync();
-            var mappedWeightCategories = _mapper.Map<List<WeightCategoryDTO>>(weightCategories);
-            return mappedWeightCategories;
+            List<Category> deleteCategories = new List<Category>();
+            List<Category> addCategories = new List<Category>();
+            List<Category> foundCategories = new List<Category>();
+
+            foreach (var item in newCategories)
+            {
+                var category = oldCategories.FirstOrDefault(x => x.Id == item.Id);
+
+                if (category == null)
+                {
+                    addCategories.Add(category);
+                }
+                else
+                {
+                    foundCategories.Add(category);
+                }
+            }
+
+            deleteCategories = oldCategories.Except(foundCategories).ToList();
         }
     }
 }

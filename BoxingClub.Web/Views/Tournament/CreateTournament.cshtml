@@ -1,9 +1,7 @@
-﻿@model BoxingClub.Web.Models.TournamentViewModel
+﻿@model BoxingClub.Web.Models.CreateEditTournamentViewModel
 
 @{
     ViewData["Title"] = "CreateTournament";
-    List<AgeCategoryViewModel> ageCategories = ViewBag.AgeCategories;
-    List<WeightCategoryViewModel> weightCategories = ViewBag.WeightCategories;
 }
 
 <h1>New Tournament</h1>
@@ -14,60 +12,44 @@
         <form asp-action="CreateTournament">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="@Model.Tournament.Name" class="control-label"></label>
+                <input asp-for="@Model.Tournament.Name" class="form-control" />
+                <span asp-validation-for="@Model.Tournament.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Country" class="control-label"></label>
-                <input asp-for="Country" class="form-control" />
-                <span asp-validation-for="Country" class="text-danger"></span>
+                <label asp-for="@Model.Tournament.Country" class="control-label"></label>
+                <input asp-for="@Model.Tournament.Country" class="form-control" />
+                <span asp-validation-for="@Model.Tournament.Country" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
+                <label asp-for="@Model.Tournament.City" class="control-label"></label>
+                <input asp-for="@Model.Tournament.City" class="form-control" />
+                <span asp-validation-for="@Model.Tournament.City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AgeCategories" class="control-label font-weight-bold"></label>
-                <div>
-                    <ul>
-                        @foreach (var item in ageCategories)
-                        {
-                            <li>
-                                <input type="checkbox" asp-for="@item.IsSelected">
-                                <label asp-for="@item.IsSelected">@item.FullName</label>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                <span asp-validation-for="AgeCategories" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WeightCategories" class="control-label font-weight-bold"></label>
-                <div>
-                    <ul>
-                        @foreach (var item in weightCategories)
-                        {
-                            <li>
-                                <input type="checkbox" asp-for="@item.IsSelected">
-                                <label asp-for="@item.IsSelected">@item.FullName</label>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                <span asp-validation-for="WeightCategories" class="text-danger"></span>
+                <label asp-for="@Model.Tournament.Date" class="control-label"></label>
+                <input asp-for="@Model.Tournament.Date" class="form-control" />
+                <span asp-validation-for="@Model.Tournament.Date" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsMedCertificateNecessary" /> @Html.DisplayNameFor(model => model.IsMedCertificateNecessary)
+                    <input class="form-check-input" asp-for="@Model.Tournament.IsMedCertificateNecessary" /> @Html.DisplayNameFor(model => model.Tournament.IsMedCertificateNecessary)
                 </label>
             </div>
+            <div class="form-group form-check">
+                @for(int i =0; i<Model.Categories.Count; i++)
+                {
+                    <div>
+                        <input type="hidden" asp-for="@Model.Categories[i].Id" />
+                        <input type="hidden" asp-for="@Model.Categories[i].Name" />
+                        <input class="form-check-input" asp-for="@Model.Categories[i].IsSelected" />
+                        <label class="form-check-label" asp-for="@Model.Categories[i].IsSelected">
+                            @Model.Categories[i].Name
+                        </label>
+                    </div>
+                }
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

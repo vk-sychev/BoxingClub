@@ -16,7 +16,5 @@ namespace BoxingClub.Web.Models
         public int EndAge { get; set; }
 
         public string FullName { get { return $"{Name} {StartAge} - {EndAge}"; } } 
-
-        public bool IsSelected { get; set; }
     }
 }

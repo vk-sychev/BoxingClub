@@ -13,5 +13,10 @@ namespace BoxingClub.DAL.Entities
         public int StartAge { get; set; }
 
         public int EndAge { get; set; }
+
+        public List<WeightCategory> WeightCategories { get; set; }
+
+        public List<AgeWeightCategory> AgeWeightCategories { get; set; }
+
     }
 }

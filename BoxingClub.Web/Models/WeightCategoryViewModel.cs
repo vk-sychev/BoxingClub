@@ -16,7 +16,5 @@ namespace BoxingClub.Web.Models
         public int EndWeight { get; set; }
 
         public string FullName { get { return $"{Name} {StartWeight} - {EndWeight}"; } }
-
-        public bool IsSelected { get; set; }
     }
 }

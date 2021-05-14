@@ -13,11 +13,11 @@ namespace BoxingClub.Web.Mapping
     {
         public TournamentProfile()
         {
-            CreateMap<Tournament, TournamentDTO>(MemberList.Source).ForSourceMember(src => src.Categories, opt => opt.DoNotValidate())
-                                                                   .ReverseMap()
-                                                                   .ForMember(dest => dest.Categories, opt => opt.Ignore());
-
-            CreateMap<TournamentDTO, TournamentViewModel>().ReverseMap();
+            CreateMap<Tournament, TournamentLiteDTO>(MemberList.Destination).ReverseMap();
+            CreateMap<Tournament, TournamentFullDTO>(MemberList.Source).ReverseMap();
+            CreateMap<TournamentLiteDTO, TournamentLiteViewModel>().ReverseMap();
+            CreateMap<TournamentFullDTO, TournamentFullViewModel>()//.ForMember(src => src.Categories, opt => opt.MapFrom(src => src.TournamentRequirements.Select(x => x.Category)))
+                                                                   .ReverseMap();
         }
     }
 }

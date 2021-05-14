@@ -10,20 +10,14 @@ namespace BoxingClub.Web.Models
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public int AgeWeightCategoryId { get; set; }
 
-        public int AgeCategoryId { get; set; }
-
-        public AgeCategoryViewModel AgeCategory { get; set; }
-
-        public int WeightCategoryId { get; set; }
-
-        public WeightCategoryViewModel WeightCategory { get; set; }
-
-        public int TournamentId { get; set; }
-
-        public TournamentViewModel Tournament { get; set; }
+        public AgeWeightCategoryViewModel AgeWeightCategory { get; set; }
 
         public Gender Gender { get; set; }
+
+        public bool IsSelected { get; set; }
+
+        public string Name { get { return (AgeWeightCategory != null) ? $"{AgeWeightCategory.AgeCategory.Name} - {AgeWeightCategory.WeightCategory.Name} - {Gender}" : ""; } }
     }
 }

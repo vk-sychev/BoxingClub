@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoxingClub.DAL.Entities
+namespace BoxingClub.BLL.DomainEntities
 {
-    public class Tournament
+    public class TournamentFullDTO
     {
         public int Id { get; set; }
 
@@ -18,8 +18,8 @@ namespace BoxingClub.DAL.Entities
 
         public bool IsMedCertificateNecessary { get; set; }
 
-        public List<TournamentRequirement> TournamentRequirements { get; set; } = new List<TournamentRequirement>();
+        public List<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
 
-        public List<Category> Categories { get; set; } = new List<Category>();
+        public List<StudentFullDTO> Students { get; set; } = new List<StudentFullDTO>();
     }
 }
