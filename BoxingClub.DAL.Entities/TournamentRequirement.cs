@@ -13,7 +13,7 @@ namespace BoxingClub.DAL.Entities
 
         public Category Category { get; set; }
 
-        public int? TournamentId { get; set; }
+        public int TournamentId { get; set; }
 
         public Tournament Tournament { get; set; }
     }

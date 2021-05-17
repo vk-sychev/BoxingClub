@@ -77,11 +77,12 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [Route("MedicalCertificate/DeleteMedicalCertificate/{id}")]
         public async Task<IActionResult> DeleteMedicalCertificate(int? id, int? studentId)
         {
             await _medicalCertificateService.DeleteMedicalCertificateAsync(id);
-            return RedirectToAction("DetailsStudent", new { id = studentId });
+            return RedirectToAction("DetailsStudent", "Student", new { id = studentId });
         }
     }
 }

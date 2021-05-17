@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<BoxingClub.Web.Models.TournamentLiteViewModel>
+@using BoxingClub.Infrastructure.Constants
 
 @{
     ViewData["Title"] = "View";
@@ -59,13 +60,24 @@
                         @Html.Raw("No")
                     }
                 </td>
-                <td>
-                    <div class="d-flex justify-content-end">
-                        @Html.ActionLink("Edit", "EditTournament", new { id = item.Id }, new { @class = "btn btn-outline-primary px-3 btn-sm" })
-                        @Html.ActionLink("Details", "DetailsTournament", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
-                        @Html.ActionLink("Delete", "DeleteTournament", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
-                    </div>
-                </td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+                {
+                    <td>
+                        <div class="d-flex justify-content-end">
+                            @Html.ActionLink("Edit", "EditTournament", new { id = item.Id }, new { @class = "btn btn-outline-primary px-3 btn-sm" })
+                            @Html.ActionLink("Details", "DetailsTournament", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
+                            @Html.ActionLink("Delete", "DeleteTournament", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                        </div>
+                    </td>
+                }
+                else if (User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        <div class="d-flex justify-content-end">
+                            @Html.ActionLink("Details", "DetailsTournament", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
+                        </div>
+                    </td>
+                }
             </tr>
         }
     </tbody>

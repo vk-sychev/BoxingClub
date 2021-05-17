@@ -61,10 +61,6 @@ namespace BoxingClub.DAL.Implementation.Implementation
                 throw new ArgumentNullException(nameof(item), "Tournament is null");
             }
             _db.Entry(item).State = EntityState.Modified;
-            _db.Entry(item.Categories).State = EntityState.Modified;
         }
-
-
-
     }
 }

@@ -39,18 +39,6 @@ namespace BoxingClub.BLL.Implementation.Services
             await _database.SaveAsync();
         }
 
-        private async Task<List<Category>> GetSelectedCategories(List<Category> categoryIds)
-        {
-            List<Category> selectedCategories = new List<Category>();
-            var categories = await _database.Categories.GetAllAsync();
-            foreach (var item in categoryIds)
-            {
-                var category = categories.FirstOrDefault(x => x.Id == item.Id);
-                selectedCategories.Add(category);
-            }
-            return selectedCategories;
-        }
-
         public async Task DeleteTournamentAsync(int? id)
         {
             if (id == null)
@@ -96,13 +84,17 @@ namespace BoxingClub.BLL.Implementation.Services
 
             var tournament = _mapper.Map<Tournament>(tournamentDTO);
 
+            if (tournament == null)
+            {
+                throw new NotFoundException($"Tournament with id = {tournament.Id} isn't found", "");
+            }
+
             var tournamentFromDb = await _database.Tournaments.GetByIdAsync(tournament.Id);
-            var oldCategories = tournamentFromDb.Categories;
-            tournament.Categories = await GetSelectedCategories(tournament.Categories);
 
-            //если выбрано 0 категорий
+            UpdateTournamentProperties(tournamentFromDb, tournament);
+            await UpdateTournamentCategories(tournamentFromDb, tournament);
 
-            _database.Tournaments.Update(tournament);
+            _database.Tournaments.Update(tournamentFromDb);
             await _database.SaveAsync();
         }
 
@@ -120,8 +112,25 @@ namespace BoxingClub.BLL.Implementation.Services
             return mappedCategories;
         }
 
-        private async Task UpdateTournamentCategories(List<Category> oldCategories, List<Category> newCategories)
+        private void UpdateTournamentProperties(Tournament tournamentFromDb, Tournament updatedTournament)
         {
+            tournamentFromDb.Name = updatedTournament.Name;
+            tournamentFromDb.Date = updatedTournament.Date;
+            tournamentFromDb.Country = updatedTournament.Country;
+            tournamentFromDb.City = updatedTournament.City;
+            tournamentFromDb.IsMedCertificateNecessary = updatedTournament.IsMedCertificateNecessary;
+        }
+
+        private async Task UpdateTournamentCategories(Tournament tournamentFromDb, Tournament updatedTournament)
+        {
+            var oldCategories = tournamentFromDb.Categories;
+            var newCategories = await GetSelectedCategories(updatedTournament.Categories);
+            
+            if (newCategories.Count == 0)
+            {
+                return;
+            }
+
             List<Category> deleteCategories = new List<Category>();
             List<Category> addCategories = new List<Category>();
             List<Category> foundCategories = new List<Category>();
@@ -132,7 +141,7 @@ namespace BoxingClub.BLL.Implementation.Services
 
                 if (category == null)
                 {
-                    addCategories.Add(category);
+                    addCategories.Add(item);
                 }
                 else
                 {
@@ -141,6 +150,33 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             deleteCategories = oldCategories.Except(foundCategories).ToList();
+            if (deleteCategories.Count != 0)
+            {
+                foreach(var item in deleteCategories)
+                {
+                    tournamentFromDb.Categories.Remove(item);
+                }
+            }
+
+            if (addCategories.Count!=0)
+            {
+                foreach (var item in addCategories)
+                {
+                    tournamentFromDb.Categories.Add(item);
+                }
+            }
+        }
+
+        private async Task<List<Category>> GetSelectedCategories(List<Category> categoryIds)
+        {
+            List<Category> selectedCategories = new List<Category>();
+            var categories = await _database.Categories.GetAllAsync();
+            foreach (var item in categoryIds)
+            {
+                var category = categories.FirstOrDefault(x => x.Id == item.Id);
+                selectedCategories.Add(category);
+            }
+            return selectedCategories;
         }
     }
 }

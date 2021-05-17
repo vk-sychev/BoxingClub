@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.Infrastructure.Constants;
+using BoxingClub.Web.CustomAttributes;
 using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +38,7 @@ namespace BoxingClub.Web.Controllers
 
 
         [HttpGet]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Tournament/EditTournament/{id}")]
         public async Task<IActionResult> EditTournament(int? id)
         {
@@ -50,6 +53,7 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpPost]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Tournament/EditTournament/{id}")]
         public async Task<IActionResult> EditTournament(CreateEditTournamentViewModel model)
         {
@@ -65,6 +69,7 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpGet]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Tournament/CreateTournament")]
         public async Task<IActionResult> CreateTournament()
         {
@@ -76,6 +81,7 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpPost]
+        [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Tournament/CreateTournament")]
         public async Task<IActionResult> CreateTournament(CreateEditTournamentViewModel model)
         {
@@ -90,6 +96,24 @@ namespace BoxingClub.Web.Controllers
             return View(model);
         }
 
+        [Route("Tournament/DeleteTournament/{id}")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTournament(int? id)
+        {
+            await _tournamentService.DeleteTournamentAsync(id);
+            return RedirectToAction("GetAllTournaments", "Tournament");
+        }
+
+        [Route("Tournament/DetailsTournament/{id}")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> DetailsTournament(int? id)
+        {
+            var tournament = await _tournamentService.GetTournamentByIdAsync(id);
+            var mappedTournament = _mapper.Map<TournamentFullViewModel>(tournament);
+            return View(mappedTournament);
+        }
 
         private List<CategoryViewModel> GetSelectedCategories(List<CategoryViewModel> categories)
         {

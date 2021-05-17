@@ -31,24 +31,6 @@ namespace BoxingClub.BLL.Implementation.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
         }
 
-        private async Task<RoleDTO> FindUserRoleAsync(ApplicationUser user)
-        {
-            var role = await _roleProvider.GetUserRole(user);
-            if (string.IsNullOrEmpty(role))
-            {
-                throw new NotFoundException($"Role for user = {user.UserName} isn't found", "");
-            }
-
-            var roleObject = await _roleProvider.FindRoleByNameAsync(role);
-            if (roleObject == null)
-            {
-                throw new NotFoundException($"Role with name = {role} isn't found", "");
-            }
-
-            var mappedRole = _mapper.Map<RoleDTO>(roleObject);
-            return mappedRole;
-        }
-
         public async Task<UserDTO> FindUserByIdAsync(string userId)
         {
             if (string.IsNullOrEmpty(userId))
@@ -62,15 +44,6 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var mappedUser = await AssignRole(user);
-            return mappedUser;
-        }
-
-
-        private async Task<UserDTO> AssignRole(ApplicationUser user)
-        {
-            var mappedRole = await FindUserRoleAsync(user);
-            var mappedUser = _mapper.Map<UserDTO>(user);
-            mappedUser.Role = mappedRole;
             return mappedUser;
         }
 
@@ -184,62 +157,6 @@ namespace BoxingClub.BLL.Implementation.Services
             return roleResult;                  
         }
 
-
-        private async Task<string> GetUserRole(ApplicationUser userFromDb)
-        {
-            var role = await _roleProvider.GetUserRole(userFromDb);
-            if (string.IsNullOrEmpty(role))
-            {
-                throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found", "");
-            }
-            return role;
-        }
-
-        private void ChangeUserProperties(ApplicationUser userFromDb, UserDTO user)
-        {
-            userFromDb.Name = user.Name;
-            userFromDb.Surname = user.Surname;
-            userFromDb.Patronymic = user.Patronymic;
-            userFromDb.UserName = user.UserName;
-            userFromDb.Description = user.Description;
-        }
-
-        private async Task<AccountResultDTO> ChangeUserRole(ApplicationUser userFromDb, string newRoleId)
-        {
-            var oldRoleName = await GetUserRole(userFromDb);
-            var userId = userFromDb.Id;
-
-            if (string.IsNullOrEmpty(newRoleId))
-            {
-                throw new ArgumentNullException(nameof(newRoleId), "newRoleId is null");
-            }
-
-            var newRole = await _roleProvider.FindRoleByIdAsync(newRoleId); 
-            if (newRole == null)
-            {
-                throw new NotFoundException($"Role for user = {userId} isn't found", "");
-            }
-
-            var newRoleName = newRole.Name;
-            if (!oldRoleName.Equals(newRoleName))
-            {
-                var result = await UpdateRoleIfChanged(userId, oldRoleName, newRoleName);
-                return result;
-            }
-            return new AccountResultDTO { Succeeded = true };
-        }
-
-        private async Task<AccountResultDTO> UpdateRoleIfChanged(string userId, string oldRoleName, string newRoleName)
-        {
-            var result = await _roleProvider.RemoveFromRoleAsync(userId, oldRoleName);
-            if (result.Succeeded)
-            {
-                result = await _roleProvider.AddToRoleAsync(userId, newRoleName);
-            }
-            var mappedResult = _mapper.Map<AccountResultDTO>(result);
-            return mappedResult;
-        }
-
         public async Task<PageModelDTO<UserDTO>> GetUsersPaginatedAsync(SearchModelDTO searchDTO)
         {
             if (searchDTO == null)
@@ -274,6 +191,87 @@ namespace BoxingClub.BLL.Implementation.Services
             var count = await _userProvider.GetCountOfUsersAsync();
             var model = new PageModelDTO<UserDTO>() { Items = userDTOs, Count = count };
             return model;
+        }
+
+        private async Task<AccountResultDTO> UpdateRoleIfChanged(string userId, string oldRoleName, string newRoleName)
+        {
+            var result = await _roleProvider.RemoveFromRoleAsync(userId, oldRoleName);
+            if (result.Succeeded)
+            {
+                result = await _roleProvider.AddToRoleAsync(userId, newRoleName);
+            }
+            var mappedResult = _mapper.Map<AccountResultDTO>(result);
+            return mappedResult;
+        }
+
+        private async Task<RoleDTO> FindUserRoleAsync(ApplicationUser user)
+        {
+            var role = await _roleProvider.GetUserRole(user);
+            if (string.IsNullOrEmpty(role))
+            {
+                throw new NotFoundException($"Role for user = {user.UserName} isn't found", "");
+            }
+
+            var roleObject = await _roleProvider.FindRoleByNameAsync(role);
+            if (roleObject == null)
+            {
+                throw new NotFoundException($"Role with name = {role} isn't found", "");
+            }
+
+            var mappedRole = _mapper.Map<RoleDTO>(roleObject);
+            return mappedRole;
+        }
+
+        private async Task<string> GetUserRole(ApplicationUser userFromDb)
+        {
+            var role = await _roleProvider.GetUserRole(userFromDb);
+            if (string.IsNullOrEmpty(role))
+            {
+                throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found", "");
+            }
+            return role;
+        }
+
+        private void ChangeUserProperties(ApplicationUser userFromDb, UserDTO user)
+        {
+            userFromDb.Name = user.Name;
+            userFromDb.Surname = user.Surname;
+            userFromDb.Patronymic = user.Patronymic;
+            userFromDb.UserName = user.UserName;
+            userFromDb.Description = user.Description;
+        }
+
+        private async Task<AccountResultDTO> ChangeUserRole(ApplicationUser userFromDb, string newRoleId)
+        {
+            var oldRoleName = await GetUserRole(userFromDb);
+            var userId = userFromDb.Id;
+
+            if (string.IsNullOrEmpty(newRoleId))
+            {
+                throw new ArgumentNullException(nameof(newRoleId), "newRoleId is null");
+            }
+
+            var newRole = await _roleProvider.FindRoleByIdAsync(newRoleId);
+            if (newRole == null)
+            {
+                throw new NotFoundException($"Role for user = {userId} isn't found", "");
+            }
+
+            var newRoleName = newRole.Name;
+            if (!oldRoleName.Equals(newRoleName))
+            {
+                var result = await UpdateRoleIfChanged(userId, oldRoleName, newRoleName);
+                return result;
+            }
+            return new AccountResultDTO { Succeeded = true };
+        }
+
+        private async Task<UserDTO> AssignRole(ApplicationUser user)
+        {
+            var mappedRole = await FindUserRoleAsync(user);
+            var mappedUser = _mapper.Map<UserDTO>(user);
+            mappedUser.Role = mappedRole;
+            return mappedUser;
         }
     }
 }
