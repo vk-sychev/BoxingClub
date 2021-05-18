@@ -78,7 +78,7 @@ namespace BoxingClub.Web.Controllers
 
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
-        [Route("Home/EditGroup/{id}")]
+        [Route("Home/EditBoxingGroup/{id}")]
         public async Task<IActionResult> EditBoxingGroup(int? id)
         {
             var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id.Value);
@@ -86,12 +86,18 @@ namespace BoxingClub.Web.Controllers
 
             ViewBag.Coaches = await GetCoaches();
 
+            bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+            {
+                return PartialView("_CreateEditBoxingGroupPartial", mappedGroup);
+            }
+
             return View(mappedGroup);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpPost]
-        [Route("Home/EditGroup/{id}")]
+        [Route("Home/EditBoxingGroup/{id}")]
         public async Task<IActionResult> EditBoxingGroup(BoxingGroupLiteViewModel model)
         {
             if (ModelState.IsValid)
@@ -111,6 +117,11 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> CreateBoxingGroup()
         {
             ViewBag.Coaches = await GetCoaches();
+            bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+            {
+                return PartialView("_CreateEditBoxingGroupPartial");
+            }
             return View();
         }
 

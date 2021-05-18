@@ -28,67 +28,69 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Group's Name
-                </th>
-                <th>
-                    Full Name
-                </th>
-                <th>
-                    <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Page Size
-                        </button>
-                        <div class="dropdown-menu">
-                            @foreach (var size in ViewBag.Sizes)
-                            {
-                                <a asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@(Model.PageIndex)" asp-route-pageSize="@size" class="page-link">@size</a>
-                            }
-                        </div>
-                    </div>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            @foreach (var item in Model.Items)
-            {
+    <form id="boxingGroupForm">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CoachFullName)
-                    </td>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
-                    {
-                        <td>
-                            <div class="d-flex justify-content-end px-3">
-                                @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" })
-                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm ml-3" })
-                                @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm ml-3" })
+                    <th>
+                        Group's Name
+                    </th>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Page Size
+                            </button>
+                            <div class="dropdown-menu">
+                                @foreach (var size in ViewBag.Sizes)
+                                {
+                                    <a asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@(Model.PageIndex)" asp-route-pageSize="@size" class="page-link">@size</a>
+                                }
                             </div>
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            <div class="d-flex justify-content-end px-3">
-                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" })
-                            </div>
-                        </td>
-                    }
+                        </div>
+                    </th>
+                    <th></th>
                 </tr>
-            }
-            <tr id="formTr">
-                @{await Html.RenderPartialAsync("_CreateEditBoxingGroupPartial", new BoxingGroupLiteViewModel()); }
-            </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="tableBody">
+                @foreach (var item in Model.Items)
+                {
+                    <tr id="@item.Id">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CoachFullName)
+                        </td>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+                        {
+                            <td>
+                                <div class="d-flex justify-content-end px-3">
+                                    @*@Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" })*@
+                                    <a id="editButton{@item.Id}" class="editButton btn btn-outline-primary btn-sm">Edit</a>
+                                    @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm ml-3" })
+                                    @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm ml-3" })
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <div class="d-flex justify-content-end px-3">
+                                    @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" })
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
 }
+
+
 
 
 <ul class="pagination">
@@ -140,56 +142,171 @@ else
     </li>
 </ul>
 
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
 <script>
-@*    $(document).ready(function () {
-        $("#createButton").click(function () {
-             $("#tableBody").append("<tr>")
-             $("tr:Last").append("<td>");
-                    $("td:Last").append("<input asp-for='Name' class='form-control'/>");
-                    $("td:Last").append("<span asp-validation-for='Name' class='text-danger'></span>");
-
-                $("tr:Last").append("<td>");
-                    $("td:Last").append("<div>");
-                        $("td:Last").append("<select asp-for='CoachId' class='form-select custom-select' asp-items='@ViewBag.Coaches'>");
-                            $("td:Last").append("<option selected='selected' disabled='disabled'>Choose coach</option>");
-                        $("td:Last").append("</select>")
-                        $("td:Last").append("<span asp-validation-for='CoachId' class='text-danger'></span>");
-                    $("td:Last").append("</div>");
-        })
-    })*@
-
     $(document).ready(function () {
         var dataType = 'application/x-www-form-urlencoded';
 
+@*        $("#createButton").click(function () {
+            $("#createTr").show();
+        });*@
+
+
+
+        (function ($) {
+            $.fn.validateFunction = function (input, select) {
+                if (!input.hasClass("valid")) {
+                    return false;
+                }
+                if (!select.hasClass("valid")) {
+                    return false;
+                }
+                return true;
+            }
+        }(jQuery));
+
+        var form = $("#boxingGroupForm");
+        var isCreateRequest;
+
+        $(document).on("click", "#createSubmit", function (e) {
+            console.log("createInForm");
+            isCreateRequest = true;
+        });
+
+        $(document).on("click", "#editSubmit", function (e) {
+            console.log("editInForm");
+            isCreateRequest = false;
+        });
+
+
+        form.submit(function (e) {
+            e.preventDefault();
+
+            console.log(isCreateRequest);
+            var data = $('#boxingGroupForm').serialize();
+            console.log(data);
+
+           var isValid = false;
+            var url;
+                if (isCreateRequest) {
+                    url = "Home/CreateBoxingGroup";
+                    var input = $("#createTr").closest(":input");
+                    var select = $("#createTr").closest("select");
+                    isValid = $.fn.validateFunction(input, select)
+                }
+                else {
+                    url = "Home/EditBoxingGroup";
+                    var input = $("#editTr").closest(":input");
+                    var select = $("#editTr").closest("select");
+                    isValid = $.fn.validateFunction(input, select)
+            }
+
+
+            if (isValid) {
+                var data = $('#boxingGroupForm').serialize();
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    contentType: dataType,
+                    data: data,
+                    success: alert("Success")
+                })
+            }
+            else {
+                alert("Failed");
+            }
+        });
+
+@*        $(document).on("click", "#createSubmit", function () {
+            console.log("createInForm");
+            $.fn.customSubmit(true);
+        });
+
+        $(document).on("click", "#editSubmit", function () {
+            console.log("editInForm");
+            $.fn.customSubmit(false);
+        });*@
+
+
+    (function ($) {
+        $.fn.customSubmit = function (isCreateRequest) {
+            form.submit(function (e) {
+                e.preventDefault();
+
+                console.log(isCreateRequest);
+                var data = $('#boxingGroupForm').serialize();
+                console.log(data);
+
+                var isValid = false;
+                var input = $("#boxingGroupForm :input").first();
+                var select = $("#boxingGroupForm select").first();
+
+                isValid = $.fn.validateFunction(input, select);
+
+                if (isValid) {
+                    var data = $('#boxingGroupForm').serialize();
+                    $.ajax({
+                        url: "Home/CreateBoxingGroup",
+                        type: "POST",
+                        contentType: dataType,
+                        data: data,
+                        success: alert("success")
+                    })
+                }
+                else {
+                    alert("Mistake");
+                }
+            });
+        }
+    }(jQuery));
+
+
+        var deletedData;
+
+        $(".editButton").click(function () {
+            $(".editButton").each(function () {
+                $(this).addClass("disabled");
+            })
+            var parentTr = $(this).parent().closest("tr");
+            var boxingGroupId = $(parentTr).attr("id");
+            deletedData = parentTr.html();
+            $.get("Home/EditBoxingGroup/" + boxingGroupId, function (data) {
+                $(parentTr).replaceWith(data);
+
+            });
+        });
 
         $("#createButton").click(function () {
-            $("#formTr").show();
-        })
-
-        $("#cancelButton").click(function () {
-            $("#formTr").hide();
-        })
-
-        $("#boxingGroupForm").submit(function () {
-            $.validator.unobtrusive.parse($('#boxingGroupForm'));
-@*            var isValid = $('#boxingGroupForm').validate();*@
-            var data = $('#boxingGroupForm').serialize();
-            $.ajax({
-                url: "Home/CreateBoxingGroup",
-                type: "POST",
-                contentType: dataType,
-                data: data,
-                success : alert("success")
+            console.log("create");
+            $.get("Home/CreateBoxingGroup", function (data) {
+                $("tbody").append(data);
             })
-        })
+        });
+
+        $(document).on("click", "#cancelCreate", function() {
+            console.log("cancelCreate");
+            console.log($(this).parent().closest("tr"));
+            $(this).parent().closest("tr").remove();
+        });
+
+        $(document).on("click", "#cancelEdit", function () {
+            console.log("cancelEdit");
+            var parentTr = $(this).parent().closest("tr");
+            $(parentTr).replaceWith(deletedData);
+
+            $(".editButton").each(function () {
+                $(this).removeClass("disabled");
+            });
+        });
+
     })
 
 </script>
+
+
 
 
 
