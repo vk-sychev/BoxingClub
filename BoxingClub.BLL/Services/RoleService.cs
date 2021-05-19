@@ -33,13 +33,15 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new NotFoundException($"Role with id = {id} isn't found", "");
             }
-            return _mapper.Map<RoleDTO>(role);
+            var mappedRole = _mapper.Map<RoleDTO>(role);
+            return mappedRole;
         }
 
         public async Task<List<RoleDTO>> GetRolesAsync()
         {
             var roles = await _roleProvider.GetRolesAsync();
-            return _mapper.Map<List<RoleDTO>>(roles);
+            var mappedRoles = _mapper.Map<List<RoleDTO>>(roles);
+            return mappedRoles;
         }
 
         public async Task<bool> IsInRoleAsync(UserDTO user, string roleName)
@@ -54,7 +56,8 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new ArgumentNullException(nameof(roleName), "Role is null");
             }
 
-            var result = await _roleProvider.IsInRoleAsync(_mapper.Map<ApplicationUser>(user), roleName);
+            var mappedUser = _mapper.Map<ApplicationUser>(user);
+            var result = await _roleProvider.IsInRoleAsync(mappedUser, roleName);
             return result;
         }
 
@@ -71,7 +74,8 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var result = await _roleProvider.RemoveFromRoleAsync(userId, roleName);
-            return _mapper.Map<AccountResultDTO>(result);
+            var mappedResult = _mapper.Map<AccountResultDTO>(result);
+            return mappedResult;
         }
 
         public async Task<AccountResultDTO> AddToRoleAsync(string userId, string roleName)
@@ -87,7 +91,8 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var result = await _roleProvider.AddToRoleAsync(userId, roleName);
-            return _mapper.Map<AccountResultDTO>(result);
+            var mappedResult = _mapper.Map<AccountResultDTO>(result);
+            return mappedResult;
         }
     }
 }

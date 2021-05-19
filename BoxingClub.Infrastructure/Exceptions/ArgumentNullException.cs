@@ -2,7 +2,7 @@
 {
     public class ArgumentNullException : BoxingClubException
     {
-        public ArgumentNullException(string message, string prop) : base(message, prop)
+        public ArgumentNullException(string prop, string message) : base(message, prop)
         {
         }
     }
