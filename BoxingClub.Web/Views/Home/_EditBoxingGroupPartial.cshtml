@@ -1,0 +1,40 @@
+﻿@model BoxingClub.Web.Models.BoxingGroupLiteViewModel
+@*<table>*@
+@*    <tbody>*@
+        <tr>
+            <td>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <div>
+                        <select asp-for="CoachId" class="form-select custom-select" asp-items="ViewBag.Coaches">
+                            <option selected="selected" disabled="disabled">Choose coach</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="CoachId" class="text-danger"></span>
+                </div>
+
+            </td>
+            <td>
+                <div class="form-group d-flex justify-content-end">
+                    <p><input type="submit" id="submitButton" value="Create" class="btn btn-primary btn-sm" /></p>
+                    <p><a id="cancelEditButton" class="btn btn-secondary btn-sm mx-3">Cancel</a></p>
+                </div>
+            </td>
+        </tr>
+@*    </tbody>*@
+@*</table>*@
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
