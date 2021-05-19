@@ -27,10 +27,10 @@ namespace BoxingClub.Web.Controllers
                               IUserService userService,
                               IStudentService studentService)
         {
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
-            _boxingGroupService = boxingGroupService ?? throw new ArgumentNullException(nameof(boxingGroupService), "boxingGroupService is null");
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService), "userService is null");
-            _studentService = studentService ?? throw new ArgumentNullException(nameof(studentService), "studentService is null");
+            _mapper = mapper;
+            _boxingGroupService = boxingGroupService;
+            _userService = userService;
+            _studentService = studentService;
         }
 
         public async Task<IActionResult> Index(int? pageIndex, int? pageSize)
@@ -42,28 +42,21 @@ namespace BoxingClub.Web.Controllers
 
             List<BoxingGroupLiteViewModel> groups;
             PageModelDTO<BoxingGroupDTO> pageModel;
+            var searchModel = new SearchModelDTO() { PageIndex = pageIndex, PageSize = pageSize };
 
             if (User.IsInRole(Constants.CoachRoleName))
             {
                 var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
-                pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, pageIndex ?? 1, pageSize ?? 3);
-                if (!pageModel.Items.Any())
-                {
-                    pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, 1, pageSize ?? 3);
-                    pageIndex = 1;
-                }
+                pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, searchModel);
+                pageIndex = searchModel.PageIndex;
             }
             else
             {
-                pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(pageIndex ?? 1, pageSize ?? 3);
-                if (!pageModel.Items.Any())
-                {
-                    pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(1, pageSize ?? 3);
-                    pageIndex = 1;
-                }           
+                pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(searchModel);
+                pageIndex = searchModel.PageIndex;
             }
             groups = _mapper.Map<List<BoxingGroupLiteViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, pageIndex ?? 1, pageSize ?? 3, groups);
+            var pageViewModel = new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, pageIndex, pageSize, groups);
 
             var sizes = new List<int> { 1, 2, 3, 4, 5 };
             ViewBag.Sizes = sizes;
@@ -72,7 +65,6 @@ namespace BoxingClub.Web.Controllers
 
             return View(pageViewModel);
         }
-
 
 
         [AuthorizeRoles(Constants.AdminRoleName)]
