@@ -98,7 +98,7 @@ namespace BoxingClub.BLL.UnitTests
         }
 
 
-        static readonly object[] CasesForIsInRole =
+        private static readonly object[] CasesForIsInRole =
         {
             new object[] { null, "testRole", "User is null"},
             new object[] { new UserDTO() { Id = "test" }, null, "Role is null" }
@@ -113,9 +113,7 @@ namespace BoxingClub.BLL.UnitTests
             Assert.AreEqual(exceptionMessage, exception.Message);
         }
 
-
-
-        static readonly IdentityResult[] CasesIdentityResult =
+        private static readonly IdentityResult[] CasesIdentityResult =
         {
             new IdentityResult(),
             IdentityResult.Success
@@ -139,7 +137,7 @@ namespace BoxingClub.BLL.UnitTests
 
 
 
-        static readonly object[] CasesForAddRemoveFromRoleInvalidInput =
+        private static readonly object[] CasesForAddRemoveFromRoleInvalidInput =
 {
             new object[] { null, "testRole", "User's id is null"},
             new object[] { "testId", null, "Role is null" }
