@@ -148,7 +148,7 @@ namespace BoxingClub.Web.Controllers
 
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [Route("Home/DeleteGroup/{id}")]
+        [Route("Home/DeleteBoxingGroup/{id}")]
         public async Task<IActionResult> DeleteBoxingGroup(int? id)
         {
             await _boxingGroupService.DeleleBoxingGroupAsync(id.Value);
@@ -157,7 +157,7 @@ namespace BoxingClub.Web.Controllers
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
-        [Route("Home/DetailsGroup/{id}")]
+        [Route("Home/DetailsBoxingGroup/{id}")]
         [HttpGet]
         public async Task<IActionResult> DetailsBoxingGroup(int? id)
         {
@@ -168,7 +168,7 @@ namespace BoxingClub.Web.Controllers
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Home/DeleteFromGroup/{studentId}")]
+        [Route("Home/DeleteFromBoxingGroup/{studentId}")]
         public async Task<IActionResult> DeleteFromBoxingGroup(int? studentId, int? returnId)
         {
             await _studentService.DeleteFromGroupAsync(studentId);
