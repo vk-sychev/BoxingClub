@@ -4,6 +4,7 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
 using BoxingClub.Web.Models;
+using BoxingClub.Web.WebManagers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,16 +22,19 @@ namespace BoxingClub.Web.Controllers
         private readonly IBoxingGroupService _boxingGroupService;
         private readonly IUserService _userService;
         private readonly IStudentService _studentService;
+        private readonly IHomeWebManager _homeWebManager;
 
         public HomeController(IMapper mapper,
                               IBoxingGroupService boxingGroupService,
                               IUserService userService,
-                              IStudentService studentService)
+                              IStudentService studentService,
+                              IHomeWebManager homeWebManager)
         {
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
             _userService = userService;
             _studentService = studentService;
+            _homeWebManager = homeWebManager;
         }
 
         public async Task<IActionResult> Index(SearchModelDTO searchModel)
@@ -40,24 +44,20 @@ namespace BoxingClub.Web.Controllers
                 return View("PendingRoleAssignment");
             }
 
-            List<BoxingGroupLiteViewModel> groups;
-            PageModelDTO<BoxingGroupDTO> pageModel;
+            PageViewModel<BoxingGroupLiteViewModel> pageViewModel;
 
             if (User.IsInRole(Constants.CoachRoleName))
             {
-                var coach = await _userService.FindUserByNameAsync(User.Identity.Name);
-                pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, searchModel);
+                pageViewModel = await _homeWebManager.GetBoxingGroupsByCoachIdAsync(User.Identity.Name, searchModel);
             }
             else
             {
-                pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(searchModel);
+                pageViewModel = await _homeWebManager.GetBoxingGroupsAsync(searchModel);
             }
-            groups = _mapper.Map<List<BoxingGroupLiteViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, groups);
 
             var sizes = new List<int> { 1, 2, 3, 4, 5 };
             ViewBag.Sizes = sizes;
-            ViewBag.pageSize = searchModel.PageSize ?? 3;
+            ViewBag.pageSize = searchModel.PageSize;
 
             return View(pageViewModel);
         }
@@ -147,12 +147,12 @@ namespace BoxingClub.Web.Controllers
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Home/DetailsGroup/DeleteFromBoxingGroup/{id}")]
-        [HttpDelete("{id}")]
+        [Route("Home/DetailsGroup/DeleteFromBoxingGroup/{studentId}")]
+        [HttpDelete("{studentId}")]
         public async Task<IActionResult> DeleteFromBoxingGroup(int? studentId, int? returnId)
         {
             await _studentService.DeleteFromGroupAsync(studentId);
-            return RedirectToAction("DetailsGroup", new { id = returnId.Value });
+            return RedirectToAction("DetailsBoxingGroup", new { id = returnId.Value });
         }
 
         private async Task<SelectList> GetCoaches()

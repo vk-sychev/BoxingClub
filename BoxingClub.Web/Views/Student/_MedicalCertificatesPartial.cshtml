@@ -4,7 +4,10 @@
 <div class="card-body">
     <div class="d-flex justify-content-between ">
         <h5 class="card-title">Medical Certificates</h5>
-        <a class="btn btn-primary btn-sm mb-3" asp-action="CreateMedicalCertificate" asp-controller="MedicalCertificate" asp-route-id="@Model.Id">Create New Medical Certificate</a>
+        @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.ManagerRoleName) || (User.IsInRole(Constants.AdminRoleName))))
+        {
+            <a class="btn btn-primary btn-sm mb-3" asp-action="CreateMedicalCertificate" asp-controller="MedicalCertificate" asp-route-id="@Model.Id">Create New Medical Certificate</a>
+        }
     </div>
     <table class="table">
         <thead>

@@ -5,6 +5,8 @@ using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Infrastructure.Exceptions;
 using BoxingClub.Web.CustomAttributes;
 using BoxingClub.Web.Models;
+using BoxingClub.Web.WebManagers.Implementation;
+using BoxingClub.Web.WebManagers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,25 +22,24 @@ namespace BoxingClub.Web.Controllers
         private readonly IRoleService _roleService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IAdministrationWebManager _administrationWebManager;
 
         public AdministrationController(IRoleService roleService,
                                         IUserService userService,
-                                        IMapper mapper)
+                                        IMapper mapper,
+                                        IAdministrationWebManager administrationWebManager)
         {   
             _roleService = roleService;
             _userService = userService;
             _mapper = mapper;
+            _administrationWebManager = administrationWebManager;
         }
 
         [HttpGet]
         [Route("Administration/GetUsers")]
         public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
-            var pageModel = await _userService.GetUsersPaginatedAsync(searchModel);
-
-            var users = _mapper.Map<List<UserViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<UserViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, users);
-
+            var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
             var sizes = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
             ViewBag.Sizes = sizes;
             ViewBag.pageSize = searchModel.PageSize ?? 3;
@@ -47,7 +48,7 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Route("Administration/DeleteStudent/{id}")]
+        [Route("Administration/DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             await _userService.DeleteUserByIdAsync(id);

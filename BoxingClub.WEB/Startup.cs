@@ -12,6 +12,8 @@ using BoxingClub.DAL.Repositories;
 using BoxingClub.Web.Mapping;
 using BoxingClub.Web.Models;
 using BoxingClub.Web.Validations;
+using BoxingClub.Web.WebManagers.Implementation;
+using BoxingClub.Web.WebManagers.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -71,6 +73,10 @@ namespace BoxingClub.Web
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
             services.AddTransient<ITournamentService, TournamentService>();
+
+            services.AddTransient<IHomeWebManager, HomeWebManager>();
+            services.AddTransient<IStudentWebManager, StudentWebManager>();
+            services.AddTransient<IAdministrationWebManager, AdministrationWebManager>();
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), 
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
