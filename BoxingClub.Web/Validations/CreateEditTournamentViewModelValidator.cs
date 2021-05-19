@@ -11,7 +11,7 @@ namespace BoxingClub.Web.Validations
     {
         public CreateEditTournamentViewModelValidator()
         {
-            
+            RuleFor(x => x.Tournament).NotNull().SetValidator(new TournamentFullViewModelValidator());
         }
     }
 }

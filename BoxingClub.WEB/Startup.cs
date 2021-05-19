@@ -91,9 +91,9 @@ namespace BoxingClub.Web
                                 .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
 
-                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
-            .AddFluentValidation();
+            .AddFluentValidation(configuration => configuration.ImplicitlyValidateChildProperties = true);
 
             services.AddTransient<IValidator<SignUpViewModel>, SignUpViewModelValidator>();
             services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();
@@ -101,6 +101,9 @@ namespace BoxingClub.Web
             services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
             services.AddTransient<IValidator<BoxingGroupLiteViewModel>, BoxingGroupLiteViewModelValidator>();
             services.AddTransient<IValidator<MedicalCertificateViewModel>, MedicalCertificateViewModelValidator>();
+            services.AddTransient<IValidator<CreateEditTournamentViewModel>, CreateEditTournamentViewModelValidator>();
+            services.AddTransient<IValidator<CreateEditTournamentViewModel>, CreateEditTournamentViewModelValidator>();
+            services.AddTransient<IValidator<TournamentFullViewModel>, TournamentFullViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>
             {
