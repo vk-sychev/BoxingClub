@@ -11,6 +11,7 @@ using BoxingClub.Web.CustomAttributes;
 using System.Linq;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
+using BoxingClub.Web.WebManagers.Interfaces;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -20,17 +21,20 @@ namespace BoxingClub.Web.Controllers
         private readonly IStudentService _studentService;
         private readonly IBoxingGroupService _boxingGroupService;
         private readonly IMedicalCertificateService _medicalCertificateService;
+        private readonly IStudentWebManager _studentWebManager;
         private readonly IMapper _mapper;
 
         public StudentController(IStudentService studentService,
                                  IMapper mapper,
                                  IBoxingGroupService boxingGroupService,
-                                 IMedicalCertificateService medicalCertificateService)
+                                 IMedicalCertificateService medicalCertificateService,
+                                 IStudentWebManager studentWebManager)
         {
             _studentService = studentService;
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
             _medicalCertificateService = medicalCertificateService;
+            _studentWebManager = studentWebManager;
         }
 
 
@@ -38,14 +42,11 @@ namespace BoxingClub.Web.Controllers
         [Route("Student/GetAllStudents")]
         public async Task<IActionResult> GetAllStudents(SearchModelDTO searchModel)
         {
-            var pageModel = await _studentService.GetStudentsAsync(searchModel);
+            var pageViewModel = await _studentWebManager.GetStudentsAsync(searchModel);
 
-            var students = _mapper.Map<List<StudentLiteViewModel>>(pageModel.Items);
-            var pageViewModel = new PageViewModel<StudentLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, students);
-
-            var sizes = new List<int> { 1, 2, 3, 4, 5 }; //в конфиг
+            var sizes = new List<int> { 1, 2, 3, 4, 5 }; 
             ViewBag.Sizes = sizes;
-            ViewBag.pageSize = searchModel.PageSize ?? 3;
+            ViewBag.pageSize = searchModel.PageSize;
             ViewBag.experienceFilter = searchModel.ExperienceFilter ?? 0;
             ViewBag.medExaminationFilter = searchModel.MedExaminationFilter ?? 0;
 
