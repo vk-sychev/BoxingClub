@@ -1,0 +1,52 @@
+﻿@model BoxingClub.Web.Models.BoxingGroupLiteViewModel
+
+@{
+    string id;
+    string idSaveButton;
+    string idCancelButton;
+    @if (Model == null)
+    {
+        id = "createTr";
+        idSaveButton = "createSubmit";
+        idCancelButton = "cancelCreate";
+    }
+    else
+    {
+        id = "editTr";
+        idSaveButton = "editSubmit";
+        idCancelButton = "cancelEdit";
+    }
+}
+
+
+<tr id="@id">
+    <td>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </td>
+    <td>
+        <div class="form-group">
+            <div>
+                <select asp-for="CoachId" class="form-select custom-select" asp-items="ViewBag.Coaches">
+                    <option selected="selected" disabled="disabled">Choose coach</option>
+                </select>
+            </div>
+            <span asp-validation-for="CoachId" class="text-danger"></span>
+        </div>
+    </td>
+    <td>
+        <div class="form-group d-flex justify-content-end">
+            <p><input type="submit" value="Save" id="@idSaveButton"  class="btn btn-primary btn-sm" /></p>
+            <p><a class="btn btn-secondary btn-sm mx-3" id="@idCancelButton">Cancel</a></p>
+        </div>
+    </td>
+</tr>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
