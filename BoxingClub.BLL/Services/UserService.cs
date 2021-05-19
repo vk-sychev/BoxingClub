@@ -31,12 +31,12 @@ namespace BoxingClub.BLL.Implementation.Services
             _mapper = mapper;
         }
 
-        private async Task<RoleDTO> FindUserRole(ApplicationUser user)
+        private async Task<RoleDTO> FindUserRoleAsync(ApplicationUser user)
         {
             var role = await _roleProvider.GetUserRole(user);
             if (string.IsNullOrEmpty(role))
             {
-                throw new NotFoundException($"Role for user = {user.UserName} isn't found ", "");
+                throw new NotFoundException($"Role for user = {user.UserName} isn't found", "");
             }
 
             var roleObject = await _roleProvider.FindRoleByNameAsync(role);
@@ -68,7 +68,7 @@ namespace BoxingClub.BLL.Implementation.Services
 
         private async Task<UserDTO> AssignRole(ApplicationUser user)
         {
-            var mappedRole = await FindUserRole(user);
+            var mappedRole = await FindUserRoleAsync(user);
             var mappedUser = _mapper.Map<UserDTO>(user);
             mappedUser.Role = mappedRole;
             return mappedUser;
@@ -108,7 +108,6 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var mappedResult = _mapper.Map<AccountResultDTO>(result);
-
             return mappedResult;
         }
 
@@ -191,7 +190,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var role = await _roleProvider.GetUserRole(userFromDb);
             if (string.IsNullOrEmpty(role))
             {
-                throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found ", "");
+                throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found", "");
             }
             return role;
         }
@@ -218,7 +217,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var newRole = await _roleProvider.FindRoleByIdAsync(newRoleId); 
             if (newRole == null)
             {
-                throw new NotFoundException($"Role for user = {userId} isn't found ", "");
+                throw new NotFoundException($"Role for user = {userId} isn't found", "");
             }
 
             var newRoleName = newRole.Name;
