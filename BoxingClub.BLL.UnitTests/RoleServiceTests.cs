@@ -24,6 +24,24 @@ namespace BoxingClub.BLL.UnitTests
         private Mock<IRoleProvider> _mockRoleProvider;
         private IRoleService _roleService;
 
+        private static readonly object[] CasesForAddRemoveFromRoleInvalidInput =
+        {
+            new object[] { null, "testRole", "User's id is null"},
+            new object[] { "testId", null, "Role is null" }
+        };
+
+        private static readonly object[] CasesForIsInRole =
+{
+            new object[] { null, "testRole", "User is null"},
+            new object[] { new UserDTO() { Id = "test" }, null, "Role is null" }
+        };
+
+        private static readonly IdentityResult[] CasesIdentityResult =
+{
+            new IdentityResult(),
+            IdentityResult.Success
+        };
+
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -97,14 +115,6 @@ namespace BoxingClub.BLL.UnitTests
             Assert.AreEqual(inRole, result);
         }
 
-
-        private static readonly object[] CasesForIsInRole =
-        {
-            new object[] { null, "testRole", "User is null"},
-            new object[] { new UserDTO() { Id = "test" }, null, "Role is null" }
-        };
-
-
         [Test]
         [TestCaseSource(nameof(CasesForIsInRole))]
         public void IsInRoleAsync_InvalidInput_ShouldThrowArgumentNullException(UserDTO user, string roleName, string exceptionMessage)
@@ -113,11 +123,6 @@ namespace BoxingClub.BLL.UnitTests
             Assert.AreEqual(exceptionMessage, exception.Message);
         }
 
-        private static readonly IdentityResult[] CasesIdentityResult =
-        {
-            new IdentityResult(),
-            IdentityResult.Success
-        };
 
         [Test]
         [TestCaseSource(nameof(CasesIdentityResult))]
@@ -134,14 +139,6 @@ namespace BoxingClub.BLL.UnitTests
             Assert.IsNotNull(result);
             Assert.AreEqual(identityResult.Succeeded, result.Succeeded);
         }
-
-
-
-        private static readonly object[] CasesForAddRemoveFromRoleInvalidInput =
-{
-            new object[] { null, "testRole", "User's id is null"},
-            new object[] { "testId", null, "Role is null" }
-        };
 
         [Test]
         [TestCaseSource(nameof(CasesForAddRemoveFromRoleInvalidInput))]
