@@ -174,15 +174,5 @@ namespace BoxingClub.Web.Controllers
             await _studentService.DeleteFromGroupAsync(studentId);
             return RedirectToAction("DetailsGroup", new { id = returnId.Value });
         }
-
-        [HttpPost]
-        public IActionResult TestAjaxPost(BoxingGroupLiteViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-
-            }
-            return View();
-        }
     }
 }
