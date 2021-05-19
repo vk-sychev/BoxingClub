@@ -14,10 +14,7 @@
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
         <div class="mt-2">
-            <a class="btn btn-primary" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
-        </div>
-        <div class="mt-2">
-            <a id="createButton" class="btn btn-primary">Create New Boxing Group Ajax</a>
+            <a id="createButton" class="btn btn-primary" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
         </div>
     }
 </div>
@@ -28,7 +25,7 @@
 }
 else
 {
-    <form id="boxingGroupForm">
+    <form id="boxingGroupForm" method="post">
         <table class="table">
             <thead>
                 <tr>
@@ -68,7 +65,6 @@ else
                         {
                             <td>
                                 <div class="d-flex justify-content-end px-3">
-                                    @*@Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" })*@
                                     <a id="editButton{@item.Id}" class="editButton btn btn-outline-primary btn-sm">Edit</a>
                                     @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm ml-3" })
                                     @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm ml-3" })
@@ -148,11 +144,20 @@ else
 
 <script>
     $(document).ready(function () {
+        var form = $("#boxingGroupForm");
+        var boxingGroupId;
+        var isCreateRequest;
         var dataType = 'application/x-www-form-urlencoded';
+        var deletedData;
 
-@*        $("#createButton").click(function () {
-            $("#createTr").show();
-        });*@
+        (function ($) {
+            $.fn.initValidation = function (elementSelector) {
+                $(elementSelector).removeData("validator").removeData("unobtrusiveValidation");
+                $.validator.unobtrusive.parse(elementSelector);
+                console.log(elementSelector);
+                console.log("init validation");
+            };
+        }(jQuery));
 
 
 
@@ -168,138 +173,122 @@ else
             }
         }(jQuery));
 
-        var form = $("#boxingGroupForm");
-        var isCreateRequest;
+        (function ($) {
+            $.fn.disableEdits = function () {
+                $(".editButton").each(function () {
+                    $(this).addClass("disabled");
+                });
+            }
+        }(jQuery));
 
-        $(document).on("click", "#createSubmit", function (e) {
-            console.log("createInForm");
-            isCreateRequest = true;
-        });
+        (function ($) {
+            $.fn.ableEdits = function () {
+                $(".editButton").each(function () {
+                    $(this).removeClass("disabled");
+                });
+            }
+        }(jQuery));
 
-        $(document).on("click", "#editSubmit", function (e) {
-            console.log("editInForm");
-            isCreateRequest = false;
-        });
 
+
+        (function ($) {
+            $.fn.disableNew = function () {
+                $("#createButton").addClass("disabled");
+            }
+        }(jQuery));
+
+        (function ($) {
+            $.fn.ableNew = function () {
+                $("#createButton").removeClass("disabled");
+            }
+        }(jQuery));
 
         form.submit(function (e) {
             e.preventDefault();
 
-            console.log(isCreateRequest);
             var data = $('#boxingGroupForm').serialize();
             console.log(data);
 
-           var isValid = false;
             var url;
-                if (isCreateRequest) {
-                    url = "Home/CreateBoxingGroup";
-                    var input = $("#createTr").closest(":input");
-                    var select = $("#createTr").closest("select");
-                    isValid = $.fn.validateFunction(input, select)
-                }
-                else {
-                    url = "Home/EditBoxingGroup";
-                    var input = $("#editTr").closest(":input");
-                    var select = $("#editTr").closest("select");
-                    isValid = $.fn.validateFunction(input, select)
+            if (isCreateRequest) {
+                url = "Home/CreateBoxingGroup";
+            }
+            else {
+                url = "Home/EditBoxingGroup/" + boxingGroupId;
             }
 
-
-            if (isValid) {
+            if (form.valid()) {
                 var data = $('#boxingGroupForm').serialize();
                 $.ajax({
                     url: url,
                     type: "POST",
                     contentType: dataType,
                     data: data,
-                    success: alert("Success")
+                    success: function () {
+                        console.log("success");                   
+                            setTimeout(function () {
+                                location.reload(); 
+                            }, 100);
+                    }
                 })
-            }
-            else {
-                alert("Failed");
-            }
+            };
         });
 
-@*        $(document).on("click", "#createSubmit", function () {
-            console.log("createInForm");
-            $.fn.customSubmit(true);
+
+        $(document).on("click", "#createSubmit", function () {
+
+            isCreateRequest = true;
         });
 
         $(document).on("click", "#editSubmit", function () {
-            console.log("editInForm");
-            $.fn.customSubmit(false);
-        });*@
+            isCreateRequest = false;
+        });
 
 
-    (function ($) {
-        $.fn.customSubmit = function (isCreateRequest) {
-            form.submit(function (e) {
-                e.preventDefault();
+        $(document).on("click", ".editButton", function () {
+            $.fn.disableEdits();
+            $.fn.disableNew();
 
-                console.log(isCreateRequest);
-                var data = $('#boxingGroupForm').serialize();
-                console.log(data);
-
-                var isValid = false;
-                var input = $("#boxingGroupForm :input").first();
-                var select = $("#boxingGroupForm select").first();
-
-                isValid = $.fn.validateFunction(input, select);
-
-                if (isValid) {
-                    var data = $('#boxingGroupForm').serialize();
-                    $.ajax({
-                        url: "Home/CreateBoxingGroup",
-                        type: "POST",
-                        contentType: dataType,
-                        data: data,
-                        success: alert("success")
-                    })
-                }
-                else {
-                    alert("Mistake");
-                }
-            });
-        }
-    }(jQuery));
-
-
-        var deletedData;
-
-        $(".editButton").click(function () {
-            $(".editButton").each(function () {
-                $(this).addClass("disabled");
-            })
             var parentTr = $(this).parent().closest("tr");
-            var boxingGroupId = $(parentTr).attr("id");
-            deletedData = parentTr.html();
+            boxingGroupId = $(parentTr).attr("id");
+            deletedData = "<tr id = " + boxingGroupId + ">" + parentTr.html() + "</tr>";
+
+            console.log(deletedData);
             $.get("Home/EditBoxingGroup/" + boxingGroupId, function (data) {
                 $(parentTr).replaceWith(data);
-
+            }).then(function () {
+                $.fn.initValidation(form);
             });
+
         });
 
-        $("#createButton").click(function () {
-            console.log("create");
+        $("#createButton").click(function (e) {
+            e.preventDefault();
             $.get("Home/CreateBoxingGroup", function (data) {
                 $("tbody").append(data);
-            })
+            }).then(function () {
+                $.fn.initValidation(form);
+            });
+            $.fn.disableEdits();
+            $.fn.disableNew();
         });
 
-        $(document).on("click", "#cancelCreate", function() {
-            console.log("cancelCreate");
+        $(document).on("click", "#cancelCreate", function () {
+
             console.log($(this).parent().closest("tr"));
             $(this).parent().closest("tr").remove();
+            $.fn.ableNew();
+            $.fn.ableEdits();
+
         });
 
         $(document).on("click", "#cancelEdit", function () {
-            console.log("cancelEdit");
+
             var parentTr = $(this).parent().closest("tr");
             $(parentTr).replaceWith(deletedData);
 
-            $(".editButton").each(function () {
-                $(this).removeClass("disabled");
-            });
+            $.fn.ableEdits();
+            $.fn.ableNew();
         });
 
     })

@@ -1,9 +1,10 @@
 ﻿@model BoxingClub.Web.Models.BoxingGroupLiteViewModel
+
 @{
     string id;
     string idSaveButton;
     string idCancelButton;
-    @if (Model==null)
+    @if (Model == null)
     {
         id = "createTr";
         idSaveButton = "createSubmit";

@@ -27,7 +27,6 @@ namespace BoxingClub.Web.Controllers
                               IUserService userService,
                               IStudentService studentService)
         {
-            //проверка на null
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
             _userService = userService;
