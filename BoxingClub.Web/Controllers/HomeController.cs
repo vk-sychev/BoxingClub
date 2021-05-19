@@ -27,10 +27,10 @@ namespace BoxingClub.Web.Controllers
                               IUserService userService,
                               IStudentService studentService)
         {
-            _mapper = mapper;
-            _boxingGroupService = boxingGroupService;
-            _userService = userService;
-            _studentService = studentService;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
+            _boxingGroupService = boxingGroupService ?? throw new ArgumentNullException(nameof(boxingGroupService), "boxingGroupService is null");
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService), "userService is null");
+            _studentService = studentService ?? throw new ArgumentNullException(nameof(studentService), "studentService is null");
         }
 
         public async Task<IActionResult> Index(int? pageIndex, int? pageSize)
@@ -148,7 +148,7 @@ namespace BoxingClub.Web.Controllers
 
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [Route("Home/DeleteGroup/{id}")]
+        [Route("Home/DeleteBoxingGroup/{id}")]
         public async Task<IActionResult> DeleteBoxingGroup(int? id)
         {
             await _boxingGroupService.DeleleBoxingGroupAsync(id.Value);
@@ -157,7 +157,7 @@ namespace BoxingClub.Web.Controllers
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
-        [Route("Home/DetailsGroup/{id}")]
+        [Route("Home/DetailsBoxingGroup/{id}")]
         [HttpGet]
         public async Task<IActionResult> DetailsBoxingGroup(int? id)
         {
@@ -168,7 +168,7 @@ namespace BoxingClub.Web.Controllers
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Home/DeleteFromGroup/{studentId}")]
+        [Route("Home/DeleteFromBoxingGroup/{studentId}")]
         public async Task<IActionResult> DeleteFromBoxingGroup(int? studentId, int? returnId)
         {
             await _studentService.DeleteFromGroupAsync(studentId);
