@@ -68,18 +68,23 @@ namespace BoxingClub.Web.Controllers
         [Route("Home/EditBoxingGroup/{id}")]
         public async Task<IActionResult> EditBoxingGroup(int? id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id.Value);
-            var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
+            var mappedGroup = await GetBoxingGroupById(id);
 
             ViewBag.Coaches = await GetCoaches();
 
-            bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
-            if (isAjax)
-            {
-                return PartialView("_CreateEditBoxingGroupPartial", mappedGroup);
-            }
-
             return View(mappedGroup);
+        }
+
+        [AuthorizeRoles(Constants.AdminRoleName)]
+        [HttpGet]
+        [Route("Home/EditBoxingGroupInline/{id}")]
+        public async Task<IActionResult> EditBoxingGroupInline(int? id)
+        {
+            var mappedGroup = await GetBoxingGroupById(id);
+
+            ViewBag.Coaches = await GetCoaches();
+
+            return PartialView("_CreateEditBoxingGroupPartial", mappedGroup);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
@@ -104,12 +109,16 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> CreateBoxingGroup()
         {
             ViewBag.Coaches = await GetCoaches();
-            bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
-            if (isAjax)
-            {
-                return PartialView("_CreateEditBoxingGroupPartial");
-            }
             return View();
+        }
+
+        [AuthorizeRoles(Constants.AdminRoleName)]
+        [HttpGet]
+        [Route("Home/CreateBoxingGroupInline")]
+        public async Task<IActionResult> CreateBoxingGroupInline()
+        {
+            ViewBag.Coaches = await GetCoaches();
+            return PartialView("_CreateEditBoxingGroupPartial");
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
@@ -161,6 +170,13 @@ namespace BoxingClub.Web.Controllers
             var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
             var selectList = new SelectList(coacheViewModels, "Id", "FullName");
             return selectList;
+        }
+
+        private async Task<BoxingGroupLiteViewModel> GetBoxingGroupById(int? id)
+        {
+            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id.Value);
+            var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
+            return mappedGroup;
         }
     }
 }
