@@ -19,7 +19,7 @@
     <ProjectReference Include="..\BoxingClub.BLL.DomainEntities\BoxingClub.BLL.DomainEntities.csproj" />
     <ProjectReference Include="..\BoxingClub.BLL\BoxingClub.BLL.Implementation.csproj" />
     <ProjectReference Include="..\BoxingClub.DAL.Interfaces\BoxingClub.DAL.Interfaces.csproj" />
-    <ProjectReference Include="..\BoxingClub.WEB\BoxingClub.Web.csproj" />
+    <ProjectReference Include="..\BoxingClub.Web\BoxingClub.Web.csproj" />
   </ItemGroup>
 
 </Project>
