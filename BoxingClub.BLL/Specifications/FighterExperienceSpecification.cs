@@ -9,7 +9,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
 {
     public class FighterExperienceSpecification : IStudentSpecification
     {
-        private static readonly int TrainingPeriod = FighterExperienceConstants.TrainingPeriod;
+        private static readonly int TrainingPeriodYears = FighterExperienceConstants.TrainingPeriodYears;
         private static readonly int NumberOfFights = FighterExperienceConstants.NumberOfFights;
 
         public bool IsValid(StudentFullDTO student)
@@ -18,21 +18,13 @@ namespace BoxingClub.BLL.Implementation.Specifications
             {
                 throw new ArgumentNullException(nameof(student), "Student is null");
             }
-            //тест 4 кейса
-            var diff = GetStudentTrainingPeriod(student.DateOfEntry);
 
-            var durationRule = diff >= TrainingPeriod;
+            var diff = student.GetStudentTrainingPeriod();
+
+            var durationRule = diff >= TrainingPeriodYears;
             var fightsRule = student.NumberOfFights >= NumberOfFights;
 
             return durationRule && fightsRule;
-        }
-
-        private int GetStudentTrainingPeriod(DateTime dateOfEntry)
-        {
-            var dateOfEntryYear = dateOfEntry.Year;
-            var currentYear = DateTime.Now.Year;
-            var diff = currentYear - dateOfEntryYear;
-            return diff;
         }
     }
 }

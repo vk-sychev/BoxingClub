@@ -129,7 +129,7 @@ namespace BoxingClub.BLL.Services
             var students = await _database.Students.GetAllAsync();
             
             var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
-            //AssignLastMedicalCertificateForStudent(studentDTOs);
+            AssignLastMedicalCertificateForStudent(studentDTOs);
 
             var validatedStudents = ValidateStudentsInList(studentDTOs);
             var mappedValidatedStudents = _mapper.Map<List<StudentLiteDTO>>(validatedStudents);
@@ -152,13 +152,13 @@ namespace BoxingClub.BLL.Services
         }
 
 
-/*        private void AssignLastMedicalCertificateForStudent(List<StudentFullDTO> students)
+        private void AssignLastMedicalCertificateForStudent(List<StudentFullDTO> students)
         {
             foreach(var student in students)
             {
                 student.LastMedicalCertificate = student.MedicalCertificates.OrderBy(x => x.DateOfIssue).LastOrDefault();
             }
-        }*/
+        }
 
         private List<StudentLiteDTO> GetFilteredStudents(ExperienceOrder experienceOrder, MedExaminationOrder medExaminationOrder, List<StudentLiteDTO> students)
         {

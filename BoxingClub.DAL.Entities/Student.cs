@@ -31,5 +31,6 @@ namespace BoxingClub.DAL.Entities
         public BoxingGroup BoxingGroup { get; set; }
 
         public List<MedicalCertificate> MedicalCertificates { get; set; }
+
     }
 }

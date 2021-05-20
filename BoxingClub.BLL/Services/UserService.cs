@@ -147,7 +147,7 @@ namespace BoxingClub.BLL.Implementation.Services
 
             var mappedUser = _mapper.Map<ApplicationUser>(user);
 
-            ApplicationUser.ChangeUserProperties(userFromDb, mappedUser);
+            userFromDb.ChangeUserProperties(mappedUser);
             var roleResult = await ChangeUserRole(userFromDb, user.Role.Id);
 
             if (roleResult.Succeeded)

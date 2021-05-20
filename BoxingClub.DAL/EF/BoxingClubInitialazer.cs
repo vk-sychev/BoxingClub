@@ -781,7 +781,7 @@ namespace BoxingClub.DAL.EF
                 Country = "Russia",
                 City = "Moscow",
                 Date = new DateTime(2021, 06, 25),
-                IsMedCertificateNecessary = true
+                IsMedCertificateRequired = true
             };
 
             var voronezhBoxingLeague = new Tournament()
@@ -791,7 +791,7 @@ namespace BoxingClub.DAL.EF
                 Country = "Russia",
                 City = "Voronezh",
                 Date = new DateTime(2021, 08, 10),
-                IsMedCertificateNecessary = false
+                IsMedCertificateRequired = false
             };
 
             var internationalWomensBoxingCompetition = new Tournament()
@@ -801,7 +801,7 @@ namespace BoxingClub.DAL.EF
                 Country = "Belarus",
                 City = "Gomel",
                 Date = new DateTime(2021, 07, 13),
-                IsMedCertificateNecessary = true
+                IsMedCertificateRequired = true
             };
 
             var internationalBoxingTournamentCupOfTheGovernorOfStPetersburg = new Tournament()
@@ -811,7 +811,7 @@ namespace BoxingClub.DAL.EF
                 Country = "Russia",
                 City = "St. Petersburg",
                 Date = new DateTime(2021, 10, 17),
-                IsMedCertificateNecessary = false
+                IsMedCertificateRequired = false
             };
 
 

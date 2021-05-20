@@ -15,19 +15,19 @@ namespace BoxingClub.DAL.Entities
 
         public DateTime Date { get; set; }
 
-        public bool IsMedCertificateNecessary { get; set; }
+        public bool IsMedCertificateRequired { get; set; }
 
         public List<TournamentRequirement> TournamentRequirements { get; set; } = new List<TournamentRequirement>();
 
         public List<Category> Categories { get; set; } = new List<Category>();
 
-        public static void UpdateTournamentProperties(Tournament tournamentFromDb, Tournament updatedTournament)
+        public void UpdateTournamentProperties(Tournament updatedTournament)
         {
-            tournamentFromDb.Name = updatedTournament.Name;
-            tournamentFromDb.Date = updatedTournament.Date;
-            tournamentFromDb.Country = updatedTournament.Country;
-            tournamentFromDb.City = updatedTournament.City;
-            tournamentFromDb.IsMedCertificateNecessary = updatedTournament.IsMedCertificateNecessary;
+            Name = updatedTournament.Name;
+            Date = updatedTournament.Date;
+            Country = updatedTournament.Country;
+            City = updatedTournament.City;
+            IsMedCertificateRequired = updatedTournament.IsMedCertificateRequired;
         }
     }
 }

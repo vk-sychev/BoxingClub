@@ -29,7 +29,7 @@
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsMedCertificateNecessary)
+                @Html.DisplayNameFor(model => model.IsMedCertificateRequired)
             </th>
             <th></th>
         </tr>
@@ -51,7 +51,7 @@
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                    @if (item.IsMedCertificateNecessary)
+                    @if (item.IsMedCertificateRequired)
                     {
                         @Html.Raw("Yes")
                     }

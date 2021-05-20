@@ -91,8 +91,8 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"Tournament with id = {tournament.Id} isn't found", "");
             }
 
-            Tournament.UpdateTournamentProperties(tournamentFromDb, tournament);
-            await UpdateTournamentCategories(tournamentFromDb, tournament);
+            tournamentFromDb.UpdateTournamentProperties(tournament);
+            UpdateTournamentCategories(tournamentFromDb, tournament);
 
             _database.Tournaments.Update(tournamentFromDb);
             await _database.SaveAsync();
@@ -112,10 +112,9 @@ namespace BoxingClub.BLL.Implementation.Services
             return mappedCategories;
         }
 
-        private async Task UpdateTournamentCategories(Tournament tournamentFromDb, Tournament updatedTournament)
+        private void UpdateTournamentCategories(Tournament tournamentFromDb, Tournament updatedTournament)
         {
             var oldCategories = tournamentFromDb.Categories;
-            /*var newCategories = await GetSelectedCategories(updatedTournament.Categories);*/
             var newCategories = updatedTournament.Categories;
             
             if (newCategories.Count == 0)

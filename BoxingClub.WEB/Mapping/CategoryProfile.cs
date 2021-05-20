@@ -14,7 +14,7 @@ namespace BoxingClub.Web.Mapping
         public CategoryProfile()
         {
             CreateMap<Category, CategoryDTO>().ReverseMap();
-            CreateMap<CategoryDTO, CategoryViewModel>().ReverseMap();
+            CreateMap<CategoryDTO, CategoryViewModel>(MemberList.Source).ReverseMap();
         }
     }
 }

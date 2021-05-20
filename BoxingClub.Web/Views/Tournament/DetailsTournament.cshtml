@@ -51,10 +51,10 @@
             @Html.DisplayFor(model => model.Date)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsMedCertificateNecessary)
+            @Html.DisplayNameFor(model => model.IsMedCertificateRequired)
         </dt>
         <dd class="col-sm-10">
-            @if (Model.IsMedCertificateNecessary)
+            @if (Model.IsMedCertificateRequired)
             {
                 @Html.Raw("Yes")
             }

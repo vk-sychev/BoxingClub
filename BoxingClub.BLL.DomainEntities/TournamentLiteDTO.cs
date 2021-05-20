@@ -14,6 +14,6 @@ namespace BoxingClub.BLL.DomainEntities
 
         public DateTime Date { get; set; }
 
-        public bool IsMedCertificateNecessary { get; set; }
+        public bool IsMedCertificateRequired { get; set; }
     }
 }

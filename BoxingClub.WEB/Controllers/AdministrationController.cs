@@ -42,7 +42,7 @@ namespace BoxingClub.Web.Controllers
             var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
             var sizes = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
             ViewBag.Sizes = sizes;
-            ViewBag.pageSize = searchModel.PageSize ?? 3;
+            ViewBag.pageSize = searchModel.PageSize;
 
             return View(pageViewModel);
         }

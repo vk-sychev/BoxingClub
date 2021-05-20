@@ -16,13 +16,13 @@ namespace BoxingClub.DAL.Entities
         public string Description { get; set; }
 
 
-        public static void ChangeUserProperties(ApplicationUser userFromDb, ApplicationUser user)
+        public void ChangeUserProperties(ApplicationUser user)
         {
-            userFromDb.Name = user.Name;
-            userFromDb.Surname = user.Surname;
-            userFromDb.Patronymic = user.Patronymic;
-            userFromDb.UserName = user.UserName;
-            userFromDb.Description = user.Description;
+            Name = user.Name;
+            Surname = user.Surname;
+            Patronymic = user.Patronymic;
+            UserName = user.UserName;
+            Description = user.Description;
         }
     }
 

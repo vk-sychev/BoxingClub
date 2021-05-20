@@ -21,6 +21,6 @@ namespace BoxingClub.Web.Models
         public DateTime Date { get; set; }
 
         [DisplayName("Needs Med Examination?")]
-        public bool IsMedCertificateNecessary { get; set; }
+        public bool IsMedCertificateRequired { get; set; }
     }
 }

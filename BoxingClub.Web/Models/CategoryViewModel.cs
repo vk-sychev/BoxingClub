@@ -18,6 +18,6 @@ namespace BoxingClub.Web.Models
 
         public bool IsSelected { get; set; }
 
-        public string Name { get { return (AgeWeightCategory != null) ? $"{AgeWeightCategory.AgeCategory.Name} - {AgeWeightCategory.WeightCategory.Name} - {Gender}" : ""; } }
+        public string Name { get { return (AgeWeightCategory != null) ? $"{AgeWeightCategory.AgeCategory.Name} - {AgeWeightCategory.WeightCategory.Name} - {Gender}" : string.Empty; } }
     }
 }

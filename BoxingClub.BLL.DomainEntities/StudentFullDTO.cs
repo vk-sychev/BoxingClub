@@ -39,5 +39,13 @@ namespace BoxingClub.BLL.DomainEntities
         public bool IsMedicalCertificateValid { get; set; }
 
         public CategoryDTO Category { get; set; }
+
+        public int GetStudentTrainingPeriod()
+        {
+            var dateOfEntryYear = this.DateOfEntry.Year;
+            var currentYear = DateTime.Now.Year;
+            var diff = currentYear - dateOfEntryYear;
+            return diff;
+        }
     }
 }

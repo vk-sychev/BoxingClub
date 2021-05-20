@@ -10,7 +10,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
 {
     class MedicalCertificateSpecification : IStudentSpecification
     {
-        private readonly int ValidityPeriod = MedicalCertificateConstants.ValidityPeriod;
+        private readonly int ValidityPeriodMonthes = MedicalCertificateConstants.ValidityPeriodMonthes;
 
         public bool IsValid(StudentFullDTO student)
         {
@@ -29,7 +29,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
                 return false;
             }
 
-            return GetMedicalCertificateDuration(student.LastMedicalCertificate.DateOfIssue) < ValidityPeriod; 
+            return GetMedicalCertificateDuration(student.LastMedicalCertificate.DateOfIssue) < ValidityPeriodMonthes; 
         }
 
         private int GetMedicalCertificateDuration(DateTime dateOfIssue)

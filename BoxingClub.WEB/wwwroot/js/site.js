@@ -89,7 +89,7 @@ $(document).ready(function () {
         boxingGroupId = $(parentTr).attr("id");
         deletedData = "<tr id=" + boxingGroupId + ">" + parentTr.html() + "</tr>";
 
-        $.get("Home/EditBoxingGroup/" + boxingGroupId, function (data) {
+        $.get("Home/EditBoxingGroupInline/" + boxingGroupId, function (data) {
             $(parentTr).replaceWith(data);
         }).then(function () {
             $.fn.initValidation(form);
@@ -112,7 +112,7 @@ $(document).ready(function () {
 
     $("#createButton").click(function (e) {
         e.preventDefault();
-        $.get("Home/CreateBoxingGroup", function (data) {
+        $.get("Home/CreateBoxingGroupInline", function (data) {
             $("tbody").append(data);
         }).then(function () {
             $.fn.initValidation(form);
