@@ -40,12 +40,6 @@ namespace BoxingClub.BLL.UnitTests
             Surname = "Test"
         };
 
-        /*        private static readonly SearchModelDTO _searchModel = new SearchModelDTO
-                {
-                    PageIndex = 3,
-                    PageSize = 3
-                };
-                private static readonly int _count = 6;*/
         private static readonly SearchModelDTO _searchModelWithoutFilters = new SearchModelDTO()
         {
             PageIndex = 1,
@@ -306,12 +300,6 @@ namespace BoxingClub.BLL.UnitTests
         [TestCaseSource(nameof(CasesForGetStudentsAsync))]
         public async Task GetStudentsAsync_ValidInput_ReturnList(SearchModelDTO searchModel, int countOfValidStudents)
         {
-/*            var searchModel = new SearchModelDTO()
-            {
-                PageIndex = 1,
-                PageSize = 4
-            };*/
-
             _mockStudentRepository.Setup(repo => repo.GetAllAsync().Result).Returns(_students);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
@@ -321,25 +309,6 @@ namespace BoxingClub.BLL.UnitTests
             Assert.AreEqual(countOfValidStudents, pageModel.Items.Count());
         }
 
-        /*        [Test]
-                public async Task GetStudentsAsync_ValidInput_ExperienceOrderIsExperienced_MedOrderIsAll_ReturnList()
-                {
-                    var searchModel = new SearchModelDTO()
-                    {
-                        PageIndex = 1,
-                        PageSize = 4
-                    };
-
-                    var countOfExperiencedStudents = 2;
-
-                    _mockStudentRepository.Setup(repo => repo.GetAllAsync().Result).Returns(_students);
-                    _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
-
-                    var pageModel = await _studentService.GetStudentsAsync(searchModel);
-
-                    _mockStudentRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
-                    Assert.AreEqual(countOfExperiencedStudents, pageModel.Items.Count());
-                }*/
 
         [Test]
         public void GetStudentsAsync_InvalidInput_ShouldThrowArgumentNullException()
@@ -347,18 +316,6 @@ namespace BoxingClub.BLL.UnitTests
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.GetStudentsAsync(null));
         }
 
-        /*        public async Task GetStudentsAsync_PageIndexAndPageSizeIsNull_ShouldAssignValueToPageIndexAndPageSize()
-                {
-                    var searchModel = new SearchModelDTO()
-                    {
-                        PageIndex = null,
-                        PageSize = null
-                    };
-
-                    _mockStudentRepository.Setup(repo => repo.GetAllAsync().Result).Returns(_students);
-                    _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
-
-                }*/
 
         [Test]
         public async Task GetStudentByIdAsync_ValidInput()
