@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
@@ -23,6 +24,31 @@ namespace BoxingClub.BLL.UnitTests
         private Mock<IBoxingGroupRepository> _mockRepository;
         private Mock<IUnitOfWork> _mockUoW;
         private IBoxingGroupService _boxingGroupService;
+
+        private static readonly object[] CasesForConstructor =
+{
+            new object[] {null, new Mock<IUnitOfWork>().Object, "mapper is null"},
+            new object[] {new Mock<IMapper>().Object, null, "uow is null"}
+        };
+        private static readonly string _coachId = "test";
+        private static readonly List<BoxingGroup> _boxingGroupsList = new List<BoxingGroup>() {
+                new BoxingGroup { Id = 1, CoachId = _coachId },
+                new BoxingGroup { Id = 2, CoachId = _coachId },
+                new BoxingGroup { Id = 3, CoachId = _coachId }
+        };
+
+        private static readonly SearchModelDTO _searchModel = new SearchModelDTO
+        {
+            PageIndex = 3,
+            PageSize = 3
+        };
+        private static readonly int _count = 6;
+
+        private static readonly object[] CasesForGetBoxingGroupsByCoachIdPaginatedAsync =
+        {
+            new object[] {_coachId, null, "SearchDTO is null" },
+            new object[] {null, _searchModel, "Coach id is null" }
+        };
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -38,6 +64,23 @@ namespace BoxingClub.BLL.UnitTests
             _mockRepository = new Mock<IBoxingGroupRepository>();
             _mockUoW = new Mock<IUnitOfWork>();
             _boxingGroupService = new BoxingGroupService(_mapper, _mockUoW.Object);
+        }
+
+        [Test]
+        public void BoxingGroupServiceConstructor_ShouldConstruct()
+        {
+            var boxingGroupService = new BoxingGroupService(_mapper, _mockUoW.Object);
+
+            Assert.IsNotNull(boxingGroupService);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(CasesForConstructor))]
+        public void BoxingGroupServiceConstructor_ShouldThrowArgumentNullException(IMapper mapper, IUnitOfWork uow, string exceptionMessage)
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new BoxingGroupService(mapper, uow));
+
+            Assert.AreEqual(exceptionMessage, exception.Message);
         }
 
         [Test]
@@ -187,20 +230,13 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public async Task GetBoxingGroupsByCoachIdAsync_ValidInput()
         {
-            var coachId = "test";
-            var boxingGroupsList = new List<BoxingGroup>() {
-                new BoxingGroup { Id = 1, CoachId = coachId },
-                new BoxingGroup { Id = 2, CoachId = coachId },
-                new BoxingGroup { Id = 3, CoachId = coachId }
-            };
-
-            _mockRepository.Setup(repo => repo.GetBoxingGroupsByCoachIdAsync(coachId).Result).Returns(boxingGroupsList);
+            _mockRepository.Setup(repo => repo.GetBoxingGroupsByCoachIdAsync(_coachId).Result).Returns(_boxingGroupsList);
             _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
 
-            var boxingGroups = await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(coachId);
+            var boxingGroups = await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(_coachId);
 
-            _mockRepository.Verify(repo => repo.GetBoxingGroupsByCoachIdAsync(coachId), Times.Once);
-            Assert.AreEqual(boxingGroupsList.Count, boxingGroups.Count);
+            _mockRepository.Verify(repo => repo.GetBoxingGroupsByCoachIdAsync(_coachId), Times.Once);
+            Assert.AreEqual(_boxingGroupsList.Count, boxingGroups.Count);
         }
 
         [Test]
@@ -209,5 +245,129 @@ namespace BoxingClub.BLL.UnitTests
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.GetBoxingGroupsByCoachIdAsync(null));
         }
 
+        [Test]
+        public async Task GetBoxingGroupsPaginatedAsync_ValidInput_ReturnList()
+        {
+            _mockRepository.Setup(repo => repo.GetBoxingGroupsPaginatedAsync(It.IsAny<int>(), It.IsAny<int>()).Result).Returns(_boxingGroupsList);
+            _mockRepository.Setup(repo => repo.GetCountOfBoxingGroupsAsync().Result).Returns(_count);
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(_searchModel);
+
+            _mockRepository.Verify(repo => repo.GetBoxingGroupsPaginatedAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            _mockRepository.Verify(repo => repo.GetCountOfBoxingGroupsAsync(), Times.Once);
+            Assert.AreEqual(_boxingGroupsList.Count, pageModel.Items.Count());
+            Assert.AreEqual(_count, pageModel.Count);
+        }
+
+        [Test]
+        public void GetBoxingGroupsPaginatedAsync_InvalidInput_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.GetBoxingGroupsPaginatedAsync(null));
+        }
+
+        [Test]
+        public async Task GetBoxingGroupsPaginatedAsync_PageIndexAndPageSizeIsNull_ShouldAssignValueToPageIndexAndPageSize()
+        {
+            var searchModel = new SearchModelDTO()
+            {
+                PageIndex = null,
+                PageSize = null
+            };
+
+            _mockRepository.Setup(repo => repo.GetBoxingGroupsPaginatedAsync(It.IsAny<int>(), It.IsAny<int>()).Result).Returns(_boxingGroupsList);
+            _mockRepository.Setup(repo => repo.GetCountOfBoxingGroupsAsync().Result).Returns(_count);
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(searchModel);
+
+            Assert.IsNotNull(searchModel.PageIndex);
+            Assert.AreEqual(1, searchModel.PageIndex);
+            Assert.IsNotNull(searchModel.PageSize);
+            Assert.AreEqual(3, searchModel.PageSize);
+        }
+
+        [Test]
+         public async Task GetBoxingGroupsPaginatedAsync_UsersOnGivenPageIndexDoesntExist_ShouldCallGetUsersTwice()
+        {
+            _mockRepository.Setup(repo => repo.GetBoxingGroupsPaginatedAsync(_searchModel.PageIndex.Value, _searchModel.PageSize.Value).Result).Returns(new List<BoxingGroup>());
+            _mockRepository.Setup(repo => repo.GetBoxingGroupsPaginatedAsync(1, _searchModel.PageSize.Value).Result).Returns(_boxingGroupsList);
+            _mockRepository.Setup(repo => repo.GetCountOfBoxingGroupsAsync().Result).Returns(_count);
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(_searchModel);
+
+            _mockRepository.Verify(repo => repo.GetBoxingGroupsPaginatedAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(2));
+            _mockRepository.Verify(repo => repo.GetCountOfBoxingGroupsAsync(), Times.Once);
+            Assert.AreEqual(_boxingGroupsList.Count, pageModel.Items.Count());
+            Assert.AreEqual(_count, pageModel.Count);
+        }
+
+        [Test]
+        public async Task GetBoxingGroupsByCoachIdPaginatedAsync_ValidInput_ReturnList()
+        {
+            _mockRepository.Setup(repo => repo.GetBoxingGroupsByCoachIdPaginatedAsync(_coachId, It.IsAny<int>(), It.IsAny<int>()).Result).Returns(_boxingGroupsList);
+            _mockRepository.Setup(repo => repo.GetCountOfBoxingGroupsByCoachIdAsync(_coachId).Result).Returns(_count);
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            var pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(_coachId, _searchModel);
+
+            _mockRepository.Verify(repo => repo.GetBoxingGroupsByCoachIdPaginatedAsync(_coachId, It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            _mockRepository.Verify(repo => repo.GetCountOfBoxingGroupsByCoachIdAsync(_coachId), Times.Once);
+            Assert.AreEqual(_boxingGroupsList.Count, pageModel.Items.Count());
+            Assert.AreEqual(_count, pageModel.Count);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(CasesForGetBoxingGroupsByCoachIdPaginatedAsync))]
+        public void GetBoxingGroupsByCoachIdPaginatedAsync_InvalidInput_ShouldThrowArgumentNullException(string coachId, SearchModelDTO searchModel, string exceptionMessage)
+        {
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coachId, searchModel));
+
+            Assert.AreEqual(exceptionMessage, exception.Message);
+        }
+
+        [Test]
+        public async Task GetBoxingGroupsByCoachIdPaginatedAsync_PageIndexAndPageSizeIsNull_ShouldAssignValueToPageIndexAndPageSize()
+        {
+            var searchModel = new SearchModelDTO()
+            {
+                PageIndex = null,
+                PageSize = null
+            };
+
+            _mockRepository.Setup(repo => repo.GetBoxingGroupsByCoachIdPaginatedAsync(_coachId, It.IsAny<int>(), It.IsAny<int>()).Result).Returns(_boxingGroupsList);
+            _mockRepository.Setup(repo => repo.GetCountOfBoxingGroupsByCoachIdAsync(_coachId).Result).Returns(_count);
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            var pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(_coachId, searchModel);
+
+            Assert.IsNotNull(searchModel.PageIndex);
+            Assert.AreEqual(1, searchModel.PageIndex);
+            Assert.IsNotNull(searchModel.PageSize);
+            Assert.AreEqual(3, searchModel.PageSize);
+        }
+
+        [Test]
+        public async Task GetBoxingGroupsByCoachIdPaginatedAsync_UsersOnGivenPageIndexDoesntExist_ShouldCallGetUsersTwice()
+        {
+            var searchModel = new SearchModelDTO()
+            {
+                PageIndex = 3,
+                PageSize = 3
+            };
+
+            _mockRepository.Setup(repo => repo.GetBoxingGroupsByCoachIdPaginatedAsync(_coachId, searchModel.PageIndex.Value, searchModel.PageSize.Value).Result).Returns(new List<BoxingGroup>());
+            _mockRepository.Setup(repo => repo.GetBoxingGroupsByCoachIdPaginatedAsync(_coachId, 1, searchModel.PageSize.Value).Result).Returns(_boxingGroupsList);
+            _mockRepository.Setup(repo => repo.GetCountOfBoxingGroupsByCoachIdAsync(_coachId).Result).Returns(_count);
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
+
+            var pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(_coachId, searchModel);
+
+            _mockRepository.Verify(repo => repo.GetBoxingGroupsByCoachIdPaginatedAsync(_coachId, It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(2));
+            _mockRepository.Verify(repo => repo.GetCountOfBoxingGroupsByCoachIdAsync(_coachId), Times.Once);
+            Assert.AreEqual(_boxingGroupsList.Count, pageModel.Items.Count());
+            Assert.AreEqual(_count, pageModel.Count);
+        }
     }
 }

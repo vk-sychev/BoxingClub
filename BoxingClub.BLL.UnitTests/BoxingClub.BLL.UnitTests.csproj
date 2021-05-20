@@ -22,4 +22,8 @@
     <ProjectReference Include="..\BoxingClub.Web\BoxingClub.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

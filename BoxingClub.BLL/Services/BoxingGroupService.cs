@@ -134,12 +134,16 @@ namespace BoxingClub.BLL.Services
 
             var groupDTOs = _mapper.Map<List<BoxingGroupDTO>>(groups);
             var count = await _database.BoxingGroups.GetCountOfBoxingGroupsAsync();
-            var model = new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
-            return model;
+            return new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
         }
 
         public async Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, SearchModelDTO searchDTO)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException(nameof(id), "Coach id is null");
+            }
+
             if (searchDTO == null)
             {
                 throw new ArgumentNullException(nameof(searchDTO), "SearchDTO is null");

@@ -21,8 +21,8 @@ namespace BoxingClub.BLL.Implementation.Services
         public MedicalCertificateService(IUnitOfWork uow,
                                          IMapper mapper)
         {
-            _database = uow;
-            _mapper = mapper;
+            _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null"); ;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
         }
 
         public async Task<MedicalCertificateDTO> GetMedicalCertificateByIdAsync(int? id)

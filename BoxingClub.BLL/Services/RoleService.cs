@@ -18,7 +18,7 @@ namespace BoxingClub.BLL.Implementation.Services
         public RoleService(IRoleProvider roleProvider,
                            IMapper mapper)
         {
-            _roleProvider = roleProvider;
+            _roleProvider = roleProvider ?? throw new ArgumentNullException(nameof(roleProvider), "roleProvider is null");
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
         }
 

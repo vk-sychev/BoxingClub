@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BoxingClub.Infrastructure.Exceptions;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
+using System.Linq;
+using System;
+using BoxingClub.Infrastructure.Enums;
 
 namespace BoxingClub.BLL.UnitTests
 {
@@ -18,15 +21,253 @@ namespace BoxingClub.BLL.UnitTests
     class StudentServiceTests
     {
         private IMapper _mapper;
-        private Mock<IStudentRepository> _mockRepository;
+        private Mock<IStudentRepository> _mockStudentRepository;
+        private Mock<IBoxingGroupRepository> _mockBoxingGroupRepository;
         private Mock<IUnitOfWork> _mockUoW;
         private IStudentService _studentService;
+        private static readonly StudentFullDTO _studentDTO = new StudentFullDTO()
+        {
+            Id = 1,
+            Name = "Test",
+            Surname = "Test",
+            BoxingGroupId = 1
+        };
+
+        private static readonly Student _student = new Student()
+        {
+            Id = 1,
+            Name = "Test",
+            Surname = "Test"
+        };
+
+        /*        private static readonly SearchModelDTO _searchModel = new SearchModelDTO
+                {
+                    PageIndex = 3,
+                    PageSize = 3
+                };
+                private static readonly int _count = 6;*/
+        private static readonly SearchModelDTO _searchModelWithoutFilters = new SearchModelDTO()
+        {
+            PageIndex = 1,
+            PageSize = 4
+        };
+
+        private static readonly SearchModelDTO _searchModelWithExperiencedStudents = new SearchModelDTO()
+        {
+            PageIndex = 1,
+            PageSize = 4,
+            ExperienceFilter = (int)ExperienceOrder.Experienced
+        };
+
+        private static readonly SearchModelDTO _searchModelWithNewbiesStudents = new SearchModelDTO()
+        {
+            PageIndex = 1,
+            PageSize = 4,
+            ExperienceFilter = (int)ExperienceOrder.Newbies
+        };
+
+        private static readonly SearchModelDTO _searchModelWithMedExaminatedStudents = new SearchModelDTO()
+        {
+            PageIndex = 1,
+            PageSize = 4,
+            MedExaminationFilter = (int)MedExaminationOrder.Successed
+        };
+
+        private static readonly SearchModelDTO _searchModelWithMedFailedStudents = new SearchModelDTO()
+        {
+            PageIndex = 1,
+            PageSize = 4,
+            MedExaminationFilter = (int)MedExaminationOrder.Failed
+        };
+
+        private static readonly SearchModelDTO _searchModelWithExperiencedAndMedExaminatedStudents = new SearchModelDTO()
+        {
+            PageIndex = 1,
+            PageSize = 4,
+            ExperienceFilter = (int)ExperienceOrder.Experienced,
+            MedExaminationFilter = (int)MedExaminationOrder.Successed
+        };
+
+        private static readonly SearchModelDTO _searchModelWithNewbiesAndMedExaminatedStudents = new SearchModelDTO()
+        {
+            PageIndex = 1,
+            PageSize = 4,
+            ExperienceFilter = (int)ExperienceOrder.Newbies,
+            MedExaminationFilter = (int)MedExaminationOrder.Successed
+        };
+
+        private static readonly SearchModelDTO _searchModelWithExperiencedAndMedFailedStudents = new SearchModelDTO()
+        {
+            PageIndex = 1,
+            PageSize = 4,
+            ExperienceFilter = (int)ExperienceOrder.Experienced,
+            MedExaminationFilter = (int)MedExaminationOrder.Failed
+        };
+
+        private static readonly SearchModelDTO _searchModelWithNewbiesAndMedFailedStudents = new SearchModelDTO()
+        {
+            PageIndex = 1,
+            PageSize = 4,
+            ExperienceFilter = (int)ExperienceOrder.Newbies,
+            MedExaminationFilter = (int)MedExaminationOrder.Failed
+        };
+
+        private static readonly object[] CasesForGetStudentsAsync =
+        {
+            new object[] {_searchModelWithoutFilters, 4},
+            new object[] {_searchModelWithExperiencedStudents, 2},
+            new object[] {_searchModelWithNewbiesStudents, 2},
+            new object[] {_searchModelWithMedExaminatedStudents, 2},
+            new object[] {_searchModelWithMedFailedStudents, 2},
+            new object[] {_searchModelWithExperiencedAndMedExaminatedStudents, 0},
+            new object[] {_searchModelWithNewbiesAndMedExaminatedStudents, 2},
+            new object[] {_searchModelWithNewbiesAndMedFailedStudents, 0},
+            new object[] {_searchModelWithExperiencedAndMedFailedStudents, 2}
+        };
+
+        private static readonly List<MedicalCertificate> MedicalCertificatesForFirstStudent = new List<MedicalCertificate>()
+        {
+             new MedicalCertificate()
+             {
+                    Id = 1,
+                    ClinicName = "Polyclinic 4",
+                    DateOfIssue = new DateTime(2021, 03, 10),
+                    Result = MedicalResult.Success,
+                    StudentId = 1
+             },
+
+             new MedicalCertificate()
+             {
+                    Id = 2,
+                    ClinicName = "Polyclinic 4",
+                    DateOfIssue = new DateTime(2020, 05, 02),
+                    Result = MedicalResult.Fail,
+                    StudentId = 1
+             },
+
+             new MedicalCertificate()
+             {
+                    Id = 3,
+                    ClinicName = "Polyclinic 13",
+                    DateOfIssue = new DateTime(2019, 10, 04),
+                    Result = MedicalResult.Success,
+                    StudentId = 1
+             }
+        };
+
+        private static readonly List<MedicalCertificate> MedicalCertificatesForSecondStudent = new List<MedicalCertificate>()
+        {
+            new MedicalCertificate()
+            {
+                    Id = 4,
+                    ClinicName = "VODC",
+                    DateOfIssue = new DateTime(2018, 07, 14),
+                    Result = MedicalResult.Success,
+                    StudentId = 2
+            },
+
+            new MedicalCertificate()
+            {
+                    Id = 5,
+                    ClinicName = "VODC",
+                    DateOfIssue = new DateTime(2021, 04, 14),
+                    Result = MedicalResult.Fail,
+                    StudentId = 2
+            }
+        };
+
+        private static readonly List<MedicalCertificate> MedicalCertificatesForThirdStudent = new List<MedicalCertificate>()
+        {
+             new MedicalCertificate()
+             {
+                    Id = 6,
+                    ClinicName = "Polyclinic 4",
+                    DateOfIssue = new DateTime(2020, 12, 06),
+                    Result = MedicalResult.Fail,
+                    StudentId = 3
+             },
+
+             new MedicalCertificate()
+             {
+                    Id = 7,
+                    ClinicName = "Polyclinic 1",
+                    DateOfIssue = new DateTime(2021, 05, 04),
+                    Result = MedicalResult.Success,
+                    StudentId = 3
+             }
+        };
+
+
+        private static readonly List<Student> _students = new List<Student>()
+        {
+            new Student
+            {
+                    Id = 1,
+                    Name = "Vasiliy",
+                    Surname = "Sychev",
+                    Patronymic = "Konstantinovich",
+                    BornDate = new DateTime(2000, 10, 10),
+                    DateOfEntry = new DateTime(2017, 2, 20),
+                    Height = 175,
+                    Weight = 88,
+                    BoxingGroupId = 1,
+                    NumberOfFights = 3,
+                    Gender = Gender.Male,
+                    MedicalCertificates = MedicalCertificatesForFirstStudent
+            },
+
+            new Student
+            {
+                    Id = 2,
+                    Name = "Igor",
+                    Surname = "Zhuravlev",
+                    BornDate = new DateTime(1991, 5, 22),
+                    DateOfEntry = new DateTime(2014, 1, 15),
+                    Height = 180,
+                    Weight = 87,
+                    BoxingGroupId = 2,
+                    NumberOfFights = 5,
+                    Gender = Gender.Male,
+                    MedicalCertificates = MedicalCertificatesForSecondStudent
+            },
+
+            new Student
+            {
+                    Id = 3,
+                    Name = "Ivan",
+                    Surname = "Pavlov",
+                    BornDate = new DateTime(2001, 10, 14),
+                    DateOfEntry = new DateTime(2019, 02, 28),
+                    Height = 175,
+                    Weight = 81,
+                    BoxingGroupId = 1,
+                    NumberOfFights = 2,
+                    Gender = Gender.Male,
+                    MedicalCertificates = MedicalCertificatesForThirdStudent
+            },
+
+            new Student
+            {
+                    Id = 4,
+                    Name = "Andrew",
+                    Surname = "Solovyev",
+                    Patronymic = "Sergeevich",
+                    BornDate = new DateTime(2000, 04, 03),
+                    DateOfEntry = new DateTime(2015, 02, 02),
+                    Height = 176,
+                    Weight = 73,
+                    NumberOfFights = 10,
+                    Gender = Gender.Male
+            }
+
+        };
+
 
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            var mapperProfiles = new List<Profile>() { new StudentProfile() };
+            var mapperProfiles = new List<Profile>() { new StudentProfile(), new MedicalCertificateProfile() };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
             _mapper = mapperConfig.CreateMapper();
         }
@@ -34,27 +275,24 @@ namespace BoxingClub.BLL.UnitTests
         [SetUp]
         public void SetUp()
         {
-            _mockRepository = new Mock<IStudentRepository>();
+            _mockStudentRepository = new Mock<IStudentRepository>();
             _mockUoW = new Mock<IUnitOfWork>();
             _studentService = new StudentService(_mockUoW.Object, _mapper);
+            _mockBoxingGroupRepository = new Mock<IBoxingGroupRepository>();
         }
 
         [Test]
         public async Task CreateStudent_ValidInput()
         {
-            var student = new StudentFullDTO()
-            {
-                Id = 1,
-                Name = "Test",
-                Surname = "Test"
-            };
+            _mockStudentRepository.Setup(repo => repo.CreateAsync(It.IsAny<Student>()));
+            _mockBoxingGroupRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result).Returns(new BoxingGroup { Id = 1 });
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
+            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockBoxingGroupRepository.Object);
 
-            _mockRepository.Setup(repo => repo.CreateAsync(It.IsAny<Student>()));
-            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+            await _studentService.CreateStudentAsync(_studentDTO);
 
-            await _studentService.CreateStudentAsync(student);
-
-            _mockRepository.Verify(repo => repo.CreateAsync(It.IsAny<Student>()), Times.Once);
+            _mockStudentRepository.Verify(repo => repo.CreateAsync(It.IsAny<Student>()), Times.Once);
+            _mockBoxingGroupRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<int>()), Times.Once);
             _mockUoW.Verify(uow => uow.SaveAsync());
         }
 
@@ -65,30 +303,74 @@ namespace BoxingClub.BLL.UnitTests
         }
 
         [Test]
-        public async Task GetStudentsAsync_ReturnList()
+        [TestCaseSource(nameof(CasesForGetStudentsAsync))]
+        public async Task GetStudentsAsync_ValidInput_ReturnList(SearchModelDTO searchModel, int countOfValidStudents)
         {
-            var studentsList = new List<Student>() { new Student { Id = 1 }, new Student { Id = 2 }, new Student { Id = 3 } };
-            _mockRepository.Setup(repo => repo.GetAllAsync().Result).Returns(studentsList);
-            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+/*            var searchModel = new SearchModelDTO()
+            {
+                PageIndex = 1,
+                PageSize = 4
+            };*/
 
-            var list = await _studentService.GetStudentsAsync(null); //serachDTO передать
+            _mockStudentRepository.Setup(repo => repo.GetAllAsync().Result).Returns(_students);
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
-            _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
-            Assert.AreEqual(studentsList.Count, list.Count);
+            var pageModel = await _studentService.GetStudentsAsync(searchModel);
+
+            _mockStudentRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
+            Assert.AreEqual(countOfValidStudents, pageModel.Items.Count());
         }
+
+        /*        [Test]
+                public async Task GetStudentsAsync_ValidInput_ExperienceOrderIsExperienced_MedOrderIsAll_ReturnList()
+                {
+                    var searchModel = new SearchModelDTO()
+                    {
+                        PageIndex = 1,
+                        PageSize = 4
+                    };
+
+                    var countOfExperiencedStudents = 2;
+
+                    _mockStudentRepository.Setup(repo => repo.GetAllAsync().Result).Returns(_students);
+                    _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
+
+                    var pageModel = await _studentService.GetStudentsAsync(searchModel);
+
+                    _mockStudentRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
+                    Assert.AreEqual(countOfExperiencedStudents, pageModel.Items.Count());
+                }*/
+
+        [Test]
+        public void GetStudentsAsync_InvalidInput_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.GetStudentsAsync(null));
+        }
+
+        /*        public async Task GetStudentsAsync_PageIndexAndPageSizeIsNull_ShouldAssignValueToPageIndexAndPageSize()
+                {
+                    var searchModel = new SearchModelDTO()
+                    {
+                        PageIndex = null,
+                        PageSize = null
+                    };
+
+                    _mockStudentRepository.Setup(repo => repo.GetAllAsync().Result).Returns(_students);
+                    _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
+
+                }*/
 
         [Test]
         public async Task GetStudentByIdAsync_ValidInput()
         {
-            var studentId = 1;
-            _mockRepository.Setup(repo => repo.GetByIdAsync(studentId).Result).Returns(new Student { Id = studentId });
-            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+            _mockStudentRepository.Setup(repo => repo.GetByIdAsync(_student.Id).Result).Returns(_student);
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
-            var student = await _studentService.GetStudentByIdAsync(studentId);
+            var student = await _studentService.GetStudentByIdAsync(_student.Id);
 
-            _mockRepository.Verify(repo => repo.GetByIdAsync(studentId), Times.Once);
+            _mockStudentRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<int>()), Times.Once);
             Assert.IsNotNull(student);
-            Assert.AreEqual(studentId, student.Id);
+            Assert.AreEqual(_student.Id, student.Id);
         }
 
         [Test]
@@ -100,8 +382,8 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public void GetStudentByIdAsync_InvalidInput_ShouldThrowNotFoundException()
         {
-            _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
-            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+            _mockStudentRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
             Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.GetStudentByIdAsync(It.IsAny<int>()));
         }
@@ -110,21 +392,14 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public async Task DeleteStudentAsync_ValidInput()
         {
-            var student = new Student()
-            {
-                Id = 1,
-                Name = "Test",
-                Surname = "Test"
-            };
+            _mockStudentRepository.Setup(repo => repo.GetByIdAsync(_student.Id).Result).Returns(_student);
+            _mockStudentRepository.Setup(repo => repo.Delete(It.IsAny<Student>()));
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
-            _mockRepository.Setup(repo => repo.GetByIdAsync(student.Id).Result).Returns(student);
-            _mockRepository.Setup(repo => repo.Delete(It.IsAny<Student>()));
-            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+            await _studentService.DeleteStudentAsync(_student.Id);
 
-            await _studentService.DeleteStudentAsync(student.Id);
-
-            _mockRepository.Verify(repo => repo.GetByIdAsync(student.Id), Times.Once);
-            _mockRepository.Verify(repo => repo.Delete(It.IsAny<Student>()), Times.Once);
+            _mockStudentRepository.Verify(repo => repo.GetByIdAsync(_student.Id), Times.Once);
+            _mockStudentRepository.Verify(repo => repo.Delete(It.IsAny<Student>()), Times.Once);
             _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
         }
 
@@ -132,8 +407,8 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public void DeleteStudentAsync_InvalidInput_ShouldThrowNotFoundException()
         {
-            _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
-            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+            _mockStudentRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
             Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.DeleteStudentAsync(It.IsAny<int>()));
         }
@@ -147,19 +422,12 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public async Task UpdateStudentAsync_ValidInput()
         {
-            var student = new StudentFullDTO()
-            {
-                Id = 1,
-                Name = "Test",
-                Surname = "Test"
-            };
+            _mockStudentRepository.Setup(repo => repo.Update(It.IsAny<Student>()));
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
-            _mockRepository.Setup(repo => repo.Update(It.IsAny<Student>()));
-            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+            await _studentService.UpdateStudentAsync(_studentDTO);
 
-            await _studentService.UpdateStudentAsync(student);
-
-            _mockRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
+            _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
             _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
         }
 
@@ -172,29 +440,22 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public async Task DeleteFromGroup_ValidInput()
         {
-            var student = new Student()
-            {
-                Id = 1,
-                Name = "Test",
-                Surname = "Test"
-            };
+            _mockStudentRepository.Setup(repo => repo.Update(It.IsAny<Student>()));
+            _mockStudentRepository.Setup(repo => repo.GetByIdAsync(_student.Id).Result).Returns(_student);
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
-            _mockRepository.Setup(repo => repo.Update(It.IsAny<Student>()));
-            _mockRepository.Setup(repo => repo.GetByIdAsync(student.Id).Result).Returns(student);
-            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+            await _studentService.DeleteFromGroupAsync(_student.Id);
 
-            await _studentService.DeleteFromGroupAsync(student.Id);
-
-            _mockRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<int>()), Times.Once);
-            _mockRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
+            _mockStudentRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<int>()), Times.Once);
+            _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
             _mockUoW.Verify(uow => uow.SaveAsync(), Times.Once);
         }
 
         [Test]
         public void DeleteFromGroup_InvalidInput_ShouldThrowNotFoundException()
         {
-            _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
-            _mockUoW.Setup(uow => uow.Students).Returns(_mockRepository.Object);
+            _mockStudentRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
+            _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
             Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.DeleteFromGroupAsync(It.IsAny<int>()));
         }

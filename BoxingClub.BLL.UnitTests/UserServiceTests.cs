@@ -33,6 +33,15 @@ namespace BoxingClub.BLL.UnitTests
             new ApplicationUser { Id = "test2" },
             new ApplicationUser { Id = "test3" }
         };
+
+        private static readonly object[] CasesForConstructor =
+        {
+            new object[] {null, new Mock<IRoleProvider>().Object, new Mock<IAuthenticationProvider>().Object, new Mock<IMapper>().Object, "userProvider is null" },
+            new object[] {new Mock<IUserProvider>().Object, null, new Mock<IAuthenticationProvider>().Object, new Mock<IMapper>().Object, "roleProvider is null" },
+            new object[] {new Mock<IUserProvider>().Object, new Mock<IRoleProvider>().Object, null, new Mock<IMapper>().Object, "authenticationProvider is null" },
+            new object[] {new Mock<IUserProvider>().Object, new Mock<IRoleProvider>().Object, new Mock<IAuthenticationProvider>().Object, null, "mapper is null" }
+        };
+
         private static readonly IdentityRole _role = new IdentityRole() { Id = "testId", Name = "Test" };
         private static readonly ApplicationUser _user = new ApplicationUser() { Id = "testId", UserName = "Test" };
         private static readonly string _roleName = _role.Name;
@@ -58,6 +67,25 @@ namespace BoxingClub.BLL.UnitTests
             _mockAuthProvider = new Mock<IAuthenticationProvider>();
             _mockRoleProvider = new Mock<IRoleProvider>();
             _userService = new UserService(_mockUserProvider.Object, _mockRoleProvider.Object, _mockAuthProvider.Object, _mapper);
+        }
+
+        [Test]
+        public void UserServiceConstructor_ShouldConstruct()
+        {
+            var userService = new UserService(_mockUserProvider.Object, _mockRoleProvider.Object, _mockAuthProvider.Object, _mapper);
+
+            Assert.IsNotNull(userService);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(CasesForConstructor))]
+        public void UserServiceConstructor_ShouldThrowArgumentNullException(IUserProvider userProvider, IRoleProvider roleProvider,
+                                                                            IAuthenticationProvider authProvider, IMapper mapper,
+                                                                            string exceptionMessage)
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new UserService(userProvider, roleProvider, authProvider, mapper));
+
+            Assert.AreEqual(exceptionMessage, exception.Message);
         }
 
         [Test]
@@ -463,6 +491,86 @@ namespace BoxingClub.BLL.UnitTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(identityResult.Succeeded, result.Succeeded);
+        }
+
+        [Test]
+        public async Task GetUsersPaginatedAsync_ValidInput_ReturnList()
+        {
+            var searchModel = new SearchModelDTO
+            {
+                PageIndex = 1,
+                PageSize = 3
+            };
+            var count = 6;
+
+            _mockUserProvider.Setup(p => p.GetUsersPaginatedAsync(It.IsAny<int>(), It.IsAny<int>()).Result).Returns(_usersList);
+            _mockUserProvider.Setup(p => p.GetCountOfUsersAsync().Result).Returns(count);
+            _mockRoleProvider.Setup(p => p.GetUserRole(It.IsAny<ApplicationUser>()).Result).Returns(_role.Name);
+            _mockRoleProvider.Setup(p => p.FindRoleByNameAsync(It.IsAny<string>()).Result).Returns(_role);
+
+            var pageModel = await _userService.GetUsersPaginatedAsync(searchModel);
+
+            _mockUserProvider.Verify(p => p.GetUsersPaginatedAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            _mockRoleProvider.Verify(p => p.GetUserRole(It.IsAny<ApplicationUser>()), Times.Exactly(_usersList.Count));
+            _mockRoleProvider.Verify(p => p.FindRoleByNameAsync(It.IsAny<string>()), Times.Exactly(_usersList.Count));
+            Assert.AreEqual(_usersList.Count, pageModel.Items.Count());
+            Assert.AreEqual(count, pageModel.Count);
+        }
+
+
+        [Test]
+        public void GetUsersPaginatedAsync_InvalidInput_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _userService.GetUsersPaginatedAsync(null));
+        }
+
+        [Test]
+        public async Task GetUsersPaginatedAsync_PageIndexAndPageSizeIsNull_ShouldAssignValueToPageIndexAndPageSize()
+        {
+            var searchModel = new SearchModelDTO
+            {
+                PageIndex = null,
+                PageSize = null
+            };
+            var count = 6;
+
+            _mockUserProvider.Setup(p => p.GetUsersPaginatedAsync(It.IsAny<int>(), It.IsAny<int>()).Result).Returns(_usersList);
+            _mockUserProvider.Setup(p => p.GetCountOfUsersAsync().Result).Returns(count);
+            _mockRoleProvider.Setup(p => p.GetUserRole(It.IsAny<ApplicationUser>()).Result).Returns(_role.Name);
+            _mockRoleProvider.Setup(p => p.FindRoleByNameAsync(It.IsAny<string>()).Result).Returns(_role);
+
+            var pageModel = await _userService.GetUsersPaginatedAsync(searchModel);
+
+            Assert.IsNotNull(searchModel.PageIndex);
+            Assert.AreEqual(1, searchModel.PageIndex);
+            Assert.IsNotNull(searchModel.PageSize);
+            Assert.AreEqual(3, searchModel.PageSize);
+        }
+
+
+        [Test]
+        public async Task GetUsersPaginatedAsync_UsersOnGivenPageIndexDoesntExist_ShouldCallGetUsersTwice()
+        {
+            var searchModel = new SearchModelDTO
+            {
+                PageIndex = 3,
+                PageSize = 3
+            };
+            var count = 6;
+
+            _mockUserProvider.Setup(p => p.GetUsersPaginatedAsync(searchModel.PageIndex.Value, searchModel.PageSize.Value).Result).Returns(new List<ApplicationUser>());
+            _mockUserProvider.Setup(p => p.GetUsersPaginatedAsync(1, searchModel.PageSize.Value).Result).Returns(_usersList);
+            _mockUserProvider.Setup(p => p.GetCountOfUsersAsync().Result).Returns(count);
+            _mockRoleProvider.Setup(p => p.GetUserRole(It.IsAny<ApplicationUser>()).Result).Returns(_role.Name);
+            _mockRoleProvider.Setup(p => p.FindRoleByNameAsync(It.IsAny<string>()).Result).Returns(_role);
+
+            var pageModel = await _userService.GetUsersPaginatedAsync(searchModel);
+
+            _mockUserProvider.Verify(p => p.GetUsersPaginatedAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(2));
+            _mockRoleProvider.Verify(p => p.GetUserRole(It.IsAny<ApplicationUser>()), Times.Exactly(_usersList.Count));
+            _mockRoleProvider.Verify(p => p.FindRoleByNameAsync(It.IsAny<string>()), Times.Exactly(_usersList.Count));
+            Assert.AreEqual(_usersList.Count, pageModel.Items.Count());
+            Assert.AreEqual(count, pageModel.Count);
         }
     }
 }
