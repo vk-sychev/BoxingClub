@@ -2,10 +2,8 @@
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
@@ -57,7 +55,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
                                  .Include(aw => aw.AgeWeightCategory)
                                  .ThenInclude(w => w.WeightCategory)
                                  .FirstOrDefaultAsync(x => x.Id == id);
-                    }
+        }
 
         public void Update(Category item)
         {
@@ -67,22 +65,6 @@ namespace BoxingClub.DAL.Implementation.Implementation
             }
 
             _db.Entry(item).State = EntityState.Modified;
-        }
-
-        public Task<List<Category>> GetCategoriesByTournamentIdAsync(int id)
-        {
-            //return _db.Categories.AsQueryable().Where(x => x.TournamentId == id).Include(w => w.WeightCategory).Include(a => a.AgeCategory).ToListAsync();
-            throw new NotImplementedException();
-        }
-
-        public void DeleteRange(List<Category> categories)
-        {
-            if (categories == null)
-            {
-                throw new ArgumentNullException(nameof(categories), "Categories is null");
-            }
-
-            _db.RemoveRange(categories);
         }
     }
 }

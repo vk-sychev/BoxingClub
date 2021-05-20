@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
-using System;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Repositories

@@ -2,9 +2,7 @@
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
@@ -16,7 +14,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public AgeCategoryRepository(BoxingClubContext context)
         {
-            _db = context ?? throw new ArgumentNullException(nameof(context), "context is null");
+            _db = context ?? throw new ArgumentNullException(nameof(context), "Context is null");
         }
 
         public async Task CreateAsync(AgeCategory item)

@@ -89,30 +89,5 @@ namespace BoxingClub.BLL.Implementation.Services
             _database.MedicalCertificates.Update(medicalCertificate);
             await _database.SaveAsync();
         }
-
-        public async Task<List<MedicalCertificateDTO>> GetMedicalCertificatesByStudentIdAsync(int? studentId)
-        {
-            if (studentId == null)
-            {
-                throw new ArgumentNullException(nameof(studentId), "Student's id is null");
-            }
-
-            var medicalCertificates = await _database.MedicalCertificates.GetMedicalCertificatesByStudentIdAsync(studentId.Value);
-            var mappedCertificates = _mapper.Map<List<MedicalCertificateDTO>>(medicalCertificates);
-            return mappedCertificates;
-        }
-
-        public async Task<MedicalCertificateDTO> GetLastMedicalCertificateByStudentIdAsync(int? studentId)
-        {
-            if (studentId == null)
-            {
-                throw new ArgumentNullException(nameof(studentId), "Student's id is null");
-            }
-
-            var medicalCertificates = await _database.MedicalCertificates.GetMedicalCertificatesByStudentIdAsync(studentId.Value);
-            var lastCertificate = medicalCertificates.OrderBy(x => x.DateOfIssue).LastOrDefault();
-            var mappedCertificate = _mapper.Map<MedicalCertificateDTO>(lastCertificate);
-            return mappedCertificate;
-        }
     }
 }

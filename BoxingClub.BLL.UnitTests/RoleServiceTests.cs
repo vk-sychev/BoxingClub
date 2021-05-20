@@ -9,9 +9,7 @@ using BoxingClub.Web.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
@@ -23,6 +21,8 @@ namespace BoxingClub.BLL.UnitTests
         private IMapper _mapper;
         private Mock<IRoleProvider> _mockRoleProvider;
         private IRoleService _roleService;
+        private static readonly string _userId = "test";
+        private static readonly string _roleName = "test";
 
         private static readonly object[] CasesForAddRemoveFromRoleInvalidInput =
         {
@@ -103,12 +103,11 @@ namespace BoxingClub.BLL.UnitTests
         [TestCase(false)]
         public async Task IsInRoleAsync_ValidInput_ReturnsTrue(bool inRole)
         {
-            var user = new UserDTO() { Id = "test" };
-            var roleName = "testRole";
+            var user = new UserDTO() { Id = _userId };
 
             _mockRoleProvider.Setup(p => p.IsInRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()).Result).Returns(inRole);
 
-            var result = await _roleService.IsInRoleAsync(user, roleName);
+            var result = await _roleService.IsInRoleAsync(user, _roleName);
 
             _mockRoleProvider.Verify(p => p.IsInRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()), Times.Once);
             Assert.IsNotNull(result);
@@ -128,12 +127,9 @@ namespace BoxingClub.BLL.UnitTests
         [TestCaseSource(nameof(CasesIdentityResult))]
         public async Task RemoveFromRoleAsync_ValidInput(IdentityResult identityResult) 
         {
-            string userId = "test";
-            string roleName = "testRole";
-
             _mockRoleProvider.Setup(p => p.RemoveFromRoleAsync(It.IsAny<string>(), It.IsAny<string>()).Result).Returns(identityResult);
 
-            var result = await _roleService.RemoveFromRoleAsync(userId, roleName);
+            var result = await _roleService.RemoveFromRoleAsync(_userId, _roleName);
 
             _mockRoleProvider.Verify(p => p.RemoveFromRoleAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             Assert.IsNotNull(result);
@@ -152,12 +148,9 @@ namespace BoxingClub.BLL.UnitTests
         [TestCaseSource(nameof(CasesIdentityResult))]
         public async Task AddToRoleAsync_ValidInput(IdentityResult identityResult)
         {
-            string userId = "test";
-            string roleName = "testRole";
-
             _mockRoleProvider.Setup(p => p.AddToRoleAsync(It.IsAny<string>(), It.IsAny<string>()).Result).Returns(identityResult);
 
-            var result = await _roleService.AddToRoleAsync(userId, roleName);
+            var result = await _roleService.AddToRoleAsync(_userId, _roleName);
 
             _mockRoleProvider.Verify(p => p.AddToRoleAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             Assert.IsNotNull(result);

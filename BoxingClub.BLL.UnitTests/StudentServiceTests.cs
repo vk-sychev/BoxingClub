@@ -303,7 +303,7 @@ namespace BoxingClub.BLL.UnitTests
             _mockStudentRepository.Setup(repo => repo.GetAllAsync().Result).Returns(_students);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
-            var pageModel = await _studentService.GetStudentsAsync(searchModel);
+            var pageModel = await _studentService.GetStudentsPaginatedAsync(searchModel);
 
             _mockStudentRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
             Assert.AreEqual(countOfValidStudents, pageModel.Items.Count());
@@ -313,7 +313,7 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public void GetStudentsAsync_InvalidInput_ShouldThrowArgumentNullException()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.GetStudentsAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.GetStudentsPaginatedAsync(null));
         }
 
 

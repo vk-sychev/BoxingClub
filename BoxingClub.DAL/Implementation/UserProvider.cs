@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BoxingClub.DAL.Entities;
+﻿using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -4,12 +4,13 @@ namespace BoxingClub.Infrastructure.Exceptions
 {
     public class BoxingClubException : Exception
     {
-
         public string Property { get; protected set; }
-        public BoxingClubException(string message, string prop) : base(message)
+
+        public BoxingClubException(string message, string property) : base(message)
         {
-            Property = prop;
+            Property = property;
         }
+
         public BoxingClubException(string message) : base(message)
         {
         }

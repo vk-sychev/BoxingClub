@@ -25,7 +25,7 @@ namespace BoxingClub.Web.WebManagers.Implementation
 
         public async Task<PageViewModel<StudentLiteViewModel>> GetStudentsAsync(SearchModelDTO searchModel)
         {
-            var pageModel = await _studentService.GetStudentsAsync(searchModel);
+            var pageModel = await _studentService.GetStudentsPaginatedAsync(searchModel);
             var students = _mapper.Map<List<StudentLiteViewModel>>(pageModel.Items);
             return new PageViewModel<StudentLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, students);
         }

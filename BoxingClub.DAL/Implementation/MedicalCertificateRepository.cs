@@ -2,10 +2,8 @@
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
