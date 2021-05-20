@@ -17,6 +17,10 @@ namespace BoxingClub.DAL.EF
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<AgeWeightCategory> AgeWeightCategories { get; set; }
+
+        public DbSet<TournamentRequirement> TournamentRequirements { get; set; }
+
         public DbSet<Tournament> Tournaments { get; set; }
 
 
