@@ -5,6 +5,7 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Interfaces.Specifications;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
+using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Infrastructure.Enums;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
@@ -56,9 +57,7 @@ namespace BoxingClub.BLL.Services
                 throw new ArgumentNullException(nameof(studentDTO), "Student is null");
             }
             var student = _mapper.Map<Student>(studentDTO);
-            var boxingGroup = await _database.BoxingGroups.GetByIdAsync(student.BoxingGroupId.Value);
-            student.BoxingGroup = boxingGroup;
-
+            
             await _database.Students.CreateAsync(student);
             await _database.SaveAsync();
         }
@@ -80,7 +79,7 @@ namespace BoxingClub.BLL.Services
             await _database.SaveAsync();
         }
 
-        public async Task UpdateStudentAsync(StudentFullDTO studentDTO)
+        public Task UpdateStudentAsync(StudentFullDTO studentDTO)
         {
             if (studentDTO == null)
             {
@@ -88,7 +87,7 @@ namespace BoxingClub.BLL.Services
             }
             var student = _mapper.Map<Student>(studentDTO);
             _database.Students.Update(student);
-            await _database.SaveAsync();
+            return _database.SaveAsync();
         }
 
         public async Task DeleteFromGroupAsync(int? studentId)
@@ -119,18 +118,18 @@ namespace BoxingClub.BLL.Services
 
             if (searchDTO.PageIndex == null)
             {
-                searchDTO.PageIndex = 1;
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
             }
 
             if (searchDTO.PageSize == null)
             {
-                searchDTO.PageSize = 3;
+                searchDTO.PageSize = PageModelConstants.PageSize;
             }
 
             var students = await _database.Students.GetAllAsync();
             
             var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
-            AssignLastMedicalCertificateForStudent(studentDTOs);
+            //AssignLastMedicalCertificateForStudent(studentDTOs);
 
             var validatedStudents = ValidateStudentsInList(studentDTOs);
             var mappedValidatedStudents = _mapper.Map<List<StudentLiteDTO>>(validatedStudents);
@@ -145,7 +144,7 @@ namespace BoxingClub.BLL.Services
 
             if (takenStudents.Count() == 0)
             {
-                searchDTO.PageIndex = 1;
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
                 takenStudents = mappedValidatedStudents.Skip((searchDTO.PageIndex.Value - 1) * searchDTO.PageSize.Value).Take(searchDTO.PageSize.Value);
             }
 
@@ -153,13 +152,13 @@ namespace BoxingClub.BLL.Services
         }
 
 
-        private void AssignLastMedicalCertificateForStudent(List<StudentFullDTO> students)
+/*        private void AssignLastMedicalCertificateForStudent(List<StudentFullDTO> students)
         {
             foreach(var student in students)
             {
                 student.LastMedicalCertificate = student.MedicalCertificates.OrderBy(x => x.DateOfIssue).LastOrDefault();
             }
-        }
+        }*/
 
         private List<StudentLiteDTO> GetFilteredStudents(ExperienceOrder experienceOrder, MedExaminationOrder medExaminationOrder, List<StudentLiteDTO> students)
         {

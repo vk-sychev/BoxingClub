@@ -20,5 +20,14 @@ namespace BoxingClub.DAL.Entities
         public List<TournamentRequirement> TournamentRequirements { get; set; } = new List<TournamentRequirement>();
 
         public List<Category> Categories { get; set; } = new List<Category>();
+
+        public static void UpdateTournamentProperties(Tournament tournamentFromDb, Tournament updatedTournament)
+        {
+            tournamentFromDb.Name = updatedTournament.Name;
+            tournamentFromDb.Date = updatedTournament.Date;
+            tournamentFromDb.Country = updatedTournament.Country;
+            tournamentFromDb.City = updatedTournament.City;
+            tournamentFromDb.IsMedCertificateNecessary = updatedTournament.IsMedCertificateNecessary;
+        }
     }
 }

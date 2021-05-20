@@ -145,7 +145,9 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"User with id = {user.Id} isn't found", "");
             }
 
-            ChangeUserProperties(userFromDb, user);
+            var mappedUser = _mapper.Map<ApplicationUser>(user);
+
+            ApplicationUser.ChangeUserProperties(userFromDb, mappedUser);
             var roleResult = await ChangeUserRole(userFromDb, user.Role.Id);
 
             if (roleResult.Succeeded)
@@ -166,18 +168,18 @@ namespace BoxingClub.BLL.Implementation.Services
 
             if (searchDTO.PageIndex == null)
             {
-                searchDTO.PageIndex = 1;
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
             }
 
             if (searchDTO.PageSize == null)
             {
-                searchDTO.PageSize = 3;
+                searchDTO.PageSize = PageModelConstants.PageSize;
             }
 
             var users = await _userProvider.GetUsersPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             if (users.Count == 0)
             {
-                searchDTO.PageIndex = 1;
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
                 users = await _userProvider.GetUsersPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             }
             var userDTOs = new List<UserDTO>();
@@ -230,15 +232,6 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found", "");
             }
             return role;
-        }
-
-        private void ChangeUserProperties(ApplicationUser userFromDb, UserDTO user)
-        {
-            userFromDb.Name = user.Name;
-            userFromDb.Surname = user.Surname;
-            userFromDb.Patronymic = user.Patronymic;
-            userFromDb.UserName = user.UserName;
-            userFromDb.Description = user.Description;
         }
 
         private async Task<AccountResultDTO> ChangeUserRole(ApplicationUser userFromDb, string newRoleId)

@@ -33,7 +33,7 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var tournament = _mapper.Map<Tournament>(tournamentDTO);
-            tournament.Categories = await GetSelectedCategories(tournament.Categories);
+            /*tournament.Categories = await GetSelectedCategories(tournament.Categories);*/
 
             await _database.Tournaments.CreateAsync(tournament);
             await _database.SaveAsync();
@@ -84,14 +84,14 @@ namespace BoxingClub.BLL.Implementation.Services
 
             var tournament = _mapper.Map<Tournament>(tournamentDTO);
 
-            if (tournament == null)
+            var tournamentFromDb = await _database.Tournaments.GetByIdAsync(tournament.Id);
+
+            if (tournamentFromDb == null)
             {
                 throw new NotFoundException($"Tournament with id = {tournament.Id} isn't found", "");
             }
 
-            var tournamentFromDb = await _database.Tournaments.GetByIdAsync(tournament.Id);
-
-            UpdateTournamentProperties(tournamentFromDb, tournament);
+            Tournament.UpdateTournamentProperties(tournamentFromDb, tournament);
             await UpdateTournamentCategories(tournamentFromDb, tournament);
 
             _database.Tournaments.Update(tournamentFromDb);
@@ -112,19 +112,11 @@ namespace BoxingClub.BLL.Implementation.Services
             return mappedCategories;
         }
 
-        private void UpdateTournamentProperties(Tournament tournamentFromDb, Tournament updatedTournament)
-        {
-            tournamentFromDb.Name = updatedTournament.Name;
-            tournamentFromDb.Date = updatedTournament.Date;
-            tournamentFromDb.Country = updatedTournament.Country;
-            tournamentFromDb.City = updatedTournament.City;
-            tournamentFromDb.IsMedCertificateNecessary = updatedTournament.IsMedCertificateNecessary;
-        }
-
         private async Task UpdateTournamentCategories(Tournament tournamentFromDb, Tournament updatedTournament)
         {
             var oldCategories = tournamentFromDb.Categories;
-            var newCategories = await GetSelectedCategories(updatedTournament.Categories);
+            /*var newCategories = await GetSelectedCategories(updatedTournament.Categories);*/
+            var newCategories = updatedTournament.Categories;
             
             if (newCategories.Count == 0)
             {
@@ -167,7 +159,7 @@ namespace BoxingClub.BLL.Implementation.Services
             }
         }
 
-        private async Task<List<Category>> GetSelectedCategories(List<Category> categoryIds)
+/*        private async Task<List<Category>> GetSelectedCategories(List<Category> categoryIds)
         {
             List<Category> selectedCategories = new List<Category>();
             var categories = await _database.Categories.GetAllAsync();
@@ -177,6 +169,6 @@ namespace BoxingClub.BLL.Implementation.Services
                 selectedCategories.Add(category);
             }
             return selectedCategories;
-        }
+        }*/
     }
 }

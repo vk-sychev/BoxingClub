@@ -39,8 +39,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
         public Task<List<Category>> GetAllAsync()
-        {
-            
+        {           
             return _db.Categories.Include(aw => aw.AgeWeightCategory)
                                  .ThenInclude(a => a.AgeCategory)
                                  .Include(aw => aw.AgeWeightCategory)

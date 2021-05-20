@@ -55,7 +55,6 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var medicalCertificate = _mapper.Map<MedicalCertificate>(certificateDTO);
-            medicalCertificate.Student = await _database.Students.GetByIdAsync(medicalCertificate.StudentId);
 
             await _database.MedicalCertificates.CreateAsync(medicalCertificate);
             await _database.SaveAsync();

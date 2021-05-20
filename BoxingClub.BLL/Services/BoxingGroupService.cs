@@ -3,6 +3,7 @@ using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
+using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Infrastructure.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -116,18 +117,18 @@ namespace BoxingClub.BLL.Services
 
             if (searchDTO.PageIndex == null)
             {
-                searchDTO.PageIndex = 1;
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
             }
 
             if (searchDTO.PageSize == null)
             {
-                searchDTO.PageSize = 3;
+                searchDTO.PageSize = PageModelConstants.PageSize;
             }
 
             var groups = await _database.BoxingGroups.GetBoxingGroupsPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             if (groups.Count == 0)
             {
-                searchDTO.PageIndex = 1;
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
                 groups = await _database.BoxingGroups.GetBoxingGroupsPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             }
 
@@ -150,18 +151,18 @@ namespace BoxingClub.BLL.Services
 
             if (searchDTO.PageIndex == null)
             {
-                searchDTO.PageIndex = 1;
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
             }
 
             if (searchDTO.PageSize == null)
             {
-                searchDTO.PageSize = 3;
+                searchDTO.PageSize = PageModelConstants.PageSize;
             }
 
             var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdPaginatedAsync(id, searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             if (groups.Count == 0)
             {
-                searchDTO.PageIndex = 1;
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
                 groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdPaginatedAsync(id, searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             }
 
