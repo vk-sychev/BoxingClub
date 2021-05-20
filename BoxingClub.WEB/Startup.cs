@@ -108,7 +108,6 @@ namespace BoxingClub.Web
             services.AddTransient<IValidator<BoxingGroupLiteViewModel>, BoxingGroupLiteViewModelValidator>();
             services.AddTransient<IValidator<MedicalCertificateViewModel>, MedicalCertificateViewModelValidator>();
             services.AddTransient<IValidator<CreateEditTournamentViewModel>, CreateEditTournamentViewModelValidator>();
-            services.AddTransient<IValidator<CreateEditTournamentViewModel>, CreateEditTournamentViewModelValidator>();
             services.AddTransient<IValidator<TournamentFullViewModel>, TournamentFullViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>

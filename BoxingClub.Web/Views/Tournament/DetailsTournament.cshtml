@@ -6,7 +6,10 @@
 }
 
 <div class="d-flex justify-content-between">
-    <h1>&#171;@Model.Name&#187; Details</h1>
+    <div class="col-md-8">
+        <h1>&#171;@Model.Name&#187; Details</h1>
+    </div>
+    
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
         <div class="d-flex justify-content-between mt-2">

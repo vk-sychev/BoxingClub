@@ -11,7 +11,8 @@ namespace BoxingClub.Web.Validations
     {
         public CreateEditTournamentViewModelValidator()
         {
-            RuleFor(x => x.Tournament).NotNull().SetValidator(new TournamentFullViewModelValidator());
+            RuleFor(x => x).Must(x => x.Categories.Where(x => x.IsSelected == true).Any())
+                           .WithMessage("At least one category must be selected!");
         }
     }
 }
