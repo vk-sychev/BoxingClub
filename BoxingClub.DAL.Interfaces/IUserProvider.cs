@@ -17,6 +17,10 @@ namespace BoxingClub.DAL.Interfaces
 
         Task<List<ApplicationUser>> GetUsersAsync();
 
+        Task<List<ApplicationUser>> GetUsersPaginatedAsync(int pageIndex, int pageSize);
+
+        Task<int> GetCountOfUsersAsync();
+
         Task<IList<ApplicationUser>> GetUsersByRoleAsync(string roleName);
 
         Task<IdentityResult> UpdateUserAsync(ApplicationUser user);

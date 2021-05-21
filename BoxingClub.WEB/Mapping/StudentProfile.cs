@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.DAL.Entities;
 using BoxingClub.Web.Models;
 
@@ -11,8 +11,14 @@ namespace BoxingClub.Web.Mapping
         {
             CreateMap<StudentFullDTO, StudentFullViewModel>().ReverseMap();
             CreateMap<StudentLiteDTO, StudentLiteViewModel>().ReverseMap();
-            CreateMap<StudentLiteDTO, Student>(MemberList.Source).ReverseMap();
-            CreateMap<StudentFullDTO, Student>().ReverseMap();
+            CreateMap<StudentLiteDTO, Student>(MemberList.Source).ForSourceMember(src => src.Experienced, opt => opt.DoNotValidate())
+                                                                 .ForSourceMember(src => src.IsMedicalCertificateValid, opt => opt.DoNotValidate())
+                                                                 .ReverseMap()
+                                                                 .ForMember(dest => dest.Experienced, opt => opt.Ignore());
+            CreateMap<StudentFullDTO, Student>(MemberList.Destination).ForSourceMember(src => src.Experienced, opt => opt.DoNotValidate())
+                                                                      .ForSourceMember(src => src.IsMedicalCertificateValid, opt => opt.DoNotValidate())
+                                                                      .ReverseMap();
+            CreateMap<StudentLiteDTO, StudentFullDTO>(MemberList.Source).ReverseMap();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BoxingClub.BLL.DTO
+namespace BoxingClub.BLL.DomainEntities
 {
     public class StudentLiteDTO
     {
@@ -14,8 +14,12 @@ namespace BoxingClub.BLL.DTO
 
         public DateTime BornDate { get; set; }
 
+        public bool Experienced { get; set; }
+
         public int BoxingGroupId { get; set; }
 
         public BoxingGroupDTO BoxingGroup { get; set; }
+
+        public bool IsMedicalCertificateValid { get; set; }
     }
 }

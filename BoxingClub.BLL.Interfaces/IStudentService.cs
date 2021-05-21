@@ -1,5 +1,4 @@
-﻿using BoxingClub.BLL.DTO;
-using System.Collections.Generic;
+﻿using BoxingClub.BLL.DomainEntities;
 using System.Threading.Tasks;
 
 namespace BoxingClub.BLL.Interfaces
@@ -8,7 +7,7 @@ namespace BoxingClub.BLL.Interfaces
     {
         Task<StudentFullDTO> GetStudentByIdAsync(int? id);
 
-        Task<List<StudentLiteDTO>> GetStudentsAsync();
+        Task<PageModelDTO<StudentLiteDTO>> GetStudentsPaginatedAsync(SearchModelDTO searchDTO);
 
         Task CreateStudentAsync(StudentFullDTO studentDTO);
 

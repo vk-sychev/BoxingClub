@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BoxingClub.DAL.Interfaces\BoxingClub.DAL.Interfaces.csproj" />
+    <ProjectReference Include="..\BoxingClub.Infrastructure\BoxingClub.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

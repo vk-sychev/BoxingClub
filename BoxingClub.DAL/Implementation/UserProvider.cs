@@ -1,25 +1,21 @@
-﻿using AutoMapper;
-using BoxingClub.DAL.Entities;
+﻿using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
     public class UserProvider : IUserProvider
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UserProvider(UserManager<ApplicationUser> userManager,
-                            SignInManager<ApplicationUser> signInManager,
-                            IMapper mapper)
+        public UserProvider(UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager), "userManager is null");
         }
 
         public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
@@ -33,12 +29,10 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return user;
         }
 
-
         public async Task<List<ApplicationUser>> GetUsersAsync()
         {
             return await _userManager.Users.ToListAsync();
         }
-
 
         public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password)
         {
@@ -62,6 +56,20 @@ namespace BoxingClub.DAL.Implementation.Implementation
         {   
             var result = await _userManager.UpdateAsync(user);
             return result;
+        }
+
+        public async Task<List<ApplicationUser>> GetUsersPaginatedAsync(int pageIndex, int pageSize)
+        {
+            var query = _userManager.Users;
+            var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return list;
+        }
+
+        public async Task<int> GetCountOfUsersAsync()
+        {
+            var query = _userManager.Users;
+            var count = await query.CountAsync();
+            return count;
         }
     }
 }

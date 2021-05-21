@@ -1,11 +1,11 @@
-﻿using AutoMapper;
-using BoxingClub.DAL.Entities;
+﻿using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Implementation.Implementation
 {
@@ -13,15 +13,12 @@ namespace BoxingClub.DAL.Implementation.Implementation
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IMapper _mapper;
 
         public RoleProvider(RoleManager<IdentityRole> roleManager,
-                            UserManager<ApplicationUser> userManager,
-                            IMapper mapper)
+                            UserManager<ApplicationUser> userManager)
         {
-            _mapper = mapper;
-            _roleManager = roleManager;
-            _userManager = userManager;
+            _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager), "roleManager is null");
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager), "userManager is null");
         }
 
         public async Task<string> GetUserRole(ApplicationUser user)
@@ -40,8 +37,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<bool> IsInRoleAsync(ApplicationUser user, string roleName)
         {
-            var res = await _userManager.IsInRoleAsync(user, roleName);
-            return res;
+            return await _userManager.IsInRoleAsync(user, roleName);
         }
 
         public async Task<IdentityResult> RemoveFromRoleAsync(string userId, string roleName)
@@ -62,8 +58,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<IdentityRole> FindRoleByNameAsync(string roleName)
         {
-            var role = await _roleManager.FindByNameAsync(roleName);
-            return role;
+           return await _roleManager.FindByNameAsync(roleName);
         }
     }
 }

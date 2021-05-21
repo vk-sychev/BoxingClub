@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BoxingClub.BLL.DTO
+namespace BoxingClub.BLL.DomainEntities
 {
     public class BoxingGroupDTO
     {
@@ -12,6 +12,6 @@ namespace BoxingClub.BLL.DTO
 
         public UserDTO Coach { get; set; }
 
-        public List<StudentLiteDTO> Students { get; set; } = new List<StudentLiteDTO>();
+        public List<StudentFullDTO> Students { get; set; } = new List<StudentFullDTO>();
     }
 }

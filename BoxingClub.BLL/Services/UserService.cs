@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
@@ -25,28 +25,10 @@ namespace BoxingClub.BLL.Implementation.Services
                            IAuthenticationProvider authenticationProvider,
                            IMapper mapper)
         {
-            _userProvider = userProvider;
-            _roleProvider = roleProvider;
-            _authenticationProvider = authenticationProvider;
-            _mapper = mapper;
-        }
-
-        private async Task<RoleDTO> FindUserRoleAsync(ApplicationUser user)
-        {
-            var role = await _roleProvider.GetUserRole(user);
-            if (string.IsNullOrEmpty(role))
-            {
-                throw new NotFoundException($"Role for user = {user.UserName} isn't found", "");
-            }
-
-            var roleObject = await _roleProvider.FindRoleByNameAsync(role);
-            if (roleObject == null)
-            {
-                throw new NotFoundException($"Role with name = {role} isn't found", "");
-            }
-
-            var mappedRole = _mapper.Map<RoleDTO>(roleObject);
-            return mappedRole;
+            _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider), "userProvider is null");
+            _roleProvider = roleProvider ?? throw new ArgumentNullException(nameof(roleProvider), "roleProvider is null");
+            _authenticationProvider = authenticationProvider ?? throw new ArgumentNullException(nameof(authenticationProvider), "authenticationProvider is null");
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
         }
 
         public async Task<UserDTO> FindUserByIdAsync(string userId)
@@ -62,15 +44,6 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var mappedUser = await AssignRole(user);
-            return mappedUser;
-        }
-
-
-        private async Task<UserDTO> AssignRole(ApplicationUser user)
-        {
-            var mappedRole = await FindUserRoleAsync(user);
-            var mappedUser = _mapper.Map<UserDTO>(user);
-            mappedUser.Role = mappedRole;
             return mappedUser;
         }
 
@@ -172,7 +145,9 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"User with id = {user.Id} isn't found", "");
             }
 
-            ChangeUserProperties(userFromDb, user);
+            var mappedUser = _mapper.Map<ApplicationUser>(user);
+
+            userFromDb.ChangeUserProperties(mappedUser);
             var roleResult = await ChangeUserRole(userFromDb, user.Role.Id);
 
             if (roleResult.Succeeded)
@@ -184,6 +159,70 @@ namespace BoxingClub.BLL.Implementation.Services
             return roleResult;                  
         }
 
+        public async Task<PageModelDTO<UserDTO>> GetUsersPaginatedAsync(SearchModelDTO searchDTO)
+        {
+            if (searchDTO == null)
+            {
+                throw new ArgumentNullException(nameof(searchDTO), "SearchDTO is null");
+            }
+
+            if (searchDTO.PageIndex == null)
+            {
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
+            }
+
+            if (searchDTO.PageSize == null)
+            {
+                searchDTO.PageSize = PageModelConstants.PageSize;
+            }
+
+            var users = await _userProvider.GetUsersPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+            if (users.Count == 0)
+            {
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
+                users = await _userProvider.GetUsersPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+            }
+            var userDTOs = new List<UserDTO>();
+
+            foreach (var user in users)
+            {
+                var mappedUser = await AssignRole(user);
+                userDTOs.Add(mappedUser);
+            }
+
+            var count = await _userProvider.GetCountOfUsersAsync();
+            var model = new PageModelDTO<UserDTO>() { Items = userDTOs, Count = count };
+            return model;
+        }
+
+        private async Task<AccountResultDTO> UpdateRoleIfChanged(string userId, string oldRoleName, string newRoleName)
+        {
+            var result = await _roleProvider.RemoveFromRoleAsync(userId, oldRoleName);
+            if (result.Succeeded)
+            {
+                result = await _roleProvider.AddToRoleAsync(userId, newRoleName);
+            }
+            var mappedResult = _mapper.Map<AccountResultDTO>(result);
+            return mappedResult;
+        }
+
+        private async Task<RoleDTO> FindUserRoleAsync(ApplicationUser user)
+        {
+            var role = await _roleProvider.GetUserRole(user);
+            if (string.IsNullOrEmpty(role))
+            {
+                throw new NotFoundException($"Role for user = {user.UserName} isn't found", "");
+            }
+
+            var roleObject = await _roleProvider.FindRoleByNameAsync(role);
+            if (roleObject == null)
+            {
+                throw new NotFoundException($"Role with name = {role} isn't found", "");
+            }
+
+            var mappedRole = _mapper.Map<RoleDTO>(roleObject);
+            return mappedRole;
+        }
 
         private async Task<string> GetUserRole(ApplicationUser userFromDb)
         {
@@ -193,15 +232,6 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"Role for user = {userFromDb.UserName} isn't found", "");
             }
             return role;
-        }
-
-        private void ChangeUserProperties(ApplicationUser userFromDb, UserDTO user)
-        {
-            userFromDb.Name = user.Name;
-            userFromDb.Surname = user.Surname;
-            userFromDb.Patronymic = user.Patronymic;
-            userFromDb.UserName = user.UserName;
-            userFromDb.Description = user.Description;
         }
 
         private async Task<AccountResultDTO> ChangeUserRole(ApplicationUser userFromDb, string newRoleId)
@@ -214,7 +244,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new ArgumentNullException(nameof(newRoleId), "newRoleId is null");
             }
 
-            var newRole = await _roleProvider.FindRoleByIdAsync(newRoleId); 
+            var newRole = await _roleProvider.FindRoleByIdAsync(newRoleId);
             if (newRole == null)
             {
                 throw new NotFoundException($"Role for user = {userId} isn't found", "");
@@ -229,15 +259,12 @@ namespace BoxingClub.BLL.Implementation.Services
             return new AccountResultDTO { Succeeded = true };
         }
 
-        private async Task<AccountResultDTO> UpdateRoleIfChanged(string userId, string oldRoleName, string newRoleName)
+        private async Task<UserDTO> AssignRole(ApplicationUser user)
         {
-            var result = await _roleProvider.RemoveFromRoleAsync(userId, oldRoleName);
-            if (result.Succeeded)
-            {
-                result = await _roleProvider.AddToRoleAsync(userId, newRoleName);
-            }
-            var mappedResult = _mapper.Map<AccountResultDTO>(result);
-            return mappedResult;
+            var mappedRole = await FindUserRoleAsync(user);
+            var mappedUser = _mapper.Map<UserDTO>(user);
+            mappedUser.Role = mappedRole;
+            return mappedUser;
         }
     }
 }

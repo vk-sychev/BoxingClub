@@ -1,7 +1,12 @@
-﻿@model IEnumerable<BoxingClub.Web.Models.UserViewModel>
+﻿@model PageViewModel<UserViewModel>
 
 @{
     ViewData["Title"] = "All Users";
+    string hasPreviousPage = Model.HasPreviousPage ? "" : "disabled";
+    string hasNextPage = Model.HasNextPage ? "" : "disabled";
+    string controller = "Administration";
+    string action = "GetUsers";
+    var pageSize = ViewBag.pageSize;
 }
 
 <h1 class="mb-3">All Users</h1>
@@ -11,22 +16,35 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                Username
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FullName)
+                Full Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RoleName)
+                Role
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Description
+            </th>
+            <th>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Page Size
+                    </button>
+                    <div class="dropdown-menu">
+                        @foreach (var size in ViewBag.Sizes)
+                        {
+                            <a asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@(Model.PageIndex)" asp-route-pageSize="@size" class="page-link">@size</a>
+                        }
+                    </div>
+                </div>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Items)
         {
             <tr>
                 <td>
@@ -52,3 +70,53 @@
         }
     </tbody>
 </table>
+
+
+<ul class="pagination">
+    <li class="page-item @hasPreviousPage">
+        <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-pageSize="@pageSize">Previous</a>
+    </li>
+
+    @if (Model.StartPage > 1)
+    {
+        <li class="page-item @(1 == Model.PageIndex ? "disabled" : "")">
+            <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="1" asp-route-pageSize="@pageSize">1</a>
+        </li>
+    }
+
+    @if (Model.StartPage > 2)
+    {
+
+        <li class="page-item disabled">
+            <p class="page-link">...</p>
+        </li>
+    }
+
+    @if (Model.TotalPages != 0)
+    {
+        @for (int i = Model.StartPage; i <= Model.LastPage; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@i" asp-route-pageSize="@pageSize">@i</a>
+            </li>
+        }
+    }
+
+    @if (Model.LastPage < Model.TotalPages - 1)
+    {
+        <li class="page-item disabled">
+            <p class="page-link">...</p>
+        </li>
+    }
+
+    @if (Model.LastPage < Model.TotalPages)
+    {
+        <li class="page-item @(Model.TotalPages == Model.PageIndex ? "disabled" : "")">
+            <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@Model.TotalPages" asp-route-pageSize="@pageSize">@Model.TotalPages</a>
+        </li>
+    }
+
+    <li class="page-item @hasNextPage">
+        <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-pageSize="@pageSize">Next</a>
+    </li>
+</ul>

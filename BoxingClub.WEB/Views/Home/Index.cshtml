@@ -1,68 +1,152 @@
-﻿@model IEnumerable<BoxingClub.Web.Models.BoxingGroupFullViewModel>
+﻿@model PageViewModel<BoxingGroupLiteViewModel>
 @using BoxingClub.Infrastructure.Constants
 @{
     ViewData["Title"] = "Index";
+    string hasPreviousPage = Model.HasPreviousPage ? "" : "disabled";
+    string hasNextPage = Model.HasNextPage ? "" : "disabled";
+    string controller = "Home";
+    string action = "Index";
+    var pageSize = ViewBag.pageSize;
 }
+
+<script src="~/js/BoxingGroups.js"></script>
 
 <div class="d-flex justify-content-between mb-2">
     <h1>Boxing Groups</h1>
-
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
         <div class="mt-2">
-            <a class="btn btn-primary" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
+            <a id="createButton" class="btn btn-primary" asp-action="CreateBoxingGroup" asp-controller="Home">Create New Boxing Group</a>
         </div>
     }
 </div>
 
-@if (!Model.Any())
+@if (!Model.Items.Any())
 {
     <h5> You have no groups yet</h5>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoachFullName)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <form id="boxingGroupForm" method="post">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CoachFullName)
-                    </td>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
-                    {
-                        <td>
-                            <div class="d-flex justify-content-end">
-                                @Html.ActionLink("Edit", "EditBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
-                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
-                                @Html.ActionLink("Delete", "DeleteBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                    <th>
+                        Group's Name
+                    </th>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Page Size
+                            </button>
+                            <div class="dropdown-menu">
+                                @foreach (var size in ViewBag.Sizes)
+                                {
+                                    <a asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@(Model.PageIndex)" asp-route-pageSize="@size" class="page-link">@size</a>
+                                }
                             </div>
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            <div class="d-flex justify-content-end">
-                                @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
-                            </div>
-                        </td>
-                    }
+                        </div>
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="tableBody">
+                @foreach (var item in Model.Items)
+                {
+                    <tr id="@item.Id">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CoachFullName)
+                        </td>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+                        {
+                            <td>
+                                <div class="d-flex justify-content-end px-3">
+                                    <button type="button" class="editButton btn btn-outline-primary btn-sm px-3">Edit</button>
+                                    @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm ml-3" })
+                                    <button type="button" class="deleteButton btn btn-outline-danger btn-sm ml-3">Delete</button>
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <div class="d-flex justify-content-end px-3">
+                                    @Html.ActionLink("Details", "DetailsBoxingGroup", "Home", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" })
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
 }
+
+
+
+
+<ul class="pagination">
+    <li class="page-item @hasPreviousPage">
+        <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-pageSize="@pageSize">Previous</a>
+    </li>
+
+    @if (Model.StartPage > 1)
+    {
+        <li class="page-item @(1 == Model.PageIndex ? "disabled" : "")">
+            <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="1" asp-route-pageSize="@pageSize">1</a>
+        </li>
+    }
+
+    @if (Model.StartPage > 2)
+    {
+
+        <li class="page-item disabled">
+            <p class="page-link">...</p>
+        </li>
+    }
+
+    @if (Model.TotalPages != 0)
+    {
+        @for (int i = Model.StartPage; i <= Model.LastPage; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@i" asp-route-pageSize="@pageSize">@i</a>
+            </li>
+        }
+    }
+
+    @if (Model.LastPage < Model.TotalPages - 1)
+    {
+        <li class="page-item disabled">
+            <p class="page-link">...</p>
+        </li>
+    }
+
+    @if (Model.LastPage < Model.TotalPages)
+    {
+        <li class="page-item @(Model.TotalPages == Model.PageIndex ? "disabled" : "")">
+            <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@Model.TotalPages" asp-route-pageSize="@pageSize">@Model.TotalPages</a>
+        </li>
+    }
+
+    <li class="page-item @hasNextPage">
+        <a class="page-link" asp-action="@action" asp-controller="@controller" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-pageSize="@pageSize">Next</a>
+    </li>
+</ul>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+
+
+
+

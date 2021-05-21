@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.Infrastructure.Exceptions;
 using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace BoxingClub.Web.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel model)
-            {
+        {
             if (ModelState.IsValid)
             {
                 var user = _mapper.Map<UserDTO>(model);

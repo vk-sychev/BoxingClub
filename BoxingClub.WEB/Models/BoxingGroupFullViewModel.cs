@@ -16,8 +16,8 @@ namespace BoxingClub.Web.Models
         public UserViewModel Coach { get; set; }
 
         [DisplayName("Full Name")]
-        public string CoachFullName { get { return (Coach!=null)? $"{Coach.Surname} {Coach.Name} {Coach.Patronymic}" : ""; } }
+        public string CoachFullName { get { return (Coach!=null)? $"{Coach.Surname} {Coach.Name} {Coach.Patronymic}" : string.Empty; } }
 
-        public List<StudentLiteViewModel> Students { get; set; } = new List<StudentLiteViewModel>();
+        public List<StudentFullViewModel> Students { get; set; } = new List<StudentFullViewModel>();
     }
 }

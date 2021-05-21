@@ -1,0 +1,53 @@
+﻿@model StudentFullViewModel
+@using BoxingClub.Infrastructure.Constants
+
+<div class="card-body">
+    <div class="d-flex justify-content-between ">
+        <h5 class="card-title">Medical Certificates</h5>
+        @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.ManagerRoleName) || (User.IsInRole(Constants.AdminRoleName))))
+        {
+            <a class="btn btn-primary btn-sm mb-3" asp-action="CreateMedicalCertificate" asp-controller="MedicalCertificate" asp-route-id="@Model.Id">Create New Medical Certificate</a>
+        }
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Clinic Name
+                </th>
+                <th>
+                    Date Of Issue
+                </th>
+                <th>
+                    Result
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.MedicalCertificates)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClinicName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfIssue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Result)
+                    </td>
+                    @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName)))
+                    {
+                        <td>
+                            <div class="d-flex justify-content-end">
+                                @Html.ActionLink("Edit", "EditMedicalCertificate", "MedicalCertificate", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm px-3" })
+                                @Html.ActionLink("Delete", "DeleteMedicalCertificate", "MedicalCertificate", new { id = item.Id, studentId = item.StudentId }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

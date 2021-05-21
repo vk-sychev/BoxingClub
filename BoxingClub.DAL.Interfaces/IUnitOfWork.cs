@@ -8,6 +8,16 @@ namespace BoxingClub.DAL.Interfaces
 
         IBoxingGroupRepository BoxingGroups { get; }
 
+        IMedicalCertificateRepository MedicalCertificates { get; }
+
+        ITournamentRepository Tournaments { get; }
+
+        ICategoryRepository Categories { get; }
+
+        IAgeCategoryRepository AgeCategories { get; }
+
+        IWeightCategoryRepository WeightCategories { get; }
+
         Task SaveAsync();
     }
 }

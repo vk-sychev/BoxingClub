@@ -1,4 +1,4 @@
-﻿namespace BoxingClub.BLL.DTO
+﻿namespace BoxingClub.BLL.DomainEntities
 {
     public class SignInResultDTO
     {

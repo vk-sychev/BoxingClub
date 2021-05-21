@@ -1,6 +1,8 @@
 using AutoMapper;
 using BoxingClub.BLL.Implementation.Services;
+using BoxingClub.BLL.Implementation.Specifications;
 using BoxingClub.BLL.Interfaces;
+using BoxingClub.BLL.Interfaces.Specifications;
 using BoxingClub.BLL.Services;
 using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
@@ -10,6 +12,8 @@ using BoxingClub.DAL.Repositories;
 using BoxingClub.Web.Mapping;
 using BoxingClub.Web.Models;
 using BoxingClub.Web.Validations;
+using BoxingClub.Web.WebManagers.Implementation;
+using BoxingClub.Web.WebManagers.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -55,8 +59,10 @@ namespace BoxingClub.Web
             .AddEntityFrameworkStores<BoxingClubContext>();
 
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
+
+            services.AddTransient<IStudentSpecification, FighterExperienceSpecification>();
             services.AddTransient<IStudentService, StudentService>();
-            
+
             services.AddTransient<IRoleProvider, RoleProvider>();
             services.AddTransient<IUserProvider, UserProvider>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
@@ -64,14 +70,25 @@ namespace BoxingClub.Web
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
-
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
+            services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
+            services.AddTransient<ITournamentService, TournamentService>();
 
-            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), new UserProfile() };
+            services.AddTransient<IHomeWebManager, HomeWebManager>();
+            services.AddTransient<IStudentWebManager, StudentWebManager>();
+            services.AddTransient<IAdministrationWebManager, AdministrationWebManager>();
+
+            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), 
+                                                       new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
+                                                       new AgeCategoryProfile(), new WeightCategoryProfile(), new CategoryProfile(),
+                                                       new AgeWeightCategoryProfile() };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
             mapperConfig.AssertConfigurationIsValid();
 
-            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile), typeof(UserProfile));
+            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile), 
+                                   typeof(UserProfile), typeof(MedicalCertificateProfile), typeof(TournamentProfile),
+                                   typeof(AgeCategoryProfile), typeof(WeightCategoryProfile), typeof(CategoryProfile),
+                                   typeof(AgeWeightCategoryProfile));
 
             services.AddMvc(options =>
             {
@@ -82,13 +99,16 @@ namespace BoxingClub.Web
 
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
-            .AddFluentValidation();
+            .AddFluentValidation(configuration => configuration.ImplicitlyValidateChildProperties = true);
 
             services.AddTransient<IValidator<SignUpViewModel>, SignUpViewModelValidator>();
             services.AddTransient<IValidator<SignInViewModel>, SignInViewModelValidator>();
             services.AddTransient<IValidator<StudentFullViewModel>, StudentFullViewModelValidator>();
             services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
             services.AddTransient<IValidator<BoxingGroupLiteViewModel>, BoxingGroupLiteViewModelValidator>();
+            services.AddTransient<IValidator<MedicalCertificateViewModel>, MedicalCertificateViewModelValidator>();
+            services.AddTransient<IValidator<CreateEditTournamentViewModel>, CreateEditTournamentViewModelValidator>();
+            services.AddTransient<IValidator<TournamentFullViewModel>, TournamentFullViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>
             {

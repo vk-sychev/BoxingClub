@@ -23,6 +23,6 @@ namespace BoxingClub.Web.Models
         public string FullName { get { return $"{Surname} {Name} {Patronymic}"; } }
 
         [DisplayName("Role")]
-        public string RoleName { get { return (Role != null) ? Role.Name : ""; } }
+        public string RoleName { get { return (Role != null) ? Role.Name : string.Empty; } }
     }
 }

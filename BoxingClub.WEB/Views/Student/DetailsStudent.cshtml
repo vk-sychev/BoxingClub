@@ -20,7 +20,7 @@
         @if (fromHomeController)
         {
             <div class="ml-5">
-                <a asp-action="DetailsGroup" asp-controller="Home" class="btn btn-secondary" asp-route-id=@returnId>Back to groups List</a>
+                <a asp-action="DetailsBoxingGroup" asp-controller="Home" class="btn btn-secondary" asp-route-id=@returnId>Back to groups List</a>
             </div>
         }
         else
@@ -71,6 +71,25 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Weight)
         </dd>
+@*        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Experienced)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Experienced)
+            {
+                @Html.Raw("Yes")
+            }
+            else
+            {
+                @Html.Raw("No")
+            }
+        </dd>*@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberOfFights)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumberOfFights)
+        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DateOfEntry)
         </dt>
@@ -84,5 +103,9 @@
             @Html.DisplayFor(model => model.BoxingGroup.Name)
         </dd>
     </dl>
+</div>
+
+<div class="card col-md-8">
+    @{await Html.RenderPartialAsync("_MedicalCertificatesPartial");}
 </div>
 

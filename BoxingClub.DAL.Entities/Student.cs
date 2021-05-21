@@ -1,13 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using BoxingClub.Infrastructure.Enums;
+using System;
+using System.Collections.Generic;
 
 namespace BoxingClub.DAL.Entities
 {
     public class Student
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -22,10 +20,17 @@ namespace BoxingClub.DAL.Entities
 
         public double Weight { get; set; }
 
+        public int NumberOfFights { get; set; }
+
         public DateTime DateOfEntry { get; set; }
+
+        public Gender Gender { get; set; }
 
         public int? BoxingGroupId { get; set; }
 
         public BoxingGroup BoxingGroup { get; set; }
+
+        public List<MedicalCertificate> MedicalCertificates { get; set; }
+
     }
 }

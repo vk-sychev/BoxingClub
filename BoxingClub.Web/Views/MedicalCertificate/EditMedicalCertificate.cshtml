@@ -1,0 +1,48 @@
+﻿@model BoxingClub.Web.Models.MedicalCertificateViewModel
+@using BoxingClub.Infrastructure.Enums
+
+@{
+    ViewData["Title"] = "EditMedicalCertificate";
+}
+
+<div class="d-flex justify-content-between mb-2">
+    <h1>Edit Medical Certificate</h1>
+    <div class="mt-2">
+        <a asp-action="DetailsStudent" class="btn btn-secondary" asp-route-id="@Model.StudentId" asp-controller="Student">Back to Student's Details</a>
+    </div>
+</div>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditMedicalCertificate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="StudentId" />
+            <div class="form-group">
+                <label asp-for="ClinicName" class="control-label font-weight-bold"></label>
+                <input asp-for="ClinicName" class="form-control" />
+                <span asp-validation-for="ClinicName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfIssue" class="control-label font-weight-bold"></label>
+                <input asp-for="DateOfIssue" class="form-control" />
+                <span asp-validation-for="DateOfIssue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Result" class="control-label font-weight-bold"></label>
+                <select asp-for="Result" class="form-select custom-select" asp-items="@Html.GetEnumSelectList<MedicalResult>()">
+                </select>
+                <br />
+                <span asp-validation-for="Result" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

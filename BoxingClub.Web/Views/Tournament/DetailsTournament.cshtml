@@ -1,0 +1,68 @@
+﻿@model BoxingClub.Web.Models.TournamentFullViewModel
+@using BoxingClub.Infrastructure.Constants
+
+@{
+    ViewData["Title"] = "DetailsTournament";
+}
+
+<div class="d-flex justify-content-between">
+    <div class="col-md-8">
+        <h1>&#171;@Model.Name&#187; Details</h1>
+    </div>
+    
+    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+    {
+        <div class="d-flex justify-content-between mt-2">
+            <div>
+                @Html.ActionLink("Edit Tournament", "EditTournament", new { id = Model.Id }, new { @class = "btn btn-primary" })
+            </div>
+            <div class="ml-5">
+                <a asp-action="GetAllTournaments" class="btn btn-secondary" asp-controller="Tournament">Back to List</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Country)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Country)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsMedCertificateRequired)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.IsMedCertificateRequired)
+            {
+                @Html.Raw("Yes")
+            }
+            else
+            {
+                @Html.Raw("No")
+            }
+        </dd>
+    </dl>
+</div>
+

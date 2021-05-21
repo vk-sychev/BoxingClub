@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Repositories
 {
@@ -14,36 +15,61 @@ namespace BoxingClub.DAL.Repositories
 
         public StudentRepository(BoxingClubContext context)
         {
-            _db = context;
+            _db = context ?? throw new ArgumentNullException(nameof(context), "context is null");
         }
-
 
         public async Task CreateAsync(Student item)
         {
-            var group = await _db.BoxingGroups.FindAsync(item.BoxingGroupId);
-            item.BoxingGroup = group;
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Student is null");
+            }
             await _db.Students.AddAsync(item);
         }
 
         public void Delete(Student item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Student is null");
+            }
             _db.Students.Remove(item);
         }
 
-        public async Task<Student> GetByIdAsync(int id)
+        public Task<Student> GetByIdAsync(int id)
         {
-            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).Where(s => s.Id == id).SingleOrDefaultAsync();
+            return _db.Students.Include(x => x.BoxingGroup)
+                               .Include(x => x.MedicalCertificates)
+                               .SingleOrDefaultAsync(s => s.Id == id);
         }
 
 
-        public async Task<IEnumerable<Student>> GetAllAsync()
+        public Task<List<Student>> GetAllAsync()
         {
-            return await _db.Students.AsQueryable().Include(x => x.BoxingGroup).ToListAsync();
+            return _db.Students.Include(x => x.BoxingGroup).Include(x => x.MedicalCertificates).ToListAsync();
         }
 
         public void Update(Student item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Student is null");
+            }
             _db.Entry(item).State = EntityState.Modified;
+        }
+
+        public Task<List<Student>> GetStudentsPaginatedAsync(int pageIndex, int pageSize)
+        {
+            var query = _db.Students.Include(x => x.BoxingGroup);
+            var list = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return list;
+        }
+
+        public Task<int> GetCountOfStudentsAsync()
+        {
+            var query = _db.Students.Include(x => x.BoxingGroup);
+            var count = query.CountAsync();
+            return count;
         }
     }
 }

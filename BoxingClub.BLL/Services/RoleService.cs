@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
@@ -18,8 +18,8 @@ namespace BoxingClub.BLL.Implementation.Services
         public RoleService(IRoleProvider roleProvider,
                            IMapper mapper)
         {
-            _roleProvider = roleProvider;
-            _mapper = mapper;
+            _roleProvider = roleProvider ?? throw new ArgumentNullException(nameof(roleProvider), "roleProvider is null");
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
         }
 
         public async Task<RoleDTO> FindRoleByIdAsync(string id)

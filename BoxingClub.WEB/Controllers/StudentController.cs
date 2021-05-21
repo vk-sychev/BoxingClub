@@ -3,11 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BoxingClub.BLL.Interfaces;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
+using System.Linq;
+using BoxingClub.Infrastructure.Exceptions;
+using System;
+using BoxingClub.Web.WebManagers.Interfaces;
+using BoxingClub.Web.Helpers;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -16,26 +21,42 @@ namespace BoxingClub.Web.Controllers
     {
         private readonly IStudentService _studentService;
         private readonly IBoxingGroupService _boxingGroupService;
+        private readonly IMedicalCertificateService _medicalCertificateService;
+        private readonly IStudentWebManager _studentWebManager;
         private readonly IMapper _mapper;
 
         public StudentController(IStudentService studentService,
                                  IMapper mapper,
-                                 IBoxingGroupService boxingGroupService)
+                                 IBoxingGroupService boxingGroupService,
+                                 IMedicalCertificateService medicalCertificateService,
+                                 IStudentWebManager studentWebManager)
         {
             _studentService = studentService;
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
+            _medicalCertificateService = medicalCertificateService;
+            _studentWebManager = studentWebManager;
         }
 
+
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        public async Task<IActionResult> GetAllStudents()
+        [Route("Student/GetAllStudents")]
+        public async Task<IActionResult> GetAllStudents(SearchModelDTO searchModel)
         {
-            var studentDTOs = await _studentService.GetStudentsAsync();
-            var students = _mapper.Map<List<StudentLiteViewModel>>(studentDTOs);
-            return View(students);
+            var pageViewModel = await _studentWebManager.GetStudentsAsync(searchModel);
+
+            var sizes = PageSizeHelper.GetPageSizeList(5);
+            ViewBag.Sizes = sizes;
+            ViewBag.pageSize = searchModel.PageSize;
+            ViewBag.experienceFilter = searchModel.ExperienceFilter ?? 0;
+            ViewBag.medExaminationFilter = searchModel.MedExaminationFilter ?? 0;
+
+            return View(pageViewModel);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [HttpGet]
+        [Route("Student/CreateStudent")]
         public async Task<IActionResult> CreateStudent()
         {
             ViewBag.Groups = await GetGroups();
@@ -43,6 +64,7 @@ namespace BoxingClub.Web.Controllers
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [Route("Student/CreateStudent")]
         [HttpPost]
         public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
         {
@@ -57,21 +79,13 @@ namespace BoxingClub.Web.Controllers
 
         }
 
-        [Route("Student/DeleteStudent/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName)]
+        [Route("Student/DeleteStudent/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(int? id)
         {
             await _studentService.DeleteStudentAsync(id);
             return RedirectToAction("GetAllStudents", "Student");
-        }
-
-        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        private async Task<SelectList> GetGroups()
-        {
-            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
-            var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
-            var selectList = new SelectList(groupViewModels, "Id", "Name");
-            return selectList;
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
@@ -119,6 +133,14 @@ namespace BoxingClub.Web.Controllers
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;
             return View(student);
+        }
+
+        private async Task<SelectList> GetGroups()
+        {
+            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
+            var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
+            var selectList = new SelectList(groupViewModels, "Id", "Name");
+            return selectList;
         }
     }
 }

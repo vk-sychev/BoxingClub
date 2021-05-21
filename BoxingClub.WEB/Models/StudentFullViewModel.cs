@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BoxingClub.Infrastructure.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,6 +23,16 @@ namespace BoxingClub.Web.Models
         public int Height { get; set; }
 
         public double Weight { get; set; }
+
+        public int NumberOfFights { get; set; }
+
+        public bool Experienced { get; set; }
+
+        public Gender Gender { get; set; }
+
+        public List<MedicalCertificateViewModel> MedicalCertificates { get; set; } = new List<MedicalCertificateViewModel>();
+
+        public bool IsMedicalCertificateValid { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayName("Date of Entry")]

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
@@ -16,8 +16,8 @@ namespace BoxingClub.BLL.Implementation.Services
         public AuthenticationService(IAuthenticationProvider authenticationProvider,
                                      IMapper mapper)
         {
-            _authenticationProvider = authenticationProvider;
-            _mapper = mapper;
+            _authenticationProvider = authenticationProvider ?? throw new ArgumentNullException(nameof(authenticationProvider), "authenticationProvider is null");
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
         }
 
         public async Task<SignInResultDTO> SignInAsync(UserDTO user)

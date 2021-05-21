@@ -1,4 +1,4 @@
-﻿using BoxingClub.BLL.DTO;
+﻿using BoxingClub.BLL.DomainEntities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,6 +13,8 @@ namespace BoxingClub.BLL.Interfaces
         Task DeleteUserByIdAsync(string userId);
 
         Task<List<UserDTO>> GetUsersAsync();
+
+        Task<PageModelDTO<UserDTO>> GetUsersPaginatedAsync(SearchModelDTO searchDTO);
 
         Task<List<UserDTO>> GetUsersByRoleAsync(string roleName);
 

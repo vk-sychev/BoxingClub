@@ -1,4 +1,4 @@
-﻿using BoxingClub.BLL.DTO;
+﻿using BoxingClub.BLL.DomainEntities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,5 +19,9 @@ namespace BoxingClub.BLL.Interfaces
         Task UpdateBoxingGroupAsync(BoxingGroupDTO groupDTO);
 
         Task<BoxingGroupDTO> GetBoxingGroupWithStudentsByIdAsync(int? id);
+
+        Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsPaginatedAsync(SearchModelDTO searchDTO);
+
+        Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, SearchModelDTO searchDTO);
     }
 }

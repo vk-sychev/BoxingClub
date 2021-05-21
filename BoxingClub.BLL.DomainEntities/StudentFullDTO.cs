@@ -1,6 +1,8 @@
-﻿using System;
+﻿using BoxingClub.Infrastructure.Enums;
+using System;
+using System.Collections.Generic;
 
-namespace BoxingClub.BLL.DTO
+namespace BoxingClub.BLL.DomainEntities
 {
     public class StudentFullDTO
     {
@@ -18,10 +20,32 @@ namespace BoxingClub.BLL.DTO
 
         public double Weight { get; set; }
 
+        public int NumberOfFights { get; set; }
+
+        public bool Experienced { get; set; }
+
         public DateTime DateOfEntry { get; set; }
+
+        public Gender Gender { get; set; }
 
         public int BoxingGroupId { get; set; }
 
         public BoxingGroupDTO BoxingGroup { get; set; }
+
+        public List<MedicalCertificateDTO> MedicalCertificates { get; set; } = new List<MedicalCertificateDTO>();
+
+        public MedicalCertificateDTO LastMedicalCertificate { get; set; }
+
+        public bool IsMedicalCertificateValid { get; set; }
+
+        public CategoryDTO Category { get; set; }
+
+        public int GetStudentTrainingPeriod()
+        {
+            var dateOfEntryYear = this.DateOfEntry.Year;
+            var currentYear = DateTime.Now.Year;
+            var diff = currentYear - dateOfEntryYear;
+            return diff;
+        }
     }
 }

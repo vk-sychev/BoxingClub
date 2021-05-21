@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
+using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Infrastructure.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,8 +19,8 @@ namespace BoxingClub.BLL.Services
         public BoxingGroupService(IMapper mapper,
                                   IUnitOfWork uow)
         {
-            _mapper = mapper;
-            _database = uow;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
+            _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
         }
 
         public async Task<List<BoxingGroupDTO>> GetBoxingGroupsAsync()
@@ -105,6 +106,70 @@ namespace BoxingClub.BLL.Services
             var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdAsync(coachId);
             var mappedGroups = _mapper.Map<List<BoxingGroupDTO>>(groups);
             return mappedGroups;
+        }
+
+        public async Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsPaginatedAsync(SearchModelDTO searchDTO)
+        {
+            if (searchDTO == null)
+            {
+                throw new ArgumentNullException(nameof(searchDTO), "SearchDTO is null");
+            }
+
+            if (searchDTO.PageIndex == null)
+            {
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
+            }
+
+            if (searchDTO.PageSize == null)
+            {
+                searchDTO.PageSize = PageModelConstants.PageSize;
+            }
+
+            var groups = await _database.BoxingGroups.GetBoxingGroupsPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+            if (groups.Count == 0)
+            {
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
+                groups = await _database.BoxingGroups.GetBoxingGroupsPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+            }
+
+            var groupDTOs = _mapper.Map<List<BoxingGroupDTO>>(groups);
+            var count = await _database.BoxingGroups.GetCountOfBoxingGroupsAsync();
+            return new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
+        }
+
+        public async Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, SearchModelDTO searchDTO)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException(nameof(id), "Coach id is null");
+            }
+
+            if (searchDTO == null)
+            {
+                throw new ArgumentNullException(nameof(searchDTO), "SearchDTO is null");
+            }
+
+            if (searchDTO.PageIndex == null)
+            {
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
+            }
+
+            if (searchDTO.PageSize == null)
+            {
+                searchDTO.PageSize = PageModelConstants.PageSize;
+            }
+
+            var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdPaginatedAsync(id, searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+            if (groups.Count == 0)
+            {
+                searchDTO.PageIndex = PageModelConstants.PageIndex;
+                groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdPaginatedAsync(id, searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+            }
+
+            var groupDTOs = _mapper.Map<List<BoxingGroupDTO>>(groups);
+            var count = await _database.BoxingGroups.GetCountOfBoxingGroupsByCoachIdAsync(id);
+            var model = new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
+            return model;
         }
     }
 }

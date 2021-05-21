@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DTO;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Implementation.Services;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.DAL.Entities;
@@ -8,9 +8,7 @@ using BoxingClub.Web.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
