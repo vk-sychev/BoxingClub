@@ -3,6 +3,7 @@ using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.CustomAttributes;
+using BoxingClub.Web.Helpers;
 using BoxingClub.Web.Models;
 using BoxingClub.Web.WebManagers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -55,7 +56,7 @@ namespace BoxingClub.Web.Controllers
                 pageViewModel = await _homeWebManager.GetBoxingGroupsAsync(searchModel);
             }
 
-            var sizes = new List<int> { 1, 2, 3, 4, 5 };
+            var sizes = PageSizeHelper.GetPageSizeList(5);
             ViewBag.Sizes = sizes;
             ViewBag.pageSize = searchModel.PageSize;
 
