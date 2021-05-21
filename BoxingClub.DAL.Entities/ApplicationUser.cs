@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace BoxingClub.DAL.Entities
 {
@@ -14,7 +15,6 @@ namespace BoxingClub.DAL.Entities
         public DateTime BornDate { get; set; }
 
         public string Description { get; set; }
-
 
         public void ChangeUserProperties(ApplicationUser user)
         {

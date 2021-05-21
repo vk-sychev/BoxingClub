@@ -44,7 +44,6 @@ namespace BoxingClub.DAL.EF
                         j => j.HasOne(aw => aw.WeightCategory).WithMany(w => w.AgeWeightCategories),
                         j => j.HasOne(aw => aw.AgeCategory).WithMany(a => a.AgeWeightCategories));
 
-
             modelBuilder.Seed();
         }
     }
