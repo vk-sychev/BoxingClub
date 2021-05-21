@@ -9,6 +9,8 @@
     var pageSize = ViewBag.pageSize;
 }
 
+<script src="~/js/BoxingGroups.js"></script>
+
 <div class="d-flex justify-content-between mb-2">
     <h1>Boxing Groups</h1>
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))

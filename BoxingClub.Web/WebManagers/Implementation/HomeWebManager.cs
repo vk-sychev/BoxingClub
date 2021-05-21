@@ -27,7 +27,6 @@ namespace BoxingClub.Web.WebManagers.Implementation
 
         public async Task<PageViewModel<BoxingGroupLiteViewModel>> GetBoxingGroupsAsync(SearchModelDTO searchModel)
         {
-            //validation
             var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(searchModel);
             var groups = _mapper.Map<List<BoxingGroupLiteViewModel>>(pageModel.Items);
             return new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, groups);

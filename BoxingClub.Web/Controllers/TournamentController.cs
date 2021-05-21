@@ -59,7 +59,7 @@ namespace BoxingClub.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Tournament.Categories = GetSelectedCategories(model.Categories);
+                model.Tournament.Categories = model.Categories.Where(x => x.IsSelected).ToList();
                 var tournament = _mapper.Map<TournamentFullDTO>(model.Tournament);
                 await _tournamentService.UpdateTournamentAsync(tournament);
                 return RedirectToAction("GetAllTournaments", "Tournament");
@@ -87,7 +87,7 @@ namespace BoxingClub.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Tournament.Categories = GetSelectedCategories(model.Categories);
+                model.Tournament.Categories = model.Categories.Where(x => x.IsSelected).ToList();
                 var tournament = _mapper.Map<TournamentFullDTO>(model.Tournament);
                 await _tournamentService.CreateTournamentAsync(tournament);
                 return RedirectToAction("GetAllTournaments", "Tournament");
@@ -138,7 +138,10 @@ namespace BoxingClub.Web.Controllers
                 var category = allCategories.FirstOrDefault(x => x.Id == item.Id);
                 if (item.Id == category.Id)
                 {
-                    category.IsSelected = true;
+                    if (category != null)
+                    {
+                        category.IsSelected = true;
+                    }
                 }
             }
             return allCategories;

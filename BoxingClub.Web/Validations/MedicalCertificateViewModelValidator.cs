@@ -18,8 +18,6 @@ namespace BoxingClub.Web.Validations
             RuleFor(x => x.DateOfIssue).NotNull()
                                        .Must(x => x <= todaysDate)
                                        .WithMessage($"Date of entry must be less or equal today's date: { todaysDate }");
-
-/*            RuleFor(x => x.Result).InclusiveBetween(0, 1);*/
         }
     }
 }
