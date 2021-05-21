@@ -182,7 +182,8 @@ namespace BoxingClub.BLL.Implementation.Services
                 searchDTO.PageIndex = PageModelConstants.PageIndex;
                 users = await _userProvider.GetUsersPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             }
-            var userDTOs = new List<UserDTO>();
+            /*var userDTOs = new List<UserDTO>();*/
+            var userDTOs = _mapper.Map<List<UserDTO>>(users);
 
             foreach (var user in users)
             {

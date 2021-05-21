@@ -2,6 +2,7 @@
 using BoxingClub.DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,10 +12,10 @@ namespace BoxingClub.DAL.Implementation.Implementation
 {
     public class RoleProvider : IRoleProvider
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public RoleProvider(RoleManager<IdentityRole> roleManager,
+        public RoleProvider(RoleManager<ApplicationRole> roleManager,
                             UserManager<ApplicationUser> userManager)
         {
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager), "roleManager is null");
@@ -48,17 +49,20 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<IdentityRole> FindRoleByIdAsync(string id)
         {
-            return await _roleManager.FindByIdAsync(id);
+            /*return await _roleManager.FindByIdAsync(id);*/
+            throw new NotImplementedException();
         }
 
         public async Task<List<IdentityRole>> GetRolesAsync()
         {
-            return await _roleManager.Roles.ToListAsync();
+            /*return await _roleManager.Roles.ToListAsync();*/
+            throw new NotImplementedException();
         }
 
         public async Task<IdentityRole> FindRoleByNameAsync(string roleName)
         {
-           return await _roleManager.FindByNameAsync(roleName);
+            /*return await _roleManager.FindByNameAsync(roleName);*/
+            throw new NotImplementedException();
         }
     }
 }

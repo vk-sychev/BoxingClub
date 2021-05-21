@@ -60,7 +60,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<List<ApplicationUser>> GetUsersPaginatedAsync(int pageIndex, int pageSize)
         {
-            var query = _userManager.Users;
+            var query = _userManager.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role);
             var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return list;
         }

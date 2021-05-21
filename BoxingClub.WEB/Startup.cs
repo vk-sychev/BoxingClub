@@ -49,7 +49,7 @@ namespace BoxingClub.Web
 
             var passwordConfig = Configuration.GetSection("PasswordSettings");
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.Password.RequiredLength = Convert.ToInt32(passwordConfig.GetSection("RequiredLength").Value);
                 options.Password.RequireNonAlphanumeric = Convert.ToBoolean(passwordConfig.GetSection("RequireNonAlphanumeric").Value);

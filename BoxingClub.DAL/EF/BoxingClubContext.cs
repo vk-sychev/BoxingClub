@@ -1,9 +1,12 @@
 ﻿using BoxingClub.DAL.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace BoxingClub.DAL.EF
 {
-    public class BoxingClubContext : IdentityDbContext<ApplicationUser>
+    public class BoxingClubContext : IdentityDbContext<ApplicationUser, ApplicationRole, string,
+                                     IdentityUserClaim<string>, ApplicationUserRole, IdentityUserLogin<string>,
+                                     IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public DbSet<Student> Students { get; set; }
 
@@ -43,6 +46,28 @@ namespace BoxingClub.DAL.EF
                         .UsingEntity<AgeWeightCategory>(
                         j => j.HasOne(aw => aw.WeightCategory).WithMany(w => w.AgeWeightCategories),
                         j => j.HasOne(aw => aw.AgeCategory).WithMany(a => a.AgeWeightCategories));
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasKey(x => new { x.UserId, x.RoleId });
+
+            modelBuilder.Entity<ApplicationUser>(b =>
+            {
+                b.HasKey(k => k.Id);
+
+                b.HasMany(e => e.UserRoles)
+                .WithOne(e => e.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+            });
+
+            modelBuilder.Entity<ApplicationRole>(b =>
+            {
+                b.HasKey(k => k.Id);
+
+                b.HasMany(e => e.UserRoles)
+                .WithOne(e => e.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+            });
 
             modelBuilder.Seed();
         }

@@ -158,7 +158,7 @@ namespace BoxingClub.BLL.Implementation.Services
             }
         }
 
-        private async Task<List<Category>> GetSelectedCategories(List<Category> categoryIds)
+        private async Task<List<Category>> GetSelectedCategories(List<Category> categoryIds)//тянуть только тех, у кого айди есть
         {
             List<Category> selectedCategories = new List<Category>();
             var categories = await _database.Categories.GetAllAsync();
