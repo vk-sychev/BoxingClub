@@ -47,6 +47,19 @@ namespace BoxingClub.DAL.Implementation.Implementation
                                  .ToListAsync();
         }
 
+        public Task<List<Category>> GetCategoriesByIds(List<Category> categoriesIds)
+        {
+            List<int> Ids = categoriesIds.Select(x => x.Id).ToList();
+
+            var result = _db.Categories.Include(aw => aw.AgeWeightCategory)
+                                       .ThenInclude(a => a.AgeCategory)
+                                       .Include(aw => aw.AgeWeightCategory)
+                                       .ThenInclude(w => w.WeightCategory)
+                                       .Where(x => Ids.Contains(x.Id))
+                                       .ToListAsync();
+            return result;
+        }
+
         public Task<Category> GetByIdAsync(int id)
         {
             return _db.Categories.Include(aw => aw.AgeWeightCategory)

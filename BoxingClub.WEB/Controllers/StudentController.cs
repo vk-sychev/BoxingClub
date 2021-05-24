@@ -12,6 +12,7 @@ using System.Linq;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
 using BoxingClub.Web.WebManagers.Interfaces;
+using BoxingClub.Web.Helpers;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -44,7 +45,7 @@ namespace BoxingClub.Web.Controllers
         {
             var pageViewModel = await _studentWebManager.GetStudentsAsync(searchModel);
 
-            var sizes = new List<int> { 1, 2, 3, 4, 5 }; 
+            var sizes = PageSizeHelper.GetPageSizeList(5);
             ViewBag.Sizes = sizes;
             ViewBag.pageSize = searchModel.PageSize;
             ViewBag.experienceFilter = searchModel.ExperienceFilter ?? 0;

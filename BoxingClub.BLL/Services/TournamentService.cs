@@ -33,7 +33,7 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var tournament = _mapper.Map<Tournament>(tournamentDTO);
-            tournament.Categories = await GetSelectedCategories(tournament.Categories);
+            tournament.Categories = await _database.Categories.GetCategoriesByIds(tournament.Categories);
 
             await _database.Tournaments.CreateAsync(tournament);
             await _database.SaveAsync();
@@ -156,18 +156,6 @@ namespace BoxingClub.BLL.Implementation.Services
                     tournamentFromDb.Categories.Add(item);
                 }
             }
-        }
-
-        private async Task<List<Category>> GetSelectedCategories(List<Category> categoryIds)//тянуть только тех, у кого айди есть
-        {
-            List<Category> selectedCategories = new List<Category>();
-            var categories = await _database.Categories.GetAllAsync();
-            foreach (var item in categoryIds)
-            {
-                var category = categories.FirstOrDefault(x => x.Id == item.Id);
-                selectedCategories.Add(category);
-            }
-            return selectedCategories;
         }
     }
 }

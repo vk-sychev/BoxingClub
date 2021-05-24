@@ -4,6 +4,7 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Infrastructure.Exceptions;
 using BoxingClub.Web.CustomAttributes;
+using BoxingClub.Web.Helpers;
 using BoxingClub.Web.Models;
 using BoxingClub.Web.WebManagers.Implementation;
 using BoxingClub.Web.WebManagers.Interfaces;
@@ -40,7 +41,7 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
             var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
-            var sizes = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
+            var sizes = PageSizeHelper.GetPageSizeList(7);
             ViewBag.Sizes = sizes;
             ViewBag.pageSize = searchModel.PageSize;
 

@@ -24,8 +24,6 @@ namespace BoxingClub.BLL.Services
         private readonly IStudentSpecification _medicalCertificateSpecification;
         private readonly IUnitOfWork _database;
 
-        private List<IStudentSpecification> _specifications;
-
         public StudentService(IUnitOfWork uow, 
                               IMapper mapper)
         {
@@ -33,8 +31,6 @@ namespace BoxingClub.BLL.Services
             _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
             _medicalCertificateSpecification = new MedicalCertificateSpecification();
             _fighterExperienceSpecification = new FighterExperienceSpecification();
-
-            _specifications = new List<IStudentSpecification>() { new MedicalCertificateSpecification(), new FighterExperienceSpecification() };
         }
 
         public async Task<StudentFullDTO> GetStudentByIdAsync(int? id)
@@ -209,11 +205,6 @@ namespace BoxingClub.BLL.Services
             {
                 student.Experienced = _fighterExperienceSpecification.IsValid(student);
                 student.IsMedicalCertificateValid = _medicalCertificateSpecification.IsValid(student);
-
-                foreach(var s in _specifications)
-                {
-                    s.IsValid(student);
-                }
             }
             return students;
         }
