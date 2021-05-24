@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.Web.Controllers
 {
-    [Authorize]
+    [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
     public class TournamentController : Controller
     {
         private readonly IMapper _mapper;
@@ -114,22 +114,6 @@ namespace BoxingClub.Web.Controllers
             var mappedTournament = _mapper.Map<TournamentFullViewModel>(tournament);
             return View(mappedTournament);
         }
-
-        private List<CategoryViewModel> GetSelectedCategories(List<CategoryViewModel> categories)
-        {
-            List<CategoryViewModel> selectedCategories = new List<CategoryViewModel>();
-
-            foreach(var item in categories)
-            {
-                if (item.IsSelected)
-                {
-                    selectedCategories.Add(item);
-                }
-            }
-
-            return selectedCategories;
-        }
-
 
         private List<CategoryViewModel> SetSelectedCategories(List<CategoryViewModel> allCategories, List<CategoryViewModel> selectedCategories)
         {

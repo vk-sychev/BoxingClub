@@ -16,7 +16,7 @@ namespace BoxingClub.DAL.Entities
 
         public string Description { get; set; }
 
-        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public List<ApplicationUserRole> UserRoles { get; set; }
 
         public void ChangeUserProperties(ApplicationUser user)
         {

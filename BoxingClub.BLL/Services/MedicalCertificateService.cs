@@ -40,13 +40,6 @@ namespace BoxingClub.BLL.Implementation.Services
             return mappedCertificate;
         }
 
-        public async Task<List<MedicalCertificateDTO>> GetMedicalCertificatesAsync()
-        {
-            var medicalCertificates = await _database.MedicalCertificates.GetAllAsync();
-            var mappedCertificates = _mapper.Map<List<MedicalCertificateDTO>>(medicalCertificates);
-            return mappedCertificates;
-        }
-
         public async Task CreateMedicalCertificateAsync(MedicalCertificateDTO certificateDTO)
         {
             if (certificateDTO == null)

@@ -27,10 +27,6 @@ namespace BoxingClub.Infrastructure.HttpSwitcher
                 StatusCode = (int)HttpStatusCode.InternalServerError,
                 Message = "Internal server error"
             };
-
-            /*            if (exceptionType == typeof(NotFoundException)) return "404 - Page Not Found";
-                        if (exceptionType == typeof(ArgumentNullException)) return "Bad Request occurred";
-                        return "Internal server error occured while processing your request";*/
         }
     }
 }

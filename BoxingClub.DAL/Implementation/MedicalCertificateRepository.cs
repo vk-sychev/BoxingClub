@@ -42,11 +42,6 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return _db.MedicalCertificates.AsQueryable().ToListAsync();
         }
 
-        public Task<List<MedicalCertificate>> GetMedicalCertificatesByStudentIdAsync(int studentId)
-        {
-            return _db.MedicalCertificates.AsQueryable().Where(s => s.StudentId == studentId).ToListAsync();
-        }
-
         public Task<MedicalCertificate> GetByIdAsync(int id)
         {
             return _db.MedicalCertificates.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);

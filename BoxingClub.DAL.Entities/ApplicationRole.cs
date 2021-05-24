@@ -7,6 +7,6 @@ namespace BoxingClub.DAL.Entities
 {
     public class ApplicationRole : IdentityRole<string>
     {
-        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public List<ApplicationUserRole> UserRoles { get; set; }
     }
 }

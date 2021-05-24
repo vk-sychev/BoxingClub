@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.Web.Controllers
 {
-    [Authorize]
+    [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
     public class MedicalCertificateController : Controller
     {
         private readonly IMapper _mapper;

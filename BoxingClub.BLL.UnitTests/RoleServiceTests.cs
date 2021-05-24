@@ -60,7 +60,7 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public async Task FindRoleByIdAsync_ValidInput()
         {
-            var role = new IdentityRole() { Id = "test", Name = "test" };
+            var role = new ApplicationRole() { Id = "test", Name = "test" };
             _mockRoleProvider.Setup(p => p.FindRoleByIdAsync(role.Id).Result).Returns(role);
 
             var roleFromService = await _roleService.FindRoleByIdAsync(role.Id);
@@ -89,7 +89,7 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public async Task GetRolesAsync_ReturnList()
         {
-            var roleList = new List<IdentityRole>() { new IdentityRole { Id = "1" }, new IdentityRole { Id = "2" }, new IdentityRole { Id = "3" } };
+            var roleList = new List<ApplicationRole>() { new ApplicationRole { Id = "1" }, new ApplicationRole { Id = "2" }, new ApplicationRole { Id = "3" } };
             _mockRoleProvider.Setup(p => p.GetRolesAsync().Result).Returns(roleList);
 
             var roles = await _roleService.GetRolesAsync();

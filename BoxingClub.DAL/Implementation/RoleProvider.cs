@@ -47,22 +47,19 @@ namespace BoxingClub.DAL.Implementation.Implementation
             return await _userManager.RemoveFromRoleAsync(identityUser, roleName);
         }
 
-        public async Task<IdentityRole> FindRoleByIdAsync(string id)
+        public async Task<ApplicationRole> FindRoleByIdAsync(string id)
         {
-            /*return await _roleManager.FindByIdAsync(id);*/
-            throw new NotImplementedException();
+            return await _roleManager.FindByIdAsync(id);
         }
 
-        public async Task<List<IdentityRole>> GetRolesAsync()
+        public async Task<List<ApplicationRole>> GetRolesAsync()
         {
-            /*return await _roleManager.Roles.ToListAsync();*/
-            throw new NotImplementedException();
+            return await _roleManager.Roles.ToListAsync();
         }
 
-        public async Task<IdentityRole> FindRoleByNameAsync(string roleName)
+        public async Task<ApplicationRole> FindRoleByNameAsync(string roleName)
         {
-            /*return await _roleManager.FindByNameAsync(roleName);*/
-            throw new NotImplementedException();
+            return await _roleManager.FindByNameAsync(roleName);
         }
     }
 }

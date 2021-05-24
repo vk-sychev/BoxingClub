@@ -189,33 +189,6 @@ namespace BoxingClub.DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-                });
-
             modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -301,15 +274,15 @@ namespace BoxingClub.DAL.Migrations
                             Id = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "97db3428-6252-4adc-82be-fd647b0cdf78",
+                            ConcurrencyStamp = "5acc2f70-f875-4539-bf4f-17ab60cc6f22",
                             Email = "Manager1@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER1@GMAIL.COM",
                             NormalizedUserName = "MANAGER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEMCmfo3dSaPwTGpzm6few+wj9ihFCigNnlraYLzb7WH36nrBhOhXEm7XyKLwv1/Vg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAwylYLdKHi1YUcFqsnjBr4CA+itbu/hXw0DScNf98RXlpNS9RLw2yaOBWfO+qLNPg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5824ceff-87b9-4c92-b470-13e189a3873b",
+                            SecurityStamp = "6e9264e5-ded3-4174-8322-b71639136f63",
                             TwoFactorEnabled = false,
                             UserName = "Manager1"
                         },
@@ -318,15 +291,15 @@ namespace BoxingClub.DAL.Migrations
                             Id = "2d4254a5-7782-4b9c-a987-42a83d30669a",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "34c11eb2-dff9-4e53-ac95-e50fce218148",
+                            ConcurrencyStamp = "25cf79de-c326-41d4-9e0a-a73beadd9613",
                             Email = "Manager2@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER2@GMAIL.COM",
                             NormalizedUserName = "MANAGER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAENaL6oOR2H0cpq+EEdfCa1iUfmued/ICKFo5pntkpuyUQslUon4Y0YCIKqjLQC5EoA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBrFwWZJEOKVMBH6CXTA32st46V7iaNbnsRqik0pgsXEGEmwCnJjRnB+lJgHP0uHPQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "03ade30c-3cfd-4c73-989b-bc3bee4e9c91",
+                            SecurityStamp = "e4deb6a1-bcb5-4f27-b848-60bc03dded6c",
                             TwoFactorEnabled = false,
                             UserName = "Manager2"
                         },
@@ -335,17 +308,17 @@ namespace BoxingClub.DAL.Migrations
                             Id = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(2000, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "69a7246f-f25a-4f0d-b644-73de1fa42f42",
+                            ConcurrencyStamp = "92a4454a-f0e2-4de4-b93b-d0c3a4d6ec65",
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Vasya",
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHKAeUKEDze2CQM2tZED8t9SqkpLy7TWHIs5CaGIt/aSetGKyKULmNlsVgQvsnALIw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGCVc5uJT1D+HcKBXdgoYp32p23gMUm0sfk8U/2TajMyaMab6InzN8oYEEBuYtaq8g==",
                             Patronymic = "Konstantinovich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "513c2b38-5e4e-4474-8e08-6d0f40787320",
+                            SecurityStamp = "337226a2-d8ad-4ec6-9fc1-bce69eea3541",
                             Surname = "Sychev",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
@@ -355,7 +328,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1995, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "f64ffe76-7d0f-43d7-bc1c-b72b028f699d",
+                            ConcurrencyStamp = "aa6b12fb-cefb-4e02-90d1-a24fbf1731b4",
                             Description = "CMS in boxing",
                             Email = "Coach1@gmail.com",
                             EmailConfirmed = false,
@@ -363,10 +336,10 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Pavel",
                             NormalizedEmail = "COACH1@GMAIL.COM",
                             NormalizedUserName = "COACH1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPQ/YpKDWdkaMr9pvZ55eaJnGiS0D8uuf4vnLAKFi4Bu+7Wa4K0B0iOGC4PuF/JwwQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEG3vGOQ010FUuygNLG4DqUYHnqa1NYInqRgUmxfCg5dmQMeX1hyRzNNfhSC5NNdSmA==",
                             Patronymic = "Nikolayevich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8d94f63a-0cd7-4b83-96bf-c0d7655e6b35",
+                            SecurityStamp = "3c8c130c-8f37-48e0-95d6-cae31f96d09f",
                             Surname = "Dorochin",
                             TwoFactorEnabled = false,
                             UserName = "Coach1"
@@ -376,7 +349,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1991, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "00d3805f-9d96-4e28-8931-6071c6833a7b",
+                            ConcurrencyStamp = "2e9f7eca-a524-43af-99a4-7277100f3a97",
                             Description = "CMS in boxing",
                             Email = "Coach2@gmail.com",
                             EmailConfirmed = false,
@@ -384,10 +357,10 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Vlad",
                             NormalizedEmail = "COACH2@GMAIL.COM",
                             NormalizedUserName = "COACH2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBNX5AceCCXlj+hopvxv9z/bgq70gBIxu1xelIKSVIsLLqsfEOcJju1Agsyqh4i5ng==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHlHOALwGiXS7XAalkJKB/D7mfEMKhphoP69y1br2bf97ixI5lMLIejMkXDgNPRIQQ==",
                             Patronymic = "Nikolayevich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "632c2453-60b9-450e-91ee-1bc34cedd921",
+                            SecurityStamp = "54561360-a982-4bda-9b30-48e338f5ca65",
                             Surname = "Dorochin",
                             TwoFactorEnabled = false,
                             UserName = "Coach2"
@@ -397,7 +370,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = "a50a06a5-df07-4728-b6a0-93173c2ce4cf",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1970, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "78a2d369-c976-4c0c-b454-cb4fc6217fb8",
+                            ConcurrencyStamp = "dcaba96b-16fe-4fcd-805c-c6eea9330e4c",
                             Description = "MS in boxing",
                             Email = "Coach3@gmail.com",
                             EmailConfirmed = false,
@@ -405,28 +378,13 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Sergey",
                             NormalizedEmail = "COACH3@GMAIL.COM",
                             NormalizedUserName = "COACH3",
-                            PasswordHash = "AQAAAAEAACcQAAAAELigIBDYb9DyV9udqYPd+jc/65QhPi14WHCZArIwCr2NpcP+69OU9Eccjm4sS+C7Qg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBrXgwTaf6Zs+3OYzniUlCXin+ZXeXDK+3j57jFvUOulkZDhTy/u385yWCPvZ39SxQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "37646ce0-6169-4afb-ba30-40067aaa0dae",
+                            SecurityStamp = "2f174eff-6277-463d-b130-3c566a56fb49",
                             Surname = "Goncharov",
                             TwoFactorEnabled = false,
                             UserName = "Coach3"
                         });
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationUserRole", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
                 });
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>
@@ -1141,44 +1099,52 @@ namespace BoxingClub.DAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("IdentityRole");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
 
                     b.HasData(
                         new
                         {
                             Id = "291c0120-8c27-47c5-83fe-9d7deb36f73c",
-                            ConcurrencyStamp = "0578fa02-59b6-4d71-ac94-a4fa31899643",
+                            ConcurrencyStamp = "f2b8b99b-8db4-499a-92e0-e5873e7c1f27",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6",
-                            ConcurrencyStamp = "0bb5f543-5495-44af-958f-8540a09ea1db",
+                            ConcurrencyStamp = "84d77038-26da-46d4-9548-130a804840d3",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "db460306-31c6-457a-989e-9e4317be99b9",
-                            ConcurrencyStamp = "c19f2a97-1ea5-4ce0-9102-a36292708cac",
+                            ConcurrencyStamp = "b0c33778-5be2-420d-a9cf-06ded9b9f3fe",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = "8da509ca-2005-457d-8ca3-105792f04013",
-                            ConcurrencyStamp = "ddd55c4c-eec8-4ab8-bc2d-463e28319460",
+                            ConcurrencyStamp = "381ad310-3f88-4b31-b61b-4c8aa2b87a77",
                             Name = "Coach",
                             NormalizedName = "COACH"
                         });
@@ -1264,7 +1230,9 @@ namespace BoxingClub.DAL.Migrations
 
                     b.HasKey("UserId", "RoleId");
 
-                    b.ToTable("IdentityUserRole<string>");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
 
                     b.HasData(
                         new
@@ -1333,25 +1301,6 @@ namespace BoxingClub.DAL.Migrations
                     b.Navigation("WeightCategory");
                 });
 
-            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationUserRole", b =>
-                {
-                    b.HasOne("BoxingClub.DAL.Entities.ApplicationRole", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>
                 {
                     b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", "Coach")
@@ -1409,7 +1358,7 @@ namespace BoxingClub.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("BoxingClub.DAL.Entities.ApplicationRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1434,6 +1383,21 @@ namespace BoxingClub.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", null)
@@ -1446,16 +1410,6 @@ namespace BoxingClub.DAL.Migrations
             modelBuilder.Entity("BoxingClub.DAL.Entities.AgeCategory", b =>
                 {
                     b.Navigation("AgeWeightCategories");
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationRole", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationUser", b =>
-                {
-                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>

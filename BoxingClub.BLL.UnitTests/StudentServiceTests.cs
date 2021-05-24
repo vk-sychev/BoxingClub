@@ -279,14 +279,11 @@ namespace BoxingClub.BLL.UnitTests
         public async Task CreateStudent_ValidInput()
         {
             _mockStudentRepository.Setup(repo => repo.CreateAsync(It.IsAny<Student>()));
-            _mockBoxingGroupRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result).Returns(new BoxingGroup { Id = 1 });
             _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
-            _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockBoxingGroupRepository.Object);
 
             await _studentService.CreateStudentAsync(_studentDTO);
 
             _mockStudentRepository.Verify(repo => repo.CreateAsync(It.IsAny<Student>()), Times.Once);
-            _mockBoxingGroupRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<int>()), Times.Once);
             _mockUoW.Verify(uow => uow.SaveAsync());
         }
 
