@@ -168,8 +168,8 @@ namespace BoxingClub.Web.Controllers
         private async Task<SelectList> GetCoaches()
         {
             var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
-            var coacheViewModels = _mapper.Map<List<UserViewModel>>(coaches);
-            var selectList = new SelectList(coacheViewModels, "Id", "FullName");
+            var coachViewModels = _mapper.Map<List<UserViewModel>>(coaches);
+            var selectList = new SelectList(coachViewModels, "Id", "FullName");
             return selectList;
         }
 
