@@ -1,6 +1,7 @@
 ﻿using BoxingClub.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
+using Itenso.TimePeriod;
 
 namespace BoxingClub.BLL.DomainEntities
 {
@@ -16,15 +17,15 @@ namespace BoxingClub.BLL.DomainEntities
 
         public DateTime BornDate { get; set; }
 
-        public int Height { get; set; }
-
-        public double Weight { get; set; }
-
         public int NumberOfFights { get; set; }
 
         public bool Experienced { get; set; }
 
         public DateTime DateOfEntry { get; set; }
+
+        public int Height { get; set; }
+
+        public double Weight { get; set; }
 
         public Gender Gender { get; set; }
 
@@ -38,14 +39,14 @@ namespace BoxingClub.BLL.DomainEntities
 
         public bool IsMedicalCertificateValid { get; set; }
 
-        public CategoryDTO Category { get; set; }
-
         public int GetStudentTrainingPeriod()
         {
-            var dateOfEntryYear = this.DateOfEntry.Year;
-            var currentYear = DateTime.Now.Year;
-            var diff = currentYear - dateOfEntryYear;
-            return diff;
+            return new DateDiff(DateOfEntry, DateTime.Today).Years;
+        }
+
+        public int GetStudentAge()
+        {
+            return new DateDiff(BornDate, DateTime.Today).Years;
         }
     }
 }

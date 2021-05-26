@@ -32,7 +32,7 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> GetAllTournaments()
         {
             var tournaments = await _tournamentService.GetTournamentsAsync();
-            var mappedTournaments = _mapper.Map<List<TournamentLiteViewModel>>(tournaments);
+            var mappedTournaments = _mapper.Map<List<TournamentViewModel>>(tournaments);
             return View(mappedTournaments);
         }
 
@@ -43,24 +43,18 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> EditTournament(int? id)
         {
             var tournament = await _tournamentService.GetTournamentByIdAsync(id);
-            var mappedTournament = _mapper.Map<TournamentFullViewModel>(tournament);
-            var editModel = new CreateEditTournamentViewModel()
-            {
-                Tournament = mappedTournament,
-                Categories = SetSelectedCategories(await GetCategories(), mappedTournament.Categories)
-            };
-            return View(editModel);
+            var mappedTournament = _mapper.Map<TournamentViewModel>(tournament);
+            return View(mappedTournament);
         }
 
         [HttpPost]
         [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Tournament/EditTournament/{id}")]
-        public async Task<IActionResult> EditTournament(CreateEditTournamentViewModel model)
+        public async Task<IActionResult> EditTournament(TournamentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                model.Tournament.Categories = model.Categories.Where(x => x.IsSelected).ToList();
-                var tournament = _mapper.Map<TournamentFullDTO>(model.Tournament);
+                var tournament = _mapper.Map<TournamentDTO>(model);
                 await _tournamentService.UpdateTournamentAsync(tournament);
                 return RedirectToAction("GetAllTournaments", "Tournament");
             }
@@ -71,24 +65,19 @@ namespace BoxingClub.Web.Controllers
         [HttpGet]
         [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Tournament/CreateTournament")]
-        public async Task<IActionResult> CreateTournament()
+        public IActionResult CreateTournament()
         {
-            var createModel = new CreateEditTournamentViewModel()
-            {
-                Categories = await GetCategories()
-            };
-            return View(createModel);
+            return View();
         }
 
         [HttpPost]
         [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Tournament/CreateTournament")]
-        public async Task<IActionResult> CreateTournament(CreateEditTournamentViewModel model)
+        public async Task<IActionResult> CreateTournament(TournamentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                model.Tournament.Categories = model.Categories.Where(x => x.IsSelected).ToList();
-                var tournament = _mapper.Map<TournamentFullDTO>(model.Tournament);
+                var tournament = _mapper.Map<TournamentDTO>(model);
                 await _tournamentService.CreateTournamentAsync(tournament);
                 return RedirectToAction("GetAllTournaments", "Tournament");
             }
@@ -111,7 +100,7 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> DetailsTournament(int? id)
         {
             var tournament = await _tournamentService.GetTournamentByIdAsync(id);
-            var mappedTournament = _mapper.Map<TournamentFullViewModel>(tournament);
+            var mappedTournament = _mapper.Map<TournamentViewModel>(tournament);
             return View(mappedTournament);
         }
 
@@ -129,13 +118,6 @@ namespace BoxingClub.Web.Controllers
                 }
             }
             return allCategories;
-        }
-
-        private async Task<List<CategoryViewModel>> GetCategories()
-        {
-            var categories = await _tournamentService.GetCategories();
-            var mappedCategories = _mapper.Map<List<CategoryViewModel>>(categories);
-            return mappedCategories;
         }
     }
 }

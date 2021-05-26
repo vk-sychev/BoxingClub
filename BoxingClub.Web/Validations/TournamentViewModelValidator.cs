@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.Web.Validations
 {
-    public class TournamentFullViewModelValidator : AbstractValidator<TournamentFullViewModel>
+    public class TournamentViewModelValidator : AbstractValidator<TournamentViewModel>
     {
-        public TournamentFullViewModelValidator()
+        public TournamentViewModelValidator()
         {
             string pattern = @"^[a-zA-Zа-яА-Я]+\b";
             var todaysDate = DateTime.Today;

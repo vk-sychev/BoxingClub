@@ -73,22 +73,20 @@ namespace BoxingClub.Web
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
             services.AddTransient<ITournamentService, TournamentService>();
+            services.AddTransient<ISpecificationClient, SpecificationClient>();
+            services.AddTransient<IStudentSelectionService, StudentSelectionService>();
 
             services.AddTransient<IHomeWebManager, HomeWebManager>();
             services.AddTransient<IStudentWebManager, StudentWebManager>();
             services.AddTransient<IAdministrationWebManager, AdministrationWebManager>();
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), 
-                                                       new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
-                                                       new AgeCategoryProfile(), new WeightCategoryProfile(), new CategoryProfile(),
-                                                       new AgeWeightCategoryProfile() };
+                                                       new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile()};
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
-            mapperConfig.AssertConfigurationIsValid();
+            //mapperConfig.AssertConfigurationIsValid();
 
             services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile), 
-                                   typeof(UserProfile), typeof(MedicalCertificateProfile), typeof(TournamentProfile),
-                                   typeof(AgeCategoryProfile), typeof(WeightCategoryProfile), typeof(CategoryProfile),
-                                   typeof(AgeWeightCategoryProfile));
+                                   typeof(UserProfile), typeof(MedicalCertificateProfile), typeof(TournamentProfile));
 
             services.AddMvc(options =>
             {
@@ -107,8 +105,7 @@ namespace BoxingClub.Web
             services.AddTransient<IValidator<UserViewModel>, UserViewModelValidator>();
             services.AddTransient<IValidator<BoxingGroupLiteViewModel>, BoxingGroupLiteViewModelValidator>();
             services.AddTransient<IValidator<MedicalCertificateViewModel>, MedicalCertificateViewModelValidator>();
-            services.AddTransient<IValidator<CreateEditTournamentViewModel>, CreateEditTournamentViewModelValidator>();
-            services.AddTransient<IValidator<TournamentFullViewModel>, TournamentFullViewModelValidator>();
+            services.AddTransient<IValidator<TournamentViewModel>, TournamentViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>
             {

@@ -12,7 +12,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
         private static readonly int TrainingPeriodYears = FighterExperienceConstants.TrainingPeriodYears;
         private static readonly int NumberOfFights = FighterExperienceConstants.NumberOfFights;
 
-        public bool IsValid(StudentFullDTO student)
+        public bool Validate(StudentFullDTO student)
         {
             if (student == null)
             {

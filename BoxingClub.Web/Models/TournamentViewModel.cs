@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BoxingClub.Web.Models
 {
-    public class TournamentFullViewModel
+    public class TournamentViewModel
     {
         public int Id { get; set; }
 
@@ -22,9 +22,5 @@ namespace BoxingClub.Web.Models
 
         [DisplayName("Needs Med Examination?")]
         public bool IsMedCertificateRequired { get; set; }
-
-        public List<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
-
-        public List<StudentFullViewModel> Students { get; set; } = new List<StudentFullViewModel>();
     }
 }

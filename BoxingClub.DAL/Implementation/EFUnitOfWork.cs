@@ -13,9 +13,6 @@ namespace BoxingClub.DAL.Repositories
         private IBoxingGroupRepository _boxingGroupRepository;
         private IMedicalCertificateRepository _medicalCertificateRepository;
         private ITournamentRepository _tournamentRepository;
-        private ICategoryRepository _categoryRepository;
-        private IAgeCategoryRepository _ageCategoryRepository;
-        private IWeightCategoryRepository _weightCategoryRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
@@ -67,42 +64,6 @@ namespace BoxingClub.DAL.Repositories
                     _tournamentRepository = new TournamentRepository(_db);
                 }
                 return _tournamentRepository;
-            }
-        }
-
-        public ICategoryRepository Categories
-        {
-            get
-            {
-                if (_categoryRepository == null)
-                {
-                    _categoryRepository = new CategoryRepository(_db);
-                }
-                return _categoryRepository;
-            }
-        }
-
-        public IAgeCategoryRepository AgeCategories
-        {
-            get
-            {
-                if (_ageCategoryRepository == null)
-                {
-                    _ageCategoryRepository = new AgeCategoryRepository(_db);
-                }
-                return _ageCategoryRepository;
-            }
-        }
-
-        public IWeightCategoryRepository WeightCategories
-        {
-            get
-            {
-                if (_weightCategoryRepository == null)
-                {
-                    _weightCategoryRepository = new WeightCategoryRepository(_db);
-                }
-                return _weightCategoryRepository;
             }
         }
 

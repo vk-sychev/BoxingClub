@@ -6,16 +6,14 @@ namespace BoxingClub.BLL.Interfaces
 {
     public interface ITournamentService
     {
-        Task CreateTournamentAsync(TournamentFullDTO tournamentDTO);
+        Task CreateTournamentAsync(TournamentDTO tournamentDTO);
 
         Task DeleteTournamentAsync(int? id);
 
-        Task<TournamentFullDTO> GetTournamentByIdAsync(int? id);
+        Task<TournamentDTO> GetTournamentByIdAsync(int? id);
 
-        Task<List<TournamentLiteDTO>> GetTournamentsAsync();
+        Task<List<TournamentDTO>> GetTournamentsAsync();
 
-        Task UpdateTournamentAsync(TournamentFullDTO tournamentDTO);
-
-        Task<List<CategoryDTO>> GetCategories();
+        Task UpdateTournamentAsync(TournamentDTO tournamentDTO);
     }
 }

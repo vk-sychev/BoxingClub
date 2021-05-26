@@ -16,13 +16,13 @@ namespace BoxingClub.DAL.Entities
 
         public DateTime BornDate { get; set; }
 
-        public int Height { get; set; }
-
-        public double Weight { get; set; }
-
         public int NumberOfFights { get; set; }
 
         public DateTime DateOfEntry { get; set; }
+
+        public int Height { get; set; }
+
+        public double Weight { get; set; }
 
         public Gender Gender { get; set; }
 
@@ -32,5 +32,6 @@ namespace BoxingClub.DAL.Entities
 
         public List<MedicalCertificate> MedicalCertificates { get; set; }
 
+        public List<TournamentRequest> TournamentRequests { get; set; } = new List<TournamentRequest>();
     }
 }

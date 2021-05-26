@@ -17,17 +17,6 @@ namespace BoxingClub.DAL.Entities
 
         public bool IsMedCertificateRequired { get; set; }
 
-        public List<TournamentRequirement> TournamentRequirements { get; set; } = new List<TournamentRequirement>();
-
-        public List<Category> Categories { get; set; } = new List<Category>();
-
-        public void UpdateTournamentProperties(Tournament updatedTournament)
-        {
-            Name = updatedTournament.Name;
-            Date = updatedTournament.Date;
-            Country = updatedTournament.Country;
-            City = updatedTournament.City;
-            IsMedCertificateRequired = updatedTournament.IsMedCertificateRequired;
-        }
+        public List<TournamentRequest> TournamentRequests { get; set; } = new List<TournamentRequest>();
     }
 }

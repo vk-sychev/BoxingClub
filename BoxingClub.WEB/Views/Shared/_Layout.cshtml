@@ -30,6 +30,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Tournament" asp-action="GetAllTournaments">Tournaments</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="AcceptedTournament" asp-action="GetAcceptedTournaments">Accepted Tournaments</a>
+                            </li>
                         }
 
                         @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName)))

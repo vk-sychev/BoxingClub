@@ -44,12 +44,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public Task<Tournament> GetByIdAsync(int id)
         {
-            return _db.Tournaments.Include(tr => tr.TournamentRequirements)
-                                  .Include(t => t.Categories)
-                                  .ThenInclude(aw => aw.AgeWeightCategory)
-                                  .ThenInclude(a => a.WeightCategory)
-                                  .ThenInclude(w => w.AgeCategories)
-                                  .SingleOrDefaultAsync(x => x.Id == id);
+            return _db.Tournaments.SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public void Update(Tournament item)

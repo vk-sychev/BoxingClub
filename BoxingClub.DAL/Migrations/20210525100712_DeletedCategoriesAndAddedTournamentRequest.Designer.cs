@@ -4,14 +4,16 @@ using BoxingClub.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoxingClub.DAL.Migrations
 {
     [DbContext(typeof(BoxingClubContext))]
-    partial class BoxingClubContextModelSnapshot : ModelSnapshot
+    [Migration("20210525100712_DeletedCategoriesAndAddedTournamentRequest")]
+    partial class DeletedCategoriesAndAddedTournamentRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,28 +51,28 @@ namespace BoxingClub.DAL.Migrations
                         new
                         {
                             Id = "291c0120-8c27-47c5-83fe-9d7deb36f73c",
-                            ConcurrencyStamp = "60d94b4f-b7cc-4e65-8f23-f469d972665e",
+                            ConcurrencyStamp = "f2904e00-2470-406b-b1d3-1bad97a953be",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6",
-                            ConcurrencyStamp = "04a32e9f-35c2-46d8-a694-169dcb64e532",
+                            ConcurrencyStamp = "367ac26c-f044-4ffb-a997-259694f4e96a",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "db460306-31c6-457a-989e-9e4317be99b9",
-                            ConcurrencyStamp = "6e87d3c6-d340-4fdc-949b-5c3c2f237bdb",
+                            ConcurrencyStamp = "a4580d3d-8f09-4f69-bae3-c412e4aef6bc",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = "8da509ca-2005-457d-8ca3-105792f04013",
-                            ConcurrencyStamp = "bbc5494d-d52b-4589-b70d-9bc41721f2b3",
+                            ConcurrencyStamp = "a177daa3-68a5-4119-8644-86353c1bba27",
                             Name = "Coach",
                             NormalizedName = "COACH"
                         });
@@ -161,15 +163,15 @@ namespace BoxingClub.DAL.Migrations
                             Id = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "1d3f6dc3-6349-41ba-9d4b-6999e233c469",
+                            ConcurrencyStamp = "7d592019-1dee-4054-9b41-e58e88f63a1a",
                             Email = "Manager1@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER1@GMAIL.COM",
                             NormalizedUserName = "MANAGER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAh/gOKlVVJdmVvXqwmZjFs1Lraa8O+9GldNXzG6fnYq3jyr737XO0W5FY7xK98UGQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGMaDXvx28sGSlBhAYQ4DNNqZ3cDjMiiEeFcWzikPScLvIgBsvNvrgrs6nKq6xKA3g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bc005a96-2d80-416d-babd-a0de0a513935",
+                            SecurityStamp = "4ab5a8e0-9095-440e-809a-91e3b1f77da9",
                             TwoFactorEnabled = false,
                             UserName = "Manager1"
                         },
@@ -178,15 +180,15 @@ namespace BoxingClub.DAL.Migrations
                             Id = "2d4254a5-7782-4b9c-a987-42a83d30669a",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "8dd473d5-36c0-44c9-9481-58b07216cb83",
+                            ConcurrencyStamp = "c570483f-e33d-4d89-9a1f-c18a4c11e613",
                             Email = "Manager2@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER2@GMAIL.COM",
                             NormalizedUserName = "MANAGER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFjSFuQG4lYeu2FvYmx7Uvzz79d0fv+o65WNCll4H37XI61IeDEPM3eLx/xCfvqFgw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEo1YcySqIMYyYPr/gflRbBZqjW+lX6F1b4yhpSQU6QgtsvN8dgJ/4iTgENcW2+dAw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "cc96997a-7b0c-41b1-9631-b792603ffbf8",
+                            SecurityStamp = "eec8f42d-eb98-483a-a3be-a6598a0b37ed",
                             TwoFactorEnabled = false,
                             UserName = "Manager2"
                         },
@@ -195,17 +197,17 @@ namespace BoxingClub.DAL.Migrations
                             Id = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(2000, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "3bfc73f9-365a-440e-b510-376cc79a8c57",
+                            ConcurrencyStamp = "c6f808c8-d005-4eac-b4cd-85a127b3806f",
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Vasya",
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA6uHR+sdwAH72WienUNbeCq6w0r9gpLZ9VhytW5kcOcqAC5ylDTaaKTyV38XMx2lA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENtU1L0sLP3fAjJ2OMeki+23+rdM9WMVn0rYMZBbMUV9stkbjP7QZ0Y6g/TxoQ14fQ==",
                             Patronymic = "Konstantinovich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6ccf176f-7d5b-42ec-8459-0ddf42069628",
+                            SecurityStamp = "94a0ed7d-e375-4839-bfd9-3968fe3bf2ca",
                             Surname = "Sychev",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
@@ -215,7 +217,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1995, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "d735217b-9074-498e-acd6-601ffd1a6d8c",
+                            ConcurrencyStamp = "7ed20d48-cefa-4f67-879b-cf3d069597b4",
                             Description = "CMS in boxing",
                             Email = "Coach1@gmail.com",
                             EmailConfirmed = false,
@@ -223,10 +225,10 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Pavel",
                             NormalizedEmail = "COACH1@GMAIL.COM",
                             NormalizedUserName = "COACH1",
-                            PasswordHash = "AQAAAAEAACcQAAAAELKf+HMJIC6Bm81bjftF9pyzZyTHpPPGtFzMa5DZ9xg0TD6/9vGtYxwxf3OfgUPhNQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEODpHE60GCFcqJEFH1h0tSQg4yS8o4NA/qFhK1yI6p3Q6x/K0xP9um/MGeS53/eUvA==",
                             Patronymic = "Nikolayevich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "516bc26d-75af-4286-9f73-48fb90332072",
+                            SecurityStamp = "f8b68f8c-0a6b-4b17-ac58-fd5f23032e4b",
                             Surname = "Dorochin",
                             TwoFactorEnabled = false,
                             UserName = "Coach1"
@@ -236,7 +238,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1991, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "23b504a9-5719-46ba-91d1-0273b23966a1",
+                            ConcurrencyStamp = "7db7937d-d398-4db1-a77b-a10e6ff0ff5f",
                             Description = "CMS in boxing",
                             Email = "Coach2@gmail.com",
                             EmailConfirmed = false,
@@ -244,10 +246,10 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Vlad",
                             NormalizedEmail = "COACH2@GMAIL.COM",
                             NormalizedUserName = "COACH2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAB0t+58WS+Kbs02AQ+g2Cikz/7ZOzaIVR7+FZihnu3TiajDTtSR15X+aQDfjoOgEA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIMJuqu/Z36j+7VEjhCP5g6D/V6B6kWNlNlD0FWn+hFwo77LiGg+5mvuUmkl+R64bw==",
                             Patronymic = "Nikolayevich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fa7c4e55-9ade-4021-84a3-23f23eef8a81",
+                            SecurityStamp = "6bf3ab24-2b30-4a22-9abd-c167d7fcc04e",
                             Surname = "Dorochin",
                             TwoFactorEnabled = false,
                             UserName = "Coach2"
@@ -257,7 +259,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = "a50a06a5-df07-4728-b6a0-93173c2ce4cf",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1970, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "a0224eed-663d-4230-8c28-138801c524ff",
+                            ConcurrencyStamp = "02d55280-9f06-4469-a868-ad462602b45c",
                             Description = "MS in boxing",
                             Email = "Coach3@gmail.com",
                             EmailConfirmed = false,
@@ -265,9 +267,9 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Sergey",
                             NormalizedEmail = "COACH3@GMAIL.COM",
                             NormalizedUserName = "COACH3",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPaV6KtzZii8rOAZr7nP2nz83vyXWu6Vijuuus9sFG1j8nqheU964nyBxJZguIsrlg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOvPsZGY0ntcmNfVJ/GBiMaBMvJHq11UeCOkkxiw94Wquc0/0hxv3fYSbI0+U9B94w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "392899ac-45dd-4c73-9271-55e0812bcfde",
+                            SecurityStamp = "abfebf4a-0042-4337-bdf5-92b20a15a80b",
                             Surname = "Goncharov",
                             TwoFactorEnabled = false,
                             UserName = "Coach3"
@@ -464,9 +466,6 @@ namespace BoxingClub.DAL.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<int>("Height")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -478,9 +477,6 @@ namespace BoxingClub.DAL.Migrations
 
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -496,12 +492,10 @@ namespace BoxingClub.DAL.Migrations
                             BoxingGroupId = 1,
                             DateOfEntry = new DateTime(2015, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 1,
-                            Height = 175,
                             Name = "Vasiliy",
                             NumberOfFights = 3,
                             Patronymic = "Konstantinovich",
-                            Surname = "Sychev",
-                            Weight = 88.0
+                            Surname = "Sychev"
                         },
                         new
                         {
@@ -510,11 +504,9 @@ namespace BoxingClub.DAL.Migrations
                             BoxingGroupId = 2,
                             DateOfEntry = new DateTime(2014, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 1,
-                            Height = 183,
                             Name = "Igor",
                             NumberOfFights = 5,
-                            Surname = "Zhuravlev",
-                            Weight = 70.0
+                            Surname = "Zhuravlev"
                         },
                         new
                         {
@@ -523,11 +515,9 @@ namespace BoxingClub.DAL.Migrations
                             BoxingGroupId = 1,
                             DateOfEntry = new DateTime(2018, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 1,
-                            Height = 170,
                             Name = "Ivan",
                             NumberOfFights = 2,
-                            Surname = "Pavlov",
-                            Weight = 66.0
+                            Surname = "Pavlov"
                         },
                         new
                         {
@@ -535,12 +525,10 @@ namespace BoxingClub.DAL.Migrations
                             BornDate = new DateTime(2000, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfEntry = new DateTime(2013, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 1,
-                            Height = 174,
                             Name = "Andrew",
                             NumberOfFights = 10,
                             Patronymic = "Sergeevich",
-                            Surname = "Solovyev",
-                            Weight = 72.0
+                            Surname = "Solovyev"
                         });
                 });
 

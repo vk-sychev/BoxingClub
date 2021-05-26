@@ -130,7 +130,6 @@ namespace BoxingClub.BLL.Services
             var students = await _database.Students.GetAllAsync();
             
             var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
-            AssignLastMedicalCertificateForStudents(studentDTOs);
 
             var validatedStudents = ValidateStudentsInList(studentDTOs);
             var mappedValidatedStudents = _mapper.Map<List<StudentLiteDTO>>(validatedStudents);
@@ -152,14 +151,6 @@ namespace BoxingClub.BLL.Services
             return new PageModelDTO<StudentLiteDTO>() { Items = takenStudents, Count = count };
         }
 
-
-        private void AssignLastMedicalCertificateForStudents(List<StudentFullDTO> students)
-        {
-            foreach(var student in students)
-            {
-                student.LastMedicalCertificate = student.MedicalCertificates.OrderBy(x => x.DateOfIssue).LastOrDefault();
-            }
-        }
 
         private List<StudentLiteDTO> GetFilteredStudents(ExperienceOrder experienceOrder, MedExaminationOrder medExaminationOrder, List<StudentLiteDTO> students)
         {
@@ -203,8 +194,8 @@ namespace BoxingClub.BLL.Services
         {
             foreach (var student in students)
             {
-                student.Experienced = _fighterExperienceSpecification.IsValid(student);
-                student.IsMedicalCertificateValid = _medicalCertificateSpecification.IsValid(student);
+                student.Experienced = _fighterExperienceSpecification.Validate(student);
+                student.IsMedicalCertificateValid = _medicalCertificateSpecification.Validate(student);
             }
             return students;
         }

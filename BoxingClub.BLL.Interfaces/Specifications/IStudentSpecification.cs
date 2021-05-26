@@ -4,6 +4,6 @@ namespace BoxingClub.BLL.Interfaces.Specifications
 {
     public interface IStudentSpecification
     {
-        bool IsValid(StudentFullDTO student);
+        bool Validate(StudentFullDTO student);
     }
 }

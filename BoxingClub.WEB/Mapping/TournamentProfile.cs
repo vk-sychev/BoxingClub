@@ -13,12 +13,8 @@ namespace BoxingClub.Web.Mapping
     {
         public TournamentProfile()
         {
-            CreateMap<Tournament, TournamentLiteDTO>(MemberList.Destination).ReverseMap();
-            CreateMap<Tournament, TournamentFullDTO>(MemberList.Source).ForSourceMember(src => src.TournamentRequirements, opt => opt.DoNotValidate())
-                                                                       .ReverseMap()
-                                                                       .ForMember(src => src.TournamentRequirements, dest => dest.Ignore());
-            CreateMap<TournamentLiteDTO, TournamentLiteViewModel>().ReverseMap();
-            CreateMap<TournamentFullDTO, TournamentFullViewModel>().ReverseMap();
+            CreateMap<Tournament, TournamentDTO>(MemberList.Destination).ReverseMap();
+            CreateMap<TournamentDTO, TournamentViewModel>().ReverseMap();
         }
     }
 }
