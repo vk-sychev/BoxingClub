@@ -10,21 +10,21 @@ namespace BoxingClub.BLL.Implementation.Specifications
 {
     public class CategorySpecification : ICategorySpecification
     {
-        public bool IsValid(StudentFullDTO student, TournamentSpecification specification)
+        public bool IsValid(StudentFullDTO student, AgeGroup ageGroup)
         {
             //validation
 
-            if (!IsAgeValid(student.GetStudentAge(), specification.AgeCategory.StartAge, specification.AgeCategory.EndAge))
+            if (!IsAgeValid(student.GetStudentAge(), ageGroup.AgeCategory.StartAge, ageGroup.AgeCategory.EndAge))
             {
                 return false;
             }
 
-            if (!IsGenderValid(student.Gender, specification.Gender))
+            if (!IsGenderValid(student.Gender, ageGroup.Gender))
             {
                 return false;
             }
 
-            if (specification.WeightCategories.All(weight => !IsWeightValid(student.Weight, weight.StartWeight, weight.EndWeight)))
+            if (ageGroup.WeightCategories.All(weight => !IsWeightValid(student.Weight, weight.StartWeight, weight.EndWeight)))
             {
                 return false;
             }

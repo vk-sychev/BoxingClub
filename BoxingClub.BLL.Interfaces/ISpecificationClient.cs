@@ -8,6 +8,6 @@ namespace BoxingClub.BLL.Interfaces
 {
     public interface ISpecificationClient
     {
-        public Task<List<TournamentSpecification>> GetTournamentSpecifications(int tournamentId);
+        public Task<TournamentSpecification> GetTournamentSpecifications(int tournamentId);
     }
 }

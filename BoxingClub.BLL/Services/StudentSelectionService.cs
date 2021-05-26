@@ -51,14 +51,24 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"Tournament with id = {tournamentId} isn't found", "");
             }
 
-            var specifications = await _specificationClient.GetTournamentSpecifications(tournamentId);
+            var specification = new TournamentSpecification();
+            
+            try
+            {
+                specification = await _specificationClient.GetTournamentSpecifications(tournamentId);
+            }
+            catch
+            {
+                return null;
+            }
+
             var students = await _database.Students.GetAllAsync();
             var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
 
             var validatedStudents = ValidateStudentsInList(mappedStudents);
             var takenStudents = GetFilteredStudents(tournament.IsMedCertificateRequired, validatedStudents);
 
-            var studentsForTournament = GetStudentsBySpecifications(takenStudents, specifications);
+            var studentsForTournament = GetStudentsBySpecifications(takenStudents, specification);
 
             return studentsForTournament;
         }
@@ -83,18 +93,18 @@ namespace BoxingClub.BLL.Implementation.Services
             return students.Where(x => x.Experienced).ToList();
         }
 
-        private List<StudentFullDTO> GetStudentsBySpecifications(List<StudentFullDTO> students, List<TournamentSpecification> specifications)
+        private List<StudentFullDTO> GetStudentsBySpecifications(List<StudentFullDTO> students, TournamentSpecification specification)
         {
             var takenStudents = new List<StudentFullDTO>();
 
-            foreach (var spec in specifications)
+            foreach (var ageGroup in specification.AgeGroups)
             {
-                /*foreach (var student in students.Where(student => _categorySpecification.IsValid(student, spec)))
+                foreach (var student in students.Where(student => _categorySpecification.IsValid(student, ageGroup)))
                 {
                     takenStudents.Add(student);
-                }*/
-                var validStudents = students.Where(student => _categorySpecification.IsValid(student, spec)); 
-                takenStudents.AddRange(validStudents);
+                }
+/*                var validStudents = students.Where(student => _categorySpecification.IsValid(student, spec)); 
+                takenStudents.AddRange(validStudents);*/
             }
 
             return takenStudents;

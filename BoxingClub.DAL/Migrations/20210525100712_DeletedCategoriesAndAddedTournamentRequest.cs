@@ -7,8 +7,8 @@ namespace BoxingClub.DAL.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey("FK_Students_Categories_CategoryId", "Students");
-            migrationBuilder.DropForeignKey("FK_Students_Tournaments_TournamentId", "Students");
+/*            migrationBuilder.DropForeignKey("FK_Students_Categories_CategoryId", "Students");
+            migrationBuilder.DropForeignKey("FK_Students_Tournaments_TournamentId", "Students");*/
 
             migrationBuilder.DropTable(
                 name: "TournamentRequirements");

@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BoxingClub.Infrastructure.Enums;
 
 namespace BoxingClub.BLL.DomainEntities
 {
     public class TournamentSpecification
     {
-        public AgeCategoryDTO AgeCategory { get; set; }
+        public int TournamentId { get; set; }
 
-        public List<WeightCategoryDTO> WeightCategories { get; set; }
-
-        public Gender Gender { get; set; }
+        public List<AgeGroup> AgeGroups { get; set; }
     }
 }

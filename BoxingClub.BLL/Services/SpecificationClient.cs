@@ -66,33 +66,37 @@ namespace BoxingClub.BLL.Implementation.Services
             new List<WeightCategoryDTO>()
             {_weightCategoryAdultJuniorFemales1, _weightCategoryAdultJuniorFemales2, _weightCategoryAdultJuniorFemales3};
 
-        private static readonly TournamentSpecification _adultMales = new TournamentSpecification()
+        private static readonly AgeGroup _adultMales = new AgeGroup()
         {
             AgeCategory = _adultAgeCategory,
             WeightCategories = _weightCategoriesAdultJuniorMales,
             Gender = Gender.Male
         };
 
-        private static readonly TournamentSpecification _adultFemales = new TournamentSpecification()
+        private static readonly AgeGroup _adultFemales = new AgeGroup()
         {
             AgeCategory = _adultAgeCategory,
             WeightCategories = _weightCategoriesAdultJuniorFemales,
             Gender = Gender.Female
         };
 
-        private static readonly TournamentSpecification _juniorFemales = new TournamentSpecification()
+        private static readonly AgeGroup _juniorFemales = new AgeGroup()
         {
             AgeCategory = _juniorAgeCategory,
             WeightCategories = _weightCategoriesAdultJuniorFemales,
             Gender = Gender.Female
         };
 
-        private static readonly List<TournamentSpecification> _specifications = new List<TournamentSpecification>()
+        private static readonly List<AgeGroup> _specifications = new List<AgeGroup>()
             {_adultMales, _adultFemales, _juniorFemales};
 
-        public Task<List<TournamentSpecification>> GetTournamentSpecifications(int tournamentId)
+        public Task<TournamentSpecification> GetTournamentSpecifications(int tournamentId)
         {
-            return Task.FromResult(_specifications);
+            return Task.FromResult(new TournamentSpecification()
+            {
+                TournamentId = tournamentId,
+                AgeGroups = _specifications
+            });
         }
     }
 }

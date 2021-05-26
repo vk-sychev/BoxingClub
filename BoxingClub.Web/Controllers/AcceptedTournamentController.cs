@@ -28,9 +28,13 @@ namespace BoxingClub.Web.Controllers
 
         [HttpGet]
         [Route("AcceptedTournament/ParticipateInTournament/{tournamentId}")]
-        public async Task<IActionResult> ParticipateInTournament(int? tournamentId)
+        public async Task<IActionResult> ParticipateInTournament(int tournamentId)
         {
             var students = await _studentSelectionService.GetStudentsByTournamentId(tournamentId);
+            if (students == null)
+            {
+                return View("StudentSelectionErrorView");
+            }
             var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
             return View(mappedStudents);
         }
