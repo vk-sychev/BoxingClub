@@ -16,7 +16,7 @@ namespace BoxingClub.BLL.DomainEntities
 
         public int StudentId { get; set; }
 
-        public int StudentWeight { get; set; }
+        public double StudentWeight { get; set; }
 
         public int StudentHeight { get; set; }
     }

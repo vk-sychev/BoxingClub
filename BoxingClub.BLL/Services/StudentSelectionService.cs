@@ -8,6 +8,7 @@ using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Implementation.Specifications;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Interfaces.Specifications;
+using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
@@ -71,6 +72,40 @@ namespace BoxingClub.BLL.Implementation.Services
             var studentsForTournament = GetStudentsBySpecifications(takenStudents, specification);
 
             return studentsForTournament;
+        }
+
+        public async Task CreateTournamentRequest(int tournamentId, List<StudentFullDTO> students)
+        {
+            if (students == null)
+            {
+                throw new ArgumentNullException(nameof(students), "students is null");
+            }
+
+/*            var tournament = await _database.Tournaments.GetByIdAsync(tournamentId);
+
+            if (tournament == null)
+            {
+                throw new NotFoundException($"Tournament with id = {tournamentId} isn't found", "");
+            }*/
+            var tournamentRequests = new List<TournamentRequestDTO>();
+
+            foreach (var student in students)
+            {
+                var tournamentRequest = new TournamentRequestDTO()
+                {
+                    Student = student,
+                    TournamentId = tournamentId,
+                    StudentWeight = student.Weight,
+                    StudentHeight = student.Height
+                };
+
+                tournamentRequests.Add(tournamentRequest);
+            }
+
+            var mappedTournamentRequests = _mapper.Map<List<TournamentRequest>>(tournamentRequests);
+
+            await _database.TournamentRequests.CreateTournamentRequestRangeAsync(mappedTournamentRequests);
+            await _database.SaveAsync();
         }
 
         private List<StudentFullDTO> ValidateStudentsInList(List<StudentFullDTO> students)

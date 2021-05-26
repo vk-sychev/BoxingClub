@@ -9,5 +9,7 @@ namespace BoxingClub.BLL.Interfaces
     public interface IStudentSelectionService
     {
         Task<List<StudentFullDTO>> GetStudentsByTournamentId(int tournamentId);
+
+        Task CreateTournamentRequest(int tournamentId, List<StudentFullDTO> students);
     }
 }

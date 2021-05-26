@@ -12,6 +12,8 @@ namespace BoxingClub.DAL.Interfaces
 
         ITournamentRepository Tournaments { get; }
 
+        ITournamentRequestRepository TournamentRequests { get; }
+
         Task SaveAsync();
     }
 }

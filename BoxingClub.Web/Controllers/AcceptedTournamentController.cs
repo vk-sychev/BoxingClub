@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Web.Models;
 
@@ -36,14 +37,29 @@ namespace BoxingClub.Web.Controllers
                 return View("StudentSelectionErrorView");
             }
             var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
+            ViewBag.tournamentId = tournamentId;
             return View(mappedStudents);
         }
 
-        [HttpDelete("{id}")]
+/*        [HttpDelete("{id}")]
         [Route("AcceptedTournament/DeleteFromTournament/{studentId}")]
         public async Task<IActionResult> DeleteFromTournament(int? studentId, int? tournamentId, List<StudentFullViewModel> students)
         {
             return View();
+        }*/
+
+        [HttpPost]
+        [Route("AcceptedTournament/SaveParticipants")]
+        public async Task<IActionResult> SaveParticipants(int tournamentId, List<StudentFullViewModel> students)
+        {
+            if (ModelState.IsValid)
+            {
+                var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
+                await _studentSelectionService.CreateTournamentRequest(tournamentId, mappedStudents);
+                return RedirectToAction("GetAllTournaments", "Tournament");
+            }
+
+            return RedirectToAction("ParticipateInTournament", "AcceptedTournament", new {tournamentId = tournamentId});
         }
     }
 }

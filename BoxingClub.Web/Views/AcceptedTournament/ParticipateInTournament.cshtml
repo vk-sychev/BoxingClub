@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "ParticipateInTournament";
+    var tournamentId = ViewBag.tournamentId;
 }
 <div class="d-flex justify-content-between mb-2">
     <h1>Participate In Tournament</h1>
@@ -10,14 +11,14 @@
     {
         <div class="d-flex justify-content-between mt-2">
             <div>
-                <a class="btn btn-primary" asp-action="SaveParticipants" asp-controller="AcceptedTournament">Save Request</a>
+                <button type="button" id="submitButton" class="btn btn-primary">Save Request</button>
             </div>
             <div class="ml-5">
                 <a asp-action="GetAllTournaments" class="btn btn-secondary" asp-controller="Tournament">Back to List</a>
             </div>
         </div>
-     }
-    else if(User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName) || User.IsInRole(Constants.CoachRoleName)))
+    }
+    else if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName) || User.IsInRole(Constants.CoachRoleName)))
     {
         <div>
             <a asp-action="GetAllTournaments" class="btn btn-secondary" asp-controller="Tournament">Back to List</a>
@@ -25,104 +26,134 @@
     }
 </div>
 
+<form id="studentsForm" asp-action="SaveParticipants">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Patronymic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BornDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Height)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfFights)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Experienced)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsMedicalCertificateValid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfEntry)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                    <input type="hidden" asp-for="@item.Id" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patronymic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BornDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Height)
+                    <input type="hidden" asp-for="@item.Height" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                    <input type="hidden" asp-for="@item.Weight" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfFights)
+                </td>
+                <td>
+                    @if (item.Experienced)
+                    {
+                        @Html.Raw("Experienced")
+                    }
+                    else
+                    {
+                        @Html.Raw("Newbie")
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @if (item.IsMedicalCertificateValid)
+                    {
+                        @Html.Raw("Success")
+                    }
+                    else
+                    {
+                        @Html.Raw("Fail")
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfEntry)
+                </td>
+                <td>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+                    {
+                        <button type="button" class="btn btn-outline-danger btn-sm px-3 deleteButton">Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <input type="submit" value="Save" class="btn btn-primary"/>
+</form>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Surname)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Patronymic)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BornDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Height)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Weight)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.NumberOfFights)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Experienced)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Gender)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.IsMedicalCertificateValid)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateOfEntry)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Surname)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Patronymic)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BornDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Height)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Weight)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NumberOfFights)
-                        </td>
-                        <td>
-                            @if (item.Experienced)
-                            {
-                                @Html.Raw("Experienced")
-                            }
-                            else
-                            {
-                                @Html.Raw("Newbie")
-                            }
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Gender)
-                        </td>
-                        <td>
-                            @if (item.IsMedicalCertificateValid)
-                            {
-                                @Html.Raw("Success")
-                            }
-                            else
-                            {
-                                @Html.Raw("Fail")
-                            }
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateOfEntry)
-                        </td>
-                        <td>
-                            @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
-                            {
-                                @Html.ActionLink("Delete", "DeleteFromTournament", new { studentId = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3" })
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<script>
+    console.log("ready1");
+    (function($) {
+        console.log("ready2");
+        $(document).ready(function() {
+            console.log("ready3");
+
+            $("#submitButton").click(function(e) {
+                console.log("submit");
+                var data = $("#studentsForm").serialize();
+                console.log(data);
+@*                $("#studentsForm").submit();*@
+            });
+
+            $(".deleteButton").click(function(e) {
+                console.log("delete");
+                var parentTr = $(this).parent().closest("tr");
+                parentTr.remove();
+            });
+        });
+    }(jQuery));
+
+</script>
+
