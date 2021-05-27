@@ -36,18 +36,7 @@ namespace BoxingClub.Web.Controllers
         [Route("AcceptedTournament/ParticipateInTournament/{tournamentId}")]
         public async Task<IActionResult> ParticipateInTournament(int tournamentId)
         {
-            var students = await _studentSelectionService.GetStudentsByTournamentId(tournamentId);
-            if (students == null)
-            {
-                return View("StudentSelectionErrorView");
-            }
-            var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
-            var model = new TournamentRequestViewModel()
-            {
-                TournamentId = tournamentId,
-                Students = mappedStudents
-            };
-
+            var model = await GetPossibleTournamentRequestByTournamentId(tournamentId);
             return View(model);
         }
 
@@ -62,18 +51,7 @@ namespace BoxingClub.Web.Controllers
                 return RedirectToAction("GetAllTournaments", "Tournament");
             }
 
-            var students = await _studentSelectionService.GetStudentsByTournamentId(model.TournamentId);
-            if (students == null)
-            {
-                return View("StudentSelectionErrorView");
-            }
-            var mappedStudentsFromDb = _mapper.Map<List<StudentFullViewModel>>(students);
-
-            var tournamentRequestModel = new TournamentRequestViewModel()
-            {
-                TournamentId = model.TournamentId,
-                Students = mappedStudentsFromDb
-            };
+            var tournamentRequestModel = await GetPossibleTournamentRequestByTournamentId(model.TournamentId);
 
             ModelState.AddModelError("error", "At least one student has to be selected!");
             return View("ParticipateInTournament", tournamentRequestModel);
@@ -94,7 +72,7 @@ namespace BoxingClub.Web.Controllers
             if (ModelState.IsValid)
             {
                 var mappedStudents = _mapper.Map<List<StudentFullDTO>>(model.Students);
-                //await _studentSelectionService.UpdateTournamentRequest(tournamentId, mappedStudents);
+                await _studentSelectionService.UpdateTournamentRequest(model.TournamentId, mappedStudents);
                 return RedirectToAction("GetAcceptedTournaments");
             }
 
@@ -103,9 +81,28 @@ namespace BoxingClub.Web.Controllers
             return View(tournamentRequestModel);
         }
 
+        [HttpDelete("{tournamentId}")]
+        [Route("AcceptedTournament/DeleteAcceptedTournament")]
+        public async Task<IActionResult> DeleteAcceptedTournament(int tournamentId)
+        {
+            await _studentSelectionService.DeleteAcceptedTournament(tournamentId);
+            return RedirectToAction("GetAcceptedTournaments");
+        }
+
         private async Task<TournamentRequestViewModel> GetTournamentRequestByTournamentId(int tournamentId)
         {
             var students = await _studentSelectionService.GetSelectedStudentsByTournamentId(tournamentId);
+            var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
+            return new TournamentRequestViewModel()
+            {
+                TournamentId = tournamentId,
+                Students = mappedStudents
+            };
+        }
+
+        private async Task<TournamentRequestViewModel> GetPossibleTournamentRequestByTournamentId(int tournamentId)
+        {
+            var students = await _studentSelectionService.GetStudentsByTournamentId(tournamentId);
             var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
             return new TournamentRequestViewModel()
             {

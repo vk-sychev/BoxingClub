@@ -7,5 +7,7 @@ namespace BoxingClub.DAL.Interfaces
     public interface ITournamentRepository:IRepository<Tournament>
     {
         Task<List<Tournament>> GetAcceptedTournamentsAsync();
+
+        Task<Tournament> GetTournamentByIdWithStudentsAsync(int id);
     }
 }

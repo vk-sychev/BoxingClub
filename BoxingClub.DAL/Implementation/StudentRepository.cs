@@ -59,10 +59,13 @@ namespace BoxingClub.DAL.Repositories
             _db.Entry(item).State = EntityState.Modified;
         }
 
-        public Task<List<Student>> GetFreeStudentsAsync()
+        public Task<List<Student>> GetStudentsWithTournamentsAsync()
         {
-            return _db.Students.AsQueryable().Where(x => !x.TournamentRequests.Any())
-                .Include(x => x.MedicalCertificates).ToListAsync();
+            return _db.Students.Include(x => x.BoxingGroup)
+                .Include(x => x.MedicalCertificates)
+                .Include(x => x.TournamentRequests)
+                .ThenInclude(x => x.Tournament)
+                .ToListAsync();
         }
 
         public Task<List<Student>> GetStudentsByTournamentIdAsync(int id)

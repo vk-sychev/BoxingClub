@@ -11,7 +11,10 @@ using BoxingClub.BLL.Interfaces.Specifications;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
+using Itenso.TimePeriod;
+using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
+using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
 
 namespace BoxingClub.BLL.Implementation.Services
 {
@@ -40,10 +43,10 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public async Task<List<StudentFullDTO>> GetStudentsByTournamentId(int tournamentId)
         {
-/*            if (tournamentId <= 0)
+            if (tournamentId <= 0)
             {
-                throw new ArgumentNullException(nameof(tournamentId), "Tournament id is null");
-            }*/
+                throw new ArgumentException("tournamentId less or equal 0", nameof(tournamentId));
+            }
 
             var tournament = await _database.Tournaments.GetByIdAsync(tournamentId);
 
@@ -52,18 +55,10 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"Tournament with id = {tournamentId} isn't found", "");
             }
 
-            var specification = new TournamentSpecification();
-            
-            try
-            {
-                specification = await _specificationClient.GetTournamentSpecifications(tournamentId);
-            }
-            catch
-            {
-                return null;
-            }
+            var specification = await GetTournamentSpecification(tournamentId);
 
-            var students = await _database.Students.GetFreeStudentsAsync(); //get free students
+            var students = await _database.Students.GetStudentsWithTournamentsAsync(); //get free students
+            var freeStudents = GetFreeStudents(students, tournament);
             var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
 
             var validatedStudents = ValidateStudentsInList(mappedStudents);
@@ -76,12 +71,11 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public async Task CreateTournamentRequest(int tournamentId, List<StudentFullDTO> students)
         {
-/*            var tournament = await _database.Tournaments.GetByIdAsync(tournamentId);
-
-            if (tournament == null)
+            if (tournamentId <= 0)
             {
-                throw new NotFoundException($"Tournament with id = {tournamentId} isn't found", "");
-            }*/
+                throw new ArgumentException("tournamentId less or equal 0", nameof(tournamentId));
+            }
+
             var tournamentRequests = new List<TournamentRequestDTO>();
 
             foreach (var student in students)
@@ -105,7 +99,12 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public async Task UpdateTournamentRequest(int tournamentId, List<StudentFullDTO> students)
         {
-            var tournament = await _database.Tournaments.GetByIdAsync(tournamentId);
+            if (tournamentId <= 0)
+            {
+                throw new ArgumentException("tournamentId less or equal 0", nameof(tournamentId));
+            }
+
+            var tournament = await _database.Tournaments.GetTournamentByIdWithStudentsAsync(tournamentId);
 
             if (tournament == null)
             {
@@ -113,23 +112,62 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var studentsFromDb = tournament.Students;
+            var mappedStudents = _mapper.Map<List<Student>>(students);
 
-            var deleteStudents = studentsFromDb.Except(students).ToList();
+            var deleteStudents = studentsFromDb.Where(s => !mappedStudents.Any(m => s.Id == m.Id)).ToList();
 
-        }
+            foreach (var student in deleteStudents)
+            {
+                tournament.Students.Remove(student);
+            }
 
-        private List<Student> GetStudentsForDeleting(List<Student> studentsFromDb, List<Student> newStudents)
-        {
-            var deleteStudents = new List<Student>();
+            await _database.SaveAsync();
         }
 
         public async Task<List<StudentFullDTO>> GetSelectedStudentsByTournamentId(int tournamentId)
         {
-            //validation
+            if (tournamentId <= 0)
+            {
+                throw new ArgumentException("tournamentId less or equal 0", nameof(tournamentId));
+            }
 
             var students = await _database.Students.GetStudentsByTournamentIdAsync(tournamentId);
             var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
             return mappedStudents;
+        }
+
+        public async Task DeleteAcceptedTournament(int tournamentId)
+        {
+            if (tournamentId <= 0)
+            {
+                throw new ArgumentException("tournamentId less or equal 0", nameof(tournamentId));
+            }
+
+            var tournament = await _database.Tournaments.GetByIdAsync(tournamentId);
+
+            if (tournament == null)
+            {
+                throw new NotFoundException($"Tournament with id = {tournamentId} isn't found", "");
+            }
+
+            tournament.Students = null;
+            await _database.SaveAsync();
+        }
+
+        private async Task<TournamentSpecification> GetTournamentSpecification(int tournamentId)
+        {
+            var specification = new TournamentSpecification();
+
+            try
+            {
+                specification = await _specificationClient.GetTournamentSpecifications(tournamentId);
+            }
+            catch
+            {
+                throw new InvalidOperationException("An error occurred while processing student selection.");
+            }
+
+            return specification;
         }
 
         private List<StudentFullDTO> ValidateStudentsInList(List<StudentFullDTO> students)
@@ -167,6 +205,26 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             return takenStudents;
+        }
+
+        private List<Student> GetFreeStudents(List<Student> students, Tournament tournament)
+        {
+            var freeStudents = new List<Student>();
+
+            foreach (var student in students)
+            {
+                var lastTournament = student.Tournaments.OrderBy(x => x.Date).LastOrDefault();
+                if (lastTournament == null)
+                {
+                    freeStudents.Add(student);
+                } 
+                else if (new DateDiff(lastTournament.Date, tournament.Date).Days >= 10) //constant!
+                {
+                    freeStudents.Add(student);
+                }
+            }
+
+            return freeStudents;
         }
 
     }

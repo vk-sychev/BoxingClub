@@ -44,8 +44,15 @@ namespace BoxingClub.DAL.Implementation.Implementation
         }
 
         public Task<Tournament> GetByIdAsync(int id)
-        {//убрать студентов
+        {
             return _db.Tournaments.AsQueryable()
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public Task<Tournament> GetTournamentByIdWithStudentsAsync(int id)
+        {
+            return _db.Tournaments.AsQueryable()
+                .Include(x => x.TournamentRequests)
                 .Include(x => x.Students)
                 .SingleOrDefaultAsync(x => x.Id == id);
         }

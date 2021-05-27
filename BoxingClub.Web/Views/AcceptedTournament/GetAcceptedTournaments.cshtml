@@ -4,7 +4,7 @@
     ViewData["Title"] = "GetAllAcceptedTournaments";
 }
 
-<h1>All Accepted Tournaments</h1>
+<h1>Accepted Tournaments</h1>
 
 @if (!Model.Any())
 {
@@ -49,12 +49,19 @@ else
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsMedCertificateRequired)
+                    @if (item.IsMedCertificateRequired)
+                    {
+                        @Html.Raw("Yes")
+                    }
+                    else
+                    {
+                        @Html.Raw("No")
+                    }
                 </td>
                 <td>
                     <div class="d-flex justify-content-end">
                         @Html.ActionLink("Details", "DetailsAcceptedTournament", new {tournamentId = item.Id},  new {@class = "btn btn-outline-primary px-3 btn-sm"})
-                        @Html.ActionLink("Delete", "DeleteAcceptedTournament", new {id = item.Id}, new {@class = "btn btn-outline-danger btn-sm px-3 ml-3"})
+                        @Html.ActionLink("Delete", "DeleteAcceptedTournament", new {tournamentId = item.Id}, new {@class = "btn btn-outline-danger btn-sm px-3 ml-3"})
                     </div>
                 </td>
             </tr>
