@@ -46,6 +46,22 @@ namespace BoxingClub.DAL.EF
                 .IsRequired();
             });
 
+            modelBuilder.Entity<Tournament>()
+                .HasMany(t => t.Students)
+                .WithMany(s => s.Tournaments)
+
+                .UsingEntity<TournamentRequest>(
+                    j => j.HasOne(tr => tr.Student)
+                        .WithMany(s => s.TournamentRequests)
+                        .HasForeignKey(tr => tr.StudentId),
+
+                    j => j.HasOne(tr => tr.Tournament)
+                        .WithMany(t => t.TournamentRequests)
+                        .HasForeignKey(tr => tr.TournamentId),
+
+                    j => j.HasKey(tr => tr.Id)
+                );
+            
             modelBuilder.Seed();
         }
     }

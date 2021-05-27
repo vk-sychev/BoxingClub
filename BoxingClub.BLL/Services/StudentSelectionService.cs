@@ -63,7 +63,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 return null;
             }
 
-            var students = await _database.Students.GetAllAsync(); //get free students
+            var students = await _database.Students.GetFreeStudentsAsync(); //get free students
             var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
 
             var validatedStudents = ValidateStudentsInList(mappedStudents);
@@ -76,11 +76,6 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public async Task CreateTournamentRequest(int tournamentId, List<StudentFullDTO> students)
         {
-            if (students == null)
-            {
-                throw new ArgumentNullException(nameof(students), "students is null");
-            }
-
 /*            var tournament = await _database.Tournaments.GetByIdAsync(tournamentId);
 
             if (tournament == null)
@@ -106,6 +101,35 @@ namespace BoxingClub.BLL.Implementation.Services
 
             await _database.TournamentRequests.CreateTournamentRequestRangeAsync(mappedTournamentRequests);
             await _database.SaveAsync();
+        }
+
+        public async Task UpdateTournamentRequest(int tournamentId, List<StudentFullDTO> students)
+        {
+            var tournament = await _database.Tournaments.GetByIdAsync(tournamentId);
+
+            if (tournament == null)
+            {
+                throw new NotFoundException($"Tournament with id = {tournamentId} isn't found", "");
+            }
+
+            var studentsFromDb = tournament.Students;
+
+            var deleteStudents = studentsFromDb.Except(students).ToList();
+
+        }
+
+        private List<Student> GetStudentsForDeleting(List<Student> studentsFromDb, List<Student> newStudents)
+        {
+            var deleteStudents = new List<Student>();
+        }
+
+        public async Task<List<StudentFullDTO>> GetSelectedStudentsByTournamentId(int tournamentId)
+        {
+            //validation
+
+            var students = await _database.Students.GetStudentsByTournamentIdAsync(tournamentId);
+            var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
+            return mappedStudents;
         }
 
         private List<StudentFullDTO> ValidateStudentsInList(List<StudentFullDTO> students)
@@ -144,5 +168,6 @@ namespace BoxingClub.BLL.Implementation.Services
 
             return takenStudents;
         }
+
     }
 }

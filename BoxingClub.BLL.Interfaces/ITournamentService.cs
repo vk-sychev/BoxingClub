@@ -14,6 +14,8 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<List<TournamentDTO>> GetTournamentsAsync();
 
+        Task<List<TournamentDTO>> GetAcceptedTournamentsAsync();
+
         Task UpdateTournamentAsync(TournamentDTO tournamentDTO);
     }
 }

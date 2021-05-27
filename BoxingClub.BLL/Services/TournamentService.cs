@@ -93,5 +93,12 @@ namespace BoxingClub.BLL.Implementation.Services
             var mappedTournaments = _mapper.Map<List<TournamentDTO>>(tournaments);
             return mappedTournaments;
         }
+
+        public async Task<List<TournamentDTO>> GetAcceptedTournamentsAsync()
+        {
+            var tournaments = await _database.Tournaments.GetAcceptedTournamentsAsync();
+            var mappedTournaments = _mapper.Map<List<TournamentDTO>>(tournaments);
+            return mappedTournaments;
+        }
     }
 }

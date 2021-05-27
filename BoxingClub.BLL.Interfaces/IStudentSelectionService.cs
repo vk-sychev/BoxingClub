@@ -11,5 +11,9 @@ namespace BoxingClub.BLL.Interfaces
         Task<List<StudentFullDTO>> GetStudentsByTournamentId(int tournamentId);
 
         Task CreateTournamentRequest(int tournamentId, List<StudentFullDTO> students);
+
+        Task UpdateTournamentRequest(int tournamentId, List<StudentFullDTO> students);
+
+        Task<List<StudentFullDTO>> GetSelectedStudentsByTournamentId(int tournamentId);
     }
 }

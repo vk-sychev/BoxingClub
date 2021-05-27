@@ -80,12 +80,12 @@ namespace BoxingClub.Web
             services.AddTransient<IStudentWebManager, StudentWebManager>();
             services.AddTransient<IAdministrationWebManager, AdministrationWebManager>();
 
-            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(), 
+            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(),
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile()};
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
             //mapperConfig.AssertConfigurationIsValid();
 
-            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile), 
+            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile),
                                    typeof(UserProfile), typeof(MedicalCertificateProfile), typeof(TournamentProfile));
 
             services.AddMvc(options =>
@@ -106,6 +106,7 @@ namespace BoxingClub.Web
             services.AddTransient<IValidator<BoxingGroupLiteViewModel>, BoxingGroupLiteViewModelValidator>();
             services.AddTransient<IValidator<MedicalCertificateViewModel>, MedicalCertificateViewModelValidator>();
             services.AddTransient<IValidator<TournamentViewModel>, TournamentViewModelValidator>();
+            services.AddTransient<IValidator<TournamentRequestViewModel>, TournamentRequestViewModelValidator>();
 
             services.ConfigureApplicationCookie(options =>
             {

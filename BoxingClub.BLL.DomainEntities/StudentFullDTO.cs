@@ -39,6 +39,8 @@ namespace BoxingClub.BLL.DomainEntities
 
         public bool IsMedicalCertificateValid { get; set; }
 
+        public bool Tournament
+
         public int GetStudentTrainingPeriod()
         {
             return new DateDiff(DateOfEntry, DateTime.Today).Years;

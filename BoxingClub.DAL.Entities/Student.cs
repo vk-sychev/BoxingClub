@@ -33,5 +33,7 @@ namespace BoxingClub.DAL.Entities
         public List<MedicalCertificate> MedicalCertificates { get; set; }
 
         public List<TournamentRequest> TournamentRequests { get; set; } = new List<TournamentRequest>();
+
+        public List<Tournament> Tournaments { get; set; } = new List<Tournament>();
     }
 }

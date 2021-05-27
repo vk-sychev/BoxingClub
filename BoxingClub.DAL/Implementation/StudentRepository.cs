@@ -46,8 +46,8 @@ namespace BoxingClub.DAL.Repositories
 
         public Task<List<Student>> GetAllAsync()
         {
-            var res = _db.Students.Include(x => x.BoxingGroup).Include(x => x.MedicalCertificates).ToListAsync();
-            return res;
+            return _db.Students.Include(x => x.BoxingGroup)
+                               .Include(x => x.MedicalCertificates).ToListAsync();
         }
 
         public void Update(Student item)
@@ -57,6 +57,19 @@ namespace BoxingClub.DAL.Repositories
                 throw new ArgumentNullException(nameof(item), "Student is null");
             }
             _db.Entry(item).State = EntityState.Modified;
+        }
+
+        public Task<List<Student>> GetFreeStudentsAsync()
+        {
+            return _db.Students.AsQueryable().Where(x => !x.TournamentRequests.Any())
+                .Include(x => x.MedicalCertificates).ToListAsync();
+        }
+
+        public Task<List<Student>> GetStudentsByTournamentIdAsync(int id)
+        {
+            return _db.Students.AsQueryable().Where(x => x.Tournaments.FirstOrDefault(x => x.Id == id) != null)
+                .Include(x => x.MedicalCertificates)
+                .ToListAsync();
         }
     }
 }

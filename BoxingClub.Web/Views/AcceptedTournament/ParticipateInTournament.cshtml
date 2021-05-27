@@ -1,12 +1,18 @@
 ﻿@using BoxingClub.Infrastructure.Constants
-@model List<BoxingClub.Web.Models.StudentFullViewModel>
+@model BoxingClub.Web.Models.TournamentRequestViewModel
 
 @{
     ViewData["Title"] = "ParticipateInTournament";
     var tournamentId = ViewBag.tournamentId;
 }
+
+<script src="~/js/tournament.js"></script>
+
 <div class="d-flex justify-content-between mb-2">
-    <h1>Participate In Tournament</h1>
+    <div>
+        <h1>Participate In Tournament</h1>
+        <h5 class="text-danger">@Html.ValidationMessage("error")</h5>
+    </div>
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
         <div class="d-flex justify-content-between mt-2">
@@ -26,136 +32,126 @@
     }
 </div>
 
-<form id="studentsForm" asp-action="SaveParticipants">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Surname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Patronymic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().BornDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Height)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Weight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().NumberOfFights)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Experienced)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().IsMedicalCertificateValid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().DateOfEntry)
-            </th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @for(var i = 0; i<@Model.Count(); i++)
-        {
+@if (!Model.Students.Any())
+{
+    <h5>There are no students to select!</h5>
+}
+else
+{
+    <form id="studentsForm" asp-action="SaveParticipants">
+        <input type="hidden" asp-for="@tournamentId /">
+        <table class="table">
+            <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].Name)
-                    <input type="hidden" asp-for="@tournamentId/">
-                    <input type="hidden" asp-for="@Model[i]" />
-                    <input type="hidden" asp-for="@Model[i].Id" />
-                    <input type="hidden" asp-for="@Model[i].Surname" />
-                    <input type="hidden" asp-for="@Model[i].Name" />
-                    <input type="hidden" asp-for="@Model[i].Patronymic" />
-                    <input type="hidden" asp-for="@Model[i].BornDate" />
-                    <input type="hidden" asp-for="@Model[i].Height" />
-                    <input type="hidden" asp-for="@Model[i].Weight" />
-                    <input type="hidden" asp-for="@Model[i].NumberOfFights" />
-                    <input type="hidden" asp-for="@Model[i].Gender" />
-                    <input type="hidden" asp-for="@Model[i].DateOfEntry" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].Surname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].Patronymic)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].BornDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].Height)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].Weight)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].NumberOfFights)
-                </td>
-                <td>
-                    @if (Model[i].Experienced)
-                    {
-                        @Html.Raw("Experienced")
-                    }
-                    else
-                    {
-                        @Html.Raw("Newbie")
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].Gender)
-                </td>
-                <td>
-                    @if (Model[i].IsMedicalCertificateValid)
-                    {
-                        @Html.Raw("Success")
-                    }
-                    else
-                    {
-                        @Html.Raw("Fail")
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].DateOfEntry)
-                </td>
-                <td>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
-                    {
-                        <button type="button" class="btn btn-outline-danger btn-sm px-3 deleteButton">Delete</button>
-                    }
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Surname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Patronymic)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().BornDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Height)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Weight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().NumberOfFights)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Experienced)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().IsMedicalCertificateValid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().DateOfEntry)
+                </th>
+                <th></th>
             </tr>
-        }
-        </tbody>
-    </table>
-</form>
+            </thead>
+            <tbody>
+            @for (var i = 0; i < @Model.Students.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Students[i].Name)
+                        <input type="hidden" asp-for="@Model.Students[i]"/>
+                        <input type="hidden" asp-for="@Model.Students[i].Id"/>
+                        <input type="hidden" asp-for="@Model.Students[i].Surname"/>
+                        <input type="hidden" asp-for="@Model.Students[i].Name"/>
+                        <input type="hidden" asp-for="@Model.Students[i].Patronymic"/>
+                        <input type="hidden" asp-for="@Model.Students[i].BornDate"/>
+                        <input type="hidden" asp-for="@Model.Students[i].Height"/>
+                        <input type="hidden" asp-for="@Model.Students[i].Weight"/>
+                        <input type="hidden" asp-for="@Model.Students[i].NumberOfFights"/>
+                        <input type="hidden" asp-for="@Model.Students[i].Gender"/>
+                        <input type="hidden" asp-for="@Model.Students[i].DateOfEntry"/>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Students[i].Surname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Students[i].Patronymic)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Students[i].BornDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Students[i].Height)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Students[i].Weight)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Students[i].NumberOfFights)
+                    </td>
+                    <td>
+                        @if (Model.Students[i].Experienced)
+                        {
+                            @Html.Raw("Experienced")
+                        }
+                        else
+                        {
+                            @Html.Raw("Newbie")
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Students[i].Gender)
+                    </td>
+                    <td>
+                        @if (Model.Students[i].IsMedicalCertificateValid)
+                        {
+                            @Html.Raw("Success")
+                        }
+                        else
+                        {
+                            @Html.Raw("Fail")
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Students[i].DateOfEntry)
+                    </td>
+                    <td>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+                        {
+                            <button type="button" class="btn btn-outline-danger btn-sm px-3 deleteButton">Delete</button>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </form>
+}
 
-<script>
-    (function($) {
-        $(document).ready(function() {
-            $("#submitButton").click(function() {
-                var data = $("#studentsForm").serialize();
-                console.log(data);
-                $("#studentsForm").submit();
-            });
-
-            $(".deleteButton").click(function() {
-                var parentTr = $(this).parent().closest("tr");
-                parentTr.remove();
-            });
-        });
-    }(jQuery));
-
-</script>
 
