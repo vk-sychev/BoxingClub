@@ -63,7 +63,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 return null;
             }
 
-            var students = await _database.Students.GetAllAsync();
+            var students = await _database.Students.GetAllAsync(); //get free students
             var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
 
             var validatedStudents = ValidateStudentsInList(mappedStudents);
@@ -93,7 +93,7 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 var tournamentRequest = new TournamentRequestDTO()
                 {
-                    Student = student,
+                    StudentId = student.Id,
                     TournamentId = tournamentId,
                     StudentWeight = student.Weight,
                     StudentHeight = student.Height

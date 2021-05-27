@@ -1,5 +1,5 @@
 ﻿@using BoxingClub.Infrastructure.Constants
-@model IEnumerable<BoxingClub.Web.Models.StudentFullViewModel>
+@model List<BoxingClub.Web.Models.StudentFullViewModel>
 
 @{
     ViewData["Title"] = "ParticipateInTournament";
@@ -31,71 +31,80 @@
         <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.First().Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Surname)
+                @Html.DisplayNameFor(model => model.First().Surname)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Patronymic)
+                @Html.DisplayNameFor(model => model.First().Patronymic)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BornDate)
+                @Html.DisplayNameFor(model => model.First().BornDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Height)
+                @Html.DisplayNameFor(model => model.First().Height)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weight)
+                @Html.DisplayNameFor(model => model.First().Weight)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberOfFights)
+                @Html.DisplayNameFor(model => model.First().NumberOfFights)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Experienced)
+                @Html.DisplayNameFor(model => model.First().Experienced)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gender)
+                @Html.DisplayNameFor(model => model.First().Gender)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsMedicalCertificateValid)
+                @Html.DisplayNameFor(model => model.First().IsMedicalCertificateValid)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfEntry)
+                @Html.DisplayNameFor(model => model.First().DateOfEntry)
             </th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model)
+        @for(var i = 0; i<@Model.Count(); i++)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                    <input type="hidden" asp-for="@item.Id" />
+                    @Html.DisplayFor(modelItem => Model[i].Name)
+                    <input type="hidden" asp-for="@tournamentId/">
+                    <input type="hidden" asp-for="@Model[i]" />
+                    <input type="hidden" asp-for="@Model[i].Id" />
+                    <input type="hidden" asp-for="@Model[i].Surname" />
+                    <input type="hidden" asp-for="@Model[i].Name" />
+                    <input type="hidden" asp-for="@Model[i].Patronymic" />
+                    <input type="hidden" asp-for="@Model[i].BornDate" />
+                    <input type="hidden" asp-for="@Model[i].Height" />
+                    <input type="hidden" asp-for="@Model[i].Weight" />
+                    <input type="hidden" asp-for="@Model[i].NumberOfFights" />
+                    <input type="hidden" asp-for="@Model[i].Gender" />
+                    <input type="hidden" asp-for="@Model[i].DateOfEntry" />
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Surname)
+                    @Html.DisplayFor(modelItem => Model[i].Surname)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Patronymic)
+                    @Html.DisplayFor(modelItem => Model[i].Patronymic)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.BornDate)
+                    @Html.DisplayFor(modelItem => Model[i].BornDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Height)
-                    <input type="hidden" asp-for="@item.Height" />
+                    @Html.DisplayFor(modelItem => Model[i].Height)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Weight)
-                    <input type="hidden" asp-for="@item.Weight" />
+                    @Html.DisplayFor(modelItem => Model[i].Weight)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.NumberOfFights)
+                    @Html.DisplayFor(modelItem => Model[i].NumberOfFights)
                 </td>
                 <td>
-                    @if (item.Experienced)
+                    @if (Model[i].Experienced)
                     {
                         @Html.Raw("Experienced")
                     }
@@ -105,10 +114,10 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Gender)
+                    @Html.DisplayFor(modelItem => Model[i].Gender)
                 </td>
                 <td>
-                    @if (item.IsMedicalCertificateValid)
+                    @if (Model[i].IsMedicalCertificateValid)
                     {
                         @Html.Raw("Success")
                     }
@@ -118,7 +127,7 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateOfEntry)
+                    @Html.DisplayFor(modelItem => Model[i].DateOfEntry)
                 </td>
                 <td>
                     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
@@ -130,25 +139,18 @@
         }
         </tbody>
     </table>
-    <input type="submit" value="Save" class="btn btn-primary"/>
 </form>
 
 <script>
-    console.log("ready1");
     (function($) {
-        console.log("ready2");
         $(document).ready(function() {
-            console.log("ready3");
-
-            $("#submitButton").click(function(e) {
-                console.log("submit");
+            $("#submitButton").click(function() {
                 var data = $("#studentsForm").serialize();
                 console.log(data);
-@*                $("#studentsForm").submit();*@
+                $("#studentsForm").submit();
             });
 
-            $(".deleteButton").click(function(e) {
-                console.log("delete");
+            $(".deleteButton").click(function() {
                 var parentTr = $(this).parent().closest("tr");
                 parentTr.remove();
             });

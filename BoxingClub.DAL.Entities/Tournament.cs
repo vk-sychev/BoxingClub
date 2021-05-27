@@ -18,7 +18,5 @@ namespace BoxingClub.DAL.Entities
         public bool IsMedCertificateRequired { get; set; }
 
         public List<TournamentRequest> TournamentRequests { get; set; } = new List<TournamentRequest>();
-
-        public List<Student> Students { get; set; } = new List<Student>();
     }
 }

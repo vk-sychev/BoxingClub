@@ -46,7 +46,8 @@ namespace BoxingClub.DAL.Repositories
 
         public Task<List<Student>> GetAllAsync()
         {
-            return _db.Students.Include(x => x.BoxingGroup).Include(x => x.MedicalCertificates).ToListAsync();
+            var res = _db.Students.Include(x => x.BoxingGroup).Include(x => x.MedicalCertificates).ToListAsync();
+            return res;
         }
 
         public void Update(Student item)

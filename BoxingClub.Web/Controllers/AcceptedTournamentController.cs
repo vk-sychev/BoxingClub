@@ -41,13 +41,6 @@ namespace BoxingClub.Web.Controllers
             return View(mappedStudents);
         }
 
-/*        [HttpDelete("{id}")]
-        [Route("AcceptedTournament/DeleteFromTournament/{studentId}")]
-        public async Task<IActionResult> DeleteFromTournament(int? studentId, int? tournamentId, List<StudentFullViewModel> students)
-        {
-            return View();
-        }*/
-
         [HttpPost]
         [Route("AcceptedTournament/SaveParticipants")]
         public async Task<IActionResult> SaveParticipants(int tournamentId, List<StudentFullViewModel> students)
