@@ -5,6 +5,7 @@ using System.Text;
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces.Specifications;
 using BoxingClub.Infrastructure.Enums;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.Implementation.Specifications
 {
@@ -12,7 +13,15 @@ namespace BoxingClub.BLL.Implementation.Specifications
     {
         public bool IsValid(StudentFullDTO student, AgeGroup ageGroup)
         {
-            //validation
+            if (student == null)
+            {
+                throw new ArgumentNullException(nameof(student), "student is null");
+            }
+
+            if (ageGroup == null)
+            {
+                throw new ArgumentNullException(nameof(ageGroup), "ageGroup is null");
+            }
 
             if (!IsAgeValid(student.GetStudentAge(), ageGroup.AgeCategory.StartAge, ageGroup.AgeCategory.EndAge))
             {

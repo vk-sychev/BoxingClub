@@ -7,6 +7,7 @@ using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Web.Models;
+using BoxingClub.Web.Helpers;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -53,7 +54,7 @@ namespace BoxingClub.Web.Controllers
 
             var tournamentRequestModel = await GetPossibleTournamentRequestByTournamentId(model.TournamentId);
 
-            ModelState.AddModelError("error", "At least one student has to be selected!");
+            ModelState.AddModelError("error", ErrorConstants.ValidationErrorMessage);
             return View("ParticipateInTournament", tournamentRequestModel);
         }
 
@@ -76,7 +77,7 @@ namespace BoxingClub.Web.Controllers
                 return RedirectToAction("GetAcceptedTournaments");
             }
 
-            ModelState.AddModelError("error", "At least one student has to be selected!");
+            ModelState.AddModelError("error", ErrorConstants.ValidationErrorMessage);
             var tournamentRequestModel = await GetTournamentRequestByTournamentId(model.TournamentId);
             return View(tournamentRequestModel);
         }

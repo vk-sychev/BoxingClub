@@ -38,15 +38,32 @@ namespace BoxingClub.BLL.DomainEntities
         public MedicalCertificateDTO LastMedicalCertificate { get; set; }
 
         public bool IsMedicalCertificateValid { get; set; }
+
+        public List<TournamentDTO> Tournaments { get; set; } = new List<TournamentDTO>();
         
         public int GetStudentTrainingPeriod()
         {
             return new DateDiff(DateOfEntry, DateTime.Today).Years;
         }
 
+        public int GetStudentTrainingPeriod(DateTime tournamentDate)
+        {
+            return new DateDiff(DateOfEntry, tournamentDate).Years;
+        }
+
         public int GetStudentAge()
         {
             return new DateDiff(BornDate, DateTime.Today).Years;
+        }
+
+        public int GetMedicalCertificateDuration()
+        {
+            return new DateDiff(LastMedicalCertificate.DateOfIssue, DateTime.Today).Months;
+        }
+
+        public int GetMedicalCertificateDuration(DateTime tournamentDate)
+        {
+            return new DateDiff(LastMedicalCertificate.DateOfIssue, tournamentDate).Months;
         }
     }
 }
