@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BoxingClub.BLL.Implementation.HttpSpecificationClient.Models
 {
-    class AgeGroupModelFromServer
+    public class AgeGroupModelFromServer
     {
         public int Id { get; set; }
 

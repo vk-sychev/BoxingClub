@@ -170,10 +170,10 @@ namespace BoxingClub.BLL.Implementation.Services
             }
             catch
             {
-                throw new InvalidOperationException("An error occurred while processing student selection.");
+                throw new InvalidOperationException("An error occurred while processing student selection.");//логирование
             }
 
-            return specification;
+            return specification;//null
         }
 
         private List<StudentFullDTO> ValidateStudentsInList(List<StudentFullDTO> students, Tournament tournament)

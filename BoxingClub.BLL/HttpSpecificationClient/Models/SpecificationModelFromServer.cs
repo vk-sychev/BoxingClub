@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BoxingClub.BLL.Implementation.HttpSpecificationClient.Models
 {
-    class SpecificationModelFromServer
+    public class SpecificationModelFromServer
     {
         public int TournamentId { get; set; }
 
