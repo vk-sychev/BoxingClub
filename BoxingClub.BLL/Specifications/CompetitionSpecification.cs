@@ -28,17 +28,21 @@ namespace BoxingClub.BLL.Implementation.Specifications
             }
 
 
-            var lastTournament = student.Tournaments.OrderBy(x => x.Date).LastOrDefault();
-            if (lastTournament == null)
-            {
-                return true;
-            }
-            else if (new DateDiff(lastTournament.Date, tournament.Date).Days >= _duration)
+            //var lastTournament = student.Tournaments.OrderBy(x => x.Date).LastOrDefault();
+            if (!student.Tournaments.Any())
             {
                 return true;
             }
 
-            return false;
+            foreach (var tour in student.Tournaments)
+            {
+                if (!(Math.Abs(new DateDiff(tour.Date, tournament.Date).Days) >= _duration))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public bool Validate(StudentFullDTO student)

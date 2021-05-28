@@ -26,8 +26,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http;
 using System;
 using System.Collections.Generic;
+using BoxingClub.BLL.Implementation.HttpSpecificationClient;
+using Polly;
+using Polly.Extensions.Http;
+using Polly.Registry;
 
 namespace BoxingClub.Web
 {
@@ -79,6 +84,14 @@ namespace BoxingClub.Web
             services.AddTransient<IHomeWebManager, HomeWebManager>();
             services.AddTransient<IStudentWebManager, StudentWebManager>();
             services.AddTransient<IAdministrationWebManager, AdministrationWebManager>();
+            services.AddHttpClient<ISpecificationClient, SpecificationHttpClient>(client =>
+                client.BaseAddress = new Uri("http://84.201.37.223:5005/api/specification/tournament/")
+            ).AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
+            {
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(3),
+                TimeSpan.FromSeconds(10)
+            }));
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(),
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile()};
