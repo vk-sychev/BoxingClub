@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
@@ -11,7 +9,6 @@ using BoxingClub.BLL.Interfaces.Specifications;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
-using Itenso.TimePeriod;
 using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
@@ -59,7 +56,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var specification = await _specificationClient.GetTournamentSpecifications(tournamentId);
             if (specification == null)
             {
-                return null;
+                throw new InvalidOperationException("Error occurred while selecting students for tournament");
             }
 
             var students = await _database.Students.GetStudentsWithTournamentsAsync();
@@ -101,7 +98,7 @@ namespace BoxingClub.BLL.Implementation.Services
 
             if (tournament == null)
             {
-                throw new NotFoundException($"Tournament with id = {tournamentId} isn't found", "");
+                throw new InvalidOperationException($"Tournament with id = {tournamentId} isn't found");
             }
 
             var deleteStudents = GetStudentsForDeleting(tournament.Students, students);
@@ -137,7 +134,7 @@ namespace BoxingClub.BLL.Implementation.Services
 
             if (tournament == null)
             {
-                throw new NotFoundException($"Tournament with id = {tournamentId} isn't found", "");
+                throw new InvalidOperationException($"Tournament with id = {tournamentId} isn't found");
             }
 
             tournament.Students = null;

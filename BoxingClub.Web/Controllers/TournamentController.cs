@@ -40,7 +40,7 @@ namespace BoxingClub.Web.Controllers
         [HttpGet]
         [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Tournament/EditTournament/{id}")]
-        public async Task<IActionResult> EditTournament(int? id)
+        public async Task<IActionResult> EditTournament(int id)
         {
             var tournament = await _tournamentService.GetTournamentByIdAsync(id);
             var mappedTournament = _mapper.Map<TournamentViewModel>(tournament);
@@ -88,7 +88,7 @@ namespace BoxingClub.Web.Controllers
         [Route("Tournament/DeleteTournament/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTournament(int? id)
+        public async Task<IActionResult> DeleteTournament(int id)
         {
             await _tournamentService.DeleteTournamentAsync(id);
             return RedirectToAction("GetAllTournaments", "Tournament");
@@ -97,7 +97,7 @@ namespace BoxingClub.Web.Controllers
         [Route("Tournament/DetailsTournament/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         [HttpGet]
-        public async Task<IActionResult> DetailsTournament(int? id)
+        public async Task<IActionResult> DetailsTournament(int id)
         {
             var tournament = await _tournamentService.GetTournamentByIdAsync(id);
             var mappedTournament = _mapper.Map<TournamentViewModel>(tournament);

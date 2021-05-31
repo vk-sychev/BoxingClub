@@ -8,9 +8,9 @@ namespace BoxingClub.BLL.Interfaces
     {
         Task CreateTournamentAsync(TournamentDTO tournamentDTO);
 
-        Task DeleteTournamentAsync(int? id);
+        Task DeleteTournamentAsync(int id);
 
-        Task<TournamentDTO> GetTournamentByIdAsync(int? id);
+        Task<TournamentDTO> GetTournamentByIdAsync(int id);
 
         Task<List<TournamentDTO>> GetTournamentsAsync();
 

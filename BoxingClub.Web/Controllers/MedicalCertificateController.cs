@@ -31,7 +31,7 @@ namespace BoxingClub.Web.Controllers
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [Route("MedicalCertificate/EditMedicalCertificate/{id}")]
         [HttpGet]
-        public async Task<IActionResult> EditMedicalCertificate(int? id)
+        public async Task<IActionResult> EditMedicalCertificate(int id)
         {
             var medicalCertificateDTO = await _medicalCertificateService.GetMedicalCertificateByIdAsync(id);
             var medicalCertificate = _mapper.Map<MedicalCertificateViewModel>(medicalCertificateDTO);
@@ -56,7 +56,7 @@ namespace BoxingClub.Web.Controllers
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [Route("MedicalCertificate/CreateMedicalCertificate")]
         [HttpGet]
-        public IActionResult CreateMedicalCertificate(int? id)
+        public IActionResult CreateMedicalCertificate(int id)
         {
             ViewBag.studentId = id;
             return View();
@@ -79,7 +79,7 @@ namespace BoxingClub.Web.Controllers
         [HttpDelete("{id}")]
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [Route("MedicalCertificate/DeleteMedicalCertificate/{id}")]
-        public async Task<IActionResult> DeleteMedicalCertificate(int? id, int? studentId)
+        public async Task<IActionResult> DeleteMedicalCertificate(int id, int studentId)
         {
             await _medicalCertificateService.DeleteMedicalCertificateAsync(id);
             return RedirectToAction("DetailsStudent", "Student", new { id = studentId });

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.Implementation.Services
@@ -38,36 +39,36 @@ namespace BoxingClub.BLL.Implementation.Services
             await _database.SaveAsync();
         }
 
-        public async Task DeleteTournamentAsync(int? id)
+        public async Task DeleteTournamentAsync(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                throw new ArgumentNullException(nameof(id), "Tournaments's id is null");
+                throw new ArgumentException("Tournament's id less or equal 0", nameof(id));
             }
 
-            var tournament = await _database.Tournaments.GetByIdAsync(id.Value);
+            var tournament = await _database.Tournaments.GetByIdAsync(id);
 
             if (tournament == null)
             {
-                throw new NotFoundException($"Tournament with id = {id.Value} isn't found", "");
+                throw new NotFoundException($"Tournament with id = {id} isn't found", "");
             }
 
             _database.Tournaments.Delete(tournament);
             await _database.SaveAsync();
         }
 
-        public async Task<TournamentDTO> GetTournamentByIdAsync(int? id)
+        public async Task<TournamentDTO> GetTournamentByIdAsync(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                throw new ArgumentNullException(nameof(id), "Tournaments's id is null");
+                throw new ArgumentException("Tournament's id less or equal 0", nameof(id));
             }
 
-            var tournament = await _database.Tournaments.GetByIdAsync(id.Value);
+            var tournament = await _database.Tournaments.GetByIdAsync(id);
 
             if (tournament == null)
             {
-                throw new NotFoundException($"Tournament with id = {id.Value} isn't found", "");
+                throw new NotFoundException($"Tournament with id = {id} isn't found", "");
             }
 
             var mappedTournament = _mapper.Map<TournamentDTO>(tournament);

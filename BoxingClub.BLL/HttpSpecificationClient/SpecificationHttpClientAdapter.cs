@@ -36,7 +36,7 @@ namespace BoxingClub.BLL.Implementation.HttpSpecificationClient
             }
             catch
             {
-                _logger.LogError("Error occured while attempting to connect to spec server");
+                _logger.LogError("Error occurred while attempting to connect to spec server");
                 return null;
             }
 

@@ -105,10 +105,6 @@ namespace BoxingClub.Web.Controllers
         private async Task<TournamentRequestViewModel> GetPossibleTournamentRequestByTournamentId(int tournamentId)
         {
             var students = await _studentSelectionService.GetStudentsByTournamentId(tournamentId);
-            if (students == null)
-            {
-                throw new InvalidOperationException("Error occurred while selecting students for tournament");
-            }
             var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
             return new TournamentRequestViewModel()
             {

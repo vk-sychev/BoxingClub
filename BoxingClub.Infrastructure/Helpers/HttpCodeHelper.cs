@@ -6,7 +6,7 @@ using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullE
 
 namespace BoxingClub.Infrastructure.HttpSwitcher
 {
-    static public class HttpCodeHelper
+    public static class HttpCodeHelper
     {
         public static ErrorViewModel GetSwitchHttpCode(Type exceptionType)
         {
