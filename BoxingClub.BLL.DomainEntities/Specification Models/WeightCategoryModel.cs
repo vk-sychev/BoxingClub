@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoxingClub.BLL.Implementation.HttpSpecificationClient.Models
+namespace BoxingClub.BLL.DomainEntities.Models
 {
-    public class WeightCategoryModelFromServer
+    public class WeightCategoryModel
     {
         public int Id { get; set; }
 

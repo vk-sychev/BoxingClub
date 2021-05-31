@@ -19,34 +19,29 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Http;
 using System;
 using System.Collections.Generic;
 using BoxingClub.BLL.Implementation.HttpSpecificationClient;
-using BoxingClub.Web.Helpers;
-using Microsoft.Extensions.Logging;
-using NLog.Web;
-using Polly;
-using Polly.Extensions.Http;
-using Polly.Registry;
+using BoxingClub.Web.Policies;
+using BoxingClub.BLL.Interfaces.HttpSpecificationClient;
+using BoxingClub.BLL.Implementation.HttpSpecificationClient.Helpers;
 
 namespace BoxingClub.Web
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration;            
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -81,31 +76,32 @@ namespace BoxingClub.Web
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
             services.AddTransient<ITournamentService, TournamentService>();
-            services.AddTransient<ISpecificationClient, SpecificationClient>();
+/*            services.AddTransient<ISpecificationClient, SpecificationClient>();*/
             services.AddTransient<IStudentSelectionService, StudentSelectionService>();
 
             services.AddTransient<IHomeWebManager, HomeWebManager>();
             services.AddTransient<IStudentWebManager, StudentWebManager>();
             services.AddTransient<IAdministrationWebManager, AdministrationWebManager>();
-            services.AddHttpClient<ISpecificationClient, SpecificationHttpClient>(client =>
-                client.BaseAddress = new Uri("http://84.201.137.223:5005/api/specification/tournament/")
-            )
-                .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
+
+            services.AddTransient<ISpecificationClient, SpecificationHttpClientAdapter>();
+            services.AddHttpClient<ISpecificationHttpClient, SpecificationHttpClient>(client =>
             {
-                TimeSpan.FromSeconds(1),
-                TimeSpan.FromSeconds(3),
-                TimeSpan.FromSeconds(10)
-            }));
+                client.BaseAddress = new Uri(Configuration.GetSection("SpecServer").GetSection("Uri").Value);
+                client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("SpecServer").GetSection("HttpClientTimeout").Value));
+            }).AddPolicyHandler(SpecServerPolicy.GetWaitAndRetryPolicy())
+            .AddPolicyHandler(SpecServerPolicy.GetTimeoutPolicy());
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(),
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
-                                                       new TournamentRequestProfile()
+                                                       new TournamentRequestProfile(), new AgeCategoryProfile(), new AgeGroupProfile(),
+                                                       new WeightCategoryProfile(), new TournamentSpecificationProfile()
             };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
-            //mapperConfig.AssertConfigurationIsValid();
+            mapperConfig.AssertConfigurationIsValid();
 
             services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile),
-                                   typeof(UserProfile), typeof(MedicalCertificateProfile), typeof(TournamentProfile), typeof(TournamentSpecificationProfile));
+                                   typeof(UserProfile), typeof(MedicalCertificateProfile), typeof(TournamentProfile), typeof(TournamentSpecificationProfile),
+                                   typeof(AgeCategoryProfile), typeof(AgeGroupProfile), typeof(WeightCategoryProfile), typeof(TournamentSpecificationProfile));
 
             services.AddMvc(options =>
             {

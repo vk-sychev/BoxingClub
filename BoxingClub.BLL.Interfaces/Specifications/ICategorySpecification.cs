@@ -7,6 +7,6 @@ namespace BoxingClub.BLL.Interfaces.Specifications
 {
     public interface ICategorySpecification
     {
-        bool IsValid(StudentFullDTO student, AgeGroup specification);
+        bool IsValid(StudentFullDTO student, AgeGroupDTO specification);
     }
 }

@@ -66,28 +66,28 @@ namespace BoxingClub.BLL.Implementation.Services
             new List<WeightCategoryDTO>()
             {_weightCategoryAdultJuniorFemales1, _weightCategoryAdultJuniorFemales2, _weightCategoryAdultJuniorFemales3};
 
-        private static readonly AgeGroup _adultMales = new AgeGroup()
+        private static readonly AgeGroupDTO _adultMales = new AgeGroupDTO()
         {
             AgeCategory = _adultAgeCategory,
             WeightCategories = _weightCategoriesAdultJuniorMales,
             Gender = Gender.Male
         };
 
-        private static readonly AgeGroup _adultFemales = new AgeGroup()
+        private static readonly AgeGroupDTO _adultFemales = new AgeGroupDTO()
         {
             AgeCategory = _adultAgeCategory,
             WeightCategories = _weightCategoriesAdultJuniorFemales,
             Gender = Gender.Female
         };
 
-        private static readonly AgeGroup _juniorFemales = new AgeGroup()
+        private static readonly AgeGroupDTO _juniorFemales = new AgeGroupDTO()
         {
             AgeCategory = _juniorAgeCategory,
             WeightCategories = _weightCategoriesAdultJuniorFemales,
             Gender = Gender.Female
         };
 
-        private static readonly List<AgeGroup> _specifications = new List<AgeGroup>()
+        private static readonly List<AgeGroupDTO> _specifications = new List<AgeGroupDTO>()
             {_adultMales, _adultFemales, _juniorFemales};
 
         public Task<TournamentSpecification> GetTournamentSpecifications(int tournamentId)

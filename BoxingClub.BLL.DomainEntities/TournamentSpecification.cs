@@ -8,6 +8,6 @@ namespace BoxingClub.BLL.DomainEntities
     {
         public int TournamentId { get; set; }
 
-        public List<AgeGroup> AgeGroups { get; set; }
+        public List<AgeGroupDTO> AgeGroups { get; set; }
     }
 }

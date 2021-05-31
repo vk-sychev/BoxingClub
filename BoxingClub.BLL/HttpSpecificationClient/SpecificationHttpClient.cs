@@ -1,41 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
-using BoxingClub.BLL.Implementation.HttpSpecificationClient.Models;
-using BoxingClub.BLL.Interfaces;
+using BoxingClub.BLL.DomainEntities.Models;
+using BoxingClub.BLL.Interfaces.HttpSpecificationClient;
 using Newtonsoft.Json;
 
 namespace BoxingClub.BLL.Implementation.HttpSpecificationClient
 {
-    public class SpecificationHttpClient : ISpecificationClient
+    public class SpecificationHttpClient : ISpecificationHttpClient
     {
         private readonly HttpClient _httpClient;
-        private readonly IMapper _mapper;
 
-        public SpecificationHttpClient(HttpClient httpClient,
-                                       IMapper mapper)
+        public SpecificationHttpClient(HttpClient httpClient)
         {
-            _httpClient = httpClient; //проверка
-            _mapper = mapper;
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient), "httpClient is null");
         }
 
 
-        public async Task<TournamentSpecification> GetTournamentSpecifications(int tournamentId)
+        public async Task<TournamentSpecificationModel> GetTournamentSpecifications(int tournamentId)
         {
             var url = $"{_httpClient.BaseAddress}{tournamentId}";
 
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            var specification = JsonConvert.DeserializeObject<SpecificationModelFromServer>(await response.Content.ReadAsStringAsync());
-
-            var mappedSpecification = _mapper.Map<TournamentSpecification>(specification);
-
-            return mappedSpecification;
+            var specification = JsonConvert.DeserializeObject<TournamentSpecificationModel>(await response.Content.ReadAsStringAsync());
+            return specification;
         }
     }
 }

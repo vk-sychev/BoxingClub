@@ -11,7 +11,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
 {
     public class CategorySpecification : ICategorySpecification
     {
-        public bool IsValid(StudentFullDTO student, AgeGroup ageGroup)
+        public bool IsValid(StudentFullDTO student, AgeGroupDTO ageGroup)
         {
             if (student == null)
             {

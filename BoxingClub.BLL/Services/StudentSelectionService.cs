@@ -56,7 +56,11 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new NotFoundException($"Tournament with id = {tournamentId} isn't found", "");
             }
 
-            var specification = await GetTournamentSpecification(tournamentId);
+            var specification = await _specificationClient.GetTournamentSpecifications(tournamentId);
+            if (specification == null)
+            {
+                return null; //обработать null
+            }
 
             var students = await _database.Students.GetStudentsWithTournamentsAsync();
             var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
@@ -160,7 +164,7 @@ namespace BoxingClub.BLL.Implementation.Services
             return tournamentRequests;
         }
 
-        private async Task<TournamentSpecification> GetTournamentSpecification(int tournamentId)
+/*        private async Task<TournamentSpecification> GetTournamentSpecification(int tournamentId)
         {
             var specification = new TournamentSpecification();
 
@@ -174,7 +178,7 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             return specification;//null
-        }
+        }*/
 
         private List<StudentFullDTO> ValidateStudentsInList(List<StudentFullDTO> students, Tournament tournament)
         {

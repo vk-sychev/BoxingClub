@@ -5,7 +5,7 @@ using BoxingClub.Infrastructure.Enums;
 
 namespace BoxingClub.BLL.DomainEntities
 {
-    public class AgeGroup
+    public class AgeGroupDTO
     {
         public AgeCategoryDTO AgeCategory { get; set; }
 
