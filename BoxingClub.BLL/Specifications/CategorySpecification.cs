@@ -53,7 +53,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
 
         private bool IsWeightValid(double studentWeight, double startWeight, double endWeight)
         {
-            if (studentWeight >= startWeight && studentWeight < endWeight)
+            if (studentWeight >= startWeight && studentWeight <= endWeight)
             {
                 return true;
             }

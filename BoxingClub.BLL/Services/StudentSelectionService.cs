@@ -59,7 +59,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var specification = await _specificationClient.GetTournamentSpecifications(tournamentId);
             if (specification == null)
             {
-                return null; //обработать null
+                return null;
             }
 
             var students = await _database.Students.GetStudentsWithTournamentsAsync();
@@ -164,21 +164,6 @@ namespace BoxingClub.BLL.Implementation.Services
             return tournamentRequests;
         }
 
-/*        private async Task<TournamentSpecification> GetTournamentSpecification(int tournamentId)
-        {
-            var specification = new TournamentSpecification();
-
-            try
-            {
-                specification = await _specificationClient.GetTournamentSpecifications(tournamentId);
-            }
-            catch
-            {
-                throw new InvalidOperationException("An error occurred while processing student selection.");//логирование
-            }
-
-            return specification;//null
-        }*/
 
         private List<StudentFullDTO> ValidateStudentsInList(List<StudentFullDTO> students, Tournament tournament)
         {

@@ -7,7 +7,7 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Interfaces.HttpSpecificationClient;
 using Microsoft.Extensions.Logging;
 
-namespace BoxingClub.BLL.Implementation.HttpSpecificationClient.Helpers
+namespace BoxingClub.BLL.Implementation.HttpSpecificationClient
 {
     public class SpecificationHttpClientAdapter : ISpecificationClient
     {

@@ -30,7 +30,6 @@ using System.Collections.Generic;
 using BoxingClub.BLL.Implementation.HttpSpecificationClient;
 using BoxingClub.Web.Policies;
 using BoxingClub.BLL.Interfaces.HttpSpecificationClient;
-using BoxingClub.BLL.Implementation.HttpSpecificationClient.Helpers;
 
 namespace BoxingClub.Web
 {
@@ -76,7 +75,6 @@ namespace BoxingClub.Web
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
             services.AddTransient<ITournamentService, TournamentService>();
-/*            services.AddTransient<ISpecificationClient, SpecificationClient>();*/
             services.AddTransient<IStudentSelectionService, StudentSelectionService>();
 
             services.AddTransient<IHomeWebManager, HomeWebManager>();
