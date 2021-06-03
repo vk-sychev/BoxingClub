@@ -45,6 +45,10 @@
             }
 
             if (form.valid()) {
+                var isExists = $('#sendError').length;
+                if (isExists) {
+                    $('#sendError').remove();
+                }
                 var data = $('#boxingGroupForm').serialize();
                 $.ajax({
                     url: url,
@@ -58,11 +62,8 @@
                         }, 10);
                     },
                     error: function () {
-                        var isExists = $('#sendError').length;
-                        if (!isExists) {
-                            var spanError = $(submitButton).parent().closest("tr").find('td:first').find('div');
-                            spanError.append('<span id = "sendError" class = "text-danger">Error occurred while processing your request</span>');
-                        }
+                        var spanError = $(submitButton).parent().closest("tr").find('td:first').find('div');
+                        spanError.append('<span id = "sendError" class = "text-danger">Error occurred while processing your request</span>');
                         console.log("Error occurred while processing your request");
                         submitButton.prop('disabled', false);
                     }
