@@ -58,11 +58,16 @@
                         }, 10);
                     },
                     error: function () {
-                        alert("Error occured while processing your request");
-                        console.log("Error occured while processing your request");
+                        var isExists = $('#sendError').length;
+                        console.log(isExists);
+                        if (!isExists) {
+                            var spanError = $(submitButton).parent().closest("tr").find('td:first').find('div');
+                            spanError.append('<span id = "sendError" class = "text-danger">Error occurred while processing your request</span>');
+                        }
+                        console.log("Error occurred while processing your request");
                         submitButton.prop('disabled', false);
                     }
-                })
+                });
             }
             else {
                 submitButton.prop('disabled', false);
