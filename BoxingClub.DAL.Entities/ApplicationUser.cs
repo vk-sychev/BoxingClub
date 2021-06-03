@@ -16,6 +16,8 @@ namespace BoxingClub.DAL.Entities
 
         public string Description { get; set; }
 
+        public List<ApplicationUserRole> UserRoles { get; set; }
+
         public void ChangeUserProperties(ApplicationUser user)
         {
             Name = user.Name;

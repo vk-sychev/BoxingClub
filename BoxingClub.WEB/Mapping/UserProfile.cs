@@ -2,6 +2,7 @@
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.DAL.Entities;
 using BoxingClub.Web.Models;
+using System.Linq;
 
 namespace BoxingClub.Web.Mapping
 {
@@ -30,7 +31,7 @@ namespace BoxingClub.Web.Mapping
             CreateMap<ApplicationUser, UserDTO>(MemberList.Destination).ForMember(dest => dest.Password, opt => opt.Ignore())
                                                                        .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
                                                                        .ForMember(dest => dest.RememberMe, opt => opt.Ignore())
-                                                                       .ForMember(dest => dest.Role, opt => opt.Ignore())
+                                                                       .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.UserRoles.FirstOrDefault().Role))
                                                                        .ReverseMap();          
 
         }

@@ -114,7 +114,7 @@ namespace BoxingClub.Web.Controllers
                 await _studentService.UpdateStudentAsync(studentDTO);
                 if (fromHomeController)
                 {
-                    return RedirectToAction("DetailsGroup", "Home", new { id = returnId });
+                    return RedirectToAction("DetailsBoxingGroup", "Home", new { id = returnId });
                 }
                 return RedirectToAction("GetAllStudents", "Student");
             }

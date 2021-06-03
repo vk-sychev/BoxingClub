@@ -8,10 +8,13 @@
 <div class="d-flex justify-content-between mb-2">
     <h1>All Tournaments</h1>
 
-    <div class="mt-2">
-        <a class="btn btn-primary" asp-action="CreateTournament" asp-controller="Tournament">Create New Tournament</a>
+    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
+    {
+        <div class="mt-2">
+            <a class="btn btn-primary" asp-action="CreateTournament" asp-controller="Tournament">Create New Tournament</a>
+        </div>
+    }
     </div>
-</div>
 
 <table class="table">
     <thead>

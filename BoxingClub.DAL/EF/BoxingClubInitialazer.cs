@@ -15,29 +15,29 @@ namespace BoxingClub.DAL.EF
             var coachsRoleId = "8da509ca-2005-457d-8ca3-105792f04013";
             var usersRoleId = "db460306-31c6-457a-989e-9e4317be99b9";
 
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole
+            modelBuilder.Entity<ApplicationRole>().HasData(
+                new ApplicationRole
                 {
                     Id = adminsRoleId,
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 },
 
-                new IdentityRole
+                new ApplicationRole
                 {
                     Id = managersRoleId,
                     Name = "Manager",
                     NormalizedName = "MANAGER"
                 },
 
-                new IdentityRole
+                new ApplicationRole
                 {
                     Id = usersRoleId,
                     Name = "User",
                     NormalizedName = "USER"
                 },
 
-                new IdentityRole
+                new ApplicationRole
                 {
                     Id = coachsRoleId,
                     Name = "Coach",
@@ -145,38 +145,38 @@ namespace BoxingClub.DAL.EF
                 manager1, manager2, admin, coach1, coach2, coach3);
 
 
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string>()
+            modelBuilder.Entity<ApplicationUserRole>().HasData(
+                new ApplicationUserRole()
                 {
                     RoleId = adminsRoleId,
                     UserId = adminId
                 },
 
-                new IdentityUserRole<string>()
+                new ApplicationUserRole()
                 {
                     RoleId = managersRoleId,
                     UserId = manager1Id
                 },
 
-                new IdentityUserRole<string>()
+                new ApplicationUserRole()
                 {
                     RoleId = managersRoleId,
                     UserId = manager2Id
                 },
 
-                new IdentityUserRole<string>()
+                new ApplicationUserRole()
                 {
                     RoleId = coachsRoleId,
                     UserId = coach1Id
                 },
 
-                new IdentityUserRole<string>()
+                new ApplicationUserRole()
                 {
                     RoleId = coachsRoleId,
                     UserId = coach2Id
                 },
 
-                new IdentityUserRole<string>()
+                new ApplicationUserRole()
                 {
                     RoleId = coachsRoleId,
                     UserId = coach3Id

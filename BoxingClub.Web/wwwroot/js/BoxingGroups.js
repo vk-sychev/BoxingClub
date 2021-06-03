@@ -32,9 +32,10 @@
         };
 
         form.submit(function (e) {
+            var submitButton = $(this).find('input[type=submit], button[type=submit]');
+            submitButton.prop('disabled', true);
             e.preventDefault();
 
-            var data = $('#boxingGroupForm').serialize();
             var url;
             if (isCreateRequest) {
                 url = "Home/CreateBoxingGroup";
@@ -44,6 +45,10 @@
             }
 
             if (form.valid()) {
+                var isExists = $('#sendError').length;
+                if (isExists) {
+                    $('#sendError').remove();
+                }
                 var data = $('#boxingGroupForm').serialize();
                 $.ajax({
                     url: url,
@@ -51,16 +56,25 @@
                     contentType: dataType,
                     data: data,
                     success: function () {
+                        submitButton.prop('disabled', false);
                         setTimeout(function () {
                             location.reload();
                         }, 10);
+                    },
+                    error: function () {
+                        var spanError = $(submitButton).parent().closest("tr").find('td:first').find('div');
+                        spanError.append('<span id = "sendError" class = "text-danger">Error occurred while processing your request</span>');
+                        console.log("Error occurred while processing your request");
+                        submitButton.prop('disabled', false);
                     }
-                })
+                });
+            }
+            else {
+                submitButton.prop('disabled', false);
             };
         });
 
         $(document).on("click", "#createSubmit", function () {
-
             isCreateRequest = true;
         });
 

@@ -25,7 +25,7 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<ApplicationUser> FindUserByIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role).FirstOrDefaultAsync(x => x.Id.Equals(id));
             return user;
         }
 
@@ -60,14 +60,14 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public async Task<List<ApplicationUser>> GetUsersPaginatedAsync(int pageIndex, int pageSize)
         {
-            var query = _userManager.Users;
+            var query = _userManager.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role);
             var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return list;
         }
 
         public async Task<int> GetCountOfUsersAsync()
         {
-            var query = _userManager.Users;
+            var query = _userManager.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role);
             var count = await query.CountAsync();
             return count;
         }

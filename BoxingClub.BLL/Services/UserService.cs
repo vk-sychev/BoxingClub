@@ -42,20 +42,14 @@ namespace BoxingClub.BLL.Implementation.Services
             {
                 throw new NotFoundException($"User with id = {userId} isn't found", "");
             }
-
-            var mappedUser = await AssignRole(user);
+            var mappedUser = _mapper.Map<UserDTO>(user);
             return mappedUser;
         }
 
         public async Task<List<UserDTO>> GetUsersAsync()
         {
             var users = await _userProvider.GetUsersAsync();
-            var mappedUsers = new List<UserDTO>();
-            foreach (var user in users)
-            {
-                var mappedUser = await AssignRole(user);
-                mappedUsers.Add(mappedUser);
-            }
+            var mappedUsers = _mapper.Map<List<UserDTO>>(users);
             return mappedUsers;
         }
 
@@ -182,13 +176,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 searchDTO.PageIndex = PageModelConstants.PageIndex;
                 users = await _userProvider.GetUsersPaginatedAsync(searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             }
-            var userDTOs = new List<UserDTO>();
-
-            foreach (var user in users)
-            {
-                var mappedUser = await AssignRole(user);
-                userDTOs.Add(mappedUser);
-            }
+            var userDTOs = _mapper.Map<List<UserDTO>>(users);
 
             var count = await _userProvider.GetCountOfUsersAsync();
             var model = new PageModelDTO<UserDTO>() { Items = userDTOs, Count = count };
@@ -206,23 +194,6 @@ namespace BoxingClub.BLL.Implementation.Services
             return mappedResult;
         }
 
-        private async Task<RoleDTO> FindUserRoleAsync(ApplicationUser user)
-        {
-            var role = await _roleProvider.GetUserRole(user);
-            if (string.IsNullOrEmpty(role))
-            {
-                throw new NotFoundException($"Role for user = {user.UserName} isn't found", "");
-            }
-
-            var roleObject = await _roleProvider.FindRoleByNameAsync(role);
-            if (roleObject == null)
-            {
-                throw new NotFoundException($"Role with name = {role} isn't found", "");
-            }
-
-            var mappedRole = _mapper.Map<RoleDTO>(roleObject);
-            return mappedRole;
-        }
 
         private async Task<string> GetUserRole(ApplicationUser userFromDb)
         {
@@ -257,14 +228,6 @@ namespace BoxingClub.BLL.Implementation.Services
                 return result;
             }
             return new AccountResultDTO { Succeeded = true };
-        }
-
-        private async Task<UserDTO> AssignRole(ApplicationUser user)
-        {
-            var mappedRole = await FindUserRoleAsync(user);
-            var mappedUser = _mapper.Map<UserDTO>(user);
-            mappedUser.Role = mappedRole;
-            return mappedUser;
         }
     }
 }
