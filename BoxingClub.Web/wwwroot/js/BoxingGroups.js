@@ -59,7 +59,6 @@
                     },
                     error: function () {
                         var isExists = $('#sendError').length;
-                        console.log(isExists);
                         if (!isExists) {
                             var spanError = $(submitButton).parent().closest("tr").find('td:first').find('div');
                             spanError.append('<span id = "sendError" class = "text-danger">Error occurred while processing your request</span>');
