@@ -56,7 +56,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var specification = await _specificationClient.GetTournamentSpecifications(tournamentId);
             if (specification == null)
             {
-                throw new InvalidOperationException("Error occurred while selecting students for tournament");
+                throw new InvalidOperationException("Specifications for this tournament are not found");
             }
 
             var students = await _database.Students.GetStudentsWithTournamentsAsync();
@@ -123,7 +123,7 @@ namespace BoxingClub.BLL.Implementation.Services
             return mappedStudents;
         }
 
-        public async Task DeleteAcceptedTournament(int tournamentId)
+        public async Task DeleteTournamentRequest(int tournamentId)
         {
             if (tournamentId <= 0)
             {

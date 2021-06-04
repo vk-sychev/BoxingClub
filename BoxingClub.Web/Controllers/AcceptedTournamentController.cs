@@ -84,10 +84,10 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpDelete("{tournamentId}")]
-        [Route("AcceptedTournament/DeleteAcceptedTournament")]
-        public async Task<IActionResult> DeleteAcceptedTournament(int tournamentId)
+        [Route("AcceptedTournament/DeleteTournamentRequest")]
+        public async Task<IActionResult> DeleteTournamentRequest(int tournamentId)
         {
-            await _studentSelectionService.DeleteAcceptedTournament(tournamentId);
+            await _studentSelectionService.DeleteTournamentRequest(tournamentId);
             return RedirectToAction("GetAcceptedTournaments");
         }
 

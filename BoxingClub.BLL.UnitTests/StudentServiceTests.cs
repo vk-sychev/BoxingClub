@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BoxingClub.Infrastructure.Exceptions;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
+using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
 using System.Linq;
 using System;
 using BoxingClub.Infrastructure.Enums;
+using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
 
 namespace BoxingClub.BLL.UnitTests
 {
@@ -320,9 +322,9 @@ namespace BoxingClub.BLL.UnitTests
         }
 
         [Test]
-        public void GetStudentByIdAsync_InputIsNull_ShouldThrowArgumentNullException()
+        public void GetStudentByIdAsync_InputIsNull_ShouldThrowArgumentException()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.GetStudentByIdAsync(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await _studentService.GetStudentByIdAsync(-1));
         }
 
         [Test]
@@ -331,7 +333,7 @@ namespace BoxingClub.BLL.UnitTests
             _mockStudentRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.GetStudentByIdAsync(It.IsAny<int>()));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.GetStudentByIdAsync(10));
         }
 
 
@@ -351,18 +353,18 @@ namespace BoxingClub.BLL.UnitTests
 
 
         [Test]
-        public void DeleteStudentAsync_InvalidInput_ShouldThrowNotFoundException()
+        public void DeleteStudentAsync_InvalidInput_ShouldThrowInvalidOperationException()
         {
             _mockStudentRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.DeleteStudentAsync(It.IsAny<int>()));
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await _studentService.DeleteStudentAsync(10));
         }
 
         [Test]
-        public void DeleteStudentAsync_InvalidInput_ShouldThrowArgumentNullException()
+        public void DeleteStudentAsync_InvalidInput_ShouldThrowArgumentException()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.DeleteStudentAsync(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await _studentService.DeleteStudentAsync(-1));
         }
 
         [Test]
@@ -398,18 +400,18 @@ namespace BoxingClub.BLL.UnitTests
         }
 
         [Test]
-        public void DeleteFromGroup_InvalidInput_ShouldThrowNotFoundException()
+        public void DeleteFromGroup_InvalidInput_ShouldThrowInvalidOperationException()
         {
             _mockStudentRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.Students).Returns(_mockStudentRepository.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await _studentService.DeleteFromGroupAsync(It.IsAny<int>()));
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await _studentService.DeleteFromGroupAsync(10));
         }
 
         [Test]
-        public void DeleteFromGroup_InvalidInput_ArgumentNullException()
+        public void DeleteFromGroup_InvalidInput_ArgumentException()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _studentService.DeleteFromGroupAsync(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await _studentService.DeleteFromGroupAsync(-1));
         }
     }
 }

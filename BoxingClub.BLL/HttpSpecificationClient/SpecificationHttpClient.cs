@@ -24,7 +24,8 @@ namespace BoxingClub.BLL.Implementation.HttpSpecificationClient
 
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            var specification = JsonConvert.DeserializeObject<TournamentSpecificationModel>(await response.Content.ReadAsStringAsync());
+            var content = await response.Content.ReadAsStringAsync();
+            var specification = JsonConvert.DeserializeObject<TournamentSpecificationModel>(content);
             return specification;
         }
     }

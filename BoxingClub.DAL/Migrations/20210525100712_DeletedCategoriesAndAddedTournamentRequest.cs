@@ -7,8 +7,8 @@ namespace BoxingClub.DAL.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-/*            migrationBuilder.DropForeignKey("FK_Students_Categories_CategoryId", "Students");
-            migrationBuilder.DropForeignKey("FK_Students_Tournaments_TournamentId", "Students");*/
+            migrationBuilder.DropForeignKey("FK_Students_Categories_CategoryId", "Students");
+            migrationBuilder.DropForeignKey("FK_Students_Tournaments_TournamentId", "Students");
 
             migrationBuilder.DropTable(
                 name: "TournamentRequirements");
@@ -220,6 +220,22 @@ namespace BoxingClub.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Students_Categories_CategoryId",
+                table: "Students",
+                column: "CategoryId",
+                principalTable: "Categories",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Students_Tournaments_TournamentId", 
+                table: "Students",
+                column: "TournamentId",
+                principalTable: "Tournaments",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
 
             migrationBuilder.InsertData(
                 table: "AgeCategories",

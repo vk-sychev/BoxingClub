@@ -16,6 +16,6 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<List<StudentFullDTO>> GetSelectedStudentsByTournamentId(int tournamentId);
 
-        Task DeleteAcceptedTournament(int tournamentId);
+        Task DeleteTournamentRequest(int tournamentId);
     }
 }

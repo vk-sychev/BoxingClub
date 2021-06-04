@@ -28,7 +28,6 @@ namespace BoxingClub.BLL.Implementation.Specifications
             }
 
 
-            //var lastTournament = student.Tournaments.OrderBy(x => x.Date).LastOrDefault();
             if (!student.Tournaments.Any())
             {
                 return true;
@@ -52,13 +51,7 @@ namespace BoxingClub.BLL.Implementation.Specifications
                 throw new ArgumentNullException(nameof(student), "student is null");
             }
 
-            var lastTournament = student.Tournaments.OrderBy(x => x.Date).LastOrDefault();
-            if (lastTournament == null)
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
     }
 }
