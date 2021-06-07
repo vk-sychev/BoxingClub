@@ -54,8 +54,11 @@ namespace BoxingClub.Web.Controllers
             }
 
             var tournamentRequestModel = await GetPossibleTournamentRequestByTournamentId(model.TournamentId);
-
-            ModelState.AddModelError("error", ErrorConstants.ValidationErrorMessage);
+            if (!model.Students.Any())
+            {
+                ModelState.AddModelError("error", ErrorConstants.ValidationErrorMessageForStudentSelection);
+            }
+            
             return View("ParticipateInTournament", tournamentRequestModel);
         }
 
@@ -78,7 +81,10 @@ namespace BoxingClub.Web.Controllers
                 return RedirectToAction("GetAcceptedTournaments");
             }
 
-            ModelState.AddModelError("error", ErrorConstants.ValidationErrorMessage);
+            if (!model.Students.Any())
+            {
+                ModelState.AddModelError("error", ErrorConstants.ValidationErrorMessageForStudentSelection);
+            }
             var tournamentRequestModel = await GetTournamentRequestByTournamentId(model.TournamentId);
             return View(tournamentRequestModel);
         }

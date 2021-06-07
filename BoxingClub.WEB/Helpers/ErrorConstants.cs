@@ -7,6 +7,6 @@ namespace BoxingClub.Web.Helpers
 {
     public static class ErrorConstants
     {
-        public static readonly string ValidationErrorMessage = "At least one student has to be selected!";
+        public static readonly string ValidationErrorMessageForStudentSelection = "At least one student has to be selected!";
     }
 }
