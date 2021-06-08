@@ -83,8 +83,13 @@ namespace BoxingClub.Web.Controllers
 
             if (!model.Students.Any())
             {
-                ModelState.AddModelError("error", ErrorConstants.ValidationErrorMessageForStudentSelection);
+                ModelState.AddModelError("studentSelectionError", ErrorConstants.ValidationErrorMessageForStudentSelection);
             }
+            else
+            {
+                ModelState.AddModelError("generalError", ErrorConstants.GeneralError);
+            }
+
             var tournamentRequestModel = await GetTournamentRequestByTournamentId(model.TournamentId);
             return View(tournamentRequestModel);
         }

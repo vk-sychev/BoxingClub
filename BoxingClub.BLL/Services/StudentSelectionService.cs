@@ -56,7 +56,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var specification = await _specificationClient.GetTournamentSpecifications(tournamentId);
             if (specification == null)
             {
-                throw new InvalidOperationException("Specifications for this tournament are not found");
+                throw new InvalidOperationException($"Specifications for tournament with id = {tournamentId} are not found");
             }
 
             var students = await _database.Students.GetStudentsWithTournamentsAsync();
