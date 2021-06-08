@@ -58,7 +58,11 @@ namespace BoxingClub.Web.Controllers
             {
                 ModelState.AddModelError("error", ErrorConstants.ValidationErrorMessageForStudentSelection);
             }
-            
+            else
+            {
+                ModelState.AddModelError("generalError", ErrorConstants.GeneralError);
+            }
+
             return View("ParticipateInTournament", tournamentRequestModel);
         }
 
