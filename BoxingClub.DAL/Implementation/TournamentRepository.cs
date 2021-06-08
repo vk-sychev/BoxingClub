@@ -4,6 +4,7 @@ using BoxingClub.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.DAL.Implementation.Implementation
@@ -39,17 +40,21 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public Task<List<Tournament>> GetAllAsync()
         {
-            return _db.Tournaments.ToListAsync();
+            return _db.Tournaments.AsQueryable().ToListAsync();
         }
 
         public Task<Tournament> GetByIdAsync(int id)
         {
-            return _db.Tournaments.Include(tr => tr.TournamentRequirements)
-                                  .Include(t => t.Categories)
-                                  .ThenInclude(aw => aw.AgeWeightCategory)
-                                  .ThenInclude(a => a.WeightCategory)
-                                  .ThenInclude(w => w.AgeCategories)
-                                  .SingleOrDefaultAsync(x => x.Id == id);
+            return _db.Tournaments.AsQueryable()
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public Task<Tournament> GetTournamentByIdWithStudentsAsync(int id)
+        {
+            return _db.Tournaments.AsQueryable()
+                .Include(x => x.TournamentRequests)
+                .Include(x => x.Students)
+                .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public void Update(Tournament item)
@@ -59,6 +64,13 @@ namespace BoxingClub.DAL.Implementation.Implementation
                 throw new ArgumentNullException(nameof(item), "Tournament is null");
             }
             _db.Entry(item).State = EntityState.Modified;
+        }
+
+        public Task<List<Tournament>> GetAcceptedTournamentsAsync()
+        {
+            return _db.Tournaments.AsQueryable()
+                .Where(x => x.TournamentRequests.Any())
+                .ToListAsync();
         }
     }
 }

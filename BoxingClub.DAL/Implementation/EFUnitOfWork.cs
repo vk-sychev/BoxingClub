@@ -13,9 +13,7 @@ namespace BoxingClub.DAL.Repositories
         private IBoxingGroupRepository _boxingGroupRepository;
         private IMedicalCertificateRepository _medicalCertificateRepository;
         private ITournamentRepository _tournamentRepository;
-        private ICategoryRepository _categoryRepository;
-        private IAgeCategoryRepository _ageCategoryRepository;
-        private IWeightCategoryRepository _weightCategoryRepository;
+        private ITournamentRequestRepository _tournamentRequestRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
@@ -30,6 +28,7 @@ namespace BoxingClub.DAL.Repositories
                 {
                     _studentRepository = new StudentRepository(_db);
                 }
+
                 return _studentRepository;
             }
         }
@@ -42,6 +41,7 @@ namespace BoxingClub.DAL.Repositories
                 {
                     _boxingGroupRepository = new BoxingGroupRepository(_db);
                 }
+
                 return _boxingGroupRepository;
             }
         }
@@ -54,6 +54,7 @@ namespace BoxingClub.DAL.Repositories
                 {
                     _medicalCertificateRepository = new MedicalCertificateRepository(_db);
                 }
+
                 return _medicalCertificateRepository;
             }
         }
@@ -66,43 +67,21 @@ namespace BoxingClub.DAL.Repositories
                 {
                     _tournamentRepository = new TournamentRepository(_db);
                 }
+
                 return _tournamentRepository;
             }
         }
 
-        public ICategoryRepository Categories
+        public ITournamentRequestRepository TournamentRequests
         {
             get
             {
-                if (_categoryRepository == null)
+                if (_tournamentRequestRepository == null)
                 {
-                    _categoryRepository = new CategoryRepository(_db);
+                    _tournamentRequestRepository = new TournamentRequestRepository(_db);
                 }
-                return _categoryRepository;
-            }
-        }
 
-        public IAgeCategoryRepository AgeCategories
-        {
-            get
-            {
-                if (_ageCategoryRepository == null)
-                {
-                    _ageCategoryRepository = new AgeCategoryRepository(_db);
-                }
-                return _ageCategoryRepository;
-            }
-        }
-
-        public IWeightCategoryRepository WeightCategories
-        {
-            get
-            {
-                if (_weightCategoryRepository == null)
-                {
-                    _weightCategoryRepository = new WeightCategoryRepository(_db);
-                }
-                return _weightCategoryRepository;
+                return _tournamentRequestRepository;
             }
         }
 

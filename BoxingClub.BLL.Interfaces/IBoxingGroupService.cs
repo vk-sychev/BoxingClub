@@ -8,9 +8,9 @@ namespace BoxingClub.BLL.Interfaces
     {
         Task CreateBoxingGroupAsync(BoxingGroupDTO groupDTO);
 
-        Task DeleleBoxingGroupAsync(int? id);
+        Task DeleteBoxingGroupAsync(int id);
 
-        Task<BoxingGroupDTO> GetBoxingGroupByIdAsync(int? id);
+        Task<BoxingGroupDTO> GetBoxingGroupByIdAsync(int id);
 
         Task<List<BoxingGroupDTO>> GetBoxingGroupsAsync();
 
@@ -18,7 +18,7 @@ namespace BoxingClub.BLL.Interfaces
 
         Task UpdateBoxingGroupAsync(BoxingGroupDTO groupDTO);
 
-        Task<BoxingGroupDTO> GetBoxingGroupWithStudentsByIdAsync(int? id);
+        Task<BoxingGroupDTO> GetBoxingGroupWithStudentsByIdAsync(int id);
 
         Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsPaginatedAsync(SearchModelDTO searchDTO);
 

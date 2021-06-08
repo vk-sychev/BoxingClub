@@ -1,4 +1,4 @@
-﻿@model BoxingClub.Web.Models.CreateEditTournamentViewModel
+﻿@model BoxingClub.Web.Models.TournamentViewModel
 
 @{
     ViewData["Title"] = "CreateTournament";
@@ -16,52 +16,30 @@
         <form asp-action="CreateTournament">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="@Model.Tournament.Name" class="control-label font-weight-bold"></label>
-                <input asp-for="@Model.Tournament.Name" class="form-control" />
-                <span asp-validation-for="@Model.Tournament.Name" class="text-danger"></span>
+                <label asp-for="@Model.Name" class="control-label font-weight-bold"></label>
+                <input asp-for="@Model.Name" class="form-control" />
+                <span asp-validation-for="@Model.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Tournament.Country" class="control-label font-weight-bold"></label>
-                <input asp-for="@Model.Tournament.Country" class="form-control" />
-                <span asp-validation-for="@Model.Tournament.Country" class="text-danger"></span>
+                <label asp-for="@Model.Country" class="control-label font-weight-bold"></label>
+                <input asp-for="@Model.Country" class="form-control" />
+                <span asp-validation-for="@Model.Country" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Tournament.City" class="control-label font-weight-bold"></label>
-                <input asp-for="@Model.Tournament.City" class="form-control" />
-                <span asp-validation-for="@Model.Tournament.City" class="text-danger"></span>
+                <label asp-for="@Model.City" class="control-label font-weight-bold"></label>
+                <input asp-for="@Model.City" class="form-control" />
+                <span asp-validation-for="@Model.City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Tournament.Date" class="control-label font-weight-bold"></label>
-                <input asp-for="@Model.Tournament.Date" class="form-control" />
-                <span asp-validation-for="@Model.Tournament.Date" class="text-danger"></span>
+                <label asp-for="@Model.Date" class="control-label font-weight-bold"></label>
+                <input asp-for="@Model.Date" class="form-control" />
+                <span asp-validation-for="@Model.Date" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label font-weight-bold">
-                    <input class="form-check-input" asp-for="@Model.Tournament.IsMedCertificateRequired" /> @Html.DisplayNameFor(model => model.Tournament.IsMedCertificateRequired)
+                    <input class="form-check-input" asp-for="@Model.IsMedCertificateRequired" /> @Html.DisplayNameFor(model => model.IsMedCertificateRequired)
                 </label>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <h2>Choose Categories</h2>
-                </div>
-
-                <div class="card-body">
-                    @for (int i = 0; i < Model.Categories.Count; i++)
-                    {
-                        <input type="hidden" asp-for="@Model.Categories[i].AgeWeightCategory.WeightCategory.Name" />
-                        <input type="hidden" asp-for="@Model.Categories[i].AgeWeightCategory.AgeCategory.Name" />
-                        <div class="form-check">
-                            <input type="hidden" asp-for="@Model.Categories[i].Id" />
-                            <input type="hidden" asp-for="@Model.Categories[i].Name" />
-                            <input class="form-check-input" asp-for="@Model.Categories[i].IsSelected" />
-                            <label class="form-check-label" asp-for="@Model.Categories[i].IsSelected">
-                                @Model.Categories[i].Name
-                            </label>
-                        </div>
-                    }
-                </div>
-            </div>
-            <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

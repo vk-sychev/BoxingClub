@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
+using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
 
 namespace BoxingClub.BLL.UnitTests
 {
@@ -115,13 +116,13 @@ namespace BoxingClub.BLL.UnitTests
             _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await _boxingGroupService.GetBoxingGroupByIdAsync(It.IsAny<int>()));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _boxingGroupService.GetBoxingGroupByIdAsync(10));
         }
 
         [Test]
-        public void GetBoxingGroupByIdAsync_InputIsNull_ShouldThrowArgumentNullException()
+        public void GetBoxingGroupByIdAsync_InputIsNull_ShouldThrowArgumentException()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.GetBoxingGroupByIdAsync(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await _boxingGroupService.GetBoxingGroupByIdAsync(-1));
         }
 
         [Test]
@@ -165,7 +166,7 @@ namespace BoxingClub.BLL.UnitTests
         }
 
         [Test]
-        public async Task DeleleBoxingGroupAsync_ValidInput()
+        public async Task DeleteBoxingGroupAsync_ValidInput()
         {
             var boxingGroup = new BoxingGroup { Id = 1, Name = "Test" };
 
@@ -173,7 +174,7 @@ namespace BoxingClub.BLL.UnitTests
             _mockRepository.Setup(repo => repo.Delete(It.IsAny<BoxingGroup>()));
             _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
 
-            await _boxingGroupService.DeleleBoxingGroupAsync(boxingGroup.Id);
+            await _boxingGroupService.DeleteBoxingGroupAsync(boxingGroup.Id);
 
             _mockRepository.Verify(repo => repo.GetByIdAsync(boxingGroup.Id), Times.Once);
             _mockRepository.Verify(repo => repo.Delete(It.IsAny<BoxingGroup>()), Times.Once);
@@ -181,18 +182,18 @@ namespace BoxingClub.BLL.UnitTests
         }
 
         [Test]
-        public void DeleleBoxingGroupAsync_InputIsNull_ShouldThrowArgumentNullException()
+        public void DeleteBoxingGroupAsync_InputIsNull_ShouldThrowArgumentException()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.DeleleBoxingGroupAsync(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await _boxingGroupService.DeleteBoxingGroupAsync(-1));
         }
 
         [Test]
-        public void DeleleBoxingGroupAsync_InvalidInput_ShouldThrowNotFoundException()
+        public void DeleteBoxingGroupAsync_InvalidInput_ShouldThrowNotFoundException()
         {
             _mockRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await _boxingGroupService.DeleleBoxingGroupAsync(It.IsAny<int>()));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _boxingGroupService.DeleteBoxingGroupAsync(10));
         }
 
         [Test]
@@ -212,9 +213,9 @@ namespace BoxingClub.BLL.UnitTests
 
 
         [Test]
-        public void GetBoxingGroupWithStudentsByIdAsync_InputIsNull_ShouldThrowArgumentNullException()
+        public void GetBoxingGroupWithStudentsByIdAsync_InputIsNull_ShouldThrowArgumentException()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(null));
+            Assert.ThrowsAsync<ArgumentException>(async () => await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(-1));
         }
 
         [Test]
@@ -223,7 +224,7 @@ namespace BoxingClub.BLL.UnitTests
             _mockRepository.Setup(repo => repo.GetBoxingGroupWithStudentsByIdAsync(It.IsAny<int>()).Result);
             _mockUoW.Setup(uow => uow.BoxingGroups).Returns(_mockRepository.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(It.IsAny<int>()));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(10));
         }
 
         [Test]

@@ -67,7 +67,7 @@ namespace BoxingClub.Web.Controllers
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
         [Route("Home/EditBoxingGroup/{id}")]
-        public async Task<IActionResult> EditBoxingGroup(int? id)
+        public async Task<IActionResult> EditBoxingGroup(int id)
         {
             var mappedGroup = await GetBoxingGroupById(id);
 
@@ -79,7 +79,7 @@ namespace BoxingClub.Web.Controllers
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpGet]
         [Route("Home/EditBoxingGroupInline/{id}")]
-        public async Task<IActionResult> EditBoxingGroupInline(int? id)
+        public async Task<IActionResult> EditBoxingGroupInline(int id)
         {
             var mappedGroup = await GetBoxingGroupById(id);
 
@@ -140,9 +140,9 @@ namespace BoxingClub.Web.Controllers
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         [Route("Home/DetailsBoxingGroup/{id}")]
         [HttpGet]
-        public async Task<IActionResult> DetailsBoxingGroup(int? id)
+        public async Task<IActionResult> DetailsBoxingGroup(int id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id.Value);
+            var group = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id);
             var model = _mapper.Map<BoxingGroupFullViewModel>(group);
             return View(model);
         }
@@ -150,19 +150,19 @@ namespace BoxingClub.Web.Controllers
         [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Home/DeleteBoxingGroup/{id}")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBoxingGroup(int? id)
+        public async Task<IActionResult> DeleteBoxingGroup(int id)
         {
-            await _boxingGroupService.DeleleBoxingGroupAsync(id.Value);
+            await _boxingGroupService.DeleteBoxingGroupAsync(id);
             return RedirectToAction("Index", "Home");
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [Route("Home/DetailsGroup/DeleteFromBoxingGroup/{studentId}")]
         [HttpDelete("{studentId}")]
-        public async Task<IActionResult> DeleteFromBoxingGroup(int? studentId, int? returnId)
+        public async Task<IActionResult> DeleteFromBoxingGroup(int studentId, int returnId)
         {
             await _studentService.DeleteFromGroupAsync(studentId);
-            return RedirectToAction("DetailsBoxingGroup", new { id = returnId.Value });
+            return RedirectToAction("DetailsBoxingGroup", new { id = returnId });
         }
 
         private async Task<SelectList> GetCoaches()
@@ -173,9 +173,9 @@ namespace BoxingClub.Web.Controllers
             return selectList;
         }
 
-        private async Task<BoxingGroupLiteViewModel> GetBoxingGroupById(int? id)
+        private async Task<BoxingGroupLiteViewModel> GetBoxingGroupById(int id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id.Value);
+            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id);
             var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
             return mappedGroup;
         }

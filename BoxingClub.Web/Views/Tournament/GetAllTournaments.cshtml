@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BoxingClub.Web.Models.TournamentLiteViewModel>
+﻿@model IEnumerable<BoxingClub.Web.Models.TournamentViewModel>
 @using BoxingClub.Infrastructure.Constants
 
 @{
@@ -67,9 +67,10 @@
                 {
                     <td>
                         <div class="d-flex justify-content-end">
-                            @Html.ActionLink("Edit", "EditTournament", new { id = item.Id }, new { @class = "btn btn-outline-primary px-3 btn-sm" })
-                            @Html.ActionLink("Details", "DetailsTournament", new { id = item.Id }, new { @class = "btn btn-outline-secondary btn-sm px-3 ml-3" })
-                            @Html.ActionLink("Delete", "DeleteTournament", new { id = item.Id }, new { @class = "btn btn-outline-danger btn-sm px-3 ml-3" })
+                            @Html.ActionLink("Participate", "ParticipateInTournament" ,"AcceptedTournament", new {tournamentId = item.Id}, new {@class = "btn btn-primary btn-sm px-3" })
+                            @Html.ActionLink("Edit", "EditTournament", new {id = item.Id}, new {@class = "btn btn-outline-primary px-3 btn-sm ml-3" })
+                            @Html.ActionLink("Details", "DetailsTournament", new {id = item.Id}, new {@class = "btn btn-outline-secondary btn-sm px-3 ml-3"})
+                            @Html.ActionLink("Delete", "DeleteTournament", new {id = item.Id}, new {@class = "btn btn-outline-danger btn-sm px-3 ml-3"})
                         </div>
                     </td>
                 }

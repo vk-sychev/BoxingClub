@@ -12,11 +12,7 @@ namespace BoxingClub.DAL.Interfaces
 
         ITournamentRepository Tournaments { get; }
 
-        ICategoryRepository Categories { get; }
-
-        IAgeCategoryRepository AgeCategories { get; }
-
-        IWeightCategoryRepository WeightCategories { get; }
+        ITournamentRequestRepository TournamentRequests { get; }
 
         Task SaveAsync();
     }

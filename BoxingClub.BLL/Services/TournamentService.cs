@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
 namespace BoxingClub.BLL.Implementation.Services
@@ -25,7 +26,7 @@ namespace BoxingClub.BLL.Implementation.Services
             _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
         }
 
-        public async Task CreateTournamentAsync(TournamentFullDTO tournamentDTO)
+        public async Task CreateTournamentAsync(TournamentDTO tournamentDTO)
         {
             if (tournamentDTO == null)
             {
@@ -33,49 +34,48 @@ namespace BoxingClub.BLL.Implementation.Services
             }
 
             var tournament = _mapper.Map<Tournament>(tournamentDTO);
-            tournament.Categories = await _database.Categories.GetCategoriesByIds(tournament.Categories);
 
             await _database.Tournaments.CreateAsync(tournament);
             await _database.SaveAsync();
         }
 
-        public async Task DeleteTournamentAsync(int? id)
+        public async Task DeleteTournamentAsync(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                throw new ArgumentNullException(nameof(id), "Tournaments's id is null");
+                throw new ArgumentException("Tournament's id less or equal 0", nameof(id));
             }
 
-            var tournament = await _database.Tournaments.GetByIdAsync(id.Value);
+            var tournament = await _database.Tournaments.GetByIdAsync(id);
 
             if (tournament == null)
             {
-                throw new NotFoundException($"Tournament with id = {id.Value} isn't found", "");
+                throw new NotFoundException($"Tournament with id = {id} isn't found", "");
             }
 
             _database.Tournaments.Delete(tournament);
             await _database.SaveAsync();
         }
 
-        public async Task<TournamentFullDTO> GetTournamentByIdAsync(int? id)
+        public async Task<TournamentDTO> GetTournamentByIdAsync(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                throw new ArgumentNullException(nameof(id), "Tournaments's id is null");
+                throw new ArgumentException("Tournament's id less or equal 0", nameof(id));
             }
 
-            var tournament = await _database.Tournaments.GetByIdAsync(id.Value);
+            var tournament = await _database.Tournaments.GetByIdAsync(id);
 
             if (tournament == null)
             {
-                throw new NotFoundException($"Tournament with id = {id.Value} isn't found", "");
+                throw new NotFoundException($"Tournament with id = {id} isn't found", "");
             }
 
-            var mappedTournament = _mapper.Map<TournamentFullDTO>(tournament);
+            var mappedTournament = _mapper.Map<TournamentDTO>(tournament);
             return mappedTournament;
         }
 
-        public async Task UpdateTournamentAsync(TournamentFullDTO tournamentDTO)
+        public async Task UpdateTournamentAsync(TournamentDTO tournamentDTO)
         {
             if (tournamentDTO == null)
             {
@@ -84,78 +84,22 @@ namespace BoxingClub.BLL.Implementation.Services
 
             var tournament = _mapper.Map<Tournament>(tournamentDTO);
 
-            var tournamentFromDb = await _database.Tournaments.GetByIdAsync(tournament.Id);
-
-            if (tournamentFromDb == null)
-            {
-                throw new NotFoundException($"Tournament with id = {tournament.Id} isn't found", "");
-            }
-
-            tournamentFromDb.UpdateTournamentProperties(tournament);
-            UpdateTournamentCategories(tournamentFromDb, tournament);
-
-            _database.Tournaments.Update(tournamentFromDb);
+            _database.Tournaments.Update(tournament);
             await _database.SaveAsync();
         }
 
-        public async Task<List<TournamentLiteDTO>> GetTournamentsAsync()
+        public async Task<List<TournamentDTO>> GetTournamentsAsync()
         {
             var tournaments = await _database.Tournaments.GetAllAsync();
-            var mappedTournaments = _mapper.Map<List<TournamentLiteDTO>>(tournaments);
+            var mappedTournaments = _mapper.Map<List<TournamentDTO>>(tournaments);
             return mappedTournaments;
         }
 
-        public async Task<List<CategoryDTO>> GetCategories()
+        public async Task<List<TournamentDTO>> GetAcceptedTournamentsAsync()
         {
-            var categories = await _database.Categories.GetAllAsync();
-            var mappedCategories = _mapper.Map<List<CategoryDTO>>(categories);
-            return mappedCategories;
-        }
-
-        private void UpdateTournamentCategories(Tournament tournamentFromDb, Tournament updatedTournament)
-        {
-            var oldCategories = tournamentFromDb.Categories;
-            var newCategories = updatedTournament.Categories;
-            
-            if (newCategories.Count == 0)
-            {
-                return;
-            }
-
-            List<Category> deleteCategories = new List<Category>();
-            List<Category> addCategories = new List<Category>();
-            List<Category> foundCategories = new List<Category>();
-
-            foreach (var item in newCategories)
-            {
-                var category = oldCategories.FirstOrDefault(x => x.Id == item.Id);
-
-                if (category == null)
-                {
-                    addCategories.Add(item);
-                }
-                else
-                {
-                    foundCategories.Add(category);
-                }
-            }
-
-            deleteCategories = oldCategories.Except(foundCategories).ToList();
-            if (deleteCategories.Count != 0)
-            {
-                foreach(var item in deleteCategories)
-                {
-                    tournamentFromDb.Categories.Remove(item);
-                }
-            }
-
-            if (addCategories.Count!=0)
-            {
-                foreach (var item in addCategories)
-                {
-                    tournamentFromDb.Categories.Add(item);
-                }
-            }
+            var tournaments = await _database.Tournaments.GetAcceptedTournamentsAsync();
+            var mappedTournaments = _mapper.Map<List<TournamentDTO>>(tournaments);
+            return mappedTournaments;
         }
     }
 }

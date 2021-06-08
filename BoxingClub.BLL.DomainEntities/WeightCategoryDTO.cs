@@ -2,12 +2,8 @@
 {
     public class WeightCategoryDTO
     {
-        public int Id { get; set; }
+        public double StartWeight { get; set; }
 
-        public string Name { get; set; }
-
-        public int StartWeight { get; set; }
-
-        public int EndWeight { get; set; }
+        public double EndWeight { get; set; }
     }
 }

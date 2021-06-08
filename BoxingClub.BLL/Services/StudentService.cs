@@ -13,7 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
+using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
 
 namespace BoxingClub.BLL.Services
 {
@@ -33,18 +35,18 @@ namespace BoxingClub.BLL.Services
             _fighterExperienceSpecification = new FighterExperienceSpecification();
         }
 
-        public async Task<StudentFullDTO> GetStudentByIdAsync(int? id)
+        public async Task<StudentFullDTO> GetStudentByIdAsync(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                throw new ArgumentNullException(nameof(id), "Student's id is null");    
+                throw new ArgumentException("Student's id less or equal 0", nameof(id));
             }
 
-            var student = await _database.Students.GetByIdAsync(id.Value);
+            var student = await _database.Students.GetByIdAsync(id);
 
             if (student == null)
             {
-                throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
+                throw new NotFoundException($"Student with id = {id} isn't found", "");
             }
             var mappedStudent = _mapper.Map<StudentFullDTO>(student);
             return mappedStudent;
@@ -63,18 +65,18 @@ namespace BoxingClub.BLL.Services
             await _database.SaveAsync();
         }
 
-        public async Task DeleteStudentAsync(int? id)
+        public async Task DeleteStudentAsync(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                throw new ArgumentNullException(nameof(id), "Student's id is null");
+                throw new ArgumentException("Students's id less or equal 0", nameof(id));
             }
 
-            var student = await _database.Students.GetByIdAsync(id.Value);
+            var student = await _database.Students.GetByIdAsync(id);
 
             if (student == null)
             {
-                throw new NotFoundException($"Student with id = {id.Value} isn't found", "");
+                throw new InvalidOperationException($"Student with id = {id} isn't found");
             }
             _database.Students.Delete(student);
             await _database.SaveAsync();
@@ -91,18 +93,18 @@ namespace BoxingClub.BLL.Services
             return _database.SaveAsync();
         }
 
-        public async Task DeleteFromGroupAsync(int? studentId)
+        public async Task DeleteFromGroupAsync(int studentId)
         {
-            if (studentId == null)
+            if (studentId <= 0)
             {
-                throw new ArgumentNullException(nameof(studentId), "Student's id is null");
+                throw new ArgumentException("Student's id less or equal 0", nameof(studentId));
             }
 
-            var student = await _database.Students.GetByIdAsync(studentId.Value);
+            var student = await _database.Students.GetByIdAsync(studentId);
 
             if (student == null)
             {
-                throw new NotFoundException($"Student with id = {studentId.Value} isn't found", "");
+                throw new InvalidOperationException($"Student with id = {studentId} isn't found");
             }
 
             student.BoxingGroup = null;
@@ -130,7 +132,6 @@ namespace BoxingClub.BLL.Services
             var students = await _database.Students.GetAllAsync();
             
             var studentDTOs = _mapper.Map<List<StudentFullDTO>>(students);
-            AssignLastMedicalCertificateForStudents(studentDTOs);
 
             var validatedStudents = ValidateStudentsInList(studentDTOs);
             var mappedValidatedStudents = _mapper.Map<List<StudentLiteDTO>>(validatedStudents);
@@ -143,7 +144,7 @@ namespace BoxingClub.BLL.Services
             var takenStudents = mappedValidatedStudents.Skip((searchDTO.PageIndex.Value - 1) * searchDTO.PageSize.Value).Take(searchDTO.PageSize.Value);
             var count = mappedValidatedStudents.Count;
 
-            if (takenStudents.Count() == 0)
+            if (!takenStudents.Any())
             {
                 searchDTO.PageIndex = PageModelConstants.PageIndex;
                 takenStudents = mappedValidatedStudents.Skip((searchDTO.PageIndex.Value - 1) * searchDTO.PageSize.Value).Take(searchDTO.PageSize.Value);
@@ -152,14 +153,6 @@ namespace BoxingClub.BLL.Services
             return new PageModelDTO<StudentLiteDTO>() { Items = takenStudents, Count = count };
         }
 
-
-        private void AssignLastMedicalCertificateForStudents(List<StudentFullDTO> students)
-        {
-            foreach(var student in students)
-            {
-                student.LastMedicalCertificate = student.MedicalCertificates.OrderBy(x => x.DateOfIssue).LastOrDefault();
-            }
-        }
 
         private List<StudentLiteDTO> GetFilteredStudents(ExperienceOrder experienceOrder, MedExaminationOrder medExaminationOrder, List<StudentLiteDTO> students)
         {
@@ -203,8 +196,8 @@ namespace BoxingClub.BLL.Services
         {
             foreach (var student in students)
             {
-                student.Experienced = _fighterExperienceSpecification.IsValid(student);
-                student.IsMedicalCertificateValid = _medicalCertificateSpecification.IsValid(student);
+                student.Experienced = _fighterExperienceSpecification.Validate(student);
+                student.IsMedicalCertificateValid = _medicalCertificateSpecification.Validate(student);
             }
             return students;
         }

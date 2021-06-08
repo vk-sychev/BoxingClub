@@ -7,9 +7,9 @@ namespace BoxingClub.BLL.Interfaces
     {
         Task CreateMedicalCertificateAsync(MedicalCertificateDTO certificateDTO);
 
-        Task DeleteMedicalCertificateAsync(int? id);
+        Task DeleteMedicalCertificateAsync(int id);
 
-        Task<MedicalCertificateDTO> GetMedicalCertificateByIdAsync(int? id);
+        Task<MedicalCertificateDTO> GetMedicalCertificateByIdAsync(int id);
 
         Task UpdateMedicalCertificateAsync(MedicalCertificateDTO certificateDTO);
 

@@ -82,7 +82,7 @@ namespace BoxingClub.Web.Controllers
         [AuthorizeRoles(Constants.AdminRoleName)]
         [Route("Student/DeleteStudent/{id}")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudent(int? id)
+        public async Task<IActionResult> DeleteStudent(int id)
         {
             await _studentService.DeleteStudentAsync(id);
             return RedirectToAction("GetAllStudents", "Student");
@@ -91,7 +91,7 @@ namespace BoxingClub.Web.Controllers
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [Route("Student/EditStudent/{id}")]
         [HttpGet]
-        public async Task<IActionResult> EditStudent(int? id, bool fromHomeController, int returnId)
+        public async Task<IActionResult> EditStudent(int id, bool fromHomeController, int returnId)
         {
 
             ViewBag.Groups = await GetGroups();
@@ -126,7 +126,7 @@ namespace BoxingClub.Web.Controllers
 
         [HttpGet]
         [Route("Student/DetailsStudent/{id}")]
-        public async Task<IActionResult> DetailsStudent(int? id, bool fromHomeController, int returnId)
+        public async Task<IActionResult> DetailsStudent(int id, bool fromHomeController, int returnId)
         {
             var studentDTO = await _studentService.GetStudentByIdAsync(id);
             var student = _mapper.Map<StudentFullViewModel>(studentDTO);

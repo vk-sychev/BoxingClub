@@ -31,7 +31,8 @@ namespace BoxingClub.Web.Models
         public Gender Gender { get; set; }
 
         public List<MedicalCertificateViewModel> MedicalCertificates { get; set; } = new List<MedicalCertificateViewModel>();
-
+        
+        [DisplayName("MedExamination")]
         public bool IsMedicalCertificateValid { get; set; }
 
         [DataType(DataType.Date)]

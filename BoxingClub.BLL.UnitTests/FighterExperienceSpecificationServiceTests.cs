@@ -30,7 +30,7 @@ namespace BoxingClub.BLL.UnitTests
         [TestCaseSource(nameof(students))]
         public void IsValid_ValidInput(bool result, StudentFullDTO student) 
         {
-            var resultFromService = _studentSpecification.IsValid(student);
+            var resultFromService = _studentSpecification.Validate(student);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result, resultFromService);
@@ -39,7 +39,7 @@ namespace BoxingClub.BLL.UnitTests
         [Test]
         public void IsValid_InvalidInput_ShouldThrowArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => _studentSpecification.IsValid(null));
+            Assert.Throws<ArgumentNullException>(() => _studentSpecification.Validate(null));
         }
     }
 }

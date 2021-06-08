@@ -1,0 +1,71 @@
+﻿@model IEnumerable<BoxingClub.Web.Models.TournamentViewModel>
+
+@{
+    ViewData["Title"] = "GetAllAcceptedTournaments";
+}
+
+<h1>Accepted Tournaments</h1>
+
+@if (!Model.Any())
+{
+    <h5>There are no accepted tournaments!</h5>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsMedCertificateRequired)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @if (item.IsMedCertificateRequired)
+                    {
+                        @Html.Raw("Yes")
+                    }
+                    else
+                    {
+                        @Html.Raw("No")
+                    }
+                </td>
+                <td>
+                    <div class="d-flex justify-content-end">
+                        @Html.ActionLink("Details", "DetailsAcceptedTournament", new {tournamentId = item.Id},  new {@class = "btn btn-outline-primary px-3 btn-sm"})
+                        @Html.ActionLink("Delete", "DeleteTournamentRequest", new {tournamentId = item.Id}, new {@class = "btn btn-outline-danger btn-sm px-3 ml-3"})
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

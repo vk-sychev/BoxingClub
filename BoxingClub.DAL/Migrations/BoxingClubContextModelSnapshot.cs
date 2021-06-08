@@ -19,173 +19,60 @@ namespace BoxingClub.DAL.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BoxingClub.DAL.Entities.AgeCategory", b =>
+            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationRole", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("EndAge")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StartAge")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AgeCategories");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            EndAge = 16,
-                            Name = "15-16 years old",
-                            StartAge = 15
+                            Id = "291c0120-8c27-47c5-83fe-9d7deb36f73c",
+                            ConcurrencyStamp = "78b107fd-eead-4499-a1d5-c27761807721",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = 2,
-                            EndAge = 18,
-                            Name = "Juniors",
-                            StartAge = 17
+                            Id = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6",
+                            ConcurrencyStamp = "3e3a2ab6-aa12-40f0-894c-83895ff25325",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = 3,
-                            EndAge = 40,
-                            Name = "Adults",
-                            StartAge = 19
-                        });
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.AgeWeightCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AgeCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WeightCategoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AgeCategoryId");
-
-                    b.HasIndex("WeightCategoryId");
-
-                    b.ToTable("AgeWeightCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AgeCategoryId = 2,
-                            WeightCategoryId = 1
+                            Id = "db460306-31c6-457a-989e-9e4317be99b9",
+                            ConcurrencyStamp = "1d13fec8-2e7f-4e53-940d-a88c76d7f3c0",
+                            Name = "User",
+                            NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = 2,
-                            AgeCategoryId = 2,
-                            WeightCategoryId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AgeCategoryId = 2,
-                            WeightCategoryId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AgeCategoryId = 2,
-                            WeightCategoryId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AgeCategoryId = 2,
-                            WeightCategoryId = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AgeCategoryId = 2,
-                            WeightCategoryId = 6
-                        },
-                        new
-                        {
-                            Id = 7,
-                            AgeCategoryId = 2,
-                            WeightCategoryId = 7
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AgeCategoryId = 1,
-                            WeightCategoryId = 8
-                        },
-                        new
-                        {
-                            Id = 9,
-                            AgeCategoryId = 1,
-                            WeightCategoryId = 9
-                        },
-                        new
-                        {
-                            Id = 10,
-                            AgeCategoryId = 1,
-                            WeightCategoryId = 10
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AgeCategoryId = 3,
-                            WeightCategoryId = 1
-                        },
-                        new
-                        {
-                            Id = 12,
-                            AgeCategoryId = 3,
-                            WeightCategoryId = 2
-                        },
-                        new
-                        {
-                            Id = 13,
-                            AgeCategoryId = 3,
-                            WeightCategoryId = 3
-                        },
-                        new
-                        {
-                            Id = 14,
-                            AgeCategoryId = 3,
-                            WeightCategoryId = 4
-                        },
-                        new
-                        {
-                            Id = 15,
-                            AgeCategoryId = 3,
-                            WeightCategoryId = 5
-                        },
-                        new
-                        {
-                            Id = 16,
-                            AgeCategoryId = 3,
-                            WeightCategoryId = 6
-                        },
-                        new
-                        {
-                            Id = 17,
-                            AgeCategoryId = 3,
-                            WeightCategoryId = 7
+                            Id = "8da509ca-2005-457d-8ca3-105792f04013",
+                            ConcurrencyStamp = "0f697910-a781-42f5-9a67-dcb556af3eaa",
+                            Name = "Coach",
+                            NormalizedName = "COACH"
                         });
                 });
 
@@ -274,15 +161,15 @@ namespace BoxingClub.DAL.Migrations
                             Id = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "5acc2f70-f875-4539-bf4f-17ab60cc6f22",
+                            ConcurrencyStamp = "a1454166-59ef-4c1d-a9c6-6744e2b6911f",
                             Email = "Manager1@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER1@GMAIL.COM",
                             NormalizedUserName = "MANAGER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAwylYLdKHi1YUcFqsnjBr4CA+itbu/hXw0DScNf98RXlpNS9RLw2yaOBWfO+qLNPg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPzshqTCxr9MPQSgzwFtplcOWIhiXYny6oHhn3011Hho0lGZ4AxY6flbPuWA0+u5Aw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6e9264e5-ded3-4174-8322-b71639136f63",
+                            SecurityStamp = "a1c4196f-772c-4490-b974-9a2a83009045",
                             TwoFactorEnabled = false,
                             UserName = "Manager1"
                         },
@@ -291,15 +178,15 @@ namespace BoxingClub.DAL.Migrations
                             Id = "2d4254a5-7782-4b9c-a987-42a83d30669a",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "25cf79de-c326-41d4-9e0a-a73beadd9613",
+                            ConcurrencyStamp = "9fd6a539-b039-4210-b565-b1dbd08a729b",
                             Email = "Manager2@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGER2@GMAIL.COM",
                             NormalizedUserName = "MANAGER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBrFwWZJEOKVMBH6CXTA32st46V7iaNbnsRqik0pgsXEGEmwCnJjRnB+lJgHP0uHPQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBliWmfc+0AFHX7agr36Xs6n3cQmIzGHALsQH0aiAY+1t2FYFZTvVrRXawvhLWr6jA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e4deb6a1-bcb5-4f27-b848-60bc03dded6c",
+                            SecurityStamp = "6ba0b0b5-43b4-4261-aa9f-ac525a079baa",
                             TwoFactorEnabled = false,
                             UserName = "Manager2"
                         },
@@ -308,17 +195,17 @@ namespace BoxingClub.DAL.Migrations
                             Id = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(2000, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "92a4454a-f0e2-4de4-b93b-d0c3a4d6ec65",
+                            ConcurrencyStamp = "a90e2c4c-7a91-49f9-b6ad-d198441d0633",
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Vasya",
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGCVc5uJT1D+HcKBXdgoYp32p23gMUm0sfk8U/2TajMyaMab6InzN8oYEEBuYtaq8g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELopQt7N3tFY0PsyGbY4g9/R7bYGplDWbCH9PpUqEwta7qyBeKMBYJhshhj8gm4mOw==",
                             Patronymic = "Konstantinovich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "337226a2-d8ad-4ec6-9fc1-bce69eea3541",
+                            SecurityStamp = "7529c4d1-799d-4ec0-84d6-81b11f6094e6",
                             Surname = "Sychev",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
@@ -328,7 +215,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1995, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "aa6b12fb-cefb-4e02-90d1-a24fbf1731b4",
+                            ConcurrencyStamp = "b9cc9093-640e-40c4-8644-9c4ae347d7b8",
                             Description = "CMS in boxing",
                             Email = "Coach1@gmail.com",
                             EmailConfirmed = false,
@@ -336,10 +223,10 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Pavel",
                             NormalizedEmail = "COACH1@GMAIL.COM",
                             NormalizedUserName = "COACH1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG3vGOQ010FUuygNLG4DqUYHnqa1NYInqRgUmxfCg5dmQMeX1hyRzNNfhSC5NNdSmA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAzeWKMHP6E4yPwGrsmyQtPXlV4z4V51WvpJGpaTRw9p1hnfX/FSf8aFv/l3hpxC6g==",
                             Patronymic = "Nikolayevich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3c8c130c-8f37-48e0-95d6-cae31f96d09f",
+                            SecurityStamp = "27454ca9-7e17-471c-9a94-bed25237f065",
                             Surname = "Dorochin",
                             TwoFactorEnabled = false,
                             UserName = "Coach1"
@@ -349,7 +236,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1991, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "2e9f7eca-a524-43af-99a4-7277100f3a97",
+                            ConcurrencyStamp = "5782eb47-4961-4715-8662-bed778e01ba7",
                             Description = "CMS in boxing",
                             Email = "Coach2@gmail.com",
                             EmailConfirmed = false,
@@ -357,10 +244,10 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Vlad",
                             NormalizedEmail = "COACH2@GMAIL.COM",
                             NormalizedUserName = "COACH2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHlHOALwGiXS7XAalkJKB/D7mfEMKhphoP69y1br2bf97ixI5lMLIejMkXDgNPRIQQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEChH1xDnw5jdkzXybtJFLmRlNEuYdTljKyBBgRJp38UJnG2aC8HXThrtilppOsH5NA==",
                             Patronymic = "Nikolayevich",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "54561360-a982-4bda-9b30-48e338f5ca65",
+                            SecurityStamp = "d6f9c118-8068-42cc-983f-b425a94acfef",
                             Surname = "Dorochin",
                             TwoFactorEnabled = false,
                             UserName = "Coach2"
@@ -370,7 +257,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = "a50a06a5-df07-4728-b6a0-93173c2ce4cf",
                             AccessFailedCount = 0,
                             BornDate = new DateTime(1970, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "dcaba96b-16fe-4fcd-805c-c6eea9330e4c",
+                            ConcurrencyStamp = "7b6b2279-708a-43ef-b9cc-6806e8db2ce8",
                             Description = "MS in boxing",
                             Email = "Coach3@gmail.com",
                             EmailConfirmed = false,
@@ -378,12 +265,59 @@ namespace BoxingClub.DAL.Migrations
                             Name = "Sergey",
                             NormalizedEmail = "COACH3@GMAIL.COM",
                             NormalizedUserName = "COACH3",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBrXgwTaf6Zs+3OYzniUlCXin+ZXeXDK+3j57jFvUOulkZDhTy/u385yWCPvZ39SxQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMVTmezB5fMgtPnmDJzkLV4vNk83wXNRfJv7hJncokeMfrG3dzA+77v1/SDVDG6bjA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2f174eff-6277-463d-b130-3c566a56fb49",
+                            SecurityStamp = "798461f7-884b-4fe7-abd3-61b7a2e42dd2",
                             Surname = "Goncharov",
                             TwoFactorEnabled = false,
                             UserName = "Coach3"
+                        });
+                });
+
+            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationUserRole", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
+                            RoleId = "291c0120-8c27-47c5-83fe-9d7deb36f73c"
+                        },
+                        new
+                        {
+                            UserId = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
+                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
+                        },
+                        new
+                        {
+                            UserId = "2d4254a5-7782-4b9c-a987-42a83d30669a",
+                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
+                        },
+                        new
+                        {
+                            UserId = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
+                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
+                        },
+                        new
+                        {
+                            UserId = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
+                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
+                        },
+                        new
+                        {
+                            UserId = "a50a06a5-df07-4728-b6a0-93173c2ce4cf",
+                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
                         });
                 });
 
@@ -424,148 +358,6 @@ namespace BoxingClub.DAL.Migrations
                             Id = 3,
                             CoachId = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
                             Name = "Sarmat"
-                        });
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AgeWeightCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AgeWeightCategoryId");
-
-                    b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AgeWeightCategoryId = 8,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AgeWeightCategoryId = 9,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AgeWeightCategoryId = 10,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AgeWeightCategoryId = 8,
-                            Gender = 0
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AgeWeightCategoryId = 9,
-                            Gender = 0
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AgeWeightCategoryId = 10,
-                            Gender = 0
-                        },
-                        new
-                        {
-                            Id = 7,
-                            AgeWeightCategoryId = 1,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AgeWeightCategoryId = 2,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 9,
-                            AgeWeightCategoryId = 3,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 10,
-                            AgeWeightCategoryId = 4,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AgeWeightCategoryId = 5,
-                            Gender = 0
-                        },
-                        new
-                        {
-                            Id = 12,
-                            AgeWeightCategoryId = 6,
-                            Gender = 0
-                        },
-                        new
-                        {
-                            Id = 13,
-                            AgeWeightCategoryId = 7,
-                            Gender = 0
-                        },
-                        new
-                        {
-                            Id = 14,
-                            AgeWeightCategoryId = 11,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 15,
-                            AgeWeightCategoryId = 12,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 16,
-                            AgeWeightCategoryId = 13,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 17,
-                            AgeWeightCategoryId = 14,
-                            Gender = 1
-                        },
-                        new
-                        {
-                            Id = 18,
-                            AgeWeightCategoryId = 15,
-                            Gender = 0
-                        },
-                        new
-                        {
-                            Id = 19,
-                            AgeWeightCategoryId = 16,
-                            Gender = 0
-                        },
-                        new
-                        {
-                            Id = 20,
-                            AgeWeightCategoryId = 17,
-                            Gender = 0
                         });
                 });
 
@@ -650,6 +442,118 @@ namespace BoxingClub.DAL.Migrations
                             DateOfIssue = new DateTime(2021, 5, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Result = 1,
                             StudentId = 3
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 5
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 6
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 7
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 8
+                        },
+                        new
+                        {
+                            Id = 13,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 9
+                        },
+                        new
+                        {
+                            Id = 14,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 10
+                        },
+                        new
+                        {
+                            Id = 15,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 11
+                        },
+                        new
+                        {
+                            Id = 16,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 12
+                        },
+                        new
+                        {
+                            Id = 17,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 13
+                        },
+                        new
+                        {
+                            Id = 18,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 14
+                        },
+                        new
+                        {
+                            Id = 19,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 15
+                        },
+                        new
+                        {
+                            Id = 20,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 16
+                        },
+                        new
+                        {
+                            Id = 21,
+                            ClinicName = "VODC",
+                            DateOfIssue = new DateTime(2021, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Result = 1,
+                            StudentId = 17
                         });
                 });
 
@@ -702,7 +606,7 @@ namespace BoxingClub.DAL.Migrations
                             Id = 1,
                             BornDate = new DateTime(2000, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BoxingGroupId = 1,
-                            DateOfEntry = new DateTime(2020, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfEntry = new DateTime(2015, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 1,
                             Height = 175,
                             Name = "Vasiliy",
@@ -716,39 +620,212 @@ namespace BoxingClub.DAL.Migrations
                             Id = 2,
                             BornDate = new DateTime(1991, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BoxingGroupId = 2,
-                            DateOfEntry = new DateTime(2019, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfEntry = new DateTime(2014, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 1,
-                            Height = 180,
+                            Height = 183,
                             Name = "Igor",
                             NumberOfFights = 5,
                             Surname = "Zhuravlev",
-                            Weight = 87.0
+                            Weight = 70.0
                         },
                         new
                         {
                             Id = 3,
                             BornDate = new DateTime(2001, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BoxingGroupId = 1,
-                            DateOfEntry = new DateTime(2020, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfEntry = new DateTime(2018, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 1,
-                            Height = 175,
+                            Height = 170,
                             Name = "Ivan",
                             NumberOfFights = 2,
                             Surname = "Pavlov",
-                            Weight = 81.0
+                            Weight = 66.0
                         },
                         new
                         {
                             Id = 4,
                             BornDate = new DateTime(2000, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateOfEntry = new DateTime(2021, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 2,
+                            DateOfEntry = new DateTime(2013, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 1,
-                            Height = 176,
+                            Height = 174,
                             Name = "Andrew",
                             NumberOfFights = 10,
                             Patronymic = "Sergeevich",
                             Surname = "Solovyev",
-                            Weight = 73.0
+                            Weight = 72.0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BornDate = new DateTime(1998, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 3,
+                            DateOfEntry = new DateTime(2018, 5, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 0,
+                            Height = 165,
+                            Name = "Vika",
+                            NumberOfFights = 4,
+                            Surname = "Zhukova",
+                            Weight = 55.0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            BornDate = new DateTime(2001, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 2,
+                            DateOfEntry = new DateTime(2018, 5, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 1,
+                            Height = 172,
+                            Name = "Ivan",
+                            NumberOfFights = 3,
+                            Surname = "Shabanov",
+                            Weight = 66.0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            BornDate = new DateTime(2000, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 3,
+                            DateOfEntry = new DateTime(2020, 6, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 1,
+                            Height = 175,
+                            Name = "Vlad",
+                            NumberOfFights = 1,
+                            Patronymic = "Sergeevich",
+                            Surname = "Safonov",
+                            Weight = 74.0
+                        },
+                        new
+                        {
+                            Id = 8,
+                            BornDate = new DateTime(2000, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 1,
+                            DateOfEntry = new DateTime(2016, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 0,
+                            Height = 173,
+                            Name = "Anastasia",
+                            NumberOfFights = 6,
+                            Patronymic = "Antonovna",
+                            Surname = "Efimova",
+                            Weight = 60.0
+                        },
+                        new
+                        {
+                            Id = 9,
+                            BornDate = new DateTime(2000, 9, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 2,
+                            DateOfEntry = new DateTime(2020, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 0,
+                            Height = 180,
+                            Name = "Viktoria",
+                            NumberOfFights = 1,
+                            Surname = "Narkevich",
+                            Weight = 60.0
+                        },
+                        new
+                        {
+                            Id = 10,
+                            BornDate = new DateTime(2000, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 2,
+                            DateOfEntry = new DateTime(2016, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 1,
+                            Height = 178,
+                            Name = "Dmitry",
+                            NumberOfFights = 4,
+                            Patronymic = "Dmitrievich",
+                            Surname = "Kustovinov",
+                            Weight = 69.0
+                        },
+                        new
+                        {
+                            Id = 11,
+                            BornDate = new DateTime(1989, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 1,
+                            DateOfEntry = new DateTime(2012, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 1,
+                            Height = 166,
+                            Name = "Alexey",
+                            NumberOfFights = 10,
+                            Surname = "Fedorov",
+                            Weight = 54.0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            BornDate = new DateTime(1995, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 1,
+                            DateOfEntry = new DateTime(2017, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 1,
+                            Height = 169,
+                            Name = "Evgeniy",
+                            NumberOfFights = 6,
+                            Surname = "Baranin",
+                            Weight = 57.0
+                        },
+                        new
+                        {
+                            Id = 13,
+                            BornDate = new DateTime(2003, 5, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 3,
+                            DateOfEntry = new DateTime(2015, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 1,
+                            Height = 170,
+                            Name = "Alexander",
+                            NumberOfFights = 5,
+                            Surname = "Kirillov",
+                            Weight = 74.0
+                        },
+                        new
+                        {
+                            Id = 14,
+                            BornDate = new DateTime(2003, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 3,
+                            DateOfEntry = new DateTime(2012, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 1,
+                            Height = 165,
+                            Name = "Nikolay",
+                            NumberOfFights = 6,
+                            Surname = "Leshev",
+                            Weight = 67.0
+                        },
+                        new
+                        {
+                            Id = 15,
+                            BornDate = new DateTime(2004, 2, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 1,
+                            DateOfEntry = new DateTime(2016, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 0,
+                            Height = 170,
+                            Name = "Valeria",
+                            NumberOfFights = 7,
+                            Surname = "Malahova",
+                            Weight = 52.0
+                        },
+                        new
+                        {
+                            Id = 16,
+                            BornDate = new DateTime(2000, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 2,
+                            DateOfEntry = new DateTime(2016, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 0,
+                            Height = 180,
+                            Name = "Julia",
+                            NumberOfFights = 5,
+                            Surname = "Belikova",
+                            Weight = 63.0
+                        },
+                        new
+                        {
+                            Id = 17,
+                            BornDate = new DateTime(1990, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BoxingGroupId = 3,
+                            DateOfEntry = new DateTime(2010, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Gender = 0,
+                            Height = 174,
+                            Name = "Tatyana",
+                            NumberOfFights = 10,
+                            Surname = "Lelikova",
+                            Weight = 57.0
                         });
                 });
 
@@ -786,7 +863,7 @@ namespace BoxingClub.DAL.Migrations
                             Country = "Russia",
                             Date = new DateTime(2021, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsMedCertificateRequired = true,
-                            Name = "Moscow junior boxing championship"
+                            Name = "Moscow boxing championship"
                         },
                         new
                         {
@@ -804,7 +881,7 @@ namespace BoxingClub.DAL.Migrations
                             Country = "Belarus",
                             Date = new DateTime(2021, 7, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsMedCertificateRequired = true,
-                            Name = "International Women's Boxing Competition"
+                            Name = "International Boxing Competition"
                         },
                         new
                         {
@@ -817,337 +894,32 @@ namespace BoxingClub.DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BoxingClub.DAL.Entities.TournamentRequirement", b =>
+            modelBuilder.Entity("BoxingClub.DAL.Entities.TournamentRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("StudentHeight")
                         .HasColumnType("int");
 
-                    b.Property<int>("TournamentId")
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentWeight")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TournamentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("StudentId");
 
                     b.HasIndex("TournamentId");
 
-                    b.ToTable("TournamentRequirements");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 7,
-                            TournamentId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 8,
-                            TournamentId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 9,
-                            TournamentId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = 10,
-                            TournamentId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 11,
-                            TournamentId = 1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CategoryId = 12,
-                            TournamentId = 1
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryId = 13,
-                            TournamentId = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CategoryId = 7,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CategoryId = 8,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CategoryId = 9,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CategoryId = 10,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CategoryId = 14,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CategoryId = 15,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CategoryId = 16,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CategoryId = 17,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CategoryId = 1,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CategoryId = 2,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CategoryId = 3,
-                            TournamentId = 2
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CategoryId = 18,
-                            TournamentId = 3
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CategoryId = 19,
-                            TournamentId = 3
-                        },
-                        new
-                        {
-                            Id = 21,
-                            CategoryId = 20,
-                            TournamentId = 3
-                        },
-                        new
-                        {
-                            Id = 22,
-                            CategoryId = 4,
-                            TournamentId = 4
-                        },
-                        new
-                        {
-                            Id = 23,
-                            CategoryId = 5,
-                            TournamentId = 4
-                        },
-                        new
-                        {
-                            Id = 24,
-                            CategoryId = 6,
-                            TournamentId = 4
-                        },
-                        new
-                        {
-                            Id = 25,
-                            CategoryId = 1,
-                            TournamentId = 4
-                        },
-                        new
-                        {
-                            Id = 26,
-                            CategoryId = 2,
-                            TournamentId = 4
-                        },
-                        new
-                        {
-                            Id = 27,
-                            CategoryId = 3,
-                            TournamentId = 4
-                        });
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.WeightCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("EndWeight")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StartWeight")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WeightCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 3,
-                            EndWeight = 91,
-                            Name = "Heavyweight",
-                            StartWeight = 81
-                        },
-                        new
-                        {
-                            Id = 1,
-                            EndWeight = 60,
-                            Name = "Lightweight",
-                            StartWeight = 56
-                        },
-                        new
-                        {
-                            Id = 2,
-                            EndWeight = 75,
-                            Name = "Middleweight",
-                            StartWeight = 69
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Super heavyweight",
-                            StartWeight = 91
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Heavyweight",
-                            StartWeight = 81
-                        },
-                        new
-                        {
-                            Id = 5,
-                            EndWeight = 60,
-                            Name = "Lightweight",
-                            StartWeight = 57
-                        },
-                        new
-                        {
-                            Id = 6,
-                            EndWeight = 75,
-                            Name = "Middleweight",
-                            StartWeight = 69
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Heavyweight",
-                            StartWeight = 80
-                        },
-                        new
-                        {
-                            Id = 8,
-                            EndWeight = 63,
-                            Name = "Lightweight",
-                            StartWeight = 60
-                        },
-                        new
-                        {
-                            Id = 9,
-                            EndWeight = 75,
-                            Name = "Middleweight",
-                            StartWeight = 70
-                        });
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "291c0120-8c27-47c5-83fe-9d7deb36f73c",
-                            ConcurrencyStamp = "f2b8b99b-8db4-499a-92e0-e5873e7c1f27",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6",
-                            ConcurrencyStamp = "84d77038-26da-46d4-9548-130a804840d3",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        },
-                        new
-                        {
-                            Id = "db460306-31c6-457a-989e-9e4317be99b9",
-                            ConcurrencyStamp = "b0c33778-5be2-420d-a9cf-06ded9b9f3fe",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "8da509ca-2005-457d-8ca3-105792f04013",
-                            ConcurrencyStamp = "381ad310-3f88-4b31-b61b-4c8aa2b87a77",
-                            Name = "Coach",
-                            NormalizedName = "COACH"
-                        });
+                    b.ToTable("TournamentRequests");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1230,41 +1002,7 @@ namespace BoxingClub.DAL.Migrations
 
                     b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "7dc730f1-78ec-41f5-a079-7d5e5d6b39ef",
-                            RoleId = "291c0120-8c27-47c5-83fe-9d7deb36f73c"
-                        },
-                        new
-                        {
-                            UserId = "fda7dfec-9828-41b2-bd9c-53dccbef2bb8",
-                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
-                        },
-                        new
-                        {
-                            UserId = "2d4254a5-7782-4b9c-a987-42a83d30669a",
-                            RoleId = "7bb8b4c7-de76-4b77-b5cf-ce4ef11d83a6"
-                        },
-                        new
-                        {
-                            UserId = "19759de3-ce1d-4cfd-8340-4e64eb245eb4",
-                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
-                        },
-                        new
-                        {
-                            UserId = "060342c3-9dc3-4597-bae1-9f19c991ebe9",
-                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
-                        },
-                        new
-                        {
-                            UserId = "a50a06a5-df07-4728-b6a0-93173c2ce4cf",
-                            RoleId = "8da509ca-2005-457d-8ca3-105792f04013"
-                        });
+                    b.ToTable("IdentityUserRole<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -1286,19 +1024,23 @@ namespace BoxingClub.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BoxingClub.DAL.Entities.AgeWeightCategory", b =>
+            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationUserRole", b =>
                 {
-                    b.HasOne("BoxingClub.DAL.Entities.AgeCategory", "AgeCategory")
-                        .WithMany("AgeWeightCategories")
-                        .HasForeignKey("AgeCategoryId");
+                    b.HasOne("BoxingClub.DAL.Entities.ApplicationRole", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("BoxingClub.DAL.Entities.WeightCategory", "WeightCategory")
-                        .WithMany("AgeWeightCategories")
-                        .HasForeignKey("WeightCategoryId");
+                    b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("AgeCategory");
+                    b.Navigation("Role");
 
-                    b.Navigation("WeightCategory");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>
@@ -1308,15 +1050,6 @@ namespace BoxingClub.DAL.Migrations
                         .HasForeignKey("CoachId");
 
                     b.Navigation("Coach");
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.Category", b =>
-                {
-                    b.HasOne("BoxingClub.DAL.Entities.AgeWeightCategory", "AgeWeightCategory")
-                        .WithMany()
-                        .HasForeignKey("AgeWeightCategoryId");
-
-                    b.Navigation("AgeWeightCategory");
                 });
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.MedicalCertificate", b =>
@@ -1339,26 +1072,24 @@ namespace BoxingClub.DAL.Migrations
                     b.Navigation("BoxingGroup");
                 });
 
-            modelBuilder.Entity("BoxingClub.DAL.Entities.TournamentRequirement", b =>
+            modelBuilder.Entity("BoxingClub.DAL.Entities.TournamentRequest", b =>
                 {
-                    b.HasOne("BoxingClub.DAL.Entities.Category", "Category")
-                        .WithMany("TournamentRequirements")
-                        .HasForeignKey("CategoryId");
+                    b.HasOne("BoxingClub.DAL.Entities.Student", "Student")
+                        .WithMany("TournamentRequests")
+                        .HasForeignKey("StudentId");
 
                     b.HasOne("BoxingClub.DAL.Entities.Tournament", "Tournament")
-                        .WithMany("TournamentRequirements")
-                        .HasForeignKey("TournamentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("TournamentRequests")
+                        .HasForeignKey("TournamentId");
 
-                    b.Navigation("Category");
+                    b.Navigation("Student");
 
                     b.Navigation("Tournament");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("BoxingClub.DAL.Entities.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1383,21 +1114,6 @@ namespace BoxingClub.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.HasOne("BoxingClub.DAL.Entities.ApplicationUser", null)
@@ -1407,9 +1123,14 @@ namespace BoxingClub.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BoxingClub.DAL.Entities.AgeCategory", b =>
+            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationRole", b =>
                 {
-                    b.Navigation("AgeWeightCategories");
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("BoxingClub.DAL.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.BoxingGroup", b =>
@@ -1417,24 +1138,16 @@ namespace BoxingClub.DAL.Migrations
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("BoxingClub.DAL.Entities.Category", b =>
-                {
-                    b.Navigation("TournamentRequirements");
-                });
-
             modelBuilder.Entity("BoxingClub.DAL.Entities.Student", b =>
                 {
                     b.Navigation("MedicalCertificates");
+
+                    b.Navigation("TournamentRequests");
                 });
 
             modelBuilder.Entity("BoxingClub.DAL.Entities.Tournament", b =>
                 {
-                    b.Navigation("TournamentRequirements");
-                });
-
-            modelBuilder.Entity("BoxingClub.DAL.Entities.WeightCategory", b =>
-                {
-                    b.Navigation("AgeWeightCategories");
+                    b.Navigation("TournamentRequests");
                 });
 #pragma warning restore 612, 618
         }
