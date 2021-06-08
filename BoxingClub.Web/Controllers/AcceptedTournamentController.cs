@@ -56,7 +56,7 @@ namespace BoxingClub.Web.Controllers
             var tournamentRequestModel = await GetPossibleTournamentRequestByTournamentId(model.TournamentId);
             if (!model.Students.Any())
             {
-                ModelState.AddModelError("error", ErrorConstants.ValidationErrorMessageForStudentSelection);
+                ModelState.AddModelError("studentSelectionError", ErrorConstants.ValidationErrorMessageForStudentSelection);
             }
             else
             {

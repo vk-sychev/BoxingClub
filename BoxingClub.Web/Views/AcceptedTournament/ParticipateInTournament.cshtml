@@ -11,7 +11,8 @@
 <div class="d-flex justify-content-between mb-2">
     <div>
         <h1>Participate In Tournament</h1>
-        <h5 class="text-danger">@Html.ValidationMessage("error")</h5>
+        <h5 class="text-danger">@Html.ValidationMessage("studentSelectionError")</h5>
+        <h5 class="text-danger">@Html.ValidationMessage("generalError")</h5>
     </div>
     @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.AdminRoleName))
     {
