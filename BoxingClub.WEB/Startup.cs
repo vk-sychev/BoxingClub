@@ -30,6 +30,11 @@ using System.Collections.Generic;
 using BoxingClub.BLL.Implementation.HttpSpecificationClient;
 using BoxingClub.Web.Policies;
 using BoxingClub.BLL.Interfaces.HttpSpecificationClient;
+using BoxingClub.Web.HttpClients.Implementation;
+using BoxingClub.Web.HttpClients.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Http;
 
 namespace BoxingClub.Web
 {
@@ -39,7 +44,7 @@ namespace BoxingClub.Web
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;            
+            Configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -72,6 +77,7 @@ namespace BoxingClub.Web
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
             services.AddTransient<ITournamentService, TournamentService>();
@@ -86,8 +92,18 @@ namespace BoxingClub.Web
             {
                 client.BaseAddress = new Uri(Configuration.GetSection("SpecServer").GetSection("Uri").Value);
                 client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("SpecServer").GetSection("HttpClientTimeout").Value));
-            }).AddPolicyHandler(SpecServerPolicy.GetWaitAndRetryPolicy())
-            .AddPolicyHandler(SpecServerPolicy.GetTimeoutPolicy());
+            })
+                .AddPolicyHandler(SpecServerPolicy.GetWaitAndRetryPolicy())
+                .AddPolicyHandler(SpecServerPolicy.GetTimeoutPolicy());
+
+            services.AddHttpClient<IAuthClient, AuthClient>(client =>
+                {
+                    client.BaseAddress = new Uri(Configuration.GetSection("AuthServer").GetSection("Uri").Value);
+                    client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("AuthServer")
+                        .GetSection("HttpClientTimeout").Value));
+                })
+                .AddPolicyHandler(AuthServerPolicy.GetWaitAndRetryPolicy())
+                .AddPolicyHandler(AuthServerPolicy.GetTimeoutPolicy());
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(),
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
@@ -95,7 +111,7 @@ namespace BoxingClub.Web
                                                        new WeightCategoryProfile(), new TournamentSpecificationProfile()
             };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
-            mapperConfig.AssertConfigurationIsValid();
+            //mapperConfig.AssertConfigurationIsValid();
 
             services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile),
                                    typeof(UserProfile), typeof(MedicalCertificateProfile), typeof(TournamentProfile), typeof(TournamentSpecificationProfile),
@@ -104,10 +120,13 @@ namespace BoxingClub.Web
             services.AddMvc(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
-                                .RequireAuthenticatedUser()
-                                .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
+                {
+                    AuthenticationSchemes = new List<string>() { CookieAuthenticationDefaults.AuthenticationScheme }
+                }
+                    .RequireAuthenticatedUser()
+                    .Build();
 
+                options.Filters.Add(new AuthorizeFilter(policy));
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .AddFluentValidation(configuration => configuration.ImplicitlyValidateChildProperties = true);
@@ -121,11 +140,28 @@ namespace BoxingClub.Web
             services.AddTransient<IValidator<TournamentViewModel>, TournamentViewModelValidator>();
             services.AddTransient<IValidator<TournamentRequestViewModel>, TournamentRequestViewModelValidator>();
 
-            services.ConfigureApplicationCookie(options =>
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/SignIn";
+                    options.AccessDeniedPath = "/Administration/AccessDenied";
+                    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Cookie", policy =>
+                {
+                    policy.AuthenticationSchemes = new List<string>()
+                        {CookieAuthenticationDefaults.AuthenticationScheme};
+                    policy.RequireAuthenticatedUser();
+                });
+            });
+
+/*            services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/SignIn";
                 options.AccessDeniedPath = "/Administration/AccessDenied";
-            });
+            });*/
         }
 
 
@@ -149,6 +185,13 @@ namespace BoxingClub.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always,
+            });
 
             app.UseEndpoints(endpoints =>
             {

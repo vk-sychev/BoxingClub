@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BoxingClub.Web.CustomAttributes
 {
@@ -6,6 +7,7 @@ namespace BoxingClub.Web.CustomAttributes
     {
         public AuthorizeRolesAttribute(params string[] roles) : base()
         {
+            AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme;
             Roles = string.Join(",", roles);
         }
     }
