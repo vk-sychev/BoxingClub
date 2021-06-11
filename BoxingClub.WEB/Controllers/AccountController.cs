@@ -27,19 +27,19 @@ namespace BoxingClub.Web.Controllers
         private readonly IAuthenticationService _signInService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly IAuthClient _authClient;
+        private readonly IUserClient _userClient;
         private readonly ILogger<AccountController> _logger;
 
         public AccountController(IAuthenticationService signInService,
                                  IUserService userService,
                                  IMapper mapper,
-                                 IAuthClient authClient,
+                                 IUserClient userClient,
                                  ILogger<AccountController> logger)
         {
             _signInService = signInService;
             _userService = userService;
             _mapper = mapper;
-            _authClient = authClient;
+            _userClient = userClient;
             _logger = logger;
         }
 
@@ -59,15 +59,15 @@ namespace BoxingClub.Web.Controllers
                 HttpResponseMessage response;
                 try
                 {
-                    response = await _authClient.SignUpAsync(model);
+                    response = await _userClient.SignUpAsync(model);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        var token = await _authClient.GetTokenAsync(model.UserName, model.Password);
+                        var token = await _userClient.GetTokenAsync(model.UserName, model.Password);
                         if (!string.IsNullOrEmpty(token))
                         {
-                            var decodedToken = await AppendTokenInCookie(token);
-                            await SignInCookie(decodedToken);
+                            var decodedToken = AppendTokenInCookie(token);
+                            await SignInCookie(decodedToken, true);
                             return RedirectToAction("index", "home");
                         }
 
@@ -119,7 +119,7 @@ namespace BoxingClub.Web.Controllers
                 var token = string.Empty;
                 try
                 {
-                    token = await _authClient.GetTokenAsync(model.UserName, model.Password);
+                    token = await _userClient.GetTokenAsync(model.UserName, model.Password);
                 }
 
                 catch
@@ -135,8 +135,8 @@ namespace BoxingClub.Web.Controllers
                     {
                         Expires = decodedToken.ValidTo
                     });*/
-                    var decodedToken = await AppendTokenInCookie(token);
-                    await SignInCookie(decodedToken);
+                    var decodedToken = AppendTokenInCookie(token);
+                    await SignInCookie(decodedToken, model.RememberMe);
                     /*ClaimsIdentity identity = new ClaimsIdentity(decodedToken.Claims, CookieAuthenticationDefaults.AuthenticationScheme, 
                         ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
@@ -156,7 +156,7 @@ namespace BoxingClub.Web.Controllers
             return View(model);
         }
 
-        private async Task SignInCookie(JwtSecurityToken token)
+        private async Task SignInCookie(JwtSecurityToken token, bool isPersistent)
         {
             ClaimsIdentity identity = new ClaimsIdentity(token.Claims,
                 CookieAuthenticationDefaults.AuthenticationScheme,
@@ -169,11 +169,11 @@ namespace BoxingClub.Web.Controllers
                 principal, 
                 new AuthenticationProperties()
                 {
-                    IsPersistent = true
+                    IsPersistent = isPersistent
                 });
         }
 
-        private async Task<JwtSecurityToken> AppendTokenInCookie(string token)
+        private JwtSecurityToken AppendTokenInCookie(string token)
         {
             var decodedToken = (JwtSecurityToken)new JwtSecurityTokenHandler().ReadToken(token);
             HttpContext.Response.Cookies.Append("token", token, new CookieOptions()

@@ -1,13 +1,13 @@
-﻿using BoxingClub.Infrastructure.Exceptions;
+﻿using System.Net;
+using BoxingClub.Infrastructure.Exceptions;
 using BoxingClub.Infrastructure.Helpers;
-using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace BoxingClub.Web.Controllers
+namespace IdentityServer.Controllers
 {
     [AllowAnonymous]
     public class ErrorController : Controller
@@ -20,13 +20,13 @@ namespace BoxingClub.Web.Controllers
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [Route("Error")]
-        public IActionResult Error()
+        public HttpStatusCode Error()
         {
             var exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             var error = HttpCodeHelper.GetSwitchHttpCode(exceptionDetails.Error.GetType());
             _logger.LogError(exceptionDetails.Error.Message);
             ViewBag.Message = error.Message;
-            return View();
+            return (HttpStatusCode)error.StatusCode;
         }
     }
 }

@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BoxingClub.Infrastructure.Helpers;
+using BoxingClub.Web.HttpClients.Interfaces;
 
 namespace BoxingClub.Web.Controllers
 {
@@ -23,29 +25,32 @@ namespace BoxingClub.Web.Controllers
         private readonly IRoleService _roleService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly IAdministrationWebManager _administrationWebManager;
+        private readonly IUserClient _userClient;
 
         public AdministrationController(IRoleService roleService,
                                         IUserService userService,
-                                        IMapper mapper,
-                                        IAdministrationWebManager administrationWebManager)
+                                        IMapper mapper, 
+                                        IUserClient userClient)
         {   
             _roleService = roleService;
             _userService = userService;
             _mapper = mapper;
-            _administrationWebManager = administrationWebManager;
+            _userClient = userClient;
         }
 
         [HttpGet]
         [Route("Administration/GetUsers")]
         public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
-            var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
+            var users = _userClient.GetUsers(searchModel);
+
+/*            var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
             var sizes = PageSizeHelper.GetPageSizeList(7);
             ViewBag.Sizes = sizes;
             ViewBag.pageSize = searchModel.PageSize;
 
-            return View(pageViewModel);
+            return View(pageViewModel);*/
+            return View();
         }
 
         [HttpDelete("{id}")]

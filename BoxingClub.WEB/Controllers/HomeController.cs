@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BoxingClub.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace BoxingClub.Web.Controllers

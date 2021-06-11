@@ -11,6 +11,7 @@ using BoxingClub.Web.CustomAttributes;
 using System.Linq;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
+using BoxingClub.Infrastructure.Helpers;
 using BoxingClub.Web.WebManagers.Interfaces;
 using BoxingClub.Web.Helpers;
 

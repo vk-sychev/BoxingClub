@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using BoxingClub.BLL.DomainEntities;
 using BoxingClub.Web.HttpClients.Interfaces;
 using IdentityModel.Client;
 using BoxingClub.Infrastructure.Exceptions;
@@ -11,22 +13,23 @@ using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
 
 namespace BoxingClub.Web.HttpClients.Implementation
 {
-    public class AuthClient : IAuthClient
+    public class UserClient : IUserClient
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<AuthClient> _logger;
+        private readonly ILogger<UserClient> _logger;
         private readonly string _baseUrl;
         private readonly string _clientId;
         private readonly string _clientSecret;
 
-        public AuthClient(HttpClient httpClient, 
+        public UserClient(HttpClient httpClient, 
                           IConfiguration configuration,
-                          ILogger<AuthClient> logger)
+                          ILogger<UserClient> logger)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient), "httpClient is null");
             _logger = logger;
@@ -64,10 +67,24 @@ namespace BoxingClub.Web.HttpClients.Implementation
 
         public async Task<HttpResponseMessage> SignUpAsync(SignUpViewModel model)
         {
-            var signUpUrl = $"{_httpClient.BaseAddress}Account/SignUp";
-            var dictionary = GetSignUpModelDictionary(model);
+            var signUpUrl = $"{_baseUrl}Account/SignUp";
+            var dictionary = GetModelDictionary(model);
             var content = new FormUrlEncodedContent(dictionary);
             var response = await _httpClient.PostAsync(signUpUrl, content);
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(response.ReasonPhrase);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> GetUsers(SearchModelDTO searchModel)
+        {
+            var getUsersUrl = $"{_baseUrl}Administration/GetUsers?searchModel = {searchModel}";
+            var dictionary = GetModelDictionary(searchModel);
+            var content = new FormUrlEncodedContent(dictionary);
+            var response = await _httpClient.GetAsync(getUsersUrl);
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError(response.ReasonPhrase);
@@ -88,18 +105,22 @@ namespace BoxingClub.Web.HttpClients.Implementation
             return discovery;
         }
 
-        private Dictionary<string, string> GetSignUpModelDictionary(SignUpViewModel model)
+/*        private Dictionary<string, string> GetSignUpModelDictionary(SignUpViewModel model)
         {
-            return new Dictionary<string, string>()
-            {
-                {"UserName", model.UserName},
-                {"Name", model.Name},
-                {"Surname", model.Surname},
-                {"Patronymic", model.Patronymic},
-                {"Password", model.Password},
-                {"BornDate", model.BornDate.ToString("d")},
-                {"Email", model.Email},
-            };
+            var json = JsonConvert.SerializeObject(model);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+        }
+
+        private Dictionary<string, string> GetSearchModelDictionary(SearchModelDTO model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+        }*/
+
+        private Dictionary<string, string> GetModelDictionary(object model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
     }
 }

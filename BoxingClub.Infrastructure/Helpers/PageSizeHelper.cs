@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BoxingClub.Web.Helpers
+namespace BoxingClub.Infrastructure.Helpers
 {
     public static class PageSizeHelper
     {

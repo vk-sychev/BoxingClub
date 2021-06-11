@@ -96,7 +96,7 @@ namespace BoxingClub.Web
                 .AddPolicyHandler(SpecServerPolicy.GetWaitAndRetryPolicy())
                 .AddPolicyHandler(SpecServerPolicy.GetTimeoutPolicy());
 
-            services.AddHttpClient<IAuthClient, AuthClient>(client =>
+            services.AddHttpClient<IUserClient, UserClient>(client =>
                 {
                     client.BaseAddress = new Uri(Configuration.GetSection("AuthServer").GetSection("Uri").Value);
                     client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("AuthServer")
