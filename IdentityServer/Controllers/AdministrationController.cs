@@ -11,6 +11,7 @@ using IdentityServer.BLL.Interfaces;
 using IdentityServer.Models;
 using IdentityServer.WebManagers.Implementation;
 using IdentityServer.WebManagers.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,36 +19,40 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace IdentityServer.Controllers
 {
     [Route("[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
         private readonly IMapper _mapper;
         private readonly IAdministrationWebManager _administrationWebManager;
 
         public AdministrationController(IUserService userService,
+                                        IRoleService roleService,
                                         IMapper mapper,
                                         IAdministrationWebManager administrationWebManager)
         {
             _userService = userService;
+            _roleService = roleService;
             _mapper = mapper;
             _administrationWebManager = administrationWebManager;
         }
 
+
         [HttpGet]
-        [Route("Administration/GetUsers")]
+        [Route("[action]")]
         public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
             var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
-            var sizes = PageSizeHelper.GetPageSizeList(7);
+/*            var sizes = PageSizeHelper.GetPageSizeList(7);
             ViewBag.Sizes = sizes;
-            ViewBag.pageSize = searchModel.PageSize;
+            ViewBag.pageSize = searchModel.PageSize;*/
 
             return Ok(pageViewModel);
         }
 
         [HttpDelete("{id}")]
-        [Route("Administration/DeleteUser/{id}")]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             await _userService.DeleteUserByIdAsync(id);
@@ -56,26 +61,35 @@ namespace IdentityServer.Controllers
         }
 
         [HttpGet]
-        [Route("Administration/DetailsUser/{id}")]
-        public async Task<IActionResult> DetailsUser(string id)
+        [Route("[action]")]
+        public async Task<IActionResult> GetUser(string id)
         {
             var user = await _userService.FindUserByIdAsync(id);
             var mappedUser = _mapper.Map<UserViewModel>(user);
             return Ok(mappedUser);
         }
 
-        [HttpGet]
-        [Route("Administration/EditUser/{id}")]
-        public async Task<IActionResult> EditUser(string id)
-        {
-            var user = await _userService.FindUserByIdAsync(id);
-            var mappedUser = _mapper.Map<UserViewModel>(user);
-            //ViewBag.Roles = await GetRoles();
-            return Ok(mappedUser);
-        }
+        /*        [HttpGet]
+                [Route("[action]")]
+                public async Task<IActionResult> DetailsUser(string id)
+                {
+                    var user = await _userService.FindUserByIdAsync(id);
+                    var mappedUser = _mapper.Map<UserViewModel>(user);
+                    return Ok(mappedUser);
+                }
+
+                [HttpGet]
+                [Route("[action]")]
+                public async Task<IActionResult> EditUser(string id)
+                {
+                    var user = await _userService.FindUserByIdAsync(id);
+                    var mappedUser = _mapper.Map<UserViewModel>(user);
+                    //ViewBag.Roles = await GetRoles();
+                    return Ok(mappedUser);
+                }*/
 
         [HttpPost]
-        [Route("Administration/EditUser/{id}")]
+        [Route("[action]")]
         public async Task<HttpStatusCode> EditUser(UserViewModel model)
         {
             var result = new AccountResultDTO();
@@ -92,6 +106,14 @@ namespace IdentityServer.Controllers
             }
 
             return HttpStatusCode.BadRequest;
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<List<RoleViewModel>> GetRoles()
+        {
+            var roles = await _roleService.GetRolesAsync();
+            return _mapper.Map<List<RoleViewModel>>(roles);
         }
     }
 }

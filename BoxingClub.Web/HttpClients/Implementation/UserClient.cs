@@ -1,5 +1,7 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,6 +26,8 @@ namespace BoxingClub.Web.HttpClients.Implementation
         private readonly HttpClient _httpClient;
         private readonly ILogger<UserClient> _logger;
         private readonly string _baseUrl;
+        private readonly string _administrationController = "Administration";
+        private readonly string _accountController = "Account";
         private readonly string _clientId;
         private readonly string _clientSecret;
 
@@ -44,7 +48,7 @@ namespace BoxingClub.Web.HttpClients.Implementation
             _clientSecret = configuration.GetSection("AuthServer").GetSection("Credentials").GetSection("ClientSecret").Value;
         }
 
-        public async Task<string> GetTokenAsync(string username, string password)
+        public async Task<TokenResponse> GetTokenAsync(string username, string password)
         {
             var discoveryDocument = await GetDiscoveryDocument();
             var tokenResponse = await _httpClient.RequestPasswordTokenAsync(
@@ -60,16 +64,17 @@ namespace BoxingClub.Web.HttpClients.Implementation
             if (tokenResponse.HttpStatusCode != HttpStatusCode.OK || tokenResponse.IsError)
             {
                 _logger.LogError(tokenResponse.Error);
-                throw new InvalidOperationException("Invalid Sign In Attempt");
             }
-            return tokenResponse.AccessToken;
+            return tokenResponse;
         }
 
         public async Task<HttpResponseMessage> SignUpAsync(SignUpViewModel model)
         {
-            var signUpUrl = $"{_baseUrl}Account/SignUp";
+            var signUpUrl = $"{_baseUrl}{_accountController}/SignUp";
+
             var dictionary = GetModelDictionary(model);
             var content = new FormUrlEncodedContent(dictionary);
+
             var response = await _httpClient.PostAsync(signUpUrl, content);
             if (!response.IsSuccessStatusCode)
             {
@@ -79,13 +84,74 @@ namespace BoxingClub.Web.HttpClients.Implementation
             return response;
         }
 
-        public async Task<HttpResponseMessage> GetUsers(SearchModelDTO searchModel)
+        public async Task<HttpResponseMessage> GetUsers(SearchModelDTO searchModel, string token)
         {
             var parameters = $"?PageIndex={searchModel.PageIndex}&PageSize={searchModel.PageSize}";
-            var getUsersUrl = $"{_baseUrl}Administration/GetUsers{parameters}";
-            //var dictionary = GetModelDictionary(searchModel);
-            //var content = new FormUrlEncodedContent(dictionary);
+            var getUsersUrl = $"{_baseUrl}{_administrationController}/GetUsers{parameters}";
+
+            _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getUsersUrl);
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(response.ReasonPhrase);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> DeleteUser(string id, string token)
+        {
+            var deleteUserUrl = $"{_baseUrl}{_administrationController}/DeleteUser?id={id}";
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.DeleteAsync(deleteUserUrl);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(response.ReasonPhrase);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> GetUser(string id, string token)
+        {
+            var getUserUrl = $"{_baseUrl}{_administrationController}/GetUser?id={id}";
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.GetAsync(getUserUrl);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(response.ReasonPhrase);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> EditUser(string id, string token, UserViewModel model)
+        {
+            var editUserUrl = $"{_baseUrl}{_administrationController}/EditUser?id={model.Id}";
+
+            var dictionary = GetModelDictionary(model);
+            var content = new FormUrlEncodedContent(dictionary);
+            var response = await _httpClient.PostAsync(editUserUrl, content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(response.ReasonPhrase);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> GetRoles(string token)
+        {
+            var getRolesUrl = $"{_baseUrl}{_administrationController}/GetRoles";
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.GetAsync(getRolesUrl);
+
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError(response.ReasonPhrase);
@@ -106,17 +172,6 @@ namespace BoxingClub.Web.HttpClients.Implementation
             return discovery;
         }
 
-/*        private Dictionary<string, string> GetSignUpModelDictionary(SignUpViewModel model)
-        {
-            var json = JsonConvert.SerializeObject(model);
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-        }
-
-        private Dictionary<string, string> GetSearchModelDictionary(SearchModelDTO model)
-        {
-            var json = JsonConvert.SerializeObject(model);
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-        }*/
 
         private Dictionary<string, string> GetModelDictionary(object model)
         {

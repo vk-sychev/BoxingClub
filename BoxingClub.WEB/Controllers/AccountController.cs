@@ -56,40 +56,24 @@ namespace BoxingClub.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response;
-                try
+                var response = await _userClient.SignUpAsync(model);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    response = await _userClient.SignUpAsync(model);
+                    var tokenResponse = await _userClient.GetTokenAsync(model.UserName, model.Password);
+                    var token = string.Empty;
 
-                    if (response.IsSuccessStatusCode)
+                    if (tokenResponse.IsError)
                     {
-                        var token = await _userClient.GetTokenAsync(model.UserName, model.Password);
-                        if (!string.IsNullOrEmpty(token))
-                        {
-                            var decodedToken = AppendTokenInCookie(token);
-                            await SignInCookie(decodedToken, true);
-                            return RedirectToAction("index", "home");
-                        }
-
-                        ModelState.AddModelError("", "Invalid Login Attempt");
+                        token = tokenResponse.AccessToken;
+                        var decodedToken = AppendTokenInCookie(token);
+                        await SignInCookie(decodedToken, true);
+                        return RedirectToAction("index", "home");
                     }
                 }
-                catch
-                {
-                    return View(model);
-                }
 
-/*                var user = _mapper.Map<UserDTO>(model);
-                var result = await _userService.SignUpAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("index", "home");
-                }*/
+                ModelState.AddModelError("", "Invalid Login Attempt");
 
-/*                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }*/
             }
             return View(model);
         }
@@ -116,13 +100,14 @@ namespace BoxingClub.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var response = await _userClient.GetTokenAsync(model.UserName, model.Password);
                 var token = string.Empty;
-                try
-                {
-                    token = await _userClient.GetTokenAsync(model.UserName, model.Password);
-                }
 
-                catch
+                if (!response.IsError)
+                {
+                    token = response.AccessToken;
+                }
+                else
                 {
                     ModelState.AddModelError("", "Invalid Login Attempt");
                     return View(model);
@@ -130,18 +115,8 @@ namespace BoxingClub.Web.Controllers
 
                 if (!string.IsNullOrEmpty(token))
                 {
-/*                    var decodedToken = (JwtSecurityToken) new JwtSecurityTokenHandler().ReadToken(token);
-                    HttpContext.Response.Cookies.Append("token", token, new CookieOptions()
-                    {
-                        Expires = decodedToken.ValidTo
-                    });*/
                     var decodedToken = AppendTokenInCookie(token);
                     await SignInCookie(decodedToken, model.RememberMe);
-                    /*ClaimsIdentity identity = new ClaimsIdentity(decodedToken.Claims, CookieAuthenticationDefaults.AuthenticationScheme, 
-                        ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-
-                    var principal = new ClaimsPrincipal(identity);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties() { IsPersistent = true });*/
 
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     {
@@ -160,13 +135,13 @@ namespace BoxingClub.Web.Controllers
         {
             ClaimsIdentity identity = new ClaimsIdentity(token.Claims,
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                ClaimsIdentity.DefaultNameClaimType, 
+                ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
 
             var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
-                principal, 
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
                 new AuthenticationProperties()
                 {
                     IsPersistent = isPersistent

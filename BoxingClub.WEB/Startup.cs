@@ -97,11 +97,11 @@ namespace BoxingClub.Web
                 .AddPolicyHandler(SpecServerPolicy.GetTimeoutPolicy());
 
             services.AddHttpClient<IUserClient, UserClient>(client =>
-                {
-                    client.BaseAddress = new Uri(Configuration.GetSection("AuthServer").GetSection("Uri").Value);
-                    client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("AuthServer")
-                        .GetSection("HttpClientTimeout").Value));
-                })
+            {
+                client.BaseAddress = new Uri(Configuration.GetSection("AuthServer").GetSection("Uri").Value);
+                client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("AuthServer")
+                    .GetSection("HttpClientTimeout").Value));
+            })
                 .AddPolicyHandler(AuthServerPolicy.GetWaitAndRetryPolicy())
                 .AddPolicyHandler(AuthServerPolicy.GetTimeoutPolicy());
 

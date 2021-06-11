@@ -13,13 +13,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using BoxingClub.BLL.DomainEntities.Models;
 using BoxingClub.Infrastructure.Helpers;
 using BoxingClub.Web.HttpClients.Interfaces;
+using Newtonsoft.Json;
 
 namespace BoxingClub.Web.Controllers
 {
     [AuthorizeRoles(Constants.AdminRoleName)]
+    [Route("[controller]")]
     public class AdministrationController : Controller
     {
         private readonly IRoleService _roleService;
@@ -39,49 +44,112 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Administration/GetUsers")]
+        [Route("[action]")]
         public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
-            var users = await _userClient.GetUsers(searchModel);
+            var token = Request.Cookies["token"];
+            var response = await _userClient.GetUsers(searchModel, token);
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return View("AccessDenied");
+                }
 
-/*            var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var pageViewModel = JsonConvert.DeserializeObject<PageViewModel<UserViewModel>>(content);
+
             var sizes = PageSizeHelper.GetPageSizeList(7);
             ViewBag.Sizes = sizes;
-            ViewBag.pageSize = searchModel.PageSize;
+            ViewBag.pageSize = pageViewModel.PageSize;
 
-            return View(pageViewModel);*/
-            return View();
+            return View(pageViewModel);
         }
 
         [HttpDelete("{id}")]
-        [Route("Administration/DeleteUser/{id}")]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            await _userService.DeleteUserByIdAsync(id);
+            var token = Request.Cookies["token"];
+            var response = await _userClient.DeleteUser(id, token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return View("AccessDenied");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
             return RedirectToAction("GetUsers", "Administration");
         }
 
         [HttpGet]
-        [Route("Administration/DetailsUser/{id}")]
+        [Route("[action]")]
         public async Task<IActionResult> DetailsUser(string id)
         {
-            var user = await _userService.FindUserByIdAsync(id);
-            var mappedUser = _mapper.Map<UserViewModel>(user);
-            return View(mappedUser);
+            var token = Request.Cookies["token"];
+            var response = await _userClient.GetUser(id, token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return View("AccessDenied");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserViewModel>(content);
+            return View(user);
         }
 
         [HttpGet]
-        [Route("Administration/EditUser/{id}")]
+        [Route("[action]")]
         public async Task<IActionResult> EditUser(string id)
         {
-            var user = await _userService.FindUserByIdAsync(id);
-            var mappedUser = _mapper.Map<UserViewModel>(user);
-            ViewBag.Roles = await GetRoles();
-            return View(mappedUser);
+            var token = Request.Cookies["token"];
+            var response = await _userClient.GetUser(id, token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return View("AccessDenied");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserViewModel>(content);
+
+            response = await GetRoles();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return View("AccessDenied");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+            
+            var roles = JsonConvert.DeserializeObject<List<RoleViewModel>>(content);
+            ViewBag.Roles = GetRolesSelectList(roles);
+            return View(user);
         }
 
         [HttpPost]
-        [Route("Administration/EditUser/{id}")]
+        [Route("[action]")] //доделать
         public async Task<IActionResult> EditUser(UserViewModel model)
         {
             if (ModelState.IsValid)
@@ -100,12 +168,17 @@ namespace BoxingClub.Web.Controllers
             ViewBag.Roles = await GetRoles();
             return View(model);
         }
-        private async Task<SelectList> GetRoles()
+
+        private async Task<HttpResponseMessage> GetRoles()
         {
-            var roles = await _roleService.GetRolesAsync();
+            var token = Request.Cookies["token"];
+            return await _userClient.GetRoles(token);
+        }
+
+        private SelectList GetRolesSelectList(List<RoleViewModel> roles)
+        {
             var mappedRoles = _mapper.Map<List<RoleViewModel>>(roles);
-            var selectList = new SelectList(mappedRoles, "Id", "Name");
-            return selectList;
+            return new SelectList(mappedRoles, "Id", "Name");
         }
     }
 }

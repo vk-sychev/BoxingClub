@@ -9,13 +9,15 @@ namespace IdentityServer.Models
     {
         public IEnumerable<T> Items { get; set; }
 
-        public int PageIndex { get; private set; }
+        public int PageIndex { get; set; }
         
-        public int TotalPages { get; private set; }
+        public int TotalPages { get; set; }
 
-        public int StartPage { get; private set; }
+        public int StartPage { get; set; }
 
-        public int LastPage { get; private set; }
+        public int LastPage { get; set; }
+
+        public int PageSize { get; set; }
 
         public PageViewModel(int count, int? pageIndex, int? pageSize, IEnumerable<T> items)
         {
@@ -25,6 +27,8 @@ namespace IdentityServer.Models
             {
                 pageSize = 3;
             }
+
+            PageSize = pageSize.Value;
 
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             Items = items;

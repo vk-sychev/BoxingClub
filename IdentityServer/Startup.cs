@@ -19,11 +19,15 @@ using IdentityServer.DAL.Implementation.Providers;
 using IdentityServer.DAL.Interfaces;
 using IdentityServer.Mapping;
 using IdentityServer.Models;
+using IdentityServer.WebManagers.Implementation;
+using IdentityServer.WebManagers.Interfaces;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace IdentityServer
 {
@@ -74,9 +78,23 @@ namespace IdentityServer
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
 
+            services.AddScoped<IAdministrationWebManager, AdministrationWebManager>();
+
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddAuthentication();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
+                {
+                    config.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ClockSkew = TimeSpan.FromSeconds(20),
+                        ValidateAudience = false
+                    };
+                    config.SaveToken = true;
+                    config.Authority = "https://localhost:10001";
+                    config.Audience = "https://localhost:10001";
+                });
+
 
             services.AddControllers();
         }
@@ -93,7 +111,9 @@ namespace IdentityServer
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>

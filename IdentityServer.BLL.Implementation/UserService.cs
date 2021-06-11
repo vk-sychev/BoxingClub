@@ -182,7 +182,7 @@ namespace IdentityServer.BLL.Implementation
             var userDTOs = _mapper.Map<List<UserDTO>>(users);
 
             var count = await _userProvider.GetCountOfUsersAsync();
-            var model = new PageModelDTO<UserDTO>() { Items = userDTOs, Count = count };
+            var model = new PageModelDTO<UserDTO>() { Items = userDTOs, Count = count};
             return model;
         }
 

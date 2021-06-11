@@ -20,7 +20,9 @@ namespace IdentityServer.Mapping
                                                                        .ForMember(dest => dest.LockoutOnFailure, opt => opt.Ignore())
                                                                        .ForMember(dest => dest.RememberMe, opt => opt.Ignore())
                                                                        .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.UserRoles.FirstOrDefault().Role))
-                                                                       .ReverseMap();          
+                                                                       .ReverseMap();
+
+            CreateMap<UserViewModel, UserDTO>().ReverseMap();
 
         }
     }
