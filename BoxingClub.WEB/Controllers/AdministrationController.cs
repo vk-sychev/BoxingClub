@@ -42,7 +42,7 @@ namespace BoxingClub.Web.Controllers
         [Route("Administration/GetUsers")]
         public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
-            var users = _userClient.GetUsers(searchModel);
+            var users = await _userClient.GetUsers(searchModel);
 
 /*            var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
             var sizes = PageSizeHelper.GetPageSizeList(7);

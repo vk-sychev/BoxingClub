@@ -81,9 +81,10 @@ namespace BoxingClub.Web.HttpClients.Implementation
 
         public async Task<HttpResponseMessage> GetUsers(SearchModelDTO searchModel)
         {
-            var getUsersUrl = $"{_baseUrl}Administration/GetUsers?searchModel = {searchModel}";
-            var dictionary = GetModelDictionary(searchModel);
-            var content = new FormUrlEncodedContent(dictionary);
+            var parameters = $"?PageIndex={searchModel.PageIndex}&PageSize={searchModel.PageSize}";
+            var getUsersUrl = $"{_baseUrl}Administration/GetUsers{parameters}";
+            //var dictionary = GetModelDictionary(searchModel);
+            //var content = new FormUrlEncodedContent(dictionary);
             var response = await _httpClient.GetAsync(getUsersUrl);
             if (!response.IsSuccessStatusCode)
             {
