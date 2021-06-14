@@ -102,8 +102,8 @@ namespace BoxingClub.Web
                 client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("AuthServer")
                     .GetSection("HttpClientTimeout").Value));
             })
-                .AddPolicyHandler(AuthServerPolicy.GetWaitAndRetryPolicy())
-                .AddPolicyHandler(AuthServerPolicy.GetTimeoutPolicy());
+               .AddPolicyHandler(AuthServerPolicy.GetWaitAndRetryPolicy())
+               .AddPolicyHandler(AuthServerPolicy.GetTimeoutPolicy());
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(),
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),

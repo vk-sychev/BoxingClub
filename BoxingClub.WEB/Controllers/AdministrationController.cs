@@ -142,6 +142,8 @@ namespace BoxingClub.Web.Controllers
 
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
+
+            content = await response.Content.ReadAsStringAsync();
             
             var roles = JsonConvert.DeserializeObject<List<RoleViewModel>>(content);
             ViewBag.Roles = GetRolesSelectList(roles);
@@ -149,23 +151,42 @@ namespace BoxingClub.Web.Controllers
         }
 
         [HttpPost]
-        [Route("[action]")] //доделать
+        [Route("[action]")] 
         public async Task<IActionResult> EditUser(UserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var mappedModel = _mapper.Map<UserDTO>(model);
-                var result = await _userService.UpdateUserAsync(mappedModel);
-                if (result.Succeeded)
+                var token = Request.Cookies["token"];
+                var response = await _userClient.EditUser(token, model);
+                if (!response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("GetUsers", "Administration");
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        return View("AccessDenied");
+                    }
+
+                    throw new InvalidOperationException("Error occurred while processing your request");
                 }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
+
+                return RedirectToAction("GetUsers", "Administration");
             }
-            ViewBag.Roles = await GetRoles();
+
+            var resp = await GetRoles();
+
+            if (!resp.IsSuccessStatusCode)
+            {
+                if (resp.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return View("AccessDenied");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var content = await resp.Content.ReadAsStringAsync();
+
+            var roles = JsonConvert.DeserializeObject<List<RoleViewModel>>(content);
+            ViewBag.Roles = GetRolesSelectList(roles);
             return View(model);
         }
 

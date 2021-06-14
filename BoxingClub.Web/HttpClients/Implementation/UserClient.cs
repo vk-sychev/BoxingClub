@@ -129,11 +129,12 @@ namespace BoxingClub.Web.HttpClients.Implementation
             return response;
         }
 
-        public async Task<HttpResponseMessage> EditUser(string id, string token, UserViewModel model)
+        public async Task<HttpResponseMessage> EditUser(string token, UserViewModel model)
         {
+            _httpClient.SetBearerToken(token);
             var editUserUrl = $"{_baseUrl}{_administrationController}/EditUser?id={model.Id}";
-
             var dictionary = GetModelDictionary(model);
+
             var content = new FormUrlEncodedContent(dictionary);
             var response = await _httpClient.PostAsync(editUserUrl, content);
 
@@ -177,6 +178,21 @@ namespace BoxingClub.Web.HttpClients.Implementation
         {
             var json = JsonConvert.SerializeObject(model);
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+        }
+
+        private Dictionary<string, string> GetModelDictionary(UserViewModel model)
+        {
+            var dictionary = new Dictionary<string, string>();
+
+            dictionary.Add("Id", model.Id);
+            dictionary.Add("UserName", model.UserName);
+            dictionary.Add("RoleId", model.Role.Id);
+            dictionary.Add("Name", model.Name);
+            dictionary.Add("Surname", model.Surname);
+            dictionary.Add("Patronymic", model.Patronymic);
+            dictionary.Add("Description", model.Description);
+
+            return dictionary;
         }
     }
 }

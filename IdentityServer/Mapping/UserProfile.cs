@@ -22,7 +22,9 @@ namespace IdentityServer.Mapping
                                                                        .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.UserRoles.FirstOrDefault().Role))
                                                                        .ReverseMap();
 
-            CreateMap<UserViewModel, UserDTO>().ReverseMap();
+            CreateMap<UserViewModel, UserDTO>().ForPath(dest => dest.Role.Id, opt => opt.MapFrom(src => src.RoleId))
+                                               .ReverseMap()
+                                               .ForMember(dest => dest.RoleId, opt => opt.Ignore());
 
         }
     }

@@ -44,10 +44,6 @@ namespace IdentityServer.Controllers
         public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
             var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
-/*            var sizes = PageSizeHelper.GetPageSizeList(7);
-            ViewBag.Sizes = sizes;
-            ViewBag.pageSize = searchModel.PageSize;*/
-
             return Ok(pageViewModel);
         }
 
@@ -57,7 +53,6 @@ namespace IdentityServer.Controllers
         {
             await _userService.DeleteUserByIdAsync(id);
             return Ok();
-            //return RedirectToAction("GetUsers", "Administration");
         }
 
         [HttpGet]
@@ -69,28 +64,10 @@ namespace IdentityServer.Controllers
             return Ok(mappedUser);
         }
 
-        /*        [HttpGet]
-                [Route("[action]")]
-                public async Task<IActionResult> DetailsUser(string id)
-                {
-                    var user = await _userService.FindUserByIdAsync(id);
-                    var mappedUser = _mapper.Map<UserViewModel>(user);
-                    return Ok(mappedUser);
-                }
-
-                [HttpGet]
-                [Route("[action]")]
-                public async Task<IActionResult> EditUser(string id)
-                {
-                    var user = await _userService.FindUserByIdAsync(id);
-                    var mappedUser = _mapper.Map<UserViewModel>(user);
-                    //ViewBag.Roles = await GetRoles();
-                    return Ok(mappedUser);
-                }*/
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<HttpStatusCode> EditUser(UserViewModel model)
+        public async Task<IActionResult> EditUser(UserViewModel model)
         {
             var result = new AccountResultDTO();
             if (ModelState.IsValid)
@@ -99,13 +76,13 @@ namespace IdentityServer.Controllers
                 result = await _userService.UpdateUserAsync(mappedModel);
                 if (result.Succeeded)
                 {
-                    return HttpStatusCode.OK;
+                    return Ok();
                 }
 
-                return HttpStatusCode.InternalServerError;
+                return BadRequest(result.Errors);
             }
 
-            return HttpStatusCode.BadRequest;
+            return BadRequest();
         }
 
         [HttpGet]

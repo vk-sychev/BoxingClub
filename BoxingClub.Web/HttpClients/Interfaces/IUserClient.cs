@@ -23,7 +23,7 @@ namespace BoxingClub.Web.HttpClients.Interfaces
 
         Task<HttpResponseMessage> GetUser(string id, string token);
 
-        Task<HttpResponseMessage> EditUser(string id, string token, UserViewModel model);
+        Task<HttpResponseMessage> EditUser(string token, UserViewModel model);
 
         Task<HttpResponseMessage> GetRoles(string token);
     }
