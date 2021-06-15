@@ -27,23 +27,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoxingClub.BLL.UnitTests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{3899F9F7-67BD-451C-82DC-8319D4AB401A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.DAL.Entities", "IdentityServer.DAL.Entities\IdentityServer.DAL.Entities.csproj", "{3A32DA0B-261E-4CE3-9509-81A499B6A219}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.DAL.Entities", "IdentityServer.DAL.Entities\IdentityServer.DAL.Entities.csproj", "{3A32DA0B-261E-4CE3-9509-81A499B6A219}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthServer", "AuthServer", "{038B8A39-EB28-4110-AEA8-60BA8C150BB0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer.DAL", "IdentityServer.DAL", "{B938A402-EAFA-4AFE-BB50-EFD3F7B9BCE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.DAL.Interfaces", "IdentityServer.DAL.Interfaces\IdentityServer.DAL.Interfaces.csproj", "{DA0CD84B-FED7-4753-8DF4-2B302DC3EFEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.DAL.Interfaces", "IdentityServer.DAL.Interfaces\IdentityServer.DAL.Interfaces.csproj", "{DA0CD84B-FED7-4753-8DF4-2B302DC3EFEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.DAL.Implementation", "IdentityServer.DAL.Implementation\IdentityServer.DAL.Implementation.csproj", "{DC93421B-EF08-422F-BF65-31F23AD4B1D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.DAL.Implementation", "IdentityServer.DAL.Implementation\IdentityServer.DAL.Implementation.csproj", "{DC93421B-EF08-422F-BF65-31F23AD4B1D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer.BLL", "IdentityServer.BLL", "{3E3819A9-39FC-43A5-A435-B5D3ED2A72E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.BLL.Entities", "IdentityServer.BLL.Entities\IdentityServer.BLL.Entities.csproj", "{83A938C3-A63D-4BF8-993F-1D229825D717}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.BLL.Entities", "IdentityServer.BLL.Entities\IdentityServer.BLL.Entities.csproj", "{83A938C3-A63D-4BF8-993F-1D229825D717}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.BLL.Interfaces", "IdentityServer.BLL.Interfaces\IdentityServer.BLL.Interfaces.csproj", "{FBE3C4B1-099C-4157-831C-07B74BA5BD25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.BLL.Interfaces", "IdentityServer.BLL.Interfaces\IdentityServer.BLL.Interfaces.csproj", "{FBE3C4B1-099C-4157-831C-07B74BA5BD25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.BLL.Implementation", "IdentityServer.BLL.Implementation\IdentityServer.BLL.Implementation.csproj", "{871B2B33-8D8A-4253-BA4A-7686B7D44F80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.BLL.Implementation", "IdentityServer.BLL.Implementation\IdentityServer.BLL.Implementation.csproj", "{871B2B33-8D8A-4253-BA4A-7686B7D44F80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClients", "HttpClients\HttpClients.csproj", "{F48DBFCD-01CB-4531-BF5F-8DEB1A982005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +117,10 @@ Global
 		{871B2B33-8D8A-4253-BA4A-7686B7D44F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{871B2B33-8D8A-4253-BA4A-7686B7D44F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{871B2B33-8D8A-4253-BA4A-7686B7D44F80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F48DBFCD-01CB-4531-BF5F-8DEB1A982005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F48DBFCD-01CB-4531-BF5F-8DEB1A982005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F48DBFCD-01CB-4531-BF5F-8DEB1A982005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F48DBFCD-01CB-4531-BF5F-8DEB1A982005}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

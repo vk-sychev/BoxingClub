@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿/*using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
@@ -198,3 +198,4 @@ namespace BoxingClub.Web.Controllers
     }
 }
 
+*/

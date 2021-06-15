@@ -1,25 +1,17 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using BoxingClub.BLL.DomainEntities;
-using BoxingClub.Web.HttpClients.Interfaces;
+using HttpClients.Interfaces;
+using HttpClients.Models;
 using IdentityModel.Client;
-using BoxingClub.Infrastructure.Exceptions;
-using BoxingClub.Web.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
 
-namespace BoxingClub.Web.HttpClients.Implementation
+namespace HttpClients.Implementation
 {
     public class UserClient : IUserClient
     {
@@ -68,7 +60,7 @@ namespace BoxingClub.Web.HttpClients.Implementation
             return tokenResponse;
         }
 
-        public async Task<HttpResponseMessage> SignUpAsync(SignUpViewModel model)
+        public async Task<HttpResponseMessage> SignUpAsync(SignUpModel model)
         {
             var signUpUrl = $"{_baseUrl}{_accountController}/SignUp";
 
@@ -84,7 +76,7 @@ namespace BoxingClub.Web.HttpClients.Implementation
             return response;
         }
 
-        public async Task<HttpResponseMessage> GetUsers(SearchModelDTO searchModel, string token)
+        public async Task<HttpResponseMessage> GetUsers(SearchModel searchModel, string token)
         {
             var parameters = $"?PageIndex={searchModel.PageIndex}&PageSize={searchModel.PageSize}";
             var getUsersUrl = $"{_baseUrl}{_administrationController}/GetUsers{parameters}";
@@ -129,7 +121,7 @@ namespace BoxingClub.Web.HttpClients.Implementation
             return response;
         }
 
-        public async Task<HttpResponseMessage> EditUser(string token, UserViewModel model)
+        public async Task<HttpResponseMessage> EditUser(string token, UserModel model)
         {
             _httpClient.SetBearerToken(token);
             var editUserUrl = $"{_baseUrl}{_administrationController}/EditUser?id={model.Id}";
@@ -180,7 +172,7 @@ namespace BoxingClub.Web.HttpClients.Implementation
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
 
-        private Dictionary<string, string> GetModelDictionary(UserViewModel model)
+        private Dictionary<string, string> GetModelDictionary(UserModel model)
         {
             var dictionary = new Dictionary<string, string>();
 

@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Security.Claims;
@@ -10,7 +10,7 @@ using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using BoxingClub.Web.HttpClients.Interfaces;
+using HttpClients.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -152,3 +152,4 @@ namespace BoxingClub.Web.Controllers
         }
     }
 }
+*/
