@@ -92,5 +92,13 @@ namespace IdentityServer.Controllers
             var roles = await _roleService.GetRolesAsync();
             return _mapper.Map<List<RoleViewModel>>(roles);
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetUsersByRole(string roleName)
+        {
+            var users = await _userService.GetUsersByRoleAsync(roleName);
+            return Ok(users);
+        }
     }
 }

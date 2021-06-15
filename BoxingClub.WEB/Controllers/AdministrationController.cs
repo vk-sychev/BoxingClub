@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using BoxingClub.BLL.DomainEntities.Models;
 using BoxingClub.Infrastructure.Helpers;
 using HttpClientAdapters.Interfaces;
+using HttpClientAdapters.Models;
 using HttpClients.Models;
 using Newtonsoft.Json;
 
@@ -65,18 +66,18 @@ namespace BoxingClub.Web.Controllers
             return View(mappedPageModel);
         }
 
-        /*[HttpDelete("{id}")]
+        [HttpDelete("{id}")]
         [Route("[action]")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var token = Request.Cookies["token"];
             var response = await _userClientAdapter.DeleteUser(id, token);
 
-            if (!response.IsSuccessStatusCode)
+            if (response != HttpStatusCode.OK)
             {
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                if (response == HttpStatusCode.Unauthorized)
                 {
-                    return View("AccessDenied");
+                    return RedirectToAction("SignOut", "Account");
                 }
 
                 throw new InvalidOperationException("Error occurred while processing your request");
@@ -92,19 +93,18 @@ namespace BoxingClub.Web.Controllers
             var token = Request.Cookies["token"];
             var response = await _userClientAdapter.GetUser(id, token);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    return View("AccessDenied");
+                    return RedirectToAction("SignOut", "Account");
                 }
 
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            var content = await response.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserViewModel>(content);
-            return View(user);
+            var mappedUser = _mapper.Map<UserViewModel>(response.User);
+            return View(mappedUser);
         }
 
         [HttpGet]
@@ -114,36 +114,34 @@ namespace BoxingClub.Web.Controllers
             var token = Request.Cookies["token"];
             var response = await _userClientAdapter.GetUser(id, token);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    return View("AccessDenied");
+                    return RedirectToAction("SignOut", "Account");
                 }
 
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            var content = await response.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserViewModel>(content);
+            var mappedUser = _mapper.Map<UserViewModel>(response.User);
 
-            response = await GetRoles();
+            var resp = await GetRoles();
 
-            if (!response.IsSuccessStatusCode)
+            if (resp.StatusCode != HttpStatusCode.OK)
             {
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                if (resp.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    return View("AccessDenied");
+                    return RedirectToAction("SignOut", "Account");
                 }
 
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            content = await response.Content.ReadAsStringAsync();
+            var mappedRoles = _mapper.Map<List<RoleViewModel>>(resp.Roles);
 
-            var roles = JsonConvert.DeserializeObject<List<RoleViewModel>>(content);
-            ViewBag.Roles = GetRolesSelectList(roles);
-            return View(user);
+            ViewBag.Roles = GetRolesSelectList(mappedRoles);
+            return View(mappedUser);
         }
 
         [HttpPost]
@@ -153,8 +151,9 @@ namespace BoxingClub.Web.Controllers
             if (ModelState.IsValid)
             {
                 var token = Request.Cookies["token"];
-                var response = await _userClientAdapter.EditUser(token, model);
-                if (!response.IsSuccessStatusCode)
+                var mappedUser = _mapper.Map<UserModel>(model);
+                var response = await _userClientAdapter.EditUser(token, mappedUser);
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
@@ -169,24 +168,23 @@ namespace BoxingClub.Web.Controllers
 
             var resp = await GetRoles();
 
-            if (!resp.IsSuccessStatusCode)
+            if (resp.StatusCode != HttpStatusCode.OK)
             {
                 if (resp.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    return View("AccessDenied");
+                    return RedirectToAction("SignOut", "Account");
                 }
 
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            var content = await resp.Content.ReadAsStringAsync();
+            var mappedRoles = _mapper.Map<List<RoleViewModel>>(resp.Roles);
 
-            var roles = JsonConvert.DeserializeObject<List<RoleViewModel>>(content);
-            ViewBag.Roles = GetRolesSelectList(roles);
+            ViewBag.Roles = GetRolesSelectList(mappedRoles);
             return View(model);
         }
 
-        private async Task<HttpResponseMessage> GetRoles()
+        private async Task<RolesResponseModel> GetRoles()
         {
             var token = Request.Cookies["token"];
             return await _userClientAdapter.GetRoles(token);
@@ -194,8 +192,7 @@ namespace BoxingClub.Web.Controllers
 
         private SelectList GetRolesSelectList(List<RoleViewModel> roles)
         {
-            var mappedRoles = _mapper.Map<List<RoleViewModel>>(roles);
-            return new SelectList(mappedRoles, "Id", "Name");
-        }*/
+            return new SelectList(roles, "Id", "Name");
+        }
     }
 }
