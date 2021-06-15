@@ -24,19 +24,16 @@ namespace BoxingClub.Web.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IBoxingGroupService _boxingGroupService;
-        private readonly IUserService _userService;
         private readonly IStudentService _studentService;
         private readonly IHomeWebManager _homeWebManager;
 
         public HomeController(IMapper mapper,
                               IBoxingGroupService boxingGroupService,
-                              IUserService userService,
                               IStudentService studentService,
                               IHomeWebManager homeWebManager)
         {
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
-            _userService = userService;
             _studentService = studentService;
             _homeWebManager = homeWebManager;
         }
@@ -170,10 +167,11 @@ namespace BoxingClub.Web.Controllers
 
         private async Task<SelectList> GetCoaches()
         {
-            var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
-            var coachViewModels = _mapper.Map<List<UserViewModel>>(coaches);
-            var selectList = new SelectList(coachViewModels, "Id", "FullName");
-            return selectList;
+            /*            var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
+                        var coachViewModels = _mapper.Map<List<UserViewModel>>(coaches);
+                        var selectList = new SelectList(coachViewModels, "Id", "FullName");
+                        return selectList;*/
+            throw new NotImplementedException();
         }
 
         private async Task<BoxingGroupLiteViewModel> GetBoxingGroupById(int id)

@@ -27,18 +27,12 @@ namespace BoxingClub.Web.Controllers
     [Route("[controller]")]
     public class AdministrationController : Controller
     {
-        private readonly IRoleService _roleService;
-        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IUserClient _userClient;
 
-        public AdministrationController(IRoleService roleService,
-                                        IUserService userService,
-                                        IMapper mapper, 
+        public AdministrationController(IMapper mapper, 
                                         IUserClient userClient)
         {   
-            _roleService = roleService;
-            _userService = userService;
             _mapper = mapper;
             _userClient = userClient;
         }

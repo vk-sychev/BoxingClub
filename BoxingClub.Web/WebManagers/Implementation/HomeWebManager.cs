@@ -14,15 +14,12 @@ namespace BoxingClub.Web.WebManagers.Implementation
     {
         private readonly IMapper _mapper;
         private readonly IBoxingGroupService _boxingGroupService;
-        private readonly IUserService _userService;
 
         public HomeWebManager(IMapper mapper,
-                              IBoxingGroupService boxingGroupService,
-                              IUserService userService)
+                              IBoxingGroupService boxingGroupService)
         {
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
-            _userService = userService;
         }
 
         public async Task<PageViewModel<BoxingGroupLiteViewModel>> GetBoxingGroupsAsync(SearchModelDTO searchModel)
@@ -34,10 +31,11 @@ namespace BoxingClub.Web.WebManagers.Implementation
 
         public async Task<PageViewModel<BoxingGroupLiteViewModel>> GetBoxingGroupsByCoachIdAsync(string coachName, SearchModelDTO searchModel)
         {
-            var coach = await _userService.FindUserByNameAsync(coachName);
+/*            var coach = await _userService.FindUserByNameAsync(coachName);
             var pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, searchModel);
             var groups = _mapper.Map<List<BoxingGroupLiteViewModel>>(pageModel.Items);
-            return new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, groups);
+            return new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, groups);*/
+           throw new NotImplementedException();
         }
     }
 }

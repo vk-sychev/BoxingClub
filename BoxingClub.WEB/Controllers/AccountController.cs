@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using IAuthenticationService = BoxingClub.BLL.Interfaces.IAuthenticationService;
 
 
 namespace BoxingClub.Web.Controllers
@@ -24,20 +23,14 @@ namespace BoxingClub.Web.Controllers
     [Route("[controller]")]
     public class AccountController : Controller
     {
-        private readonly IAuthenticationService _signInService;
-        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IUserClient _userClient;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAuthenticationService signInService,
-                                 IUserService userService,
-                                 IMapper mapper,
+        public AccountController(IMapper mapper,
                                  IUserClient userClient,
                                  ILogger<AccountController> logger)
         {
-            _signInService = signInService;
-            _userService = userService;
             _mapper = mapper;
             _userClient = userClient;
             _logger = logger;

@@ -54,7 +54,7 @@ namespace BoxingClub.Web
                 options.UseSqlServer(
                     Configuration.GetConnectionString("BoxingClubDB")));
 
-            var passwordConfig = Configuration.GetSection("PasswordSettings");
+/*            var passwordConfig = Configuration.GetSection("PasswordSettings");
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
@@ -63,20 +63,20 @@ namespace BoxingClub.Web
                 options.Password.RequireUppercase = Convert.ToBoolean(passwordConfig.GetSection("RequireUppercase").Value);
                 options.Password.RequireLowercase = Convert.ToBoolean(passwordConfig.GetSection("RequireLowercase").Value);
             })
-            .AddEntityFrameworkStores<BoxingClubContext>();
+            .AddEntityFrameworkStores<BoxingClubContext>();*/
 
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
 
             services.AddTransient<IStudentSpecification, FighterExperienceSpecification>();
             services.AddTransient<IStudentService, StudentService>();
 
-            services.AddTransient<IRoleProvider, RoleProvider>();
+/*            services.AddTransient<IRoleProvider, RoleProvider>();
             services.AddTransient<IUserProvider, UserProvider>();
             services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
 
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();*/
 
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
@@ -85,7 +85,7 @@ namespace BoxingClub.Web
 
             services.AddTransient<IHomeWebManager, HomeWebManager>();
             services.AddTransient<IStudentWebManager, StudentWebManager>();
-            services.AddTransient<IAdministrationWebManager, AdministrationWebManager>();
+            //services.AddTransient<IAdministrationWebManager, AdministrationWebManager>();
 
             services.AddTransient<ISpecificationClient, SpecificationHttpClientAdapter>();
             services.AddHttpClient<ISpecificationHttpClient, SpecificationHttpClient>(client =>
@@ -105,7 +105,7 @@ namespace BoxingClub.Web
                .AddPolicyHandler(AuthServerPolicy.GetWaitAndRetryPolicy())
                .AddPolicyHandler(AuthServerPolicy.GetTimeoutPolicy());
 
-            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new ResultProfile(), new RoleProfile(), new StudentProfile(),
+            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new RoleProfile(), new StudentProfile(),
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
                                                        new TournamentRequestProfile(), new AgeCategoryProfile(), new AgeGroupProfile(),
                                                        new WeightCategoryProfile(), new TournamentSpecificationProfile()
@@ -113,7 +113,7 @@ namespace BoxingClub.Web
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
             //mapperConfig.AssertConfigurationIsValid();
 
-            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(ResultProfile), typeof(RoleProfile), typeof(StudentProfile),
+            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(RoleProfile), typeof(StudentProfile),
                                    typeof(UserProfile), typeof(MedicalCertificateProfile), typeof(TournamentProfile), typeof(TournamentSpecificationProfile),
                                    typeof(AgeCategoryProfile), typeof(AgeGroupProfile), typeof(WeightCategoryProfile), typeof(TournamentSpecificationProfile));
 
