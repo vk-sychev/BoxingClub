@@ -12,9 +12,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BoxingClub.Infrastructure.Helpers;
+using HttpClientAdapters.Interfaces;
+using HttpClientAdapters.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace BoxingClub.Web.Controllers
@@ -26,16 +29,19 @@ namespace BoxingClub.Web.Controllers
         private readonly IBoxingGroupService _boxingGroupService;
         private readonly IStudentService _studentService;
         private readonly IHomeWebManager _homeWebManager;
+        private readonly IUserClientAdapter _userClientAdapter;
 
         public HomeController(IMapper mapper,
                               IBoxingGroupService boxingGroupService,
                               IStudentService studentService,
-                              IHomeWebManager homeWebManager)
+                              IHomeWebManager homeWebManager,
+                              IUserClientAdapter userClientAdapter)
         {
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
             _studentService = studentService;
             _homeWebManager = homeWebManager;
+            _userClientAdapter = userClientAdapter;
         }
 
         public async Task<IActionResult> Index(SearchModelDTO searchModel)
@@ -70,8 +76,20 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> EditBoxingGroup(int id)
         {
             var mappedGroup = await GetBoxingGroupById(id);
+            var response = await GetCoaches();
 
-            ViewBag.Coaches = await GetCoaches();
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(response.Users);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
 
             return View(mappedGroup);
         }
@@ -83,7 +101,20 @@ namespace BoxingClub.Web.Controllers
         {
             var mappedGroup = await GetBoxingGroupById(id);
 
-            ViewBag.Coaches = await GetCoaches();
+            var response = await GetCoaches();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(response.Users);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
 
             return PartialView("_CreateEditBoxingGroupPartial", mappedGroup);
         }
@@ -99,7 +130,21 @@ namespace BoxingClub.Web.Controllers
                 await _boxingGroupService.UpdateBoxingGroupAsync(group);
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Coaches = await GetCoaches();
+
+            var response = await GetCoaches();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(response.Users);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
 
             return View(model);
         }
@@ -109,7 +154,21 @@ namespace BoxingClub.Web.Controllers
         [Route("Home/CreateBoxingGroup")]
         public async Task<IActionResult> CreateBoxingGroup()
         {
-            ViewBag.Coaches = await GetCoaches();
+            var response = await GetCoaches();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(response.Users);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
+
             return View();
         }
 
@@ -118,7 +177,21 @@ namespace BoxingClub.Web.Controllers
         [Route("Home/CreateBoxingGroupInline")]
         public async Task<IActionResult> CreateBoxingGroupInline()
         {
-            ViewBag.Coaches = await GetCoaches();
+            var response = await GetCoaches();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(response.Users);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
+
             return PartialView("_CreateEditBoxingGroupPartial");
         }
 
@@ -133,7 +206,21 @@ namespace BoxingClub.Web.Controllers
                 await _boxingGroupService.CreateBoxingGroupAsync(groupDTO);
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Coaches = await GetCoaches();
+
+            var response = await GetCoaches();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(response.Users);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
             return View(model);
         }
 
@@ -165,13 +252,15 @@ namespace BoxingClub.Web.Controllers
             return RedirectToAction("DetailsBoxingGroup", new { id = returnId });
         }
 
-        private async Task<SelectList> GetCoaches()
+        private async Task<UsersResponseModel> GetCoaches()
         {
-            /*            var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
-                        var coachViewModels = _mapper.Map<List<UserViewModel>>(coaches);
-                        var selectList = new SelectList(coachViewModels, "Id", "FullName");
-                        return selectList;*/
-            throw new NotImplementedException();
+            var token = Request.Cookies["token"];
+            return await _userClientAdapter.GetUsersByRole(token, Constants.CoachRoleName);
+        }
+
+        private SelectList GetCoachesSelectList(List<UserViewModel> coaches)
+        {
+            return new SelectList(coaches, "Id", "FullName");
         }
 
         private async Task<BoxingGroupLiteViewModel> GetBoxingGroupById(int id)
