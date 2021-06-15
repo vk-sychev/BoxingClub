@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace BoxingClub.Web.Controllers
 {
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IMapper _mapper;
@@ -52,14 +52,15 @@ namespace BoxingClub.Web.Controllers
             }
 
             PageViewModel<BoxingGroupLiteViewModel> pageViewModel;
+            var token = Request.Cookies["token"];
 
             if (User.IsInRole(Constants.CoachRoleName))
             {
-                pageViewModel = await _homeWebManager.GetBoxingGroupsByCoachIdAsync(User.Identity.Name, searchModel);
+                pageViewModel = await _homeWebManager.GetBoxingGroupsByCoachIdAsync(User.Identity.Name, searchModel, token);
             }
             else
             {
-                pageViewModel = await _homeWebManager.GetBoxingGroupsAsync(searchModel);
+                pageViewModel = await _homeWebManager.GetBoxingGroupsAsync(searchModel, token);
             }
 
             var sizes = PageSizeHelper.GetPageSizeList(5);
@@ -229,7 +230,8 @@ namespace BoxingClub.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> DetailsBoxingGroup(int id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id);
+            var token = Request.Cookies["token"];
+            var group = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id, token);
             var model = _mapper.Map<BoxingGroupFullViewModel>(group);
             return View(model);
         }
@@ -265,7 +267,8 @@ namespace BoxingClub.Web.Controllers
 
         private async Task<BoxingGroupLiteViewModel> GetBoxingGroupById(int id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id);
+            var token = Request.Cookies["token"];
+            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id, token);
             var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
             return mappedGroup;
         }
