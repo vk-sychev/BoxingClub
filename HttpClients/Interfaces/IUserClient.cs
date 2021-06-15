@@ -20,5 +20,7 @@ namespace HttpClients.Interfaces
         Task<HttpResponseMessage> EditUser(string token, UserModel model);
 
         Task<HttpResponseMessage> GetRoles(string token);
+
+        Task<HttpResponseMessage> GetUsersByRole(string token, string roleName);
     }
 }

@@ -47,6 +47,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.BLL.Implemen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClients", "HttpClients\HttpClients.csproj", "{F48DBFCD-01CB-4531-BF5F-8DEB1A982005}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClientAdapters", "HttpClientAdapters\HttpClientAdapters.csproj", "{C026CB29-1374-4267-A7EF-7D45D1A144C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{F48DBFCD-01CB-4531-BF5F-8DEB1A982005}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F48DBFCD-01CB-4531-BF5F-8DEB1A982005}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F48DBFCD-01CB-4531-BF5F-8DEB1A982005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C026CB29-1374-4267-A7EF-7D45D1A144C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C026CB29-1374-4267-A7EF-7D45D1A144C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C026CB29-1374-4267-A7EF-7D45D1A144C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C026CB29-1374-4267-A7EF-7D45D1A144C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

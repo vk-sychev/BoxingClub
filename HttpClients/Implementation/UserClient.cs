@@ -153,6 +153,22 @@ namespace HttpClients.Implementation
             return response;
         }
 
+        public async Task<HttpResponseMessage> GetUsersByRole(string token, string roleName)
+        {
+            var getUsersByRole = $"{_baseUrl}{_accountController}/GetUsersByRole?roleName={roleName}";
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.GetAsync(getUsersByRole);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(response.ReasonPhrase);
+            }
+
+            return response;
+        }
+
+
         private async Task<DiscoveryDocumentResponse> GetDiscoveryDocument()
         {
             var discovery = await _httpClient.GetDiscoveryDocumentAsync(_baseUrl);
