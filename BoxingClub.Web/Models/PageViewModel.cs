@@ -7,6 +7,11 @@ namespace BoxingClub.Web.Models
 {
     public class PageViewModel<T> where T : class
     {
+        public PageViewModel()
+        {
+            
+        }
+
         public IEnumerable<T> Items { get; set; }
 
         public int PageIndex { get; set; }

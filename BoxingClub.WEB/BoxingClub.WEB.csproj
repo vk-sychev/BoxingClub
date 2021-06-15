@@ -33,6 +33,7 @@
     <ProjectReference Include="..\BoxingClub.BLL\BoxingClub.BLL.Implementation.csproj" />
     <ProjectReference Include="..\BoxingClub.DAL\BoxingClub.DAL.Implementation.csproj" />
     <ProjectReference Include="..\BoxingClub.Infrastructure\BoxingClub.Infrastructure.csproj" />
+    <ProjectReference Include="..\HttpClientAdapters\HttpClientAdapters.csproj" />
     <ProjectReference Include="..\HttpClients\HttpClients.csproj" />
   </ItemGroup>
 

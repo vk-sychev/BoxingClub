@@ -30,6 +30,8 @@ using System.Collections.Generic;
 using BoxingClub.BLL.Implementation.HttpSpecificationClient;
 using BoxingClub.Web.Policies;
 using BoxingClub.BLL.Interfaces.HttpSpecificationClient;
+using HttpClientAdapters.Implementation;
+using HttpClientAdapters.Interfaces;
 using HttpClients.Implementation;
 using HttpClients.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -85,7 +87,6 @@ namespace BoxingClub.Web
 
             services.AddTransient<IHomeWebManager, HomeWebManager>();
             services.AddTransient<IStudentWebManager, StudentWebManager>();
-            //services.AddTransient<IAdministrationWebManager, AdministrationWebManager>();
 
             services.AddTransient<ISpecificationClient, SpecificationHttpClientAdapter>();
             services.AddHttpClient<ISpecificationHttpClient, SpecificationHttpClient>(client =>
@@ -104,6 +105,8 @@ namespace BoxingClub.Web
             })
                .AddPolicyHandler(AuthServerPolicy.GetWaitAndRetryPolicy())
                .AddPolicyHandler(AuthServerPolicy.GetTimeoutPolicy());
+
+            services.AddTransient<IUserClientAdapter, UserClientAdapter>();
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new RoleProfile(), new StudentProfile(),
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),

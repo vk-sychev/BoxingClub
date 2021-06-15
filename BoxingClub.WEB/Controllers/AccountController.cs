@@ -1,5 +1,6 @@
-﻿/*using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using AutoMapper;
@@ -10,7 +11,8 @@ using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using HttpClients.Interfaces;
+using HttpClientAdapters.Interfaces;
+using HttpClients.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -24,15 +26,15 @@ namespace BoxingClub.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IUserClient _userClient;
+        private readonly IUserClientAdapter _userClientAdapter;
         private readonly ILogger<AccountController> _logger;
 
         public AccountController(IMapper mapper,
-                                 IUserClient userClient,
+                                 IUserClientAdapter userClientAdapter,
                                  ILogger<AccountController> logger)
         {
             _mapper = mapper;
-            _userClient = userClient;
+            _userClientAdapter = userClientAdapter;
             _logger = logger;
         }
 
@@ -49,23 +51,30 @@ namespace BoxingClub.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _userClient.SignUpAsync(model);
+                var mappedModel = _mapper.Map<SignUpModel>(model);
 
-                if (response.IsSuccessStatusCode)
+                var response = await _userClientAdapter.SignUpAsync(mappedModel);
+
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var tokenResponse = await _userClient.GetTokenAsync(model.UserName, model.Password);
+                    var tokenResponse = await _userClientAdapter.GetTokenAsync(model.UserName, model.Password);
                     var token = string.Empty;
 
-                    if (tokenResponse.IsError)
+                    if (tokenResponse.StatusCode == HttpStatusCode.OK)
                     {
                         token = tokenResponse.AccessToken;
                         var decodedToken = AppendTokenInCookie(token);
                         await SignInCookie(decodedToken, true);
                         return RedirectToAction("index", "home");
                     }
+
+                    ModelState.AddModelError("", "Invalid Login Attempt");
                 }
 
-                ModelState.AddModelError("", "Invalid Login Attempt");
+                foreach (var error in response.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
 
             }
             return View(model);
@@ -93,10 +102,10 @@ namespace BoxingClub.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _userClient.GetTokenAsync(model.UserName, model.Password);
+                var response = await _userClientAdapter.GetTokenAsync(model.UserName, model.Password);
                 var token = string.Empty;
 
-                if (!response.IsError)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     token = response.AccessToken;
                 }
@@ -152,4 +161,3 @@ namespace BoxingClub.Web.Controllers
         }
     }
 }
-*/

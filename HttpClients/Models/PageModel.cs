@@ -5,6 +5,11 @@ namespace HttpClients.Models
 {
     public class PageModel<T> where T : class
     {
+        public PageModel()
+        {
+
+        }
+
         public IEnumerable<T> Items { get; set; }
 
         public int PageIndex { get; set; }

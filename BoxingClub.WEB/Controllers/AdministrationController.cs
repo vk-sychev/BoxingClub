@@ -1,4 +1,4 @@
-﻿/*using AutoMapper;
+﻿using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
@@ -18,7 +18,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using BoxingClub.BLL.DomainEntities.Models;
 using BoxingClub.Infrastructure.Helpers;
-using BoxingClub.Web.HttpClients.Interfaces;
+using HttpClientAdapters.Interfaces;
+using HttpClients.Models;
 using Newtonsoft.Json;
 
 namespace BoxingClub.Web.Controllers
@@ -28,13 +29,13 @@ namespace BoxingClub.Web.Controllers
     public class AdministrationController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IUserClient _userClient;
+        private readonly IUserClientAdapter _userClientAdapter;
 
-        public AdministrationController(IMapper mapper, 
-                                        IUserClient userClient)
-        {   
+        public AdministrationController(IMapper mapper,
+                                        IUserClientAdapter userClientAdapter)
+        {
             _mapper = mapper;
-            _userClient = userClient;
+            _userClientAdapter = userClientAdapter;
         }
 
         [HttpGet]
@@ -42,33 +43,34 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
             var token = Request.Cookies["token"];
-            var response = await _userClient.GetUsers(searchModel, token);
-            if (!response.IsSuccessStatusCode)
+            var mappedModel = _mapper.Map<SearchModel>(searchModel);
+            var response = await _userClientAdapter.GetUsers(mappedModel, token);
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    return View("AccessDenied");
+                    return RedirectToAction("SignOut", "Account");
                 }
 
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            var content = await response.Content.ReadAsStringAsync();
-            var pageViewModel = JsonConvert.DeserializeObject<PageViewModel<UserViewModel>>(content);
+            var pageViewModel = response.Users;
+            var mappedPageModel = _mapper.Map<PageViewModel<UserViewModel>>(pageViewModel);
 
             var sizes = PageSizeHelper.GetPageSizeList(7);
             ViewBag.Sizes = sizes;
-            ViewBag.pageSize = pageViewModel.PageSize;
+            ViewBag.pageSize = mappedPageModel.PageSize;
 
-            return View(pageViewModel);
+            return View(mappedPageModel);
         }
 
-        [HttpDelete("{id}")]
+        /*[HttpDelete("{id}")]
         [Route("[action]")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var token = Request.Cookies["token"];
-            var response = await _userClient.DeleteUser(id, token);
+            var response = await _userClientAdapter.DeleteUser(id, token);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -88,7 +90,7 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> DetailsUser(string id)
         {
             var token = Request.Cookies["token"];
-            var response = await _userClient.GetUser(id, token);
+            var response = await _userClientAdapter.GetUser(id, token);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -110,7 +112,7 @@ namespace BoxingClub.Web.Controllers
         public async Task<IActionResult> EditUser(string id)
         {
             var token = Request.Cookies["token"];
-            var response = await _userClient.GetUser(id, token);
+            var response = await _userClientAdapter.GetUser(id, token);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -138,20 +140,20 @@ namespace BoxingClub.Web.Controllers
             }
 
             content = await response.Content.ReadAsStringAsync();
-            
+
             var roles = JsonConvert.DeserializeObject<List<RoleViewModel>>(content);
             ViewBag.Roles = GetRolesSelectList(roles);
             return View(user);
         }
 
         [HttpPost]
-        [Route("[action]")] 
+        [Route("[action]")]
         public async Task<IActionResult> EditUser(UserViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var token = Request.Cookies["token"];
-                var response = await _userClient.EditUser(token, model);
+                var response = await _userClientAdapter.EditUser(token, model);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -187,15 +189,13 @@ namespace BoxingClub.Web.Controllers
         private async Task<HttpResponseMessage> GetRoles()
         {
             var token = Request.Cookies["token"];
-            return await _userClient.GetRoles(token);
+            return await _userClientAdapter.GetRoles(token);
         }
 
         private SelectList GetRolesSelectList(List<RoleViewModel> roles)
         {
             var mappedRoles = _mapper.Map<List<RoleViewModel>>(roles);
             return new SelectList(mappedRoles, "Id", "Name");
-        }
+        }*/
     }
 }
-
-*/
