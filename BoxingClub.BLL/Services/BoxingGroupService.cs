@@ -36,7 +36,10 @@ namespace BoxingClub.BLL.Services
             var groupDTOs = _mapper.Map<List<BoxingGroupDTO>>(groups);
 
             var coaches = await GetCoaches(token);
-            AssignCoachToGroups(groupDTOs, coaches);
+            if (coaches.Any())
+            {
+                AssignCoachToGroups(groupDTOs, coaches);
+            }
 
             return groupDTOs;
         }
@@ -130,7 +133,10 @@ namespace BoxingClub.BLL.Services
             var mappedGroups = _mapper.Map<List<BoxingGroupDTO>>(groups);
 
             var coaches = await GetCoaches(token);
-            AssignCoachToGroups(mappedGroups, coaches);
+            if (coaches.Any())
+            {
+                AssignCoachToGroups(mappedGroups, coaches);
+            }
 
             return mappedGroups;
         }
@@ -162,17 +168,22 @@ namespace BoxingClub.BLL.Services
             var groupDTOs = _mapper.Map<List<BoxingGroupDTO>>(groups);
 
             var coaches = await GetCoaches(token);
-            AssignCoachToGroups(groupDTOs, coaches);
+            if (coaches.Any())
+            {
+                AssignCoachToGroups(groupDTOs, coaches);
+            }
 
             var count = await _database.BoxingGroups.GetCountOfBoxingGroupsAsync();
             return new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
         }
 
-        public async Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, SearchModelDTO searchDTO, string token)
+        public async Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string coachName, SearchModelDTO searchDTO, string token)
         {
-            if (string.IsNullOrEmpty(id))
+            //поиск юзера
+
+            if (string.IsNullOrEmpty(coachName))
             {
-                throw new ArgumentNullException(nameof(id), "Coach id is null");
+                throw new ArgumentNullException(nameof(coachName), "Coach Name is null");
             }
 
             if (searchDTO == null)
@@ -200,7 +211,10 @@ namespace BoxingClub.BLL.Services
             var groupDTOs = _mapper.Map<List<BoxingGroupDTO>>(groups);
 
             var coaches = await GetCoaches(token);
-            AssignCoachToGroups(groupDTOs, coaches);
+            if (coaches.Any())
+            {
+                AssignCoachToGroups(groupDTOs, coaches);
+            }
 
             var count = await _database.BoxingGroups.GetCountOfBoxingGroupsByCoachIdAsync(id);
             var model = new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
