@@ -56,29 +56,10 @@ namespace BoxingClub.Web
                 options.UseSqlServer(
                     Configuration.GetConnectionString("BoxingClubDB")));
 
-/*            var passwordConfig = Configuration.GetSection("PasswordSettings");
-
-            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
-            {
-                options.Password.RequiredLength = Convert.ToInt32(passwordConfig.GetSection("RequiredLength").Value);
-                options.Password.RequireNonAlphanumeric = Convert.ToBoolean(passwordConfig.GetSection("RequireNonAlphanumeric").Value);
-                options.Password.RequireUppercase = Convert.ToBoolean(passwordConfig.GetSection("RequireUppercase").Value);
-                options.Password.RequireLowercase = Convert.ToBoolean(passwordConfig.GetSection("RequireLowercase").Value);
-            })
-            .AddEntityFrameworkStores<BoxingClubContext>();*/
-
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
 
             services.AddTransient<IStudentSpecification, FighterExperienceSpecification>();
             services.AddTransient<IStudentService, StudentService>();
-
-/*            services.AddTransient<IRoleProvider, RoleProvider>();
-            services.AddTransient<IUserProvider, UserProvider>();
-            services.AddTransient<IAuthenticationProvider, AuthenticationProvider>();
-
-            services.AddTransient<IRoleService, RoleService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IAuthenticationService, AuthenticationService>();*/
 
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
             services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
@@ -159,12 +140,6 @@ namespace BoxingClub.Web
                     policy.RequireAuthenticatedUser();
                 });
             });
-
-/*            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Account/SignIn";
-                options.AccessDeniedPath = "/Administration/AccessDenied";
-            });*/
         }
 
 

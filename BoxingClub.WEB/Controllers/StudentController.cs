@@ -138,7 +138,8 @@ namespace BoxingClub.Web.Controllers
 
         private async Task<SelectList> GetGroups()
         {
-            var groups = await _boxingGroupService.GetBoxingGroupsAsync();
+            var token = Request.Cookies["token"];
+            var groups = await _boxingGroupService.GetBoxingGroupsAsync(token);
             var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
             var selectList = new SelectList(groupViewModels, "Id", "Name");
             return selectList;

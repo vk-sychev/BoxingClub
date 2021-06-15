@@ -36,19 +36,19 @@ namespace BoxingClub.DAL.Repositories
             _db.BoxingGroups.Remove(item);
         }
 
-        public Task<BoxingGroup> GetByIdAsync(int id)
+        public Task<BoxingGroup> GetByIdAsync(int id) //FIX
         {
-            return _db.BoxingGroups.Include(x => x.Coach).SingleOrDefaultAsync(g => g.Id == id);
+            return _db.BoxingGroups.AsQueryable().SingleOrDefaultAsync(g => g.Id == id);
         }
 
-        public Task<List<BoxingGroup>> GetAllAsync()
+        public Task<List<BoxingGroup>> GetAllAsync()//FIX
         {
-            return _db.BoxingGroups.Include(x => x.Coach).ToListAsync();
+            return _db.BoxingGroups.AsQueryable().ToListAsync();
         }
 
-        public Task<BoxingGroup> GetBoxingGroupWithStudentsByIdAsync(int id)
+        public Task<BoxingGroup> GetBoxingGroupWithStudentsByIdAsync(int id)//FIX
         {
-           return _db.BoxingGroups.Include(x => x.Coach).Include(x => x.Students).SingleOrDefaultAsync(x => x.Id == id);
+           return _db.BoxingGroups.Include(x => x.Students).SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public void Update(BoxingGroup item)
@@ -65,16 +65,16 @@ namespace BoxingClub.DAL.Repositories
             return _db.BoxingGroups.AsQueryable().Where(x => x.CoachId == id).ToListAsync();
         }
 
-        public Task<List<BoxingGroup>> GetBoxingGroupsPaginatedAsync(int pageIndex, int pageSize)
+        public Task<List<BoxingGroup>> GetBoxingGroupsPaginatedAsync(int pageIndex, int pageSize)//FIX
         {
-            var query = _db.BoxingGroups.Include(x => x.Coach);
+            var query = _db.BoxingGroups.AsQueryable();
             var list = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return list;
         }
 
-        public Task<int> GetCountOfBoxingGroupsAsync()
+        public Task<int> GetCountOfBoxingGroupsAsync()//FIX
         {
-            var query = _db.BoxingGroups.AsQueryable().Include(x => x.Coach);
+            var query = _db.BoxingGroups.AsQueryable();
             var count = query.CountAsync();
             return count;
         }

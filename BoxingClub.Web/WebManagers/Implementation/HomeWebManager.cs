@@ -22,20 +22,18 @@ namespace BoxingClub.Web.WebManagers.Implementation
             _boxingGroupService = boxingGroupService;
         }
 
-        public async Task<PageViewModel<BoxingGroupLiteViewModel>> GetBoxingGroupsAsync(SearchModelDTO searchModel)
+        public async Task<PageViewModel<BoxingGroupLiteViewModel>> GetBoxingGroupsAsync(SearchModelDTO searchModel, string token)
         {
-            var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(searchModel);
+            var pageModel = await _boxingGroupService.GetBoxingGroupsPaginatedAsync(searchModel, token);
             var groups = _mapper.Map<List<BoxingGroupLiteViewModel>>(pageModel.Items);
             return new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, groups);
         }
 
-        public async Task<PageViewModel<BoxingGroupLiteViewModel>> GetBoxingGroupsByCoachIdAsync(string coachName, SearchModelDTO searchModel)
+        public async Task<PageViewModel<BoxingGroupLiteViewModel>> GetBoxingGroupsByCoachIdAsync(string coachName, SearchModelDTO searchModel, string token)
         {
-/*            var coach = await _userService.FindUserByNameAsync(coachName);
-            var pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, searchModel);
+            var pageModel = await _boxingGroupService.GetBoxingGroupsByCoachIdPaginatedAsync(coachName, searchModel, token);
             var groups = _mapper.Map<List<BoxingGroupLiteViewModel>>(pageModel.Items);
-            return new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, groups);*/
-           throw new NotImplementedException();
+            return new PageViewModel<BoxingGroupLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, groups);
         }
     }
 }

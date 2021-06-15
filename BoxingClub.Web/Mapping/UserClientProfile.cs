@@ -17,6 +17,7 @@ namespace BoxingClub.Web.Mapping
             CreateMap<SearchModelDTO, SearchModel>().ReverseMap();
             CreateMap(typeof(PageViewModel<UserViewModel>), typeof(PageModel<UserModel>)).ReverseMap();
             CreateMap<UserModel, UserViewModel>().ReverseMap();
+            CreateMap<UserModel, UserDTO>().ReverseMap();
             CreateMap<RoleViewModel, RoleModel>().ReverseMap();
         }
     }

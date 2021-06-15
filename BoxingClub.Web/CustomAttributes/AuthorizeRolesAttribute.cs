@@ -7,7 +7,6 @@ namespace BoxingClub.Web.CustomAttributes
     {
         public AuthorizeRolesAttribute(params string[] roles) : base()
         {
-            AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme;
             Roles = string.Join(",", roles);
         }
     }

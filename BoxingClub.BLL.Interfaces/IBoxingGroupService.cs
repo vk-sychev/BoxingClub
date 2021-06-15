@@ -10,18 +10,18 @@ namespace BoxingClub.BLL.Interfaces
 
         Task DeleteBoxingGroupAsync(int id);
 
-        Task<BoxingGroupDTO> GetBoxingGroupByIdAsync(int id);
+        Task<BoxingGroupDTO> GetBoxingGroupByIdAsync(int id, string token);
 
-        Task<List<BoxingGroupDTO>> GetBoxingGroupsAsync();
+        Task<List<BoxingGroupDTO>> GetBoxingGroupsAsync(string token);
 
-        Task<List<BoxingGroupDTO>> GetBoxingGroupsByCoachIdAsync(string coachId);
+        Task<List<BoxingGroupDTO>> GetBoxingGroupsByCoachIdAsync(string coachId, string token);
 
         Task UpdateBoxingGroupAsync(BoxingGroupDTO groupDTO);
 
-        Task<BoxingGroupDTO> GetBoxingGroupWithStudentsByIdAsync(int id);
+        Task<BoxingGroupDTO> GetBoxingGroupWithStudentsByIdAsync(int id, string token);
 
-        Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsPaginatedAsync(SearchModelDTO searchDTO);
+        Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsPaginatedAsync(SearchModelDTO searchDTO, string token);
 
-        Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string id, SearchModelDTO searchDTO);
+        Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string coachName, SearchModelDTO searchDTO, string token);
     }
 }
