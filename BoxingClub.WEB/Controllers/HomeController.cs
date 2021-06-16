@@ -2,7 +2,6 @@
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
-using BoxingClub.Web.CustomAttributes;
 using BoxingClub.Web.Helpers;
 using BoxingClub.Web.Models;
 using BoxingClub.Web.WebManagers.Interfaces;
@@ -16,6 +15,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BoxingClub.Infrastructure.Helpers;
+using BoxingClub.Web.CustomAttributes;
 using HttpClientAdapters.Interfaces;
 using HttpClientAdapters.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
