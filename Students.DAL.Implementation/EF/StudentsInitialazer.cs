@@ -1,18 +1,21 @@
-﻿using BoxingClub.DAL.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using BoxingClub.Infrastructure.Enums;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Students.DAL.Entities;
 
-namespace BoxingClub.DAL.EF
+namespace Students.DAL.Implementation.EF
 {
-    public static class BoxingClubInitialazer
+    public static class StudentsInitialazer
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-           var coach1Id = "19759de3-ce1d-4cfd-8340-4e64eb245eb4";
-           var coach2Id = "060342c3-9dc3-4597-bae1-9f19c991ebe9";
-           var coach3Id = "a50a06a5-df07-4728-b6a0-93173c2ce4cf";
+            var coach1Id = "19759de3-ce1d-4cfd-8340-4e64eb245eb4";
+            var coach2Id = "060342c3-9dc3-4597-bae1-9f19c991ebe9";
+            var coach3Id = "a50a06a5-df07-4728-b6a0-93173c2ce4cf";
 
             modelBuilder.Entity<BoxingGroup>().HasData(
                 new BoxingGroup
@@ -343,7 +346,7 @@ namespace BoxingClub.DAL.EF
                     Result = MedicalResult.Success,
                     StudentId = 3
                 },
-                
+
                 new MedicalCertificate()
                 {
                     Id = 8,
@@ -469,52 +472,6 @@ namespace BoxingClub.DAL.EF
                     Result = MedicalResult.Success,
                     StudentId = 17
                 });
-
-            //adding tournaments
-            var moscowJuniorBoxingChampionship = new Tournament()
-            {
-                Id = 1,
-                Name = "Moscow boxing championship",
-                Country = "Russia",
-                City = "Moscow",
-                Date = new DateTime(2021, 06, 25),
-                IsMedCertificateRequired = false
-            };
-
-            var voronezhBoxingLeague = new Tournament()
-            {
-                Id = 2,
-                Name = "Voronezh Boxing League",
-                Country = "Russia",
-                City = "Voronezh",
-                Date = new DateTime(2021, 08, 10),
-                IsMedCertificateRequired = false
-            };
-
-            var internationalBoxingCompetition = new Tournament()
-            {
-                Id = 3,
-                Name = "International Boxing Competition",
-                Country = "Belarus",
-                City = "Gomel",
-                Date = new DateTime(2021, 07, 13),
-                IsMedCertificateRequired = true
-            };
-
-            var internationalBoxingTournamentCupOfTheGovernorOfStPetersburg = new Tournament()
-            {
-                Id = 4,
-                Name = "International boxing tournament - Cup of the Governor of St. Petersburg",
-                Country = "Russia",
-                City = "St. Petersburg",
-                Date = new DateTime(2021, 10, 17),
-                IsMedCertificateRequired = false
-            };
-
-
-            modelBuilder.Entity<Tournament>().HasData(moscowJuniorBoxingChampionship, voronezhBoxingLeague,
-                                                      internationalBoxingCompetition,
-                                                      internationalBoxingTournamentCupOfTheGovernorOfStPetersburg);
         }
     }
 }

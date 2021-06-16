@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoxingClub.Infrastructure\BoxingClub.Infrastructure.csproj" />
+    <ProjectReference Include="..\HttpClientAdapters\HttpClientAdapters.csproj" />
+    <ProjectReference Include="..\Students.BLL.DomainEntities\Students.BLL.DomainEntities.csproj" />
+    <ProjectReference Include="..\Students.BLL.Interfaces\Students.BLL.Interfaces.csproj" />
+    <ProjectReference Include="..\Students.DAL.Interfaces\Students.DAL.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

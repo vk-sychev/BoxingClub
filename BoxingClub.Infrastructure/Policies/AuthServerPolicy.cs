@@ -1,23 +1,18 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Net.Http;
 using NLog;
 using Polly;
 using Polly.Extensions.Http;
 using Polly.Retry;
 using Polly.Timeout;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
-namespace BoxingClub.Web.Policies
+namespace BoxingClub.Infrastructure.Policies
 {
-    public static class SpecServerPolicy
+    public static class AuthServerPolicy
     {
         private const int DurationAfterFirstAttempt = 1;
         private const int DurationAfterSecondAttempt = 5;
-        private const int DurationAfterThirdAttempt = 10;
-        private const int Timeout = 5;
+        private const int Timeout = 10;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -29,11 +24,10 @@ namespace BoxingClub.Web.Policies
                 .WaitAndRetryAsync(new[]
                 {
                     TimeSpan.FromSeconds(DurationAfterFirstAttempt),
-                    TimeSpan.FromSeconds(DurationAfterSecondAttempt),
-                    TimeSpan.FromSeconds(DurationAfterThirdAttempt)
+                    TimeSpan.FromSeconds(DurationAfterSecondAttempt)
                 }, (exception, timeSpan, retryCount, context) =>
                 {
-                    _logger.Warn($"Retrying {retryCount} to connect SpecServer");
+                    _logger.Warn($"Retrying {retryCount} to connect AuthServer");
                 });
         }
 

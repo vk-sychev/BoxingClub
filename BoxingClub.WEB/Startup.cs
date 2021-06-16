@@ -28,8 +28,8 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using BoxingClub.BLL.Implementation.HttpSpecificationClient;
-using BoxingClub.Web.Policies;
 using BoxingClub.BLL.Interfaces.HttpSpecificationClient;
+using BoxingClub.Infrastructure.Policies;
 using HttpClientAdapters.Implementation;
 using HttpClientAdapters.Interfaces;
 using HttpClients.Implementation;
@@ -58,7 +58,6 @@ namespace BoxingClub.Web
 
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
 
-            services.AddTransient<IStudentSpecification, FighterExperienceSpecification>();
             services.AddTransient<IStudentService, StudentService>();
 
             services.AddTransient<IBoxingGroupService, BoxingGroupService>();
