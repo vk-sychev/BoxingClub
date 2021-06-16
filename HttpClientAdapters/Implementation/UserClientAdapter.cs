@@ -155,5 +155,24 @@ namespace HttpClientAdapters.Implementation
                 Users = users
             };
         }
+
+        public async Task<UserResponseModel> GetUserByUsername(string token, string username)
+        {
+            var response = await _userClient.GetUserByUsername(token, username);
+
+            UserModel user = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                user = JsonConvert.DeserializeObject<UserModel>(content);
+            }
+
+            return new UserResponseModel()
+            {
+                StatusCode = response.StatusCode,
+                User = user
+            };
+        }
     }
 }

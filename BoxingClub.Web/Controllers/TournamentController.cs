@@ -2,7 +2,6 @@
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
-using BoxingClub.Web.CustomAttributes;
 using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AuthorizeRoles = BoxingClub.Web.CustomAttributes.AuthorizeRolesAttribute;
 
 namespace BoxingClub.Web.Controllers
 {

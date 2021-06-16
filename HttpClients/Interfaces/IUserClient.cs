@@ -22,5 +22,7 @@ namespace HttpClients.Interfaces
         Task<HttpResponseMessage> GetRoles(string token);
 
         Task<HttpResponseMessage> GetUsersByRole(string token, string roleName);
+
+        Task<HttpResponseMessage> GetUserByUsername(string token, string username);
     }
 }

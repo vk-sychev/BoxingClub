@@ -155,10 +155,25 @@ namespace HttpClients.Implementation
 
         public async Task<HttpResponseMessage> GetUsersByRole(string token, string roleName)
         {
-            var getUsersByRole = $"{_baseUrl}{_administrationController}/GetUsersByRole?RoleName={roleName}";
+            var getUsersByRoleUrl = $"{_baseUrl}{_administrationController}/GetUsersByRole?RoleName={roleName}";
 
             _httpClient.SetBearerToken(token);
-            var response = await _httpClient.GetAsync(getUsersByRole);
+            var response = await _httpClient.GetAsync(getUsersByRoleUrl);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(response.ReasonPhrase);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> GetUserByUsername(string token, string username)
+        {
+            var getUserByUsernameUrl = $"{_baseUrl}{_administrationController}/GetUserByUsername?Username={username}";
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.GetAsync(getUserByUsernameUrl);
 
             if (!response.IsSuccessStatusCode)
             {

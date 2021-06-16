@@ -74,7 +74,6 @@ namespace IdentityServer.BLL.Implementation
             if (result.Succeeded)
             {
                 await _roleProvider.AddToRoleAsync(mappedUser.Id, DefaultRoleName);
-                //await _authenticationProvider.SignInAsync(mappedUser, isPersistent: false);
             }
 
             var mappedResult = _mapper.Map<AccountResultDTO>(result);

@@ -22,5 +22,7 @@ namespace HttpClientAdapters.Interfaces
         Task<RolesResponseModel> GetRoles(string token);
 
         Task<UsersResponseModel> GetUsersByRole(string token, string roleName);
+
+        Task<UserResponseModel> GetUserByUsername(string token, string username);
     }
 }

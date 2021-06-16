@@ -70,6 +70,8 @@ namespace IdentityServer
             .AddProfileService<ProfileService>()
             .AddAspNetIdentity<ApplicationUser>();
 
+            services.AddSwaggerGen();
+
             services.AddScoped<IProfileService, ProfileService>();
 
             services.AddScoped<IUserProvider, UserProvider>();
@@ -106,8 +108,18 @@ namespace IdentityServer
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseRouting();
 

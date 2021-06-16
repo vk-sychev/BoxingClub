@@ -22,6 +22,6 @@ namespace BoxingClub.BLL.Interfaces
 
         Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsPaginatedAsync(SearchModelDTO searchDTO, string token);
 
-        Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string coachName, SearchModelDTO searchDTO, string token);
+        Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string username, SearchModelDTO searchDTO, string token);
     }
 }

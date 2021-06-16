@@ -7,13 +7,13 @@ using BoxingClub.BLL.DomainEntities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BoxingClub.Infrastructure.Constants;
-using BoxingClub.Web.CustomAttributes;
 using System.Linq;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
 using BoxingClub.Infrastructure.Helpers;
 using BoxingClub.Web.WebManagers.Interfaces;
 using BoxingClub.Web.Helpers;
+using AuthorizeRoles = BoxingClub.Web.CustomAttributes.AuthorizeRolesAttribute;
 
 namespace BoxingClub.Web.Controllers
 {

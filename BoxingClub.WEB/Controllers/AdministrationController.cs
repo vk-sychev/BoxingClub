@@ -3,7 +3,6 @@ using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Infrastructure.Exceptions;
-using BoxingClub.Web.CustomAttributes;
 using BoxingClub.Web.Helpers;
 using BoxingClub.Web.Models;
 using BoxingClub.Web.WebManagers.Implementation;
@@ -17,11 +16,14 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BoxingClub.BLL.DomainEntities.Models;
+using BoxingClub.Infrastructure.CustomAttributes;
 using BoxingClub.Infrastructure.Helpers;
+using BoxingClub.Web.CustomAttributes;
 using HttpClientAdapters.Interfaces;
 using HttpClientAdapters.Models;
 using HttpClients.Models;
 using Newtonsoft.Json;
+using AuthorizeRoles = BoxingClub.Web.CustomAttributes.AuthorizeRolesAttribute;
 
 namespace BoxingClub.Web.Controllers
 {

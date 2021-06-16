@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using BoxingClub.Infrastructure.Constants;
+using BoxingClub.Infrastructure.CustomAttributes;
 using BoxingClub.Infrastructure.Helpers;
 using IdentityServer.BLL.Entities;
 using IdentityServer.BLL.Interfaces;
@@ -19,7 +21,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace IdentityServer.Controllers
 {
     [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly IUserService _userService;
@@ -41,6 +42,7 @@ namespace IdentityServer.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         public async Task<IActionResult> GetUsers(SearchModelDTO searchModel)
         {
             var pageViewModel = await _administrationWebManager.GetUsersAsync(searchModel);
@@ -48,7 +50,7 @@ namespace IdentityServer.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Route("[action]")]
+        [AuthorizeRoles(Roles = Constants.AdminRoleName)]
         public async Task<IActionResult> DeleteUser(string id)
         {
             await _userService.DeleteUserByIdAsync(id);
@@ -57,6 +59,7 @@ namespace IdentityServer.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         public async Task<IActionResult> GetUser(string id)
         {
             var user = await _userService.FindUserByIdAsync(id);
@@ -67,6 +70,7 @@ namespace IdentityServer.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        [AuthorizeRoles(Roles = Constants.AdminRoleName)]
         public async Task<IActionResult> EditUser(UserViewModel model)
         {
             var result = new AccountResultDTO();
@@ -87,6 +91,7 @@ namespace IdentityServer.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [AuthorizeRoles(Roles = Constants.AdminRoleName)]
         public async Task<List<RoleViewModel>> GetRoles()
         {
             var roles = await _roleService.GetRolesAsync();
@@ -95,10 +100,20 @@ namespace IdentityServer.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         public async Task<IActionResult> GetUsersByRole(string roleName)
         {
             var users = await _userService.GetUsersByRoleAsync(roleName);
             return Ok(users);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
+        public async Task<IActionResult> GetUserByUsername(string username)
+        {
+            var user = await _userService.FindUserByNameAsync(username);
+            return Ok(user);
         }
     }
 }

@@ -177,13 +177,18 @@ namespace BoxingClub.BLL.Services
             return new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
         }
 
-        public async Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string coachName, SearchModelDTO searchDTO, string token)
+        public async Task<PageModelDTO<BoxingGroupDTO>> GetBoxingGroupsByCoachIdPaginatedAsync(string username, SearchModelDTO searchDTO, string token)
         {
-            //поиск юзера
-
-            if (string.IsNullOrEmpty(coachName))
+            if (string.IsNullOrEmpty(username))
             {
-                throw new ArgumentNullException(nameof(coachName), "Coach Name is null");
+                throw new ArgumentNullException(nameof(username), "Coach username is null");
+            }
+
+            var coach = await GetCoachByUsername(username, token);
+
+            if (coach == null)
+            {
+                throw new ArgumentNullException(nameof(coach), "coach is null");
             }
 
             if (searchDTO == null)
@@ -201,11 +206,11 @@ namespace BoxingClub.BLL.Services
                 searchDTO.PageSize = PageModelConstants.PageSize;
             }
 
-            var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdPaginatedAsync(id, searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+            var groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             if (groups.Count == 0)
             {
                 searchDTO.PageIndex = PageModelConstants.PageIndex;
-                groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdPaginatedAsync(id, searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
+                groups = await _database.BoxingGroups.GetBoxingGroupsByCoachIdPaginatedAsync(coach.Id, searchDTO.PageIndex.Value, searchDTO.PageSize.Value);
             }
 
             var groupDTOs = _mapper.Map<List<BoxingGroupDTO>>(groups);
@@ -216,7 +221,7 @@ namespace BoxingClub.BLL.Services
                 AssignCoachToGroups(groupDTOs, coaches);
             }
 
-            var count = await _database.BoxingGroups.GetCountOfBoxingGroupsByCoachIdAsync(id);
+            var count = await _database.BoxingGroups.GetCountOfBoxingGroupsByCoachIdAsync(coach.Id);
             var model = new PageModelDTO<BoxingGroupDTO>() { Items = groupDTOs, Count = count };
             return model;
         }
@@ -233,6 +238,20 @@ namespace BoxingClub.BLL.Services
             }
 
             return coaches;
+        }
+
+        private async Task<UserDTO> GetCoachByUsername(string username, string token)
+        {
+            var response = await _userClientAdapter.GetUserByUsername(token, username);
+            UserDTO coach = null;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var user = response.User;
+                coach = _mapper.Map<UserDTO>(user);
+            }
+
+            return coach;
         }
 
         private async Task<UserDTO> GetCoach(string id, string token)

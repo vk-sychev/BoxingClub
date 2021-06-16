@@ -19,7 +19,8 @@ namespace IdentityServer.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [Route("Error")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [Route("/Error")]
         public HttpStatusCode Error()
         {
             var exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
