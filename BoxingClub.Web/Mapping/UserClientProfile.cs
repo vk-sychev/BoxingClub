@@ -13,12 +13,7 @@ namespace BoxingClub.Web.Mapping
     {
         public UserClientProfile()
         {
-            CreateMap<SignUpViewModel, SignUpModel>().ReverseMap();
             CreateMap<SearchModelDTO, SearchModel>().ReverseMap();
-            CreateMap(typeof(PageViewModel<UserViewModel>), typeof(PageModel<UserModel>)).ReverseMap();
-            CreateMap<UserModel, UserViewModel>().ReverseMap();
-            CreateMap<UserModel, UserDTO>().ReverseMap();
-            CreateMap<RoleViewModel, RoleModel>().ReverseMap();
         }
     }
 }

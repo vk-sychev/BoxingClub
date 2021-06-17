@@ -10,41 +10,66 @@ using BoxingClub.Infrastructure.Constants;
 using System.Linq;
 using BoxingClub.Infrastructure.Exceptions;
 using System;
+using System.Net;
 using BoxingClub.Infrastructure.Helpers;
 using BoxingClub.Web.WebManagers.Interfaces;
 using BoxingClub.Web.Helpers;
+using HttpClientAdapters.Interfaces;
+using HttpClientAdapters.Models;
+using HttpClients.Models;
 using AuthorizeRoles = BoxingClub.Web.CustomAttributes.AuthorizeRolesAttribute;
+using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
 
 namespace BoxingClub.Web.Controllers
 {
     [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
+    [Route("[controller]")]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
         private readonly IBoxingGroupService _boxingGroupService;
         private readonly IMedicalCertificateService _medicalCertificateService;
         private readonly IStudentWebManager _studentWebManager;
+        private readonly IStudentClientAdapter _studentClientAdapter;
         private readonly IMapper _mapper;
 
         public StudentController(IStudentService studentService,
                                  IMapper mapper,
                                  IBoxingGroupService boxingGroupService,
                                  IMedicalCertificateService medicalCertificateService,
-                                 IStudentWebManager studentWebManager)
+                                 IStudentWebManager studentWebManager,
+                                 IStudentClientAdapter studentClientAdapter)
         {
             _studentService = studentService;
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
             _medicalCertificateService = medicalCertificateService;
             _studentWebManager = studentWebManager;
+            _studentClientAdapter = studentClientAdapter;
         }
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Student/GetAllStudents")]
-        public async Task<IActionResult> GetAllStudents(SearchModelDTO searchModel)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudents(SearchModelDTO searchModel)
         {
-            var pageViewModel = await _studentWebManager.GetStudentsAsync(searchModel);
+            var token = Request.Cookies["token"];
+
+            var mappedModel = _mapper.Map<SearchModel>(searchModel);
+            var response = await _studentClientAdapter.GetStudents(token, mappedModel);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var pageViewModel = response.Items;
+            var mappedPageModel = _mapper.Map<PageViewModel<StudentLiteViewModel>>(pageViewModel);
 
             var sizes = PageSizeHelper.GetPageSizeList(5);
             ViewBag.Sizes = sizes;
@@ -52,97 +77,208 @@ namespace BoxingClub.Web.Controllers
             ViewBag.experienceFilter = searchModel.ExperienceFilter ?? 0;
             ViewBag.medExaminationFilter = searchModel.MedExaminationFilter ?? 0;
 
-            return View(pageViewModel);
+            return View(mappedPageModel);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [HttpGet]
-        [Route("Student/CreateStudent")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> CreateStudent()
         {
-            ViewBag.Groups = await GetGroups();
+            var response = await GetGroups();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedGroups = _mapper.Map<List<BoxingGroupLiteViewModel>>(response.Items);
+
+            ViewBag.Groups = new SelectList(mappedGroups, "Id", "Name");
             return View();
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Student/CreateStudent")]
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
         {
             if (ModelState.IsValid)
             {
-                var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
-                await _studentService.CreateStudentAsync(studentDTO);
-                return RedirectToAction("GetAllStudents", "Student");
+                var token = Request.Cookies["token"];
+                var mappedStudent = _mapper.Map<StudentFullModel>(studentViewModel);
+                var response = await _studentClientAdapter.CreateStudent(token, mappedStudent);
+
+                if (response != HttpStatusCode.OK)
+                {
+                    if (response == HttpStatusCode.Unauthorized)
+                    {
+                        return RedirectToAction("SignOut", "Account");
+                    }
+
+                    throw new InvalidOperationException("Error occurred while processing your request");
+                }
+
+                return RedirectToAction("GetStudents", "Student");
             }
-            ViewBag.Groups = await GetGroups();
+
+            var boxingGroupResponse = await GetGroups();
+
+            if (boxingGroupResponse.StatusCode != HttpStatusCode.OK)
+            {
+                if (boxingGroupResponse.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedGroups = _mapper.Map<List<BoxingGroupLiteViewModel>>(boxingGroupResponse.Items);
+
+            ViewBag.Groups = new SelectList(mappedGroups, "Id", "Name");
             return View(studentViewModel);
 
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [Route("Student/DeleteStudent/{id}")]
-        [HttpDelete("{id}")]
+        [Route("[action]/{id}")]
+        [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> DeleteStudent(int id)
         {
-            await _studentService.DeleteStudentAsync(id);
-            return RedirectToAction("GetAllStudents", "Student");
+            var token = Request.Cookies["token"];
+            var response = await _studentClientAdapter.DeleteStudent(token, id);
+
+            if (response != HttpStatusCode.OK)
+            {
+                if (response == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            return RedirectToAction("GetStudents", "Student");
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Student/EditStudent/{id}")]
-        [HttpGet]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> EditStudent(int id, bool fromHomeController, int returnId)
         {
+            var boxingGroupResponse = await GetGroups();
 
-            ViewBag.Groups = await GetGroups();
+            if (boxingGroupResponse.StatusCode != HttpStatusCode.OK)
+            {
+                if (boxingGroupResponse.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedGroups = _mapper.Map<List<BoxingGroupLiteViewModel>>(boxingGroupResponse.Items);
+            ViewBag.Groups = new SelectList(mappedGroups, "Id", "Name");
+
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;
-            var studentDTO = await _studentService.GetStudentByIdAsync(id);
-            var student = _mapper.Map<StudentFullViewModel>(studentDTO);
 
-            return View(student);
+            var token = Request.Cookies["token"];
+            var response = await _studentClientAdapter.GetStudent(token, id);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedStudent = _mapper.Map<StudentFullViewModel>(response.Item);
+
+            return View(mappedStudent);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [HttpPost]
-        [Route("Student/EditStudent/{id}")]
+        [HttpPost("[action]/{id}")]
         public async Task<IActionResult> EditStudent(StudentFullViewModel studentViewModel, bool fromHomeController, int returnId)
         {
             if (ModelState.IsValid)
             {
-                var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
-                await _studentService.UpdateStudentAsync(studentDTO);
+                var token = Request.Cookies["token"];
+                var mappedStudent = _mapper.Map<StudentFullModel>(studentViewModel);
+                var response = await _studentClientAdapter.EditStudent(token, mappedStudent);
+
+                if (response != HttpStatusCode.OK)
+                {
+                    if (response == HttpStatusCode.Unauthorized)
+                    {
+                        return RedirectToAction("SignOut", "Account");
+                    }
+
+                    throw new InvalidOperationException("Error occurred while processing your request");
+                }
+
                 if (fromHomeController)
                 {
                     return RedirectToAction("DetailsBoxingGroup", "Home", new { id = returnId });
                 }
-                return RedirectToAction("GetAllStudents", "Student");
+                return RedirectToAction("GetStudents", "Student");
             }
-            ViewBag.Groups = await GetGroups();
-            ViewBag.fromHomeController = fromHomeController;
 
+
+            var boxingGroupResponse = await GetGroups();
+
+            if (boxingGroupResponse.StatusCode != HttpStatusCode.OK)
+            {
+                if (boxingGroupResponse.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedGroups = _mapper.Map<List<BoxingGroupLiteViewModel>>(boxingGroupResponse.Items);
+            ViewBag.Groups = new SelectList(mappedGroups, "Id", "Name");
+
+            ViewBag.fromHomeController = fromHomeController;
             return View(studentViewModel);
         }
 
-        [HttpGet]
-        [Route("Student/DetailsStudent/{id}")]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> DetailsStudent(int id, bool fromHomeController, int returnId)
         {
-            var studentDTO = await _studentService.GetStudentByIdAsync(id);
-            var student = _mapper.Map<StudentFullViewModel>(studentDTO);
+            var token = Request.Cookies["token"];
+            var response = await _studentClientAdapter.GetStudent(token, id);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            var mappedStudent = _mapper.Map<StudentFullViewModel>(response.Item);
+
             ViewBag.fromHomeController = fromHomeController;
             ViewBag.returnId = returnId;
-            return View(student);
+            return View(mappedStudent);
         }
 
-        private async Task<SelectList> GetGroups()
+        private async Task<ItemsResponseModel<BoxingGroupLiteModel>> GetGroups()
         {
             var token = Request.Cookies["token"];
-            var groups = await _boxingGroupService.GetBoxingGroupsAsync(token);
-            var groupViewModels = _mapper.Map<List<BoxingGroupLiteViewModel>>(groups);
-            var selectList = new SelectList(groupViewModels, "Id", "Name");
-            return selectList;
+            return await _studentClientAdapter.GetBoxingGroups(token);
         }
     }
 }

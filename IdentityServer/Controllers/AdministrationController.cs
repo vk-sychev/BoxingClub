@@ -49,7 +49,7 @@ namespace IdentityServer.Controllers
             return Ok(pageViewModel);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("[action]/{id}")]
         [AuthorizeRoles(Roles = Constants.AdminRoleName)]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -58,7 +58,7 @@ namespace IdentityServer.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
+        [Route("[action]/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         public async Task<IActionResult> GetUser(string id)
         {
@@ -69,7 +69,7 @@ namespace IdentityServer.Controllers
 
 
         [HttpPost]
-        [Route("[action]")]
+        [Route("[action]/{id}")]
         [AuthorizeRoles(Roles = Constants.AdminRoleName)]
         public async Task<IActionResult> EditUser(UserViewModel model)
         {
@@ -99,7 +99,7 @@ namespace IdentityServer.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
+        [Route("[action]/{roleName}")]
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         public async Task<IActionResult> GetUsersByRole(string roleName)
         {
@@ -108,7 +108,7 @@ namespace IdentityServer.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
+        [Route("[action]/{username}")]
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
         public async Task<IActionResult> GetUserByUsername(string username)
         {

@@ -38,7 +38,7 @@
                         @if (User.Identity.IsAuthenticated && (User.IsInRole(Constants.AdminRoleName) || User.IsInRole(Constants.ManagerRoleName)))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Student" asp-action="GetAllStudents">All Students</a>
+                                <a class="nav-link" asp-area="" asp-controller="Student" asp-action="GetStudents">All Students</a>
                             </li>
                         }
 

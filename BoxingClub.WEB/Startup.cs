@@ -86,7 +86,17 @@ namespace BoxingClub.Web
                .AddPolicyHandler(AuthServerPolicy.GetWaitAndRetryPolicy())
                .AddPolicyHandler(AuthServerPolicy.GetTimeoutPolicy());
 
+            services.AddHttpClient<IStudentClient, StudentClient>(client =>
+            {
+                client.BaseAddress = new Uri(Configuration.GetSection("Students.API").GetSection("Uri").Value);
+                client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("Students.API")
+                    .GetSection("HttpClientTimeout").Value));
+            })
+                .AddPolicyHandler(APIServersPolicy.GetWaitAndRetryPolicy())
+                .AddPolicyHandler(APIServersPolicy.GetTimeoutPolicy());
+
             services.AddTransient<IUserClientAdapter, UserClientAdapter>();
+            services.AddTransient<IStudentClientAdapter, StudentClientAdapter>();
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new RoleProfile(), new StudentProfile(),
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
@@ -175,6 +185,7 @@ namespace BoxingClub.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                    
                 endpoints.MapRazorPages();
             });
         }

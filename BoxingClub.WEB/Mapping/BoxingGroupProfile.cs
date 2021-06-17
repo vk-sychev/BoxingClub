@@ -2,6 +2,7 @@
 using BoxingClub.BLL.DomainEntities;
 using BoxingClub.DAL.Entities;
 using BoxingClub.Web.Models;
+using HttpClients.Models;
 
 namespace BoxingClub.Web.Mapping
 {
@@ -13,6 +14,9 @@ namespace BoxingClub.Web.Mapping
             CreateMap<BoxingGroupDTO, BoxingGroupFullViewModel>().ReverseMap();
             CreateMap<BoxingGroupLiteViewModel, BoxingGroupDTO>().ForMember(dest => dest.Students, opt => opt.Ignore())
                                                                  .ReverseMap();
+            CreateMap<BoxingGroupLiteModel, BoxingGroupLiteViewModel>().ReverseMap();
+            CreateMap<BoxingGroupFullModel, BoxingGroupFullViewModel>().ReverseMap();
+            CreateMap(typeof(PageViewModel<BoxingGroupLiteViewModel>), typeof(PageModel<BoxingGroupLiteModel>)).ReverseMap();
         }
     }
 }

@@ -8,10 +8,10 @@ using HttpClients.Models;
 
 namespace HttpClientAdapters.Models
 {
-    public class UsersResponseModel
+    public class ItemResponseModel<T> where T:class
     {
         public HttpStatusCode StatusCode { get; set; }
 
-        public List<UserModel> Users { get; set; } = new List<UserModel>();
+        public T Item { get; set; }
     }
 }

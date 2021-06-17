@@ -28,8 +28,8 @@ namespace HttpClients.Implementation
                           ILogger<UserClient> logger)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient), "httpClient is null");
-            _logger = logger;
-            _baseUrl = _httpClient.BaseAddress.ToString();
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger), "logger is null");
+            _baseUrl = httpClient.BaseAddress?.ToString();
 
             if (configuration == null)
             {
@@ -93,7 +93,7 @@ namespace HttpClients.Implementation
 
         public async Task<HttpResponseMessage> DeleteUser(string id, string token)
         {
-            var deleteUserUrl = $"{_baseUrl}{_administrationController}/DeleteUser?id={id}";
+            var deleteUserUrl = $"{_baseUrl}{_administrationController}/DeleteUser/{id}";
 
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.DeleteAsync(deleteUserUrl);
@@ -108,7 +108,7 @@ namespace HttpClients.Implementation
 
         public async Task<HttpResponseMessage> GetUser(string id, string token)
         {
-            var getUserUrl = $"{_baseUrl}{_administrationController}/GetUser?id={id}";
+            var getUserUrl = $"{_baseUrl}{_administrationController}/GetUser/{id}";
 
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getUserUrl);
@@ -124,7 +124,7 @@ namespace HttpClients.Implementation
         public async Task<HttpResponseMessage> EditUser(string token, UserModel model)
         {
             _httpClient.SetBearerToken(token);
-            var editUserUrl = $"{_baseUrl}{_administrationController}/EditUser?id={model.Id}";
+            var editUserUrl = $"{_baseUrl}{_administrationController}/EditUser/{model.Id}";
             var dictionary = GetModelDictionary(model);
 
             var content = new FormUrlEncodedContent(dictionary);
@@ -155,7 +155,7 @@ namespace HttpClients.Implementation
 
         public async Task<HttpResponseMessage> GetUsersByRole(string token, string roleName)
         {
-            var getUsersByRoleUrl = $"{_baseUrl}{_administrationController}/GetUsersByRole?RoleName={roleName}";
+            var getUsersByRoleUrl = $"{_baseUrl}{_administrationController}/GetUsersByRole/{roleName}";
 
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getUsersByRoleUrl);
@@ -170,7 +170,7 @@ namespace HttpClients.Implementation
 
         public async Task<HttpResponseMessage> GetUserByUsername(string token, string username)
         {
-            var getUserByUsernameUrl = $"{_baseUrl}{_administrationController}/GetUserByUsername?Username={username}";
+            var getUserByUsernameUrl = $"{_baseUrl}{_administrationController}/GetUserByUsername/{username}";
 
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getUserByUsernameUrl);

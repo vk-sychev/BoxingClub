@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using BoxingClub.Infrastructure.Policies;
 using HttpClientAdapters.Implementation;
 using HttpClientAdapters.Interfaces;
@@ -59,7 +60,12 @@ namespace Students.API
                     config.Audience = "https://localhost:10001";
                 });
 
-            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(StudentProfile), typeof(UserClientProfile), typeof(RoleProfile), typeof(UserProfile));
+            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(StudentProfile), typeof(UserClientProfile), typeof(RoleProfile), typeof(UserProfile), typeof(MedicalCertificateProfile));
+
+            var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new RoleProfile(), new StudentProfile(), new UserProfile(), new MedicalCertificateProfile() };
+            var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
+            mapperConfig.AssertConfigurationIsValid();
+
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
 
             services.AddScoped<IStudentService, StudentService>();
@@ -68,6 +74,7 @@ namespace Students.API
             services.AddScoped<IMedicalCertificateService, MedicalCertificateService>();
 
             services.AddScoped<IHomeWebManager, HomeWebManager>();
+            services.AddScoped<IStudentWebManager, StudentWebManager>();
 
             services.AddHttpClient<IUserClient, UserClient>(client =>
                 {

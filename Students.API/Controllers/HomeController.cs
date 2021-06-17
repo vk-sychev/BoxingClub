@@ -44,12 +44,12 @@ namespace Students.API.Controllers
             _userClientAdapter = userClientAdapter;
         }
 
-        [Route("[action]")]
+        [HttpGet("[action]")]
         [AuthorizeRoles(Constants.AdminRoleName, Constants.CoachRoleName, Constants.ManagerRoleName)]
         public async Task<IActionResult> GetBoxingGroups(SearchModelDTO searchModel)
         {
             PageViewModel<BoxingGroupLiteViewModel> pageViewModel;
-            var token = Request.Cookies["token"];
+            var token = GetTokenFromRequest();
 
             if (User.IsInRole(Constants.CoachRoleName))
             {
@@ -63,12 +63,75 @@ namespace Students.API.Controllers
             return Ok(pageViewModel);
         }
 
-        [Route("[action]")]
+        [HttpGet("[action]")]
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.CoachRoleName, Constants.ManagerRoleName)]
+        public async Task<IActionResult> GetAllBoxingGroups()
+        {
+            var token = GetTokenFromRequest();
+            var boxingGroups = await _boxingGroupService.GetBoxingGroupsAsync(token);
+            return Ok(boxingGroups);
+        }
+
+        [HttpGet("[action]/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName)]
-        public async Task<IActionResult> EditBoxingGroup(int id)
+        public async Task<IActionResult> GetBoxingGroup(int id)
         {
             var mappedGroup = await GetBoxingGroupById(id);
             return Ok(mappedGroup);
+        }
+
+        [HttpGet("[action]/{id}")]
+        [AuthorizeRoles(Constants.AdminRoleName)]
+        public async Task<IActionResult> GetBoxingGroupWithStudents(int id)
+        {
+            var token = GetTokenFromRequest();
+            var boxingGroup = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id, token);
+            var mappedGroup = _mapper.Map<BoxingGroupFullViewModel>(boxingGroup);
+            return Ok(mappedGroup);
+        }
+
+        [AuthorizeRoles(Constants.AdminRoleName)]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateBoxingGroup(BoxingGroupLiteViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var groupDTO = _mapper.Map<BoxingGroupDTO>(model);
+                await _boxingGroupService.CreateBoxingGroupAsync(groupDTO);
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [AuthorizeRoles(Constants.AdminRoleName)]
+        [HttpDelete("[action]/{id}")]
+        public async Task<IActionResult> DeleteBoxingGroup(int id)
+        {
+            await _boxingGroupService.DeleteBoxingGroupAsync(id);
+            return Ok();
+        }
+
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [HttpDelete("[action]/{studentId}")]
+        public async Task<IActionResult> DeleteFromBoxingGroup(int studentId, int returnId)
+        {
+            await _studentService.DeleteFromGroupAsync(studentId);
+            return Ok();
+        }
+
+        [AuthorizeRoles(Constants.AdminRoleName)]
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> EditBoxingGroup(BoxingGroupLiteViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var group = _mapper.Map<BoxingGroupDTO>(model);
+                await _boxingGroupService.UpdateBoxingGroupAsync(group);
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         private async Task<BoxingGroupLiteViewModel> GetBoxingGroupById(int id)

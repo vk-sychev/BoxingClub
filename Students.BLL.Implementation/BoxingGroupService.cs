@@ -233,7 +233,7 @@ namespace Students.BLL.Implementation
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var users = response.Users;
+                var users = response.Items;
                 coaches = _mapper.Map<List<UserDTO>>(users);
             }
 
@@ -247,7 +247,7 @@ namespace Students.BLL.Implementation
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var user = response.User;
+                var user = response.Item;
                 coach = _mapper.Map<UserDTO>(user);
             }
 
@@ -261,7 +261,7 @@ namespace Students.BLL.Implementation
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var user = response.User;
+                var user = response.Item;
                 coach = _mapper.Map<UserDTO>(user);
             }
 

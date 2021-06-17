@@ -58,7 +58,7 @@ namespace BoxingClub.Web.Controllers
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            var pageViewModel = response.Users;
+            var pageViewModel = response.Items;
             var mappedPageModel = _mapper.Map<PageViewModel<UserViewModel>>(pageViewModel);
 
             var sizes = PageSizeHelper.GetPageSizeList(7);
@@ -105,7 +105,7 @@ namespace BoxingClub.Web.Controllers
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            var mappedUser = _mapper.Map<UserViewModel>(response.User);
+            var mappedUser = _mapper.Map<UserViewModel>(response.Item);
             return View(mappedUser);
         }
 
@@ -126,7 +126,7 @@ namespace BoxingClub.Web.Controllers
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            var mappedUser = _mapper.Map<UserViewModel>(response.User);
+            var mappedUser = _mapper.Map<UserViewModel>(response.Item);
 
             var resp = await GetRoles();
 
@@ -140,7 +140,7 @@ namespace BoxingClub.Web.Controllers
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            var mappedRoles = _mapper.Map<List<RoleViewModel>>(resp.Roles);
+            var mappedRoles = _mapper.Map<List<RoleViewModel>>(resp.Items);
 
             ViewBag.Roles = GetRolesSelectList(mappedRoles);
             return View(mappedUser);
@@ -180,13 +180,13 @@ namespace BoxingClub.Web.Controllers
                 throw new InvalidOperationException("Error occurred while processing your request");
             }
 
-            var mappedRoles = _mapper.Map<List<RoleViewModel>>(resp.Roles);
+            var mappedRoles = _mapper.Map<List<RoleViewModel>>(resp.Items);
 
             ViewBag.Roles = GetRolesSelectList(mappedRoles);
             return View(model);
         }
 
-        private async Task<RolesResponseModel> GetRoles()
+        private async Task<ItemsResponseModel<RoleModel>> GetRoles()
         {
             var token = Request.Cookies["token"];
             return await _userClientAdapter.GetRoles(token);

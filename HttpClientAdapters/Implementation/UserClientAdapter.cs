@@ -60,7 +60,7 @@ namespace HttpClientAdapters.Implementation
             };
         }
 
-        public async Task<PageModelResponse> GetUsers(SearchModel searchModel, string token)
+        public async Task<PageModelResponse<UserModel>> GetUsers(SearchModel searchModel, string token)
         {
             var response = await _userClient.GetUsers(searchModel, token);
             PageModel<UserModel> users = null;
@@ -71,10 +71,10 @@ namespace HttpClientAdapters.Implementation
                 users = JsonConvert.DeserializeObject<PageModel<UserModel>>(content);
             }
 
-            return new PageModelResponse()
+            return new PageModelResponse<UserModel>()
             {
                 StatusCode = response.StatusCode,
-                Users = users
+                Items = users
             };
         }
 
@@ -84,7 +84,7 @@ namespace HttpClientAdapters.Implementation
             return response.StatusCode;
         }
 
-        public async Task<UserResponseModel> GetUser(string id, string token)
+        public async Task<ItemResponseModel<UserModel>> GetUser(string id, string token)
         {
             var response = await _userClient.GetUser(id, token);
             UserModel user = null;
@@ -95,10 +95,10 @@ namespace HttpClientAdapters.Implementation
                 user = JsonConvert.DeserializeObject<UserModel>(content);
             }
 
-            return new UserResponseModel()
+            return new ItemResponseModel<UserModel>()
             {
                 StatusCode = response.StatusCode,
-                User = user
+                Item = user
             };
         }
 
@@ -120,7 +120,7 @@ namespace HttpClientAdapters.Implementation
             };
         }
 
-        public async Task<RolesResponseModel> GetRoles(string token)
+        public async Task<ItemsResponseModel<RoleModel>> GetRoles(string token)
         {
             var response = await _userClient.GetRoles(token);
             var roles = new List<RoleModel>();
@@ -131,14 +131,14 @@ namespace HttpClientAdapters.Implementation
                 roles = JsonConvert.DeserializeObject<List<RoleModel>>(content);
             }
 
-            return new RolesResponseModel()
+            return new ItemsResponseModel<RoleModel>()
             {
                 StatusCode = response.StatusCode,
-                Roles = roles
+                Items = roles
             };
         }
 
-        public async Task<UsersResponseModel> GetUsersByRole(string token, string roleName)
+        public async Task<ItemsResponseModel<UserModel>> GetUsersByRole(string token, string roleName)
         {
             var response = await _userClient.GetUsersByRole(token, roleName);
             var users = new List<UserModel>();
@@ -149,14 +149,14 @@ namespace HttpClientAdapters.Implementation
                 users = JsonConvert.DeserializeObject<List<UserModel>>(content);
             }
 
-            return new UsersResponseModel()
+            return new ItemsResponseModel<UserModel>
             {
                 StatusCode = response.StatusCode,
-                Users = users
+                Items = users
             };
         }
 
-        public async Task<UserResponseModel> GetUserByUsername(string token, string username)
+        public async Task<ItemResponseModel<UserModel>> GetUserByUsername(string token, string username)
         {
             var response = await _userClient.GetUserByUsername(token, username);
 
@@ -168,10 +168,10 @@ namespace HttpClientAdapters.Implementation
                 user = JsonConvert.DeserializeObject<UserModel>(content);
             }
 
-            return new UserResponseModel()
+            return new ItemResponseModel<UserModel>()
             {
                 StatusCode = response.StatusCode,
-                User = user
+                Item = user
             };
         }
     }

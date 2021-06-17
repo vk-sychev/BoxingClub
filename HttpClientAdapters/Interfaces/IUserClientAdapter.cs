@@ -11,18 +11,18 @@ namespace HttpClientAdapters.Interfaces
 
         Task<SignUpEditResponseModel> SignUpAsync(SignUpModel model);
 
-        Task<PageModelResponse> GetUsers(SearchModel searchModel, string token);
+        Task<PageModelResponse<UserModel>> GetUsers(SearchModel searchModel, string token);
 
         Task<HttpStatusCode> DeleteUser(string id, string token);
 
-        Task<UserResponseModel> GetUser(string id, string token);
+        Task<ItemResponseModel<UserModel>> GetUser(string id, string token);
 
         Task<SignUpEditResponseModel> EditUser(string token, UserModel model);
 
-        Task<RolesResponseModel> GetRoles(string token);
+        Task<ItemsResponseModel<RoleModel>> GetRoles(string token);
 
-        Task<UsersResponseModel> GetUsersByRole(string token, string roleName);
+        Task<ItemsResponseModel<UserModel>> GetUsersByRole(string token, string roleName);
 
-        Task<UserResponseModel> GetUserByUsername(string token, string username);
+        Task<ItemResponseModel<UserModel>> GetUserByUsername(string token, string username);
     }
 }
