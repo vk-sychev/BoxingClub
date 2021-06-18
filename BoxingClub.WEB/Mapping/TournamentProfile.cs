@@ -15,6 +15,7 @@ namespace BoxingClub.Web.Mapping
         {
             CreateMap<Tournament, TournamentDTO>(MemberList.Destination).ReverseMap();
             CreateMap<TournamentDTO, TournamentViewModel>().ReverseMap();
+            CreateMap<Tournament, HttpClients.Models.Tournament>().ReverseMap();
         }
     }
 }

@@ -48,14 +48,11 @@ namespace BoxingClub.Web.Controllers
             var token = Request.Cookies["token"];
             var mappedModel = _mapper.Map<SearchModel>(searchModel);
             var response = await _userClientAdapter.GetUsers(mappedModel, token);
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return RedirectToAction("SignOut", "Account");
-                }
 
-                throw new InvalidOperationException("Error occurred while processing your request");
+            var redirect = GetRedirectAction(response.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
             }
 
             var pageViewModel = response.Items;
@@ -75,14 +72,10 @@ namespace BoxingClub.Web.Controllers
             var token = Request.Cookies["token"];
             var response = await _userClientAdapter.DeleteUser(id, token);
 
-            if (response != HttpStatusCode.OK)
+            var redirect = GetRedirectAction(response);
+            if (redirect != null)
             {
-                if (response == HttpStatusCode.Unauthorized)
-                {
-                    return RedirectToAction("SignOut", "Account");
-                }
-
-                throw new InvalidOperationException("Error occurred while processing your request");
+                return redirect;
             }
 
             return RedirectToAction("GetUsers", "Administration");
@@ -95,14 +88,10 @@ namespace BoxingClub.Web.Controllers
             var token = Request.Cookies["token"];
             var response = await _userClientAdapter.GetUser(id, token);
 
-            if (response.StatusCode != HttpStatusCode.OK)
+            var redirect = GetRedirectAction(response.StatusCode);
+            if (redirect != null)
             {
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return RedirectToAction("SignOut", "Account");
-                }
-
-                throw new InvalidOperationException("Error occurred while processing your request");
+                return redirect;
             }
 
             var mappedUser = _mapper.Map<UserViewModel>(response.Item);
@@ -116,32 +105,23 @@ namespace BoxingClub.Web.Controllers
             var token = Request.Cookies["token"];
             var response = await _userClientAdapter.GetUser(id, token);
 
-            if (response.StatusCode != HttpStatusCode.OK)
+            var redirect = GetRedirectAction(response.StatusCode);
+            if (redirect != null)
             {
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return RedirectToAction("SignOut", "Account");
-                }
-
-                throw new InvalidOperationException("Error occurred while processing your request");
+                return redirect;
             }
 
             var mappedUser = _mapper.Map<UserViewModel>(response.Item);
 
             var resp = await GetRoles();
 
-            if (resp.StatusCode != HttpStatusCode.OK)
+            redirect = GetRedirectAction(resp.StatusCode);
+            if (redirect != null)
             {
-                if (resp.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return RedirectToAction("SignOut", "Account");
-                }
-
-                throw new InvalidOperationException("Error occurred while processing your request");
+                return redirect;
             }
 
             var mappedRoles = _mapper.Map<List<RoleViewModel>>(resp.Items);
-
             ViewBag.Roles = GetRolesSelectList(mappedRoles);
             return View(mappedUser);
         }
@@ -155,14 +135,11 @@ namespace BoxingClub.Web.Controllers
                 var token = Request.Cookies["token"];
                 var mappedUser = _mapper.Map<UserModel>(model);
                 var response = await _userClientAdapter.EditUser(token, mappedUser);
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        return View("AccessDenied");
-                    }
 
-                    throw new InvalidOperationException("Error occurred while processing your request");
+                var redirect = GetRedirectAction(response.StatusCode);
+                if (redirect != null)
+                {
+                    return redirect;
                 }
 
                 return RedirectToAction("GetUsers", "Administration");
@@ -170,14 +147,10 @@ namespace BoxingClub.Web.Controllers
 
             var resp = await GetRoles();
 
-            if (resp.StatusCode != HttpStatusCode.OK)
+            var redir = GetRedirectAction(resp.StatusCode);
+            if (redir != null)
             {
-                if (resp.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return RedirectToAction("SignOut", "Account");
-                }
-
-                throw new InvalidOperationException("Error occurred while processing your request");
+                return redir;
             }
 
             var mappedRoles = _mapper.Map<List<RoleViewModel>>(resp.Items);
@@ -195,6 +168,21 @@ namespace BoxingClub.Web.Controllers
         private SelectList GetRolesSelectList(List<RoleViewModel> roles)
         {
             return new SelectList(roles, "Id", "Name");
+        }
+
+        private IActionResult GetRedirectAction(HttpStatusCode statusCode)
+        {
+            if (statusCode != HttpStatusCode.OK)
+            {
+                if (statusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            return null;
         }
     }
 }

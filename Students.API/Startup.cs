@@ -9,7 +9,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using BoxingClub.Infrastructure.Policies;
@@ -69,6 +71,7 @@ namespace Students.API
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
 
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IStudentSelectionService, StudentSelectionService>();
 
             services.AddScoped<IBoxingGroupService, BoxingGroupService>();
             services.AddScoped<IMedicalCertificateService, MedicalCertificateService>();
@@ -103,6 +106,17 @@ namespace Students.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Students.API v1"));
             }
+
+            app.Use(async (context, next) =>
+            {
+                var clone = Thread.CurrentThread.CurrentCulture.Clone() as CultureInfo;
+                clone.NumberFormat.NumberDecimalSeparator = ".";
+
+                Thread.CurrentThread.CurrentCulture = clone;
+                Thread.CurrentThread.CurrentUICulture = clone;
+
+                await next.Invoke();
+            });
 
             app.UseHttpsRedirection();
 

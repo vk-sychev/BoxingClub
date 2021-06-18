@@ -119,7 +119,8 @@ namespace BoxingClub.Web.Controllers
 
         private async Task<TournamentRequestViewModel> GetPossibleTournamentRequestByTournamentId(int tournamentId)
         {
-            var students = await _studentSelectionService.GetStudentsByTournamentId(tournamentId);
+            var token = Request.Cookies["token"];
+            var students = await _studentSelectionService.GetStudentsByTournamentId(token, tournamentId);
             var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
             return new TournamentRequestViewModel()
             {

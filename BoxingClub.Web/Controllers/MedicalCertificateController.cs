@@ -9,53 +9,74 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using HttpClientAdapters.Interfaces;
+using HttpClients.Models;
 using AuthorizeRoles = BoxingClub.Web.CustomAttributes.AuthorizeRolesAttribute;
 
 namespace BoxingClub.Web.Controllers
 {
     [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+    [Route("[controller]")]
     public class MedicalCertificateController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IMedicalCertificateService _medicalCertificateService;
+        private readonly IStudentClientAdapter _studentClientAdapter;
 
 
         public MedicalCertificateController(IMapper mapper,
-                                            IMedicalCertificateService medicalCertificateService)
+                                            IMedicalCertificateService medicalCertificateService,
+                                            IStudentClientAdapter studentClientAdapter)
         {
             _mapper = mapper;
             _medicalCertificateService = medicalCertificateService;
+            _studentClientAdapter = studentClientAdapter;
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("MedicalCertificate/EditMedicalCertificate/{id}")]
-        [HttpGet]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> EditMedicalCertificate(int id)
         {
-            var medicalCertificateDTO = await _medicalCertificateService.GetMedicalCertificateByIdAsync(id);
-            var medicalCertificate = _mapper.Map<MedicalCertificateViewModel>(medicalCertificateDTO);
-            return View(medicalCertificate);
+            var token = Request.Cookies["token"];
+            var response = await _studentClientAdapter.GetMedicalCertificate(token, id);
+
+            var redirect = GetRedirectAction(response.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var mappedCertificate = _mapper.Map<MedicalCertificateViewModel>(response.Item);
+            return View(mappedCertificate);
         }
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("MedicalCertificate/EditMedicalCertificate/{id}")]
-        [HttpPost]
+        [HttpPost("[action]/{id}")]
         public async Task<IActionResult> EditMedicalCertificate(MedicalCertificateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var medicalCertificateDTO = _mapper.Map<MedicalCertificateDTO>(model);
-                await _medicalCertificateService.UpdateMedicalCertificateAsync(medicalCertificateDTO);
+                var token = Request.Cookies["token"];
+                var mappedCertificate = _mapper.Map<MedicalCertificateModel>(model);
+
+                var response = await _studentClientAdapter.EditMedicalCertificate(token, mappedCertificate);
+
+                var redirect = GetRedirectAction(response);
+                if (redirect != null)
+                {
+                    return redirect;
+                }
+
                 return RedirectToAction("DetailsStudent", "Student", new { id = model.StudentId });
             }
             return View(model);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("MedicalCertificate/CreateMedicalCertificate")]
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult CreateMedicalCertificate(int id)
         {
             ViewBag.studentId = id;
@@ -63,14 +84,22 @@ namespace BoxingClub.Web.Controllers
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("MedicalCertificate/CreateMedicalCertificate")]
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> CreateMedicalCertificate(MedicalCertificateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var medicalCertificateDTO = _mapper.Map<MedicalCertificateDTO>(model);
-                await _medicalCertificateService.CreateMedicalCertificateAsync(medicalCertificateDTO);
+                var token = Request.Cookies["token"];
+                var mappedCertificate = _mapper.Map<MedicalCertificateModel>(model);
+
+                var response = await _studentClientAdapter.CreateMedicalCertificate(token, mappedCertificate);
+
+                var redirect = GetRedirectAction(response);
+                if (redirect != null)
+                {
+                    return redirect;
+                }
+
                 return RedirectToAction("DetailsStudent", "Student", new { id = model.StudentId });
             }
             return View(model);
@@ -78,11 +107,34 @@ namespace BoxingClub.Web.Controllers
 
         [HttpDelete("{id}")]
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("MedicalCertificate/DeleteMedicalCertificate/{id}")]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> DeleteMedicalCertificate(int id, int studentId)
         {
-            await _medicalCertificateService.DeleteMedicalCertificateAsync(id);
+            var token = Request.Cookies["token"];
+            var response = await _studentClientAdapter.DeleteMedicalCertificate(token, id);
+
+            var redirect = GetRedirectAction(response);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
             return RedirectToAction("DetailsStudent", "Student", new { id = studentId });
+        }
+
+        private IActionResult GetRedirectAction(HttpStatusCode statusCode)
+        {
+            if (statusCode != HttpStatusCode.OK)
+            {
+                if (statusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            return null;
         }
     }
 }

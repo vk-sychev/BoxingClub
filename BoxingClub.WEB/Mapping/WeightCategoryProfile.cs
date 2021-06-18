@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HttpClients.Models.SpecModels;
 
 namespace BoxingClub.Web.Mapping
 {
@@ -14,6 +15,7 @@ namespace BoxingClub.Web.Mapping
         {
             CreateMap<WeightCategoryModel, WeightCategoryDTO>(MemberList.Destination).ForMember(dest => dest.StartWeight, opt => opt.MapFrom(src => src.MinValue))
                                                                                      .ForMember(dest => dest.EndWeight, opt => opt.MapFrom(src => src.MaxValue));
+            CreateMap<WeightCategoryDTO, WeightCategory>().ReverseMap();
         }
     }
 }

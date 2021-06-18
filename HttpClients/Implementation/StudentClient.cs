@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using HttpClients.Interfaces;
 using HttpClients.Models;
+using HttpClients.Models.SpecModels;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
@@ -20,6 +24,7 @@ namespace HttpClients.Implementation
         private readonly string _baseUrl;
         private readonly string _homeController = "Home";
         private readonly string _studentController = "Student";
+        private readonly string _medicalCertificateController = "MedicalCertificate";
 
         public StudentClient(HttpClient httpClient,
                              ILogger<StudentClient> logger)
@@ -37,12 +42,8 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
 
             var response = await _httpClient.GetAsync(getBoxingGroupsUrl);
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
 
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> GetBoxingGroups(string token)
@@ -52,12 +53,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getAllBoxingGroupsUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> GetBoxingGroup(string token, int id)
@@ -67,12 +63,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getBoxingGroupUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> GetBoxingGroupWithStudents(string token, int id)
@@ -82,12 +73,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getBoxingGroupWithStudentsUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> DeleteBoxingGroup(string token, int id)
@@ -97,12 +83,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.DeleteAsync(deleteBoxingGroupUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> EditBoxingGroup(string token, BoxingGroupLiteModel model)
@@ -115,12 +96,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.PostAsync(editBoxingGroupUrl, content);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> CreateBoxingGroup(string token, BoxingGroupLiteModel model)
@@ -133,12 +109,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.PostAsync(createBoxingGroupUrl, content);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> DeleteStudentFromBoxingGroup(string token, int studentId)
@@ -148,12 +119,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.DeleteAsync(deleteStudentFromBoxingGroup);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> GetStudents(string token, SearchModel searchModel)
@@ -164,14 +130,42 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getStudentsUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
+        public async Task<HttpResponseMessage> GetStudentsBySpecification(string token, Tournament tournament,
+            TournamentSpecification specification)
+        {
+            var parametersTournament = GetQueryString(tournament);
+            var parametersSpecification = GetQueryString(specification);
+            var dictionary = GetModelDictionary(tournament);
+            var dict2 = GetModelDictionary(specification);
+
+            var getStudentsBySpecificationUrl =
+                $"{_baseUrl}{_studentController}/GetStudentsBySpecification?{parametersTournament}{parametersSpecification}";
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.GetAsync(getStudentsBySpecificationUrl);
+
+            return GetResponse(response);
+        }
+
+        public async Task<HttpResponseMessage> GetStudentsByIds(string token, List<int> ids)
+        {
+            var parameters = new RouteValueDictionary();
+
+            for (int i = 0; i < ids.Count; ++i)
+            {
+                parameters.Add("ids[" + i + "]", ids[i]);
+            }
+
+            var getStudentsByIds = $"{_baseUrl}{_studentController}/GetStudentsByIds?{parameters.ToString()}";
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.GetAsync(getStudentsByIds);
+
+            return GetResponse(response);
+        }
 
         public async Task<HttpResponseMessage> GetStudent(string token, int id)
         {
@@ -180,12 +174,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getStudentUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> CreateStudent(string token, StudentFullModel model)
@@ -198,12 +187,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.PostAsync(createStudentUrl, content);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> EditStudent(string token, StudentFullModel model)
@@ -211,17 +195,12 @@ namespace HttpClients.Implementation
             var editStudentUrl = $"{_baseUrl}{_studentController}/EditStudent/{model.Id}";
 
             var dictionary = GetModelDictionary(model);
-            var content = new FormUrlEncodedContent(dictionary); //double cannot be decoded in students api
+            var content = new FormUrlEncodedContent(dictionary);
 
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.PostAsync(editStudentUrl, content);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> DeleteStudent(string token, int id)
@@ -231,12 +210,53 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.DeleteAsync(deleteStudentUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
+            return GetResponse(response);
+        }
 
-            return response;
+        public async Task<HttpResponseMessage> GetMedicalCertificate(string token, int id)
+        {
+            var getMedicalCertificateUrl = $"{_baseUrl}{_medicalCertificateController}/GetMedicalCertificate/{id}";
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.GetAsync(getMedicalCertificateUrl);
+
+            return GetResponse(response);
+        }
+
+        public async Task<HttpResponseMessage> CreateMedicalCertificate(string token, MedicalCertificateModel model)
+        {
+            var createMedicalCertificateUrl = $"{_baseUrl}{_medicalCertificateController}/CreateMedicalCertificate";
+
+            var dictionary = GetModelDictionary(model);
+            var content = new FormUrlEncodedContent(dictionary);
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.PostAsync(createMedicalCertificateUrl, content);
+
+            return GetResponse(response);
+        }
+
+        public async Task<HttpResponseMessage> EditMedicalCertificate(string token, MedicalCertificateModel model)
+        {
+            var editMedicalCertificateUrl = $"{_baseUrl}{_medicalCertificateController}/EditMedicalCertificate/{model.Id}";
+
+            var dictionary = GetModelDictionary(model);
+            var content = new FormUrlEncodedContent(dictionary);
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.PostAsync(editMedicalCertificateUrl, content);
+
+            return GetResponse(response);
+        }
+
+        public async Task<HttpResponseMessage> DeleteMedicalCertificate(string token, int id)
+        {
+            var deleteMedicalCertificateUrl = $"{_baseUrl}{_medicalCertificateController}/DeleteMedicalCertificate/{id}";
+
+            _httpClient.SetBearerToken(token);
+            var response = await _httpClient.DeleteAsync(deleteMedicalCertificateUrl);
+
+            return GetResponse(response);
         }
 
 
@@ -245,5 +265,25 @@ namespace HttpClients.Implementation
             var json = JsonConvert.SerializeObject(model);
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
+
+        private HttpResponseMessage GetResponse(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(response.ReasonPhrase);
+            }
+
+            return response;
+        }
+
+        private string GetQueryString(object obj)
+        {
+            var properties = from p in obj.GetType().GetProperties()
+                where p.GetValue(obj, null) != null
+                select p.Name + "=" + HttpUtility.UrlEncode(p.GetValue(obj, null).ToString());
+
+            return string.Join("&", properties.ToArray());
+        }
+
     }
 }

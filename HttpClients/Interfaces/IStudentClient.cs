@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using HttpClients.Models;
+using HttpClients.Models.SpecModels;
 
 namespace HttpClients.Interfaces
 {
@@ -36,5 +37,19 @@ namespace HttpClients.Interfaces
         Task<HttpResponseMessage> EditStudent(string token, StudentFullModel model);
 
         Task<HttpResponseMessage> DeleteStudent(string token, int id);
+
+        Task<HttpResponseMessage> GetStudentsBySpecification(string token, Tournament tournament,
+            TournamentSpecification specification);
+
+        Task<HttpResponseMessage> GetStudentsByIds(string token, List<int> ids);
+
+
+        Task<HttpResponseMessage> GetMedicalCertificate(string token, int id);
+
+        Task<HttpResponseMessage> CreateMedicalCertificate(string token, MedicalCertificateModel model);
+
+        Task<HttpResponseMessage> EditMedicalCertificate(string token, MedicalCertificateModel model);
+
+        Task<HttpResponseMessage> DeleteMedicalCertificate(string token, int id);
     }
 }

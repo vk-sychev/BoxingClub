@@ -9,6 +9,7 @@ namespace BoxingClub.Web.Mapping
         public TournamentSpecificationProfile()
         {
             CreateMap<TournamentSpecificationModel, TournamentSpecification>(MemberList.Destination);
+            CreateMap<TournamentSpecification, HttpClients.Models.SpecModels.TournamentSpecification>().ReverseMap();
         }
     }
 }

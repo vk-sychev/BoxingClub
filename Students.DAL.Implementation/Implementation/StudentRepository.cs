@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Students.DAL.Entities;
@@ -40,6 +41,14 @@ namespace Students.DAL.Implementation.Implementation
             return _db.Students.Include(x => x.BoxingGroup)
                                .Include(x => x.MedicalCertificates)
                                .SingleOrDefaultAsync(s => s.Id == id);
+        }
+
+        public Task<List<Student>> GetStudentsByIds(List<int> ids)
+        {
+            return _db.Students.Include(x => x.BoxingGroup)
+                .Include(x => x.MedicalCertificates)
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
         }
 
 

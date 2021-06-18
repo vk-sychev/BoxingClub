@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using BoxingClub.Infrastructure.Constants;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Students.API.Models;
 using Students.API.WebManagers.Interfaces;
 using Students.BLL.DomainEntities;
+using Students.BLL.DomainEntities.SpecModels;
 using Students.BLL.Interfaces;
 
 namespace Students.API.Controllers
@@ -19,6 +22,7 @@ namespace Students.API.Controllers
     {
         private readonly IStudentService _studentService;
         private readonly IBoxingGroupService _boxingGroupService;
+        private readonly IStudentSelectionService _studentSelectionService;
         private readonly IMedicalCertificateService _medicalCertificateService;
         private readonly IStudentWebManager _studentWebManager;
         private readonly IMapper _mapper;
@@ -26,12 +30,14 @@ namespace Students.API.Controllers
         public StudentController(IStudentService studentService,
                                  IMapper mapper,
                                  IBoxingGroupService boxingGroupService,
+                                 IStudentSelectionService studentSelectionService,
                                  IMedicalCertificateService medicalCertificateService,
                                  IStudentWebManager studentWebManager)
         {
             _studentService = studentService;
             _mapper = mapper;
             _boxingGroupService = boxingGroupService;
+            _studentSelectionService = studentSelectionService;
             _medicalCertificateService = medicalCertificateService;
             _studentWebManager = studentWebManager;
         }
@@ -44,6 +50,26 @@ namespace Students.API.Controllers
             var pageViewModel = await _studentWebManager.GetStudentsAsync(searchModel);
             return Ok(pageViewModel);
         }
+
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudentsBySpecification(TournamentDTO tournament,
+            TournamentSpecificationDTO specification)
+        {
+            var students = await _studentSelectionService.GetStudentsBySpecification(tournament, specification);
+            var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
+            return Ok(mappedStudents);
+        }
+
+        [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudentsByIds(List<int> ids)
+        {
+            var students = await _studentSelectionService.GetStudentsByIds(ids);
+            var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
+            return Ok(mappedStudents);
+        }
+
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpPost("[action]")]

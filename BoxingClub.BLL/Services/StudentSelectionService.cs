@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,6 +10,7 @@ using BoxingClub.BLL.Interfaces.Specifications;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Interfaces;
 using BoxingClub.Infrastructure.Exceptions;
+using HttpClientAdapters.Interfaces;
 using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
@@ -19,6 +21,7 @@ namespace BoxingClub.BLL.Implementation.Services
     {
         private readonly IUnitOfWork _database;
         private readonly ISpecificationClient _specificationClient;
+        private readonly IStudentClientAdapter _studentClientAdapter;
         private readonly IStudentSpecification _fighterExperienceSpecification;
         private readonly IStudentSpecification _medicalCertificateSpecification;
         private readonly IStudentSpecification _competitionSpecification;
@@ -27,10 +30,12 @@ namespace BoxingClub.BLL.Implementation.Services
 
         public StudentSelectionService(IUnitOfWork uow,
                                        ISpecificationClient specificationClient,
+                                       IStudentClientAdapter studentClientAdapter,
                                        IMapper mapper)
         {
             _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
             _specificationClient = specificationClient ?? throw new ArgumentNullException(nameof(specificationClient), "specificationClient is null");
+            _studentClientAdapter = studentClientAdapter ?? throw new ArgumentNullException(nameof(studentClientAdapter), "studentClientAdapter is null");
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
 
             _medicalCertificateSpecification = new MedicalCertificateSpecification();
@@ -39,7 +44,7 @@ namespace BoxingClub.BLL.Implementation.Services
             _competitionSpecification = new CompetitionSpecification();
         }
 
-        public async Task<List<StudentFullDTO>> GetStudentsByTournamentId(int tournamentId)
+        public async Task<List<StudentFullDTO>> GetStudentsByTournamentId(string token, int tournamentId)
         {
             if (tournamentId <= 0)
             {
@@ -59,7 +64,13 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new InvalidOperationException($"Specifications for tournament with id = {tournamentId} are not found");
             }
 
-            var students = await _database.Students.GetStudentsWithTournamentsAsync();
+            var mappedTournament = _mapper.Map<HttpClients.Models.Tournament>(tournament);
+            var mappedSpecification = _mapper.Map<HttpClients.Models.SpecModels.TournamentSpecification>(specification);
+
+            var students = await _studentClientAdapter.GetStudentsBySpecification(token, mappedTournament, mappedSpecification);
+            var studentss = await _studentClientAdapter.GetStudentsByIds(token, new List<int> {1, 2, 3, 4, 5});
+
+/*            var students = await _database.Students.GetStudentsWithTournamentsAsync(); //Get All Students for tournament {token, specifications, tournament}
             var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
 
             var freeStudents = GetFreeStudents(mappedStudents, tournament);
@@ -67,9 +78,10 @@ namespace BoxingClub.BLL.Implementation.Services
             var validatedStudents = ValidateStudentsInList(freeStudents, tournament);
             var takenStudents = GetFilteredStudents(tournament.IsMedCertificateRequired, validatedStudents);
 
-            var studentsForTournament = GetStudentsBySpecifications(takenStudents, specification);
+            var studentsForTournament = GetStudentsBySpecifications(takenStudents, specification);*/
 
-            return studentsForTournament;
+            //return studentsForTournament;
+            throw new NotImplementedException();
         }
 
         public async Task CreateTournamentRequest(int tournamentId, List<StudentFullDTO> students)
@@ -118,7 +130,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new ArgumentException("tournamentId less or equal 0", nameof(tournamentId));
             }
 
-            var students = await _database.Students.GetStudentsByTournamentIdAsync(tournamentId);
+            var students = await _database.Students.GetStudentsByTournamentIdAsync(tournamentId); //get students by Ids
             var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
             return mappedStudents;
         }
@@ -137,7 +149,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new InvalidOperationException($"Tournament with id = {tournamentId} isn't found");
             }
 
-            tournament.Students = null;
+            tournament.Students = null; //???
             await _database.SaveAsync();
         }
 

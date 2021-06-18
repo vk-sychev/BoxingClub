@@ -68,12 +68,8 @@ namespace HttpClients.Implementation
             var content = new FormUrlEncodedContent(dictionary);
 
             var response = await _httpClient.PostAsync(signUpUrl, content);
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
 
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> GetUsers(SearchModel searchModel, string token)
@@ -83,12 +79,8 @@ namespace HttpClients.Implementation
 
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getUsersUrl);
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
 
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> DeleteUser(string id, string token)
@@ -98,12 +90,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.DeleteAsync(deleteUserUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> GetUser(string id, string token)
@@ -113,12 +100,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getUserUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> EditUser(string token, UserModel model)
@@ -130,12 +112,7 @@ namespace HttpClients.Implementation
             var content = new FormUrlEncodedContent(dictionary);
             var response = await _httpClient.PostAsync(editUserUrl, content);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> GetRoles(string token)
@@ -145,12 +122,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getRolesUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> GetUsersByRole(string token, string roleName)
@@ -160,12 +132,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getUsersByRoleUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
         public async Task<HttpResponseMessage> GetUserByUsername(string token, string username)
@@ -175,12 +142,7 @@ namespace HttpClients.Implementation
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getUserByUsernameUrl);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError(response.ReasonPhrase);
-            }
-
-            return response;
+            return GetResponse(response);
         }
 
 
@@ -216,6 +178,16 @@ namespace HttpClients.Implementation
             dictionary.Add("Description", model.Description);
 
             return dictionary;
+        }
+
+        private HttpResponseMessage GetResponse(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError(response.ReasonPhrase);
+            }
+
+            return response;
         }
     }
 }

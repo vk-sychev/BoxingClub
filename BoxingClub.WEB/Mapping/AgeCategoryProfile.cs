@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HttpClients.Models.SpecModels;
 
 namespace BoxingClub.Web.Mapping
 {
@@ -14,6 +15,7 @@ namespace BoxingClub.Web.Mapping
         {
             CreateMap<AgeCategoryModel, AgeCategoryDTO>(MemberList.Destination).ForMember(dest => dest.StartAge, opt => opt.MapFrom(src => src.MinAge))
                                                                                .ForMember(dest => dest.EndAge, opt => opt.MapFrom(src => src.MaxAge));
+            CreateMap<AgeCategoryDTO, AgeCategory>().ReverseMap();
         }
     }
 }

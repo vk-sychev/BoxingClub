@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HttpClients.Models;
 
 namespace BoxingClub.Web.Mapping
 {
@@ -15,6 +16,7 @@ namespace BoxingClub.Web.Mapping
         {
             CreateMap<MedicalCertificate, MedicalCertificateDTO>().ReverseMap();
             CreateMap<MedicalCertificateDTO, MedicalCertificateViewModel>().ReverseMap();
+            CreateMap<MedicalCertificateViewModel, MedicalCertificateModel>().ReverseMap();
         }
     }
 }

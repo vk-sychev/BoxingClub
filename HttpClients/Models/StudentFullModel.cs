@@ -30,7 +30,7 @@ namespace HttpClients.Models
 
         public Gender Gender { get; set; }
 
-        //public List<MedicalCertificateViewModel> MedicalCertificates { get; set; } = new List<MedicalCertificateViewModel>();
+        public List<MedicalCertificateModel> MedicalCertificates { get; set; } = new List<MedicalCertificateModel>();
         
         [DisplayName("MedExamination")]
         public bool IsMedicalCertificateValid { get; set; }

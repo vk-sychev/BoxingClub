@@ -9,6 +9,7 @@ using HttpClientAdapters.Interfaces;
 using HttpClientAdapters.Models;
 using HttpClients.Interfaces;
 using HttpClients.Models;
+using HttpClients.Models.SpecModels;
 using Newtonsoft.Json;
 
 namespace HttpClientAdapters.Implementation
@@ -136,6 +137,43 @@ namespace HttpClientAdapters.Implementation
             };
         }
 
+        public async Task<ItemsResponseModel<StudentFullModel>> GetStudentsBySpecification(string token,
+            Tournament tournament, TournamentSpecification specification)
+        {
+            var response = await _studentClient.GetStudentsBySpecification(token, tournament, specification);
+            var students = new List<StudentFullModel>();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                students = JsonConvert.DeserializeObject<List<StudentFullModel>>(content);
+            }
+
+            return new ItemsResponseModel<StudentFullModel>()
+            {
+                StatusCode = response.StatusCode,
+                Items = students
+            };
+        }
+
+        public async Task<ItemsResponseModel<StudentFullModel>> GetStudentsByIds(string token, List<int> ids)
+        {
+            var response = await _studentClient.GetStudentsByIds(token, ids);
+            var students = new List<StudentFullModel>();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                students = JsonConvert.DeserializeObject<List<StudentFullModel>>(content);
+            }
+
+            return new ItemsResponseModel<StudentFullModel>()
+            {
+                StatusCode = response.StatusCode,
+                Items = students
+            };
+        }
+
         public async Task<ItemResponseModel<StudentFullModel>> GetStudent(string token, int id)
         {
             var response = await _studentClient.GetStudent(token, id);
@@ -169,6 +207,42 @@ namespace HttpClientAdapters.Implementation
         public async Task<HttpStatusCode> DeleteStudent(string token, int id)
         {
             var response = await _studentClient.DeleteStudent(token, id);
+            return response.StatusCode;
+        }
+
+        public async Task<ItemResponseModel<MedicalCertificateModel>> GetMedicalCertificate(string token, int id)
+        {
+            var response = await _studentClient.GetMedicalCertificate(token, id);
+            MedicalCertificateModel certificate = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                certificate = JsonConvert.DeserializeObject<MedicalCertificateModel>(content);
+            }
+
+            return new ItemResponseModel<MedicalCertificateModel>()
+            {
+                StatusCode = response.StatusCode,
+                Item = certificate
+            };
+        }
+
+        public async Task<HttpStatusCode> CreateMedicalCertificate(string token, MedicalCertificateModel model)
+        {
+            var response = await _studentClient.CreateMedicalCertificate(token, model);
+            return response.StatusCode;
+        }
+
+        public async Task<HttpStatusCode> EditMedicalCertificate(string token, MedicalCertificateModel model)
+        {
+            var response = await _studentClient.EditMedicalCertificate(token, model);
+            return response.StatusCode;
+        }
+
+        public async Task<HttpStatusCode> DeleteMedicalCertificate(string token, int id)
+        {
+            var response = await _studentClient.DeleteMedicalCertificate(token, id);
             return response.StatusCode;
         }
     }
