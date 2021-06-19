@@ -140,7 +140,13 @@ namespace HttpClientAdapters.Implementation
         public async Task<ItemsResponseModel<StudentFullModel>> GetStudentsBySpecification(string token,
             Tournament tournament, TournamentSpecification specification)
         {
-            var response = await _studentClient.GetStudentsBySpecification(token, tournament, specification);
+            var model = new TournamentWithSpecification()
+            {
+                Tournament = tournament,
+                TournamentSpecification = specification
+            };
+
+            var response = await _studentClient.GetStudentsBySpecification(token, model);
             var students = new List<StudentFullModel>();
 
             if (response.IsSuccessStatusCode)

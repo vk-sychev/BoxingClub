@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BoxingClub.DAL.EF;
@@ -21,12 +22,19 @@ namespace BoxingClub.DAL.Implementation.Implementation
 
         public Task<List<TournamentRequest>> GetAllAsync()
         {
-            return _db.TournamentRequests.ToListAsync();
+            return _db.TournamentRequests.AsQueryable().ToListAsync();
         }
 
         public Task<TournamentRequest> GetByIdAsync(int id)
         {
-            return _db.TournamentRequests.FirstOrDefaultAsync(x => x.Id == id);
+            return _db.TournamentRequests.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public Task<List<TournamentRequest>> GetTournamentRequestsByStudentIds(List<int> ids)
+        {
+            return _db.TournamentRequests.Include(x => x.Tournament)
+                .Where(x => ids.Contains(x.StudentId.Value))
+                .ToListAsync();
         }
 
         public async Task CreateAsync(TournamentRequest item)

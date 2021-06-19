@@ -8,6 +8,7 @@ using BoxingClub.Infrastructure.CustomAttributes;
 using BoxingClub.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using RestSharp;
 using Students.API.Models;
 using Students.API.WebManagers.Interfaces;
 using Students.BLL.DomainEntities;
@@ -53,10 +54,9 @@ namespace Students.API.Controllers
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetStudentsBySpecification(TournamentDTO tournament,
-            TournamentSpecificationDTO specification)
+        public async Task<IActionResult> GetStudentsBySpecification([FromBody]TournamentWithSpecificationDTO tournamentWithSpecification)
         {
-            var students = await _studentSelectionService.GetStudentsBySpecification(tournament, specification);
+            var students = await _studentSelectionService.GetStudentsBySpecification(tournamentWithSpecification.Tournament, tournamentWithSpecification.TournamentSpecification);
             var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
             return Ok(mappedStudents);
         }

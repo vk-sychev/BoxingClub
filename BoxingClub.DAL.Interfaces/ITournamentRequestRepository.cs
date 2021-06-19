@@ -9,5 +9,7 @@ namespace BoxingClub.DAL.Interfaces
     public interface ITournamentRequestRepository : IRepository<TournamentRequest>
     {
         Task CreateTournamentRequestRangeAsync(List<TournamentRequest> requests);
+
+        Task<List<TournamentRequest>> GetTournamentRequestsByStudentIds(List<int> ids);
     }
 }

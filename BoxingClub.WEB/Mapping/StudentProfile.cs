@@ -28,6 +28,7 @@ namespace BoxingClub.Web.Mapping
             CreateMap(typeof(PageViewModel<StudentLiteViewModel>), typeof(PageModel<StudentLiteModel>)).ReverseMap();
             CreateMap<StudentLiteViewModel, StudentLiteModel>().ReverseMap();
             CreateMap<StudentFullViewModel, StudentFullModel>().ReverseMap();
+            CreateMap<StudentFullModel, StudentFullDTO>().ReverseMap();
         }
     }
 }

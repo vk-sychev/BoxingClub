@@ -51,23 +51,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpClientAdapters", "HttpC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Students.API", "Students.API", "{F4114E47-F009-4FE7-88FB-BB2818505662}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.API", "Students.API\Students.API.csproj", "{8A71E37D-4CFF-4B2B-95E4-1F88B655A964}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Students.API", "Students.API\Students.API.csproj", "{8A71E37D-4CFF-4B2B-95E4-1F88B655A964}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.DAL.Entities", "Students.DAL.Entities\Students.DAL.Entities.csproj", "{4769BE0A-465A-4A23-96D8-0E05F2CAB90D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Students.DAL.Entities", "Students.DAL.Entities\Students.DAL.Entities.csproj", "{4769BE0A-465A-4A23-96D8-0E05F2CAB90D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Students.DAL", "Students.DAL", "{9F7846A7-922F-4394-B053-4B0737A1B3FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.DAL.Interfaces", "Students.DAL.Interfaces\Students.DAL.Interfaces.csproj", "{0B350DF1-D1F5-4CFA-AA60-6B3C65F7F095}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Students.DAL.Interfaces", "Students.DAL.Interfaces\Students.DAL.Interfaces.csproj", "{0B350DF1-D1F5-4CFA-AA60-6B3C65F7F095}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.DAL.Implementation", "Students.DAL.Implementation\Students.DAL.Implementation.csproj", "{17E6D72E-2A64-4D2B-A740-1F43FBAD3D19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Students.DAL.Implementation", "Students.DAL.Implementation\Students.DAL.Implementation.csproj", "{17E6D72E-2A64-4D2B-A740-1F43FBAD3D19}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Students.BLL", "Students.BLL", "{25F567C9-24FA-45BB-81DA-4A22471E261A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.BLL.DomainEntities", "Students.BLL.DomainEntities\Students.BLL.DomainEntities.csproj", "{88AA97A5-329C-4A89-9566-CAF2B2520AC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Students.BLL.DomainEntities", "Students.BLL.DomainEntities\Students.BLL.DomainEntities.csproj", "{88AA97A5-329C-4A89-9566-CAF2B2520AC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.BLL.Interfaces", "Students.BLL.Interfaces\Students.BLL.Interfaces.csproj", "{3CA816DF-0C72-4633-86E0-A2E947FE5ECD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Students.BLL.Interfaces", "Students.BLL.Interfaces\Students.BLL.Interfaces.csproj", "{3CA816DF-0C72-4633-86E0-A2E947FE5ECD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.BLL.Implementation", "Students.BLL.Implementation\Students.BLL.Implementation.csproj", "{C4DD306A-F12D-451A-A30E-E5AC4B47613A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Students.BLL.Implementation", "Students.BLL.Implementation\Students.BLL.Implementation.csproj", "{C4DD306A-F12D-451A-A30E-E5AC4B47613A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

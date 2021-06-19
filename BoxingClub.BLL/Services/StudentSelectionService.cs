@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using BoxingClub.BLL.DomainEntities;
@@ -67,21 +68,28 @@ namespace BoxingClub.BLL.Implementation.Services
             var mappedTournament = _mapper.Map<HttpClients.Models.Tournament>(tournament);
             var mappedSpecification = _mapper.Map<HttpClients.Models.SpecModels.TournamentSpecification>(specification);
 
-            var students = await _studentClientAdapter.GetStudentsBySpecification(token, mappedTournament, mappedSpecification);
-            var studentss = await _studentClientAdapter.GetStudentsByIds(token, new List<int> {1, 2, 3, 4, 5});
+            var response = await _studentClientAdapter.GetStudentsBySpecification(token, mappedTournament, mappedSpecification);
 
-/*            var students = await _database.Students.GetStudentsWithTournamentsAsync(); //Get All Students for tournament {token, specifications, tournament}
-            var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
-
-            var freeStudents = GetFreeStudents(mappedStudents, tournament);
             
-            var validatedStudents = ValidateStudentsInList(freeStudents, tournament);
-            var takenStudents = GetFilteredStudents(tournament.IsMedCertificateRequired, validatedStudents);
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new InvalidOperationException("Unauthorized!");
+                }
 
-            var studentsForTournament = GetStudentsBySpecifications(takenStudents, specification);*/
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
 
-            //return studentsForTournament;
-            throw new NotImplementedException();
+
+            var mappedStudents = _mapper.Map<List<StudentFullDTO>>(response.Items);
+            var tournamentRequests = await _database.TournamentRequests.GetTournamentRequestsByStudentIds(mappedStudents.Select(x => x.Id).ToList());
+            var mappedtournamentRequests = _mapper.Map<List<TournamentRequestDTO>>(tournamentRequests);
+
+            SetTournamentsToStudents(mappedStudents, mappedtournamentRequests);
+            var studentsForTournament = GetFreeStudents(mappedStudents, tournament);
+
+            return studentsForTournament;
         }
 
         public async Task CreateTournamentRequest(int tournamentId, List<StudentFullDTO> students)
@@ -218,6 +226,30 @@ namespace BoxingClub.BLL.Implementation.Services
         {
             var mappedStudents = _mapper.Map<List<Student>>(students);
             return studentsFromDb.Where(s => !mappedStudents.Any(m => s.Id == m.Id)).ToList();
+        }
+
+        private void SetTournamentsToStudents(List<StudentFullDTO> students, List<TournamentRequestDTO> requests)
+        {
+            if (!students.Any())
+            {
+                return;
+            }
+
+            if (!requests.Any())
+            {
+                return;
+            }
+
+            students.ForEach(student =>
+            {
+                requests.Where(request => request.StudentId == student.Id).ToList().ForEach(request =>
+                {
+                    if (request != null)
+                    {
+                        student.Tournaments.Add(request.Tournament);
+                    }
+                });
+            });
         }
 
     }

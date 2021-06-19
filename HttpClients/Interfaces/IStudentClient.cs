@@ -38,8 +38,7 @@ namespace HttpClients.Interfaces
 
         Task<HttpResponseMessage> DeleteStudent(string token, int id);
 
-        Task<HttpResponseMessage> GetStudentsBySpecification(string token, Tournament tournament,
-            TournamentSpecification specification);
+        Task<HttpResponseMessage> GetStudentsBySpecification(string token, TournamentWithSpecification tournamentWithSpecification);
 
         Task<HttpResponseMessage> GetStudentsByIds(string token, List<int> ids);
 

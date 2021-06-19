@@ -133,19 +133,23 @@ namespace HttpClients.Implementation
             return GetResponse(response);
         }
 
-        public async Task<HttpResponseMessage> GetStudentsBySpecification(string token, Tournament tournament,
-            TournamentSpecification specification)
+        public async Task<HttpResponseMessage> GetStudentsBySpecification(string token, TournamentWithSpecification tournamentWithSpecification)
         {
-            var parametersTournament = GetQueryString(tournament);
-            var parametersSpecification = GetQueryString(specification);
-            var dictionary = GetModelDictionary(tournament);
-            var dict2 = GetModelDictionary(specification);
+            var json = JsonConvert.SerializeObject(tournamentWithSpecification);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var getStudentsBySpecificationUrl =
-                $"{_baseUrl}{_studentController}/GetStudentsBySpecification?{parametersTournament}{parametersSpecification}";
+                $"{_baseUrl}{_studentController}/GetStudentsBySpecification";
+
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(getStudentsBySpecificationUrl),
+                Content = content
+            };
 
             _httpClient.SetBearerToken(token);
-            var response = await _httpClient.GetAsync(getStudentsBySpecificationUrl);
+            var response = await _httpClient.SendAsync(request);
 
             return GetResponse(response);
         }

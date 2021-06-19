@@ -17,6 +17,7 @@ namespace BoxingClub.Web.Mapping
             CreateMap<MedicalCertificate, MedicalCertificateDTO>().ReverseMap();
             CreateMap<MedicalCertificateDTO, MedicalCertificateViewModel>().ReverseMap();
             CreateMap<MedicalCertificateViewModel, MedicalCertificateModel>().ReverseMap();
+            CreateMap<MedicalCertificateDTO, MedicalCertificateModel>().ReverseMap();
         }
     }
 }
