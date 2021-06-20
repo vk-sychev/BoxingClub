@@ -11,21 +11,17 @@ namespace Students.API.WebManagers.Implementation
     public class StudentWebManager : IStudentWebManager
     {
         private readonly IStudentService _studentService;
-        private readonly IMapper _mapper;
 
-        public StudentWebManager(IStudentService studentService,
-                                 IMapper mapper)
+        public StudentWebManager(IStudentService studentService)
         {
             _studentService = studentService;
-            _mapper = mapper;
         }
 
 
-        public async Task<PageViewModel<StudentLiteViewModel>> GetStudentsAsync(SearchModelDTO searchModel)
+        public async Task<PageViewModel<StudentLiteDTO>> GetStudentsAsync(SearchModelDTO searchModel)
         {
             var pageModel = await _studentService.GetStudentsPaginatedAsync(searchModel);
-            var students = _mapper.Map<List<StudentLiteViewModel>>(pageModel.Items);
-            return new PageViewModel<StudentLiteViewModel>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, students);
+            return new PageViewModel<StudentLiteDTO>(pageModel.Count, searchModel.PageIndex, searchModel.PageSize, pageModel.Items);
         }
     }
 }

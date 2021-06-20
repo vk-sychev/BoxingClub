@@ -10,8 +10,6 @@ namespace Students.API.Mapping
     {
         public StudentProfile()
         {
-            CreateMap<StudentFullDTO, StudentFullViewModel>().ReverseMap();
-            CreateMap<StudentLiteDTO, StudentLiteViewModel>().ReverseMap();
             CreateMap<StudentLiteDTO, Student>(MemberList.Source).ForSourceMember(src => src.Experienced, opt => opt.DoNotValidate())
                                                                  .ForSourceMember(src => src.IsMedicalCertificateValid, opt => opt.DoNotValidate())
                                                                  .ReverseMap()

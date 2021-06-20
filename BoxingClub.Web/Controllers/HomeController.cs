@@ -1,24 +1,19 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DomainEntities;
-using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
-using BoxingClub.Web.Helpers;
 using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using BoxingClub.Infrastructure.Helpers;
 using BoxingClub.Web.CustomAttributes;
 using HttpClientAdapters.Interfaces;
 using HttpClientAdapters.Models;
 using HttpClients.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using BoxingClub.BLL.DomainEntities;
 
 namespace BoxingClub.Web.Controllers
 {

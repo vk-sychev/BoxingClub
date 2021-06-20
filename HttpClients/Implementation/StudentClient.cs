@@ -179,8 +179,8 @@ namespace HttpClients.Implementation
         {
             var createStudentUrl = $"{_baseUrl}{_studentController}/CreateStudent";
 
-            var dictionary = GetModelDictionary(model);
-            var content = new FormUrlEncodedContent(dictionary);
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.PostAsync(createStudentUrl, content);
@@ -192,8 +192,8 @@ namespace HttpClients.Implementation
         {
             var editStudentUrl = $"{_baseUrl}{_studentController}/EditStudent/{model.Id}";
 
-            var dictionary = GetModelDictionary(model);
-            var content = new FormUrlEncodedContent(dictionary);
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.PostAsync(editStudentUrl, content);

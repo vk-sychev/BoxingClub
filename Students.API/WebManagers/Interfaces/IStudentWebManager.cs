@@ -6,6 +6,6 @@ namespace Students.API.WebManagers.Interfaces
 {
     public interface IStudentWebManager
     {
-        Task<PageViewModel<StudentLiteViewModel>> GetStudentsAsync(SearchModelDTO searchModel);
+        Task<PageViewModel<StudentLiteDTO>> GetStudentsAsync(SearchModelDTO searchModel);
     }
 }

@@ -1,13 +1,4 @@
 using AutoMapper;
-using BoxingClub.BLL.Implementation.Services;
-using BoxingClub.BLL.Implementation.Specifications;
-using BoxingClub.BLL.Interfaces;
-using BoxingClub.BLL.Interfaces.Specifications;
-using BoxingClub.DAL.EF;
-using BoxingClub.DAL.Entities;
-using BoxingClub.DAL.Implementation.Implementation;
-using BoxingClub.DAL.Interfaces;
-using BoxingClub.DAL.Repositories;
 using BoxingClub.Web.Mapping;
 using BoxingClub.Web.Models;
 using BoxingClub.Web.Validations;
@@ -18,14 +9,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
-using BoxingClub.BLL.Implementation.HttpSpecificationClient;
-using BoxingClub.BLL.Interfaces.HttpSpecificationClient;
 using BoxingClub.Infrastructure.Policies;
 using HttpClientAdapters.Implementation;
 using HttpClientAdapters.Interfaces;
@@ -49,24 +37,6 @@ namespace BoxingClub.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BoxingClubContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("BoxingClubDB")));
-
-            services.AddScoped<IUnitOfWork, EFUnitOfWork>();
-
-            services.AddTransient<ITournamentService, TournamentService>();
-            services.AddTransient<IStudentSelectionService, StudentSelectionService>();
-
-            services.AddTransient<ISpecificationClient, SpecificationHttpClientAdapter>();
-            services.AddHttpClient<ISpecificationHttpClient, SpecificationHttpClient>(client =>
-            {
-                client.BaseAddress = new Uri(Configuration.GetSection("SpecServer").GetSection("Uri").Value);
-                client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("SpecServer").GetSection("HttpClientTimeout").Value));
-            })
-                .AddPolicyHandler(SpecServerPolicy.GetWaitAndRetryPolicy())
-                .AddPolicyHandler(SpecServerPolicy.GetTimeoutPolicy());
-
             services.AddHttpClient<IUserClient, UserClient>(client =>
             {
                 client.BaseAddress = new Uri(Configuration.GetSection("AuthServer").GetSection("Uri").Value);
@@ -82,8 +52,8 @@ namespace BoxingClub.Web
                 client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("Students.API")
                     .GetSection("HttpClientTimeout").Value));
             })
-                .AddPolicyHandler(APIServersPolicy.GetWaitAndRetryPolicy())
-                .AddPolicyHandler(APIServersPolicy.GetTimeoutPolicy());
+/*                .AddPolicyHandler(APIServersPolicy.GetWaitAndRetryPolicy())
+                .AddPolicyHandler(APIServersPolicy.GetTimeoutPolicy())*/;
 
             services.AddHttpClient<ITournamentClient, TournamentClient>(client =>
             {
@@ -91,8 +61,8 @@ namespace BoxingClub.Web
                 client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("Students.API")
                     .GetSection("HttpClientTimeout").Value));
             })
-/*                .AddPolicyHandler(APIServersPolicy.GetWaitAndRetryPolicy())
-                .AddPolicyHandler(APIServersPolicy.GetTimeoutPolicy())*/;
+                .AddPolicyHandler(APIServersPolicy.GetWaitAndRetryPolicy())
+                .AddPolicyHandler(APIServersPolicy.GetTimeoutPolicy());
 
 
             services.AddTransient<ITournamentClientAdapter, TournamentClientAdapter>();
@@ -101,8 +71,7 @@ namespace BoxingClub.Web
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new RoleProfile(), new StudentProfile(),
                                                        new UserProfile(), new MedicalCertificateProfile(), new TournamentProfile(),
-                                                       new TournamentRequestProfile(), new AgeCategoryProfile(), new AgeGroupProfile(),
-                                                       new WeightCategoryProfile(), new TournamentSpecificationProfile()
+                                                       new TournamentRequestProfile()
             };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
             //mapperConfig.AssertConfigurationIsValid();

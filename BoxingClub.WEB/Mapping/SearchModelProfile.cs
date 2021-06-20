@@ -9,9 +9,9 @@ using HttpClients.Models;
 
 namespace BoxingClub.Web.Mapping
 {
-    public class UserClientProfile : Profile
+    public class SearchModelProfile : Profile
     {
-        public UserClientProfile()
+        public SearchModelProfile()
         {
             CreateMap<SearchModelDTO, SearchModel>().ReverseMap();
         }

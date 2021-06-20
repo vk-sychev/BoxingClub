@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using BoxingClub.BLL.DomainEntities;
-using BoxingClub.BLL.Interfaces;
 using BoxingClub.Web.Models;
 using BoxingClub.Web.Helpers;
 using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;

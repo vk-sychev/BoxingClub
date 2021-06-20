@@ -58,8 +58,7 @@ namespace Students.API.Controllers
         public async Task<IActionResult> GetStudentsBySpecification([FromBody]TournamentWithSpecificationDTO tournamentWithSpecification)
         {
             var students = await _studentSelectionService.GetStudentsBySpecification(tournamentWithSpecification.Tournament, tournamentWithSpecification.TournamentSpecification);
-            var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
-            return Ok(mappedStudents);
+            return Ok(students);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
@@ -67,19 +66,17 @@ namespace Students.API.Controllers
         public async Task<IActionResult> GetStudentsByIds(List<int> ids)
         {
             var students = await _studentSelectionService.GetStudentsByIds(ids);
-            var mappedStudents = _mapper.Map<List<StudentFullViewModel>>(students);
-            return Ok(mappedStudents);
+            return Ok(students);
         }
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateStudent(StudentFullViewModel studentViewModel)
+        public async Task<IActionResult> CreateStudent([FromBody]StudentFullDTO student)
         {
             if (ModelState.IsValid)
             {
-                var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
-                await _studentService.CreateStudentAsync(studentDTO);
+                await _studentService.CreateStudentAsync(student);
                 return Ok();
             }
 
@@ -96,22 +93,20 @@ namespace Students.API.Controllers
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetStudent(int id, bool fromHomeController, int returnId)
+        public async Task<IActionResult> GetStudent(int id)
         {
             var studentDTO = await _studentService.GetStudentByIdAsync(id);
-            var student = _mapper.Map<StudentFullViewModel>(studentDTO);
-            return Ok(student);
+            return Ok(studentDTO);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpPost]
         [Route("[action]/{id}")]
-        public async Task<IActionResult> EditStudent(StudentFullViewModel studentViewModel, bool fromHomeController, int returnId)
+        public async Task<IActionResult> EditStudent([FromBody]StudentFullDTO student)
         {
             if (ModelState.IsValid)
             {
-                var studentDTO = _mapper.Map<StudentFullDTO>(studentViewModel);
-                await _studentService.UpdateStudentAsync(studentDTO);
+                await _studentService.UpdateStudentAsync(student);
                 return Ok();
             }
 

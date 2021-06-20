@@ -10,7 +10,6 @@ namespace Students.API.Mapping
         public MedicalCertificateProfile()
         {
             CreateMap<MedicalCertificate, MedicalCertificateDTO>().ReverseMap();
-            CreateMap<MedicalCertificateDTO, MedicalCertificateViewModel>().ReverseMap();
         }
     }
 }

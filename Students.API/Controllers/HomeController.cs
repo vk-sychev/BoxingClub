@@ -48,7 +48,7 @@ namespace Students.API.Controllers
         [AuthorizeRoles(Constants.AdminRoleName, Constants.CoachRoleName, Constants.ManagerRoleName)]
         public async Task<IActionResult> GetBoxingGroups(SearchModelDTO searchModel)
         {
-            PageViewModel<BoxingGroupLiteViewModel> pageViewModel;
+            PageViewModel<BoxingGroupDTO> pageViewModel;
             var token = GetTokenFromRequest();
 
             if (User.IsInRole(Constants.CoachRoleName))
@@ -86,13 +86,12 @@ namespace Students.API.Controllers
         {
             var token = GetTokenFromRequest();
             var boxingGroup = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id, token);
-            var mappedGroup = _mapper.Map<BoxingGroupFullViewModel>(boxingGroup);
-            return Ok(mappedGroup);
+            return Ok(boxingGroup);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateBoxingGroup(BoxingGroupLiteViewModel model)
+        public async Task<IActionResult> CreateBoxingGroup(BoxingGroupDTO model)
         {
             if (ModelState.IsValid)
             {
@@ -114,7 +113,7 @@ namespace Students.API.Controllers
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpDelete("[action]/{studentId}")]
-        public async Task<IActionResult> DeleteFromBoxingGroup(int studentId, int returnId)
+        public async Task<IActionResult> DeleteFromBoxingGroup(int studentId)
         {
             await _studentService.DeleteFromGroupAsync(studentId);
             return Ok();
@@ -122,24 +121,22 @@ namespace Students.API.Controllers
 
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpPost("[action]/{id}")]
-        public async Task<IActionResult> EditBoxingGroup(BoxingGroupLiteViewModel model)
+        public async Task<IActionResult> EditBoxingGroup(BoxingGroupDTO model)
         {
             if (ModelState.IsValid)
             {
-                var group = _mapper.Map<BoxingGroupDTO>(model);
-                await _boxingGroupService.UpdateBoxingGroupAsync(group);
+                await _boxingGroupService.UpdateBoxingGroupAsync(model);
                 return Ok();
             }
 
             return BadRequest();
         }
 
-        private async Task<BoxingGroupLiteViewModel> GetBoxingGroupById(int id)
+        private async Task<BoxingGroupDTO> GetBoxingGroupById(int id)
         {
             var token = GetTokenFromRequest();
             var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id, token);
-            var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
-            return mappedGroup;
+            return group;
         }
 
         private string GetTokenFromRequest()

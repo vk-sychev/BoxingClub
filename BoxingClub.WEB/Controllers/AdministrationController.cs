@@ -1,27 +1,20 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DomainEntities;
-using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Infrastructure.Exceptions;
-using BoxingClub.Web.Helpers;
 using BoxingClub.Web.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using BoxingClub.BLL.DomainEntities.Models;
 using BoxingClub.Infrastructure.CustomAttributes;
 using BoxingClub.Infrastructure.Helpers;
 using BoxingClub.Web.CustomAttributes;
 using HttpClientAdapters.Interfaces;
 using HttpClientAdapters.Models;
 using HttpClients.Models;
-using Newtonsoft.Json;
 using AuthorizeRoles = BoxingClub.Web.CustomAttributes.AuthorizeRolesAttribute;
+using BoxingClub.BLL.DomainEntities;
 
 namespace BoxingClub.Web.Controllers
 {

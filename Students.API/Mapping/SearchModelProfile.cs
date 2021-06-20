@@ -5,11 +5,12 @@ using Students.BLL.DomainEntities;
 
 namespace Students.API.Mapping
 {
-    public class RoleProfile : Profile
+    public class SearchModelProfile : Profile
     {
-        public RoleProfile()
+        public SearchModelProfile()
         {
-            CreateMap<RoleModel, RoleDTO>().ReverseMap();
+            CreateMap<SearchModelDTO, SearchModel>().ReverseMap();
+            
         }
     }
 }

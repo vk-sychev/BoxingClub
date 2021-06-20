@@ -10,9 +10,6 @@ namespace Students.API.Mapping
         public BoxingGroupProfile()
         {
             CreateMap<BoxingGroup, BoxingGroupDTO>(MemberList.Source).ReverseMap();
-            CreateMap<BoxingGroupDTO, BoxingGroupFullViewModel>().ReverseMap();
-            CreateMap<BoxingGroupLiteViewModel, BoxingGroupDTO>().ForMember(dest => dest.Students, opt => opt.Ignore())
-                                                                 .ReverseMap();
         }
     }
 }

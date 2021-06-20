@@ -2,14 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BoxingClub.BLL.Interfaces;
-using BoxingClub.BLL.DomainEntities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BoxingClub.Infrastructure.Constants;
-using System.Linq;
-using BoxingClub.Infrastructure.Exceptions;
-using System;
 using System.Net;
 using BoxingClub.Infrastructure.Helpers;
 using HttpClientAdapters.Interfaces;
@@ -17,6 +12,7 @@ using HttpClientAdapters.Models;
 using HttpClients.Models;
 using AuthorizeRoles = BoxingClub.Web.CustomAttributes.AuthorizeRolesAttribute;
 using InvalidOperationException = BoxingClub.Infrastructure.Exceptions.InvalidOperationException;
+using BoxingClub.BLL.DomainEntities;
 
 namespace BoxingClub.Web.Controllers
 {

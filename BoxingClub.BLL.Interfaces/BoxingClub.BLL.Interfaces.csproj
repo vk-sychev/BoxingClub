@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BoxingClub.BLL.DomainEntities\BoxingClub.BLL.DomainEntities.csproj" />
-    <ProjectReference Include="..\BoxingClub.DAL.Entities\BoxingClub.DAL.Entities.csproj" />
   </ItemGroup>
 
 </Project>

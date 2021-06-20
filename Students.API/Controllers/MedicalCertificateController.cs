@@ -28,20 +28,18 @@ namespace Students.API.Controllers
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetMedicalCertificate(int id)
         {
-            var medicalCertificateDTO = await _medicalCertificateService.GetMedicalCertificateByIdAsync(id);
-            var medicalCertificate = _mapper.Map<MedicalCertificateViewModel>(medicalCertificateDTO);
+            var medicalCertificate = await _medicalCertificateService.GetMedicalCertificateByIdAsync(id);
             return Ok(medicalCertificate);
         }
 
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpPost("[action]/{id}")]
-        public async Task<IActionResult> EditMedicalCertificate(MedicalCertificateViewModel model)
+        public async Task<IActionResult> EditMedicalCertificate(MedicalCertificateDTO model)
         {
             if (ModelState.IsValid)
             {
-                var medicalCertificateDTO = _mapper.Map<MedicalCertificateDTO>(model);
-                await _medicalCertificateService.UpdateMedicalCertificateAsync(medicalCertificateDTO);
+                await _medicalCertificateService.UpdateMedicalCertificateAsync(model);
                 return Ok();
             }
 
@@ -51,12 +49,11 @@ namespace Students.API.Controllers
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateMedicalCertificate(MedicalCertificateViewModel model)
+        public async Task<IActionResult> CreateMedicalCertificate(MedicalCertificateDTO model)
         {
             if (ModelState.IsValid)
             {
-                var medicalCertificateDTO = _mapper.Map<MedicalCertificateDTO>(model);
-                await _medicalCertificateService.CreateMedicalCertificateAsync(medicalCertificateDTO);
+                await _medicalCertificateService.CreateMedicalCertificateAsync(model);
                 return Ok();
             }
 
@@ -65,7 +62,7 @@ namespace Students.API.Controllers
 
         [HttpDelete("[action]/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        public async Task<IActionResult> DeleteMedicalCertificate(int id, int studentId)
+        public async Task<IActionResult> DeleteMedicalCertificate(int id)
         {
             await _medicalCertificateService.DeleteMedicalCertificateAsync(id);
             return Ok();

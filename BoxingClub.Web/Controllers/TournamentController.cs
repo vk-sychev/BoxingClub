@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DomainEntities;
-using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.Models;
 using HttpClientAdapters.Interfaces;
 using HttpClients.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AuthorizeRoles = BoxingClub.Web.CustomAttributes.AuthorizeRolesAttribute;
@@ -22,15 +17,12 @@ namespace BoxingClub.Web.Controllers
     public class TournamentController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ITournamentService _tournamentService;
         private readonly ITournamentClientAdapter _tournamentClientAdapter;
 
         public TournamentController(IMapper mapper,
-                                    ITournamentService tournamentService,
                                     ITournamentClientAdapter tournamentClientAdapter)
         {
             _mapper = mapper;
-            _tournamentService = tournamentService;
             _tournamentClientAdapter = tournamentClientAdapter;
         }
 

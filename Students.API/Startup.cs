@@ -63,11 +63,11 @@ namespace Students.API
                     config.Authority = "https://localhost:10001";
                 });
 
-            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(StudentProfile), typeof(UserClientProfile), typeof(RoleProfile), typeof(UserProfile), typeof(MedicalCertificateProfile));
+            services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(StudentProfile), typeof(SearchModelProfile), typeof(RoleProfile), typeof(UserProfile), typeof(MedicalCertificateProfile));
 
             var mapperProfiles = new List<Profile>() { new BoxingGroupProfile(), new RoleProfile(), new StudentProfile(), new UserProfile(), new MedicalCertificateProfile() };
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfiles(mapperProfiles));
-            mapperConfig.AssertConfigurationIsValid();
+            //mapperConfig.AssertConfigurationIsValid();
 
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
 
@@ -91,7 +91,10 @@ namespace Students.API
 
             services.AddScoped<IUserClientAdapter, UserClientAdapter>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Students.API", Version = "v1" });
