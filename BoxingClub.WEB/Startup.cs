@@ -85,6 +85,17 @@ namespace BoxingClub.Web
                 .AddPolicyHandler(APIServersPolicy.GetWaitAndRetryPolicy())
                 .AddPolicyHandler(APIServersPolicy.GetTimeoutPolicy());
 
+            services.AddHttpClient<ITournamentClient, TournamentClient>(client =>
+            {
+                client.BaseAddress = new Uri(Configuration.GetSection("Tournaments.API").GetSection("Uri").Value);
+                client.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Configuration.GetSection("Students.API")
+                    .GetSection("HttpClientTimeout").Value));
+            })
+/*                .AddPolicyHandler(APIServersPolicy.GetWaitAndRetryPolicy())
+                .AddPolicyHandler(APIServersPolicy.GetTimeoutPolicy())*/;
+
+
+            services.AddTransient<ITournamentClientAdapter, TournamentClientAdapter>();
             services.AddTransient<IUserClientAdapter, UserClientAdapter>();
             services.AddTransient<IStudentClientAdapter, StudentClientAdapter>();
 

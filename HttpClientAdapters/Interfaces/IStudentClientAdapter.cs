@@ -32,7 +32,7 @@ namespace HttpClientAdapters.Interfaces
 
         Task<PageModelResponse<StudentLiteModel>> GetStudents(string token, SearchModel searchModel);
 
-        Task<ItemsResponseModel<StudentFullModel>> GetStudentsBySpecification(string token, Tournament tournament,
+        Task<ItemsResponseModel<StudentFullModel>> GetStudentsBySpecification(string token, TournamentModel tournament,
             TournamentSpecification specification);
 
         Task<ItemsResponseModel<StudentFullModel>> GetStudentsByIds(string token, List<int> ids);

@@ -2,7 +2,7 @@
 {
     public class TournamentWithSpecification
     {
-        public Tournament Tournament { get; set; }
+        public TournamentModel Tournament { get; set; }
 
         public TournamentSpecification TournamentSpecification { get; set; }
     }

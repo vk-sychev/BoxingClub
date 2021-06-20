@@ -157,6 +157,11 @@ namespace BoxingClub.Web.Controllers
             {
                 Expires = decodedToken.ValidTo
             });
+
+            HttpContext.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+            HttpContext.Response.Headers.Add("X-Xss-Protection", "1");
+            HttpContext.Response.Headers.Add("X-Frame-Options", "DENY");
+
             return decodedToken;
         }
     }

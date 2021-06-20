@@ -59,7 +59,7 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new InvalidOperationException($"Specifications for tournament with id = {tournamentId} are not found");
             }
 
-            var mappedTournament = _mapper.Map<HttpClients.Models.Tournament>(tournament);
+            var mappedTournament = _mapper.Map<HttpClients.Models.TournamentModel>(tournament);
             var mappedSpecification = _mapper.Map<HttpClients.Models.SpecModels.TournamentSpecification>(specification);
 
             var response = await _studentClientAdapter.GetStudentsBySpecification(token, mappedTournament, mappedSpecification);

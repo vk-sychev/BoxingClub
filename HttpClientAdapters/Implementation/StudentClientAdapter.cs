@@ -138,7 +138,7 @@ namespace HttpClientAdapters.Implementation
         }
 
         public async Task<ItemsResponseModel<StudentFullModel>> GetStudentsBySpecification(string token,
-            Tournament tournament, TournamentSpecification specification)
+            TournamentModel tournament, TournamentSpecification specification)
         {
             var model = new TournamentWithSpecification()
             {

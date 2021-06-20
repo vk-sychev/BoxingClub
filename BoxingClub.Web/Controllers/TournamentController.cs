@@ -3,121 +3,171 @@ using BoxingClub.BLL.DomainEntities;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.Models;
+using HttpClientAdapters.Interfaces;
+using HttpClients.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AuthorizeRoles = BoxingClub.Web.CustomAttributes.AuthorizeRolesAttribute;
 
 namespace BoxingClub.Web.Controllers
 {
     [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
+    [Route("[controller]")]
     public class TournamentController : Controller
     {
         private readonly IMapper _mapper;
         private readonly ITournamentService _tournamentService;
+        private readonly ITournamentClientAdapter _tournamentClientAdapter;
 
         public TournamentController(IMapper mapper,
-                                    ITournamentService tournamentService)
+                                    ITournamentService tournamentService,
+                                    ITournamentClientAdapter tournamentClientAdapter)
         {
             _mapper = mapper;
             _tournamentService = tournamentService;
+            _tournamentClientAdapter = tournamentClientAdapter;
         }
 
-        [HttpGet]
-        [Route("Tournament/GetAllTournaments")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetAllTournaments()
         {
-            var tournaments = await _tournamentService.GetTournamentsAsync();
-            var mappedTournaments = _mapper.Map<List<TournamentViewModel>>(tournaments);
+            var token = Request.Cookies["token"];
+            var response = await _tournamentClientAdapter.GetTournaments(token);
+
+            var redirect = GetRedirectAction(response.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var mappedTournaments = _mapper.Map<List<TournamentViewModel>>(response.Items);
             return View(mappedTournaments);
         }
 
 
-        [HttpGet]
+        [HttpGet("[action]/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [Route("Tournament/EditTournament/{id}")]
         public async Task<IActionResult> EditTournament(int id)
         {
-            var tournament = await _tournamentService.GetTournamentByIdAsync(id);
-            var mappedTournament = _mapper.Map<TournamentViewModel>(tournament);
+            var token = Request.Cookies["token"];
+            var response = await _tournamentClientAdapter.GetTournament(token, id);
+
+            var redirect = GetRedirectAction(response.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var mappedTournament = _mapper.Map<TournamentViewModel>(response.Item);
             return View(mappedTournament);
         }
 
-        [HttpPost]
+        [HttpPost("[action]/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [Route("Tournament/EditTournament/{id}")]
         public async Task<IActionResult> EditTournament(TournamentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var tournament = _mapper.Map<TournamentDTO>(model);
-                await _tournamentService.UpdateTournamentAsync(tournament);
+                var token = Request.Cookies["token"];
+                var mappedModel = _mapper.Map<TournamentModel>(model);
+                var response = await _tournamentClientAdapter.EditTournament(token, mappedModel);
+
+                var redirect = GetRedirectAction(response);
+                if (redirect != null)
+                {
+                    return redirect;
+                }
+
                 return RedirectToAction("GetAllTournaments", "Tournament");
             }
 
             return View(model);
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [Route("Tournament/CreateTournament")]
         public IActionResult CreateTournament()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [Route("Tournament/CreateTournament")]
         public async Task<IActionResult> CreateTournament(TournamentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var tournament = _mapper.Map<TournamentDTO>(model);
-                await _tournamentService.CreateTournamentAsync(tournament);
+                var token = Request.Cookies["token"];
+                var mappedModel = _mapper.Map<TournamentModel>(model);
+
+                var response = await _tournamentClientAdapter.CreateTournament(token, mappedModel);
+
+                var redirect = GetRedirectAction(response);
+                if (redirect != null)
+                {
+                    return redirect;
+                }
+
                 return RedirectToAction("GetAllTournaments", "Tournament");
             }
 
             return View(model);
         }
 
-        [Route("Tournament/DeleteTournament/{id}")]
+        [Route("[action]/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTournament(int id)
         {
-            await _tournamentService.DeleteTournamentAsync(id);
+            var token = Request.Cookies["token"];
+            var response = await _tournamentClientAdapter.DeleteTournament(token, id);
+
+            var redirect = GetRedirectAction(response);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
             return RedirectToAction("GetAllTournaments", "Tournament");
         }
 
-        [Route("Tournament/DetailsTournament/{id}")]
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
-        [HttpGet]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> DetailsTournament(int id)
         {
-            var tournament = await _tournamentService.GetTournamentByIdAsync(id);
-            var mappedTournament = _mapper.Map<TournamentViewModel>(tournament);
+            var token = Request.Cookies["token"];
+            var response = await _tournamentClientAdapter.GetTournament(token, id);
+
+            var redirect = GetRedirectAction(response.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var mappedTournament = _mapper.Map<TournamentViewModel>(response.Item);
+
             return View(mappedTournament);
         }
 
-        private List<CategoryViewModel> SetSelectedCategories(List<CategoryViewModel> allCategories, List<CategoryViewModel> selectedCategories)
+        private IActionResult GetRedirectAction(HttpStatusCode statusCode)
         {
-            foreach (var item in selectedCategories)
+            if (statusCode != HttpStatusCode.OK)
             {
-                var category = allCategories.FirstOrDefault(x => x.Id == item.Id);
-                if (item.Id == category.Id)
+                if (statusCode == HttpStatusCode.Unauthorized)
                 {
-                    if (category != null)
-                    {
-                        category.IsSelected = true;
-                    }
+                    return RedirectToAction("SignOut", "Account");
                 }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
             }
-            return allCategories;
+
+            return null;
         }
     }
 }

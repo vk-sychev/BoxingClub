@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace HttpClients.Models
+namespace Tournaments.DAL.Entities
 {
     public class Tournament
     {
@@ -15,5 +16,7 @@ namespace HttpClients.Models
         public DateTime Date { get; set; }
 
         public bool IsMedCertificateRequired { get; set; }
+
+        public List<TournamentRequest> TournamentRequests { get; set; } = new List<TournamentRequest>();
     }
 }

@@ -52,14 +52,15 @@ namespace Students.API
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
                 {
+                    config.RequireHttpsMetadata = true;
+
                     config.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ClockSkew = TimeSpan.FromSeconds(20),
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ValidateIssuer = true
                     };
                     config.SaveToken = true;
                     config.Authority = "https://localhost:10001";
-                    config.Audience = "https://localhost:10001";
                 });
 
             services.AddAutoMapper(typeof(BoxingGroupProfile), typeof(StudentProfile), typeof(UserClientProfile), typeof(RoleProfile), typeof(UserProfile), typeof(MedicalCertificateProfile));
