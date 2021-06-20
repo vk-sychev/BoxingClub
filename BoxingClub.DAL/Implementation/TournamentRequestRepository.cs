@@ -37,6 +37,13 @@ namespace BoxingClub.DAL.Implementation.Implementation
                 .ToListAsync();
         }
 
+        public Task<List<TournamentRequest>> GetTournamentRequestsByTournamentId(int id)
+        {
+            return _db.TournamentRequests.AsQueryable()
+                .Where(x => x.TournamentId == id)
+                .ToListAsync();
+        }
+
         public async Task CreateAsync(TournamentRequest item)
         {
             if (item == null)
@@ -70,6 +77,16 @@ namespace BoxingClub.DAL.Implementation.Implementation
             }
 
             _db.TournamentRequests.Remove(item);
+        }
+
+        public void DeleteTournamentRequestsRange(List<TournamentRequest> tournamentRequests)
+        {
+            if (!tournamentRequests.Any())
+            {
+                return;
+            }
+
+            _db.TournamentRequests.RemoveRange(tournamentRequests);
         }
     }
 }

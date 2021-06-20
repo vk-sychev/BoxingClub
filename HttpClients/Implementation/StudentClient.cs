@@ -156,14 +156,8 @@ namespace HttpClients.Implementation
 
         public async Task<HttpResponseMessage> GetStudentsByIds(string token, List<int> ids)
         {
-            var parameters = new RouteValueDictionary();
-
-            for (int i = 0; i < ids.Count; ++i)
-            {
-                parameters.Add("ids[" + i + "]", ids[i]);
-            }
-
-            var getStudentsByIds = $"{_baseUrl}{_studentController}/GetStudentsByIds?{parameters.ToString()}";
+            var parameters = GetParametersFromList(ids);
+            var getStudentsByIds = $"{_baseUrl}{_studentController}/GetStudentsByIds?{parameters}";
 
             _httpClient.SetBearerToken(token);
             var response = await _httpClient.GetAsync(getStudentsByIds);
@@ -280,14 +274,21 @@ namespace HttpClients.Implementation
             return response;
         }
 
-        private string GetQueryString(object obj)
+        private string GetParametersFromList(List<int> ids)
         {
-            var properties = from p in obj.GetType().GetProperties()
-                where p.GetValue(obj, null) != null
-                select p.Name + "=" + HttpUtility.UrlEncode(p.GetValue(obj, null).ToString());
+            var sb = new StringBuilder();
 
-            return string.Join("&", properties.ToArray());
+            for (int i = 0; i < ids.Count; i++)
+            {
+                sb.Append($"ids[{i}]={ids[i]}");
+
+                if (i != ids.Count - 1)
+                {
+                    sb.Append("&");
+                }
+            }
+
+            return sb.ToString();
         }
-
     }
 }

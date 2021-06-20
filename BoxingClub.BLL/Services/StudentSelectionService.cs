@@ -23,10 +23,7 @@ namespace BoxingClub.BLL.Implementation.Services
         private readonly IUnitOfWork _database;
         private readonly ISpecificationClient _specificationClient;
         private readonly IStudentClientAdapter _studentClientAdapter;
-        private readonly IStudentSpecification _fighterExperienceSpecification;
-        private readonly IStudentSpecification _medicalCertificateSpecification;
         private readonly IStudentSpecification _competitionSpecification;
-        private readonly ICategorySpecification _categorySpecification;
         private readonly IMapper _mapper;
 
         public StudentSelectionService(IUnitOfWork uow,
@@ -39,9 +36,6 @@ namespace BoxingClub.BLL.Implementation.Services
             _studentClientAdapter = studentClientAdapter ?? throw new ArgumentNullException(nameof(studentClientAdapter), "studentClientAdapter is null");
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
 
-            _medicalCertificateSpecification = new MedicalCertificateSpecification();
-            _fighterExperienceSpecification = new FighterExperienceSpecification();
-            _categorySpecification = new CategorySpecification();
             _competitionSpecification = new CompetitionSpecification();
         }
 
@@ -69,18 +63,7 @@ namespace BoxingClub.BLL.Implementation.Services
             var mappedSpecification = _mapper.Map<HttpClients.Models.SpecModels.TournamentSpecification>(specification);
 
             var response = await _studentClientAdapter.GetStudentsBySpecification(token, mappedTournament, mappedSpecification);
-
-            
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    throw new InvalidOperationException("Unauthorized!");
-                }
-
-                throw new InvalidOperationException("Error occurred while processing your request");
-            }
-
+            ProcessResponse(response.StatusCode);
 
             var mappedStudents = _mapper.Map<List<StudentFullDTO>>(response.Items);
             var tournamentRequests = await _database.TournamentRequests.GetTournamentRequestsByStudentIds(mappedStudents.Select(x => x.Id).ToList());
@@ -121,25 +104,28 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new InvalidOperationException($"Tournament with id = {tournamentId} isn't found");
             }
 
-            var deleteStudents = GetStudentsForDeleting(tournament.Students, students);
-
-            foreach (var student in deleteStudents)
-            {
-                tournament.Students.Remove(student);
-            }
-
+            var deleteTournamentRequests = GetStudentsForDeleting(tournament.TournamentRequests, students);
+            _database.TournamentRequests.DeleteTournamentRequestsRange(deleteTournamentRequests);
             await _database.SaveAsync();
         }
 
-        public async Task<List<StudentFullDTO>> GetSelectedStudentsByTournamentId(int tournamentId)
+        public async Task<List<StudentFullDTO>> GetSelectedStudentsByTournamentId(string token, int tournamentId)
         {
             if (tournamentId <= 0)
             {
                 throw new ArgumentException("tournamentId less or equal 0", nameof(tournamentId));
             }
 
-            var students = await _database.Students.GetStudentsByTournamentIdAsync(tournamentId); //get students by Ids
-            var mappedStudents = _mapper.Map<List<StudentFullDTO>>(students);
+            var tournamentRequests = await _database.TournamentRequests.GetTournamentRequestsByTournamentId(tournamentId);
+            if (!tournamentRequests.Any())
+            {
+                return new List<StudentFullDTO>();
+            }
+
+            var response = await _studentClientAdapter.GetStudentsByIds(token, tournamentRequests.Select(x => x.StudentId.Value).ToList());
+            ProcessResponse(response.StatusCode);
+
+            var mappedStudents = _mapper.Map<List<StudentFullDTO>>(response.Items);
             return mappedStudents;
         }
 
@@ -157,7 +143,9 @@ namespace BoxingClub.BLL.Implementation.Services
                 throw new InvalidOperationException($"Tournament with id = {tournamentId} isn't found");
             }
 
-            tournament.Students = null; //???
+            var tournamentRequests = await _database.TournamentRequests.GetTournamentRequestsByTournamentId(tournamentId);
+
+            _database.TournamentRequests.DeleteTournamentRequestsRange(tournamentRequests);
             await _database.SaveAsync();
         }
 
@@ -182,50 +170,16 @@ namespace BoxingClub.BLL.Implementation.Services
         }
 
 
-        private List<StudentFullDTO> ValidateStudentsInList(List<StudentFullDTO> students, Tournament tournament)
-        {
-            foreach (var student in students)
-            {
-                student.Experienced = _fighterExperienceSpecification.Validate(student, tournament);
-                student.IsMedicalCertificateValid = _medicalCertificateSpecification.Validate(student, tournament);
-            }
-            return students;
-        }
-
-        private List<StudentFullDTO> GetFilteredStudents(bool isMedCertificateRequired, List<StudentFullDTO> students)
-        {
-            if (isMedCertificateRequired)
-            {
-                students = students.Where(x => x.IsMedicalCertificateValid).ToList();
-            }
-
-            return students.Where(x => x.Experienced).ToList();
-        }
-
-        private List<StudentFullDTO> GetStudentsBySpecifications(List<StudentFullDTO> students, TournamentSpecification specification)
-        {
-            var takenStudents = new List<StudentFullDTO>();
-
-            foreach (var ageGroup in specification.AgeGroups)
-            {
-                foreach (var student in students.Where(student => _categorySpecification.IsValid(student, ageGroup)))
-                {
-                    takenStudents.Add(student);
-                }
-            }
-
-            return takenStudents;
-        }
-
+        
         private List<StudentFullDTO> GetFreeStudents(List<StudentFullDTO> students, Tournament tournament)
         {
             return students.Where(x => _competitionSpecification.Validate(x, tournament)).ToList();
         }
 
-        private List<Student> GetStudentsForDeleting(List<Student> studentsFromDb, List<StudentFullDTO> students)
+        private List<TournamentRequest> GetStudentsForDeleting(List<TournamentRequest> tournamentRequests, List<StudentFullDTO> students)
         {
-            var mappedStudents = _mapper.Map<List<Student>>(students);
-            return studentsFromDb.Where(s => !mappedStudents.Any(m => s.Id == m.Id)).ToList();
+
+            return tournamentRequests.Where(s => !students.Any(m => s.StudentId == m.Id)).ToList();
         }
 
         private void SetTournamentsToStudents(List<StudentFullDTO> students, List<TournamentRequestDTO> requests)
@@ -250,6 +204,19 @@ namespace BoxingClub.BLL.Implementation.Services
                     }
                 });
             });
+        }
+
+        private void ProcessResponse(HttpStatusCode statusCode)
+        {
+            if (statusCode != HttpStatusCode.OK)
+            {
+                if (statusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new InvalidOperationException("Unauthorized!");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
         }
 
     }

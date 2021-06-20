@@ -12,6 +12,8 @@ using Students.DAL.Entities;
 using Students.DAL.Interfaces;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
+using HttpClients.Models;
+using HttpClientAdapters.Models;
 
 namespace Students.BLL.Implementation
 {
@@ -243,20 +245,17 @@ namespace Students.BLL.Implementation
         private async Task<UserDTO> GetCoachByUsername(string username, string token)
         {
             var response = await _userClientAdapter.GetUserByUsername(token, username);
-            UserDTO coach = null;
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var user = response.Item;
-                coach = _mapper.Map<UserDTO>(user);
-            }
-
-            return coach;
+            return GetCoachFromResponse(response);
         }
 
         private async Task<UserDTO> GetCoach(string id, string token)
         {
             var response = await _userClientAdapter.GetUser(id, token);
+            return GetCoachFromResponse(response);
+        }
+
+        private UserDTO GetCoachFromResponse(ItemResponseModel<UserModel> response)
+        {
             UserDTO coach = null;
 
             if (response.StatusCode == HttpStatusCode.OK)

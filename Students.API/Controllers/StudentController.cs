@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -86,7 +87,6 @@ namespace Students.API.Controllers
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        //[Route("[action]/{id}")]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> DeleteStudent(int id)
         {

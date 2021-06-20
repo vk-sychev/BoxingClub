@@ -86,17 +86,19 @@ else
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => Model.Students[i].Name)
-                        <input type="hidden" asp-for="@Model.Students[i]"/>
-                        <input type="hidden" asp-for="@Model.Students[i].Id"/>
-                        <input type="hidden" asp-for="@Model.Students[i].Surname"/>
-                        <input type="hidden" asp-for="@Model.Students[i].Name"/>
-                        <input type="hidden" asp-for="@Model.Students[i].Patronymic"/>
-                        <input type="hidden" asp-for="@Model.Students[i].BornDate"/>
-                        <input type="hidden" asp-for="@Model.Students[i].Height"/>
-                        <input type="hidden" asp-for="@Model.Students[i].Weight"/>
-                        <input type="hidden" asp-for="@Model.Students[i].NumberOfFights"/>
-                        <input type="hidden" asp-for="@Model.Students[i].Gender"/>
-                        <input type="hidden" asp-for="@Model.Students[i].DateOfEntry"/>
+
+                        <input type="hidden" name="Students.Index" value="@i">
+                        <input type="hidden" asp-for="@Model.Students[i]" />
+                        <input type="hidden" asp-for="@Model.Students[i].Id" />
+                        <input type="hidden" asp-for="@Model.Students[i].Surname" />
+                        <input type="hidden" asp-for="@Model.Students[i].Name" />
+                        <input type="hidden" asp-for="@Model.Students[i].Patronymic" />
+                        <input type="hidden" asp-for="@Model.Students[i].BornDate" />
+                        <input type="hidden" asp-for="@Model.Students[i].Height" />
+                        <input type="hidden" asp-for="@Model.Students[i].Weight" />
+                        <input type="hidden" asp-for="@Model.Students[i].NumberOfFights" />
+                        <input type="hidden" asp-for="@Model.Students[i].Gender" />
+                        <input type="hidden" asp-for="@Model.Students[i].DateOfEntry" />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => Model.Students[i].Surname)

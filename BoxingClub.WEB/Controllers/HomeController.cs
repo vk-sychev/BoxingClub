@@ -4,7 +4,6 @@ using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Web.Helpers;
 using BoxingClub.Web.Models;
-using BoxingClub.Web.WebManagers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -29,23 +28,14 @@ namespace BoxingClub.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IBoxingGroupService _boxingGroupService;
-        private readonly IStudentService _studentService;
-        private readonly IHomeWebManager _homeWebManager;
         private readonly IUserClientAdapter _userClientAdapter;
         private readonly IStudentClientAdapter _studentClientAdapter;
 
         public HomeController(IMapper mapper,
-                              IBoxingGroupService boxingGroupService,
-                              IStudentService studentService,
-                              IHomeWebManager homeWebManager,
                               IUserClientAdapter userClientAdapter,
                               IStudentClientAdapter studentClientAdapter)
         {
             _mapper = mapper;
-            _boxingGroupService = boxingGroupService;
-            _studentService = studentService;
-            _homeWebManager = homeWebManager;
             _userClientAdapter = userClientAdapter;
             _studentClientAdapter = studentClientAdapter;
         }

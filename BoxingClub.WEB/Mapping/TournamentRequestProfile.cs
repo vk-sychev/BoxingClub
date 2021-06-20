@@ -12,7 +12,7 @@ namespace BoxingClub.Web.Mapping
     {
         public TournamentRequestProfile()
         {
-            CreateMap<TournamentRequestDTO, TournamentRequest>();
+            CreateMap<TournamentRequestDTO, TournamentRequest>().ReverseMap();
         }
     }
 }

@@ -3,7 +3,6 @@ using BoxingClub.BLL.Implementation.Services;
 using BoxingClub.BLL.Implementation.Specifications;
 using BoxingClub.BLL.Interfaces;
 using BoxingClub.BLL.Interfaces.Specifications;
-using BoxingClub.BLL.Services;
 using BoxingClub.DAL.EF;
 using BoxingClub.DAL.Entities;
 using BoxingClub.DAL.Implementation.Implementation;
@@ -12,8 +11,6 @@ using BoxingClub.DAL.Repositories;
 using BoxingClub.Web.Mapping;
 using BoxingClub.Web.Models;
 using BoxingClub.Web.Validations;
-using BoxingClub.Web.WebManagers.Implementation;
-using BoxingClub.Web.WebManagers.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -58,15 +55,8 @@ namespace BoxingClub.Web
 
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
 
-            services.AddTransient<IStudentService, StudentService>();
-
-            services.AddTransient<IBoxingGroupService, BoxingGroupService>();
-            services.AddTransient<IMedicalCertificateService, MedicalCertificateService>();
             services.AddTransient<ITournamentService, TournamentService>();
             services.AddTransient<IStudentSelectionService, StudentSelectionService>();
-
-            services.AddTransient<IHomeWebManager, HomeWebManager>();
-            services.AddTransient<IStudentWebManager, StudentWebManager>();
 
             services.AddTransient<ISpecificationClient, SpecificationHttpClientAdapter>();
             services.AddHttpClient<ISpecificationHttpClient, SpecificationHttpClient>(client =>

@@ -12,8 +12,6 @@ using BoxingClub.Infrastructure.Exceptions;
 using System;
 using System.Net;
 using BoxingClub.Infrastructure.Helpers;
-using BoxingClub.Web.WebManagers.Interfaces;
-using BoxingClub.Web.Helpers;
 using HttpClientAdapters.Interfaces;
 using HttpClientAdapters.Models;
 using HttpClients.Models;
@@ -26,25 +24,13 @@ namespace BoxingClub.Web.Controllers
     [Route("[controller]")]
     public class StudentController : Controller
     {
-        private readonly IStudentService _studentService;
-        private readonly IBoxingGroupService _boxingGroupService;
-        private readonly IMedicalCertificateService _medicalCertificateService;
-        private readonly IStudentWebManager _studentWebManager;
         private readonly IStudentClientAdapter _studentClientAdapter;
         private readonly IMapper _mapper;
 
-        public StudentController(IStudentService studentService,
-                                 IMapper mapper,
-                                 IBoxingGroupService boxingGroupService,
-                                 IMedicalCertificateService medicalCertificateService,
-                                 IStudentWebManager studentWebManager,
+        public StudentController(IMapper mapper,
                                  IStudentClientAdapter studentClientAdapter)
         {
-            _studentService = studentService;
             _mapper = mapper;
-            _boxingGroupService = boxingGroupService;
-            _medicalCertificateService = medicalCertificateService;
-            _studentWebManager = studentWebManager;
             _studentClientAdapter = studentClientAdapter;
         }
 

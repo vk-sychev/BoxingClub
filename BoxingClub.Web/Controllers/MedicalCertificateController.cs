@@ -22,16 +22,13 @@ namespace BoxingClub.Web.Controllers
     public class MedicalCertificateController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IMedicalCertificateService _medicalCertificateService;
         private readonly IStudentClientAdapter _studentClientAdapter;
 
 
         public MedicalCertificateController(IMapper mapper,
-                                            IMedicalCertificateService medicalCertificateService,
                                             IStudentClientAdapter studentClientAdapter)
         {
             _mapper = mapper;
-            _medicalCertificateService = medicalCertificateService;
             _studentClientAdapter = studentClientAdapter;
         }
 

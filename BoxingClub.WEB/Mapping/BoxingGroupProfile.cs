@@ -10,7 +10,6 @@ namespace BoxingClub.Web.Mapping
     {
         public BoxingGroupProfile()
         {
-            CreateMap<BoxingGroup, BoxingGroupDTO>().ReverseMap();
             CreateMap<BoxingGroupDTO, BoxingGroupFullViewModel>().ReverseMap();
             CreateMap<BoxingGroupLiteViewModel, BoxingGroupDTO>().ForMember(dest => dest.Students, opt => opt.Ignore())
                                                                  .ReverseMap();

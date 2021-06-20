@@ -5,8 +5,6 @@ using BoxingClub.Infrastructure.Constants;
 using BoxingClub.Infrastructure.Exceptions;
 using BoxingClub.Web.Helpers;
 using BoxingClub.Web.Models;
-using BoxingClub.Web.WebManagers.Implementation;
-using BoxingClub.Web.WebManagers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
