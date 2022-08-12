@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tournaments.BLL.Entities\Tournaments.BLL.Entities.csproj" />
+    <ProjectReference Include="..\Tournaments.DAL.Entities\Tournaments.DAL.Entities.csproj" />
+  </ItemGroup>
+
+</Project>

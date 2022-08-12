@@ -1,43 +1,43 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DomainEntities;
-using BoxingClub.BLL.Interfaces;
 using BoxingClub.Infrastructure.Constants;
-using BoxingClub.Web.CustomAttributes;
-using BoxingClub.Web.Helpers;
 using BoxingClub.Web.Models;
-using BoxingClub.Web.WebManagers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using BoxingClub.Infrastructure.Helpers;
+using BoxingClub.Web.CustomAttributes;
+using HttpClientAdapters.Interfaces;
+using HttpClientAdapters.Models;
+using HttpClients.Models;
+using BoxingClub.BLL.DomainEntities;
 
 namespace BoxingClub.Web.Controllers
 {
     [Authorize]
+    [Route("")]
+    [Route("[controller]")]
     public class HomeController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IBoxingGroupService _boxingGroupService;
-        private readonly IUserService _userService;
-        private readonly IStudentService _studentService;
-        private readonly IHomeWebManager _homeWebManager;
+        private readonly IUserClientAdapter _userClientAdapter;
+        private readonly IStudentClientAdapter _studentClientAdapter;
 
         public HomeController(IMapper mapper,
-                              IBoxingGroupService boxingGroupService,
-                              IUserService userService,
-                              IStudentService studentService,
-                              IHomeWebManager homeWebManager)
+                              IUserClientAdapter userClientAdapter,
+                              IStudentClientAdapter studentClientAdapter)
         {
             _mapper = mapper;
-            _boxingGroupService = boxingGroupService;
-            _userService = userService;
-            _studentService = studentService;
-            _homeWebManager = homeWebManager;
+            _userClientAdapter = userClientAdapter;
+            _studentClientAdapter = studentClientAdapter;
         }
 
+        [HttpGet]
+        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> Index(SearchModelDTO searchModel)
         {
             if (User.IsInRole(Constants.UserRoleName))
@@ -45,139 +45,264 @@ namespace BoxingClub.Web.Controllers
                 return View("PendingRoleAssignment");
             }
 
-            PageViewModel<BoxingGroupLiteViewModel> pageViewModel;
+            var token = Request.Cookies["token"];
 
-            if (User.IsInRole(Constants.CoachRoleName))
+            var mappedModel = _mapper.Map<SearchModel>(searchModel);
+            var response = await _studentClientAdapter.GetBoxingGroups(token, mappedModel);
+
+            var redirect = GetRedirectAction(response.StatusCode);
+            if (redirect != null)
             {
-                pageViewModel = await _homeWebManager.GetBoxingGroupsByCoachIdAsync(User.Identity.Name, searchModel);
+                return redirect;
             }
-            else
-            {
-                pageViewModel = await _homeWebManager.GetBoxingGroupsAsync(searchModel);
-            }
+
+            var pageViewModel = response.Items;
+            var mappedPageModel = _mapper.Map<PageViewModel<BoxingGroupLiteViewModel>>(pageViewModel);
 
             var sizes = PageSizeHelper.GetPageSizeList(5);
             ViewBag.Sizes = sizes;
             ViewBag.pageSize = searchModel.PageSize;
 
-            return View(pageViewModel);
+            return View(mappedPageModel);
         }
 
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [HttpGet]
-        [Route("Home/EditBoxingGroup/{id}")]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> EditBoxingGroup(int id)
         {
-            var mappedGroup = await GetBoxingGroupById(id);
+            var boxingGroupResponse = await GetBoxingGroupById(id);
 
-            ViewBag.Coaches = await GetCoaches();
+            var redirect = GetRedirectAction(boxingGroupResponse.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var coachResponse = await GetCoaches();
+            redirect = GetRedirectAction(coachResponse.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+            
+            var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(boxingGroupResponse.Item);
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(coachResponse.Items);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
 
             return View(mappedGroup);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [HttpGet]
-        [Route("Home/EditBoxingGroupInline/{id}")]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> EditBoxingGroupInline(int id)
         {
-            var mappedGroup = await GetBoxingGroupById(id);
+            var boxingGroupResponse = await GetBoxingGroupById(id);
 
-            ViewBag.Coaches = await GetCoaches();
+            var redirect = GetRedirectAction(boxingGroupResponse.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var coachResponse = await GetCoaches();
+
+            redirect = GetRedirectAction(coachResponse.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(boxingGroupResponse.Item);
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(coachResponse.Items);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
 
             return PartialView("_CreateEditBoxingGroupPartial", mappedGroup);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [HttpPost]
-        [Route("Home/EditBoxingGroup/{id}")]
+        [HttpPost("[action]/{id}")]
         public async Task<IActionResult> EditBoxingGroup(BoxingGroupLiteViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var group = _mapper.Map<BoxingGroupDTO>(model);
-                await _boxingGroupService.UpdateBoxingGroupAsync(group);
+                var token = Request.Cookies["token"];
+                var mappedModel = _mapper.Map<BoxingGroupLiteModel>(model);
+                var boxingGroupResponse = await _studentClientAdapter.EditBoxingGroup(token, mappedModel);
+
+                var redirect = GetRedirectAction(boxingGroupResponse);
+
+                if (redirect != null)
+                {
+                    return redirect;
+                }
+
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Coaches = await GetCoaches();
+
+            var coachResponse = await GetCoaches();
+            var redir = GetRedirectAction(coachResponse.StatusCode);
+
+            if (redir != null)
+            {
+                return redir;
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(coachResponse.Items);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
 
             return View(model);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [HttpGet]
-        [Route("Home/CreateBoxingGroup")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> CreateBoxingGroup()
         {
-            ViewBag.Coaches = await GetCoaches();
+            var response = await GetCoaches();
+            var redirect = GetRedirectAction(response.StatusCode);
+
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(response.Items);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
+
             return View();
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [HttpGet]
-        [Route("Home/CreateBoxingGroupInline")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> CreateBoxingGroupInline()
         {
-            ViewBag.Coaches = await GetCoaches();
+            var response = await GetCoaches();
+
+            var redirect = GetRedirectAction(response.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(response.Items);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
+
             return PartialView("_CreateEditBoxingGroupPartial");
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [HttpPost]
-        [Route("Home/CreateBoxingGroup")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> CreateBoxingGroup(BoxingGroupLiteViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var groupDTO = _mapper.Map<BoxingGroupDTO>(model);
-                await _boxingGroupService.CreateBoxingGroupAsync(groupDTO);
+                var token = Request.Cookies["token"];
+                var mappedModel = _mapper.Map<BoxingGroupLiteModel>(model);
+                var boxingGroupResponse = await _studentClientAdapter.CreateBoxingGroup(token, mappedModel);
+
+                var redirect = GetRedirectAction(boxingGroupResponse);
+                if (redirect != null)
+                {
+                    return redirect;
+                }
+
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Coaches = await GetCoaches();
+
+            var coachResponse = await GetCoaches();
+
+            var redir = GetRedirectAction(coachResponse.StatusCode);
+            if (redir != null)
+            {
+                return redir;
+            }
+
+            var mappedCoaches = _mapper.Map<List<UserViewModel>>(coachResponse.Items);
+            ViewBag.Coaches = GetCoachesSelectList(mappedCoaches);
             return View(model);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName, Constants.CoachRoleName)]
-        [Route("Home/DetailsBoxingGroup/{id}")]
-        [HttpGet]
+        [HttpGet("[action]/{id}")]
         public async Task<IActionResult> DetailsBoxingGroup(int id)
         {
-            var group = await _boxingGroupService.GetBoxingGroupWithStudentsByIdAsync(id);
-            var model = _mapper.Map<BoxingGroupFullViewModel>(group);
+            var token = Request.Cookies["token"];
+            var boxingGroupResponse = await _studentClientAdapter.GetBoxingGroupWithStudents(token, id);
+
+            var redirect = GetRedirectAction(boxingGroupResponse.StatusCode);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
+            var model = _mapper.Map<BoxingGroupFullViewModel>(boxingGroupResponse.Item);
             return View(model);
         }
 
         [AuthorizeRoles(Constants.AdminRoleName)]
-        [Route("Home/DeleteBoxingGroup/{id}")]
+        [Route("[action]/{id}")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBoxingGroup(int id)
         {
-            await _boxingGroupService.DeleteBoxingGroupAsync(id);
+            var token = Request.Cookies["token"];
+            var response = await _studentClientAdapter.DeleteBoxingGroup(token, id);
+
+            var redirect = GetRedirectAction(response);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
             return RedirectToAction("Index", "Home");
         }
 
         [AuthorizeRoles(Constants.AdminRoleName, Constants.ManagerRoleName)]
-        [Route("Home/DetailsGroup/DeleteFromBoxingGroup/{studentId}")]
-        [HttpDelete("{studentId}")]
+        [Route("[action]/{studentId}")]
+        [HttpDelete("[action]/{studentId}")]
         public async Task<IActionResult> DeleteFromBoxingGroup(int studentId, int returnId)
         {
-            await _studentService.DeleteFromGroupAsync(studentId);
+            var token = Request.Cookies["token"];
+            var response = await _studentClientAdapter.DeleteStudentFromBoxingGroup(token, studentId);
+
+            var redirect = GetRedirectAction(response);
+            if (redirect != null)
+            {
+                return redirect;
+            }
+
             return RedirectToAction("DetailsBoxingGroup", new { id = returnId });
         }
 
-        private async Task<SelectList> GetCoaches()
+        private async Task<ItemsResponseModel<UserModel>> GetCoaches()
         {
-            var coaches = await _userService.GetUsersByRoleAsync(Constants.CoachRoleName);
-            var coachViewModels = _mapper.Map<List<UserViewModel>>(coaches);
-            var selectList = new SelectList(coachViewModels, "Id", "FullName");
-            return selectList;
+            var token = Request.Cookies["token"];
+            return await _userClientAdapter.GetUsersByRole(token, Constants.CoachRoleName);
         }
 
-        private async Task<BoxingGroupLiteViewModel> GetBoxingGroupById(int id)
+        private SelectList GetCoachesSelectList(List<UserViewModel> coaches)
         {
-            var group = await _boxingGroupService.GetBoxingGroupByIdAsync(id);
-            var mappedGroup = _mapper.Map<BoxingGroupLiteViewModel>(group);
-            return mappedGroup;
+            return new SelectList(coaches, "Id", "FullName");
+        }
+
+        private async Task<ItemResponseModel<BoxingGroupLiteModel>> GetBoxingGroupById(int id)
+        {
+            var token = Request.Cookies["token"];
+            return await _studentClientAdapter.GetBoxingGroup(token, id);
+        }
+
+        private IActionResult GetRedirectAction(HttpStatusCode statusCode)
+        {
+            if (statusCode != HttpStatusCode.OK)
+            {
+                if (statusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("SignOut", "Account");
+                }
+
+                throw new InvalidOperationException("Error occurred while processing your request");
+            }
+
+            return null;
         }
     }
 }

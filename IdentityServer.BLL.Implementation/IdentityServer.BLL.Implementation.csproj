@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoxingClub.Infrastructure\BoxingClub.Infrastructure.csproj" />
+    <ProjectReference Include="..\IdentityServer.BLL.Entities\IdentityServer.BLL.Entities.csproj" />
+    <ProjectReference Include="..\IdentityServer.BLL.Interfaces\IdentityServer.BLL.Interfaces.csproj" />
+    <ProjectReference Include="..\IdentityServer.DAL.Interfaces\IdentityServer.DAL.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

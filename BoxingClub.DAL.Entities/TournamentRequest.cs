@@ -12,8 +12,6 @@ namespace BoxingClub.DAL.Entities
 
         public int? TournamentId { get; set; }
 
-        public Student Student { get; set; }
-
         public int? StudentId { get; set; }
 
         public int StudentWeight { get; set; }

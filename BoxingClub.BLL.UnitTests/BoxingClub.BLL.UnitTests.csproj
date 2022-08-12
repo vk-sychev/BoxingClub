@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -22,9 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BoxingClub.BLL.DomainEntities\BoxingClub.BLL.DomainEntities.csproj" />
-    <ProjectReference Include="..\BoxingClub.BLL\BoxingClub.BLL.Implementation.csproj" />
-    <ProjectReference Include="..\BoxingClub.DAL.Interfaces\BoxingClub.DAL.Interfaces.csproj" />
     <ProjectReference Include="..\BoxingClub.Web\BoxingClub.Web.csproj" />
   </ItemGroup>
 

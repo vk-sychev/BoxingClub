@@ -1,10 +1,9 @@
-﻿using BoxingClub.Infrastructure.Exceptions;
-using BoxingClub.Infrastructure.Helpers;
-using System;
+﻿using System;
 using System.Net;
+using BoxingClub.Infrastructure.Exceptions;
 using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
 
-namespace BoxingClub.Infrastructure.HttpSwitcher
+namespace BoxingClub.Infrastructure.Helpers
 {
     public static class HttpCodeHelper
     {

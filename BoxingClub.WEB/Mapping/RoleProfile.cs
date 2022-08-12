@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DomainEntities;
-using BoxingClub.DAL.Entities;
 using BoxingClub.Web.Models;
-using Microsoft.AspNetCore.Identity;
+using HttpClients.Models;
 
 namespace BoxingClub.Web.Mapping
 {
@@ -10,8 +8,7 @@ namespace BoxingClub.Web.Mapping
     {
         public RoleProfile()
         {
-            CreateMap<RoleDTO, RoleViewModel>().ReverseMap();
-            CreateMap<RoleDTO, ApplicationRole>(MemberList.Source).ReverseMap();
+            CreateMap<RoleViewModel, RoleModel>().ReverseMap();
         }
     }
 }

@@ -38,10 +38,10 @@
 
             var url;
             if (isCreateRequest) {
-                url = "Home/CreateBoxingGroup";
+                url = "CreateBoxingGroup";
             }
             else {
-                url = "Home/EditBoxingGroup/" + boxingGroupId;
+                url = "EditBoxingGroup/" + boxingGroupId;
             }
 
             if (form.valid()) {
@@ -90,7 +90,7 @@
             boxingGroupId = $(parentTr).attr("id");
             deletedData = "<tr id=" + boxingGroupId + ">" + parentTr.html() + "</tr>";
 
-            $.get("Home/EditBoxingGroupInline/" + boxingGroupId, function (data) {
+            $.get("EditBoxingGroupInline/" + boxingGroupId, function (data) {
                 $(parentTr).replaceWith(data);
             }).then(function () {
                 $.fn.initValidation(form);
@@ -102,7 +102,9 @@
             e.preventDefault();
             var parentTr = $(this).parent().closest("tr");
             var id = $(parentTr).attr("id");
-            $.get("Home/DeleteBoxingGroup/" + id, function () {
+            var url = "DeleteBoxingGroup/" + id;
+
+            $.get(url, function () {
                 setTimeout(function () {
                     location.reload();
                 }, 10);
@@ -111,7 +113,7 @@
 
         $("#createButton").click(function (e) {
             e.preventDefault();
-            $.get("Home/CreateBoxingGroupInline", function (data) {
+            $.get("CreateBoxingGroupInline", function (data) {
                 $("tbody").append(data);
             }).then(function () {
                 $.fn.initValidation(form);

@@ -1,0 +1,105 @@
+﻿using AutoMapper;
+using BoxingClub.Infrastructure.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Tournaments.BLL.Entities;
+using Tournaments.BLL.Interfaces;
+using Tournaments.DAL.Entities;
+using Tournaments.DAL.Interfaces;
+using ArgumentException = BoxingClub.Infrastructure.Exceptions.ArgumentException;
+using ArgumentNullException = BoxingClub.Infrastructure.Exceptions.ArgumentNullException;
+
+namespace Tournaments.BLL.Implementation.Services
+{
+    public class TournamentService : ITournamentService
+    {
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _database;
+
+        public TournamentService(IUnitOfWork uow,
+                                 IMapper mapper)
+        {
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), "mapper is null");
+            _database = uow ?? throw new ArgumentNullException(nameof(uow), "uow is null");
+        }
+
+        public async Task CreateTournamentAsync(TournamentDTO tournamentDTO)
+        {
+            if (tournamentDTO == null)
+            {
+                throw new ArgumentNullException(nameof(tournamentDTO), "Tournament is null");
+            }
+
+            var tournament = _mapper.Map<Tournament>(tournamentDTO);
+
+            await _database.Tournaments.CreateAsync(tournament);
+            await _database.SaveAsync();
+        }
+
+        public async Task DeleteTournamentAsync(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("Tournament's id less or equal 0", nameof(id));
+            }
+
+            var tournament = await _database.Tournaments.GetByIdAsync(id);
+
+            if (tournament == null)
+            {
+                throw new NotFoundException($"Tournament with id = {id} isn't found", "");
+            }
+
+            _database.Tournaments.Delete(tournament);
+            await _database.SaveAsync();
+        }
+
+        public async Task<TournamentDTO> GetTournamentByIdAsync(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("Tournament's id less or equal 0", nameof(id));
+            }
+
+            var tournament = await _database.Tournaments.GetByIdAsync(id);
+
+            if (tournament == null)
+            {
+                throw new NotFoundException($"Tournament with id = {id} isn't found", "");
+            }
+
+            var mappedTournament = _mapper.Map<TournamentDTO>(tournament);
+            return mappedTournament;
+        }
+
+        public async Task UpdateTournamentAsync(TournamentDTO tournamentDTO)
+        {
+            if (tournamentDTO == null)
+            {
+                throw new ArgumentNullException(nameof(tournamentDTO), "Tournament is null");
+            }
+
+            var tournament = _mapper.Map<Tournament>(tournamentDTO);
+
+            _database.Tournaments.Update(tournament);
+            await _database.SaveAsync();
+        }
+
+        public async Task<List<TournamentDTO>> GetTournamentsAsync()
+        {
+            var tournaments = await _database.Tournaments.GetAllAsync();
+            var mappedTournaments = _mapper.Map<List<TournamentDTO>>(tournaments);
+            return mappedTournaments;
+        }
+
+        public async Task<List<TournamentDTO>> GetAcceptedTournamentsAsync()
+        {
+            var tournaments = await _database.Tournaments.GetAcceptedTournamentsAsync();
+            var mappedTournaments = _mapper.Map<List<TournamentDTO>>(tournaments);
+            return mappedTournaments;
+        }
+    }
+}

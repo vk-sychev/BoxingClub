@@ -9,54 +9,12 @@ namespace BoxingClub.DAL.Repositories
     public class EFUnitOfWork : IUnitOfWork
     {
         private readonly BoxingClubContext _db;
-        private IStudentRepository _studentRepository;
-        private IBoxingGroupRepository _boxingGroupRepository;
-        private IMedicalCertificateRepository _medicalCertificateRepository;
         private ITournamentRepository _tournamentRepository;
         private ITournamentRequestRepository _tournamentRequestRepository;
 
         public EFUnitOfWork(BoxingClubContext context)
         {
             _db = context ?? throw new ArgumentNullException(nameof(context), "context is null");
-        }
-
-        public IStudentRepository Students
-        {
-            get
-            {
-                if (_studentRepository == null)
-                {
-                    _studentRepository = new StudentRepository(_db);
-                }
-
-                return _studentRepository;
-            }
-        }
-
-        public IBoxingGroupRepository BoxingGroups
-        {
-            get
-            {
-                if (_boxingGroupRepository == null)
-                {
-                    _boxingGroupRepository = new BoxingGroupRepository(_db);
-                }
-
-                return _boxingGroupRepository;
-            }
-        }
-
-        public IMedicalCertificateRepository MedicalCertificates
-        {
-            get
-            {
-                if (_medicalCertificateRepository == null)
-                {
-                    _medicalCertificateRepository = new MedicalCertificateRepository(_db);
-                }
-
-                return _medicalCertificateRepository;
-            }
         }
 
         public ITournamentRepository Tournaments

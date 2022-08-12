@@ -1,5 +1,5 @@
 ﻿using BoxingClub.Infrastructure.Exceptions;
-using BoxingClub.Infrastructure.HttpSwitcher;
+using BoxingClub.Infrastructure.Helpers;
 using BoxingClub.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;

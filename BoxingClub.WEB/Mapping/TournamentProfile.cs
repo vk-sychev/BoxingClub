@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-using BoxingClub.BLL.DomainEntities;
-using BoxingClub.DAL.Entities;
 using BoxingClub.Web.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using HttpClients.Models;
 
 namespace BoxingClub.Web.Mapping
 {
@@ -13,8 +8,7 @@ namespace BoxingClub.Web.Mapping
     {
         public TournamentProfile()
         {
-            CreateMap<Tournament, TournamentDTO>(MemberList.Destination).ReverseMap();
-            CreateMap<TournamentDTO, TournamentViewModel>().ReverseMap();
+            CreateMap<TournamentModel, TournamentViewModel>().ReverseMap();
         }
     }
 }
